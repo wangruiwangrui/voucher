@@ -67,4 +67,11 @@ public class WeiXinServiceImpl implements WeiXinService{
 		return weixinMapper.updateHomePageByCampusId(paramMap);
 	}
 
+	@Override
+	public Integer getCampusIdByUserName(String userName) {
+		// TODO Auto-generated method stub
+		return weixinMapper.getCampusIdByUserName(userName);
+	}
+
+
 }

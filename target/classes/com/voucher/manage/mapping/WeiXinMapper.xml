@@ -8,8 +8,10 @@
 	 <result column="city_id" property="cityId" jdbcType="INTEGER" />
 	 <result column="custom_service" property="customService" jdbcType="VARCHAR" />
 	 <result column="home_page" property="homePage" jdbcType="VARCHAR" />
+	 <result column="user_name" property="userName" jdbcType="VARCHAR" />
 	 <result column="app_id" property="appId" jdbcType="VARCHAR" />
 	 <result column="app_secret" property="appSecret" jdbcType="VARCHAR" />
+	 <result column="token" property="token" jdbcType="VARCHAR" />
 	 <result column="access_token" property="accessToken" jdbcType="VARCHAR" />
 	</resultMap>
 	
@@ -27,7 +29,9 @@
      select
         campus_id,campus_name,city_id,
         custom_service,home_page,
+        user_name,
         app_id,app_secret,
+        token,
         access_token
       from
       campus
@@ -39,7 +43,9 @@
      select
         campus_id,campus_name,city_id,
         custom_service,home_page,
+        user_name,
         app_id,app_secret,
+        token,
         access_token
       from
       campus
@@ -64,11 +70,17 @@
 			<if test="customService !=null">
 				custom_service,
 			</if>
+			<if test="userName !=null">
+				user_name,
+			</if>
 			<if test="appId !=null">
 				app_id,
 			</if>
 			<if test="appSecret !=null">
 				app_secret,
+			</if>
+			<if test="token !=null">
+				token,
 			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -77,11 +89,17 @@
 			<if test="customService!=null">
 				#{customService,jdbcType=VARCHAR},
 			</if>
+			<if test="userName!=null">
+				#{userName,jdbcType=VARCHAR},
+			</if>
 			<if test="appId!=null">
 				#{appId,jdbcType=VARCHAR},
 			</if>
 			<if test="appSecret!=null">
 				#{appSecret,jdbcType=VARCHAR},
+			</if>
+			<if test="token!=null">
+				#{token,jdbcType=VARCHAR},
 			</if>
 		</trim>
     </insert>
@@ -95,6 +113,9 @@
 		   <if test="customService!=null">
 			 custom_service=#{customService,jdbcType=VARCHAR},
 			</if>
+			<if test="userName!=null">
+			  user_name=#{userName,jdbcType=VARCHAR},
+			</if>
 			<if test="appId!=null">
 			 app_id=#{appId,jdbcType=VARCHAR},
 			</if>
@@ -103,7 +124,10 @@
 			</if>
 			<if test="accessToken!=null">
 			 access_token=#{accessToken,jdbcType=VARCHAR},
-			</if>		
+			</if>
+			<if test="token!=null">
+			 token=#{token,jdbcType=VARCHAR},
+			</if>			
 		</set>
         where 
         campus_id=#{campusId,jdbcType=INTEGER} 
@@ -117,4 +141,13 @@
      where
       campus_id=#{campusId,jdbcType=INTEGER} 
     </update>
+    
+    <select id="getCampusIdByUserName" resultType="Integer" useCache="false">
+     select campus_id 
+     from
+      campus
+     where
+      user_name=#{userName,jdbcType=VARCHAR}
+    </select>
+    
 </mapper>

@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.voucher.manage.model.WeiXin;
 import com.voucher.manage.service.WeiXinService;
-import com.voucher.manage.templet.Article;
 import com.voucher.manage.templet.HomePage;
 import com.voucher.manage.tools.Constants;
 

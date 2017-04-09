@@ -1,0 +1,38 @@
+[DEBUG][2017-04-08 17:41:43,645][org.apache.http.impl.conn.BasicClientConnectionManager]Get connection for route {s}->https://api.weixin.qq.com
+[DEBUG][2017-04-08 17:41:43,993][org.apache.http.impl.conn.DefaultClientConnectionOperator]Connecting to api.weixin.qq.com:443
+[DEBUG][2017-04-08 17:41:44,357][org.apache.http.client.protocol.RequestAddCookies]CookieSpec selected: best-match
+[DEBUG][2017-04-08 17:41:44,369][org.apache.http.client.protocol.RequestAuthCache]Auth cache not set in the context
+[DEBUG][2017-04-08 17:41:44,369][org.apache.http.client.protocol.RequestTargetAuthentication]Target auth state: UNCHALLENGED
+[DEBUG][2017-04-08 17:41:44,370][org.apache.http.client.protocol.RequestProxyAuthentication]Proxy auth state: UNCHALLENGED
+[DEBUG][2017-04-08 17:41:44,371][org.apache.http.impl.client.DefaultHttpClient]Attempt 1 to execute request
+[DEBUG][2017-04-08 17:41:44,371][org.apache.http.impl.conn.DefaultClientConnection]Sending request: POST /cgi-bin/menu/create?access_token=upeDW-2pWrHgLx3fGqgsvAvf-HkQBA--5uHOo9OW16uNdL9zNPnnuIN01UDFXh_5d-QdcnBxux9tXigFwm1z0SInbdkXEKa1pMhTqaZVxK7sCPj7421YQGI0v3evwiwiWALjAHASWH HTTP/1.1
+[DEBUG][2017-04-08 17:41:44,372][org.apache.http.wire] >> "POST /cgi-bin/menu/create?access_token=upeDW-2pWrHgLx3fGqgsvAvf-HkQBA--5uHOo9OW16uNdL9zNPnnuIN01UDFXh_5d-QdcnBxux9tXigFwm1z0SInbdkXEKa1pMhTqaZVxK7sCPj7421YQGI0v3evwiwiWALjAHASWH HTTP/1.1[\r][\n]"
+[DEBUG][2017-04-08 17:41:44,373][org.apache.http.wire] >> "Content-Length: 224[\r][\n]"
+[DEBUG][2017-04-08 17:41:44,373][org.apache.http.wire] >> "Content-Type: text/plain; charset=UTF-8[\r][\n]"
+[DEBUG][2017-04-08 17:41:44,373][org.apache.http.wire] >> "Host: api.weixin.qq.com[\r][\n]"
+[DEBUG][2017-04-08 17:41:44,373][org.apache.http.wire] >> "Connection: Keep-Alive[\r][\n]"
+[DEBUG][2017-04-08 17:41:44,373][org.apache.http.wire] >> "User-Agent: Apache-HttpClient/4.3.4 (java 1.5)[\r][\n]"
+[DEBUG][2017-04-08 17:41:44,373][org.apache.http.wire] >> "[\r][\n]"
+[DEBUG][2017-04-08 17:41:44,374][org.apache.http.headers]>> POST /cgi-bin/menu/create?access_token=upeDW-2pWrHgLx3fGqgsvAvf-HkQBA--5uHOo9OW16uNdL9zNPnnuIN01UDFXh_5d-QdcnBxux9tXigFwm1z0SInbdkXEKa1pMhTqaZVxK7sCPj7421YQGI0v3evwiwiWALjAHASWH HTTP/1.1
+[DEBUG][2017-04-08 17:41:44,374][org.apache.http.headers]>> Content-Length: 224
+[DEBUG][2017-04-08 17:41:44,374][org.apache.http.headers]>> Content-Type: text/plain; charset=UTF-8
+[DEBUG][2017-04-08 17:41:44,374][org.apache.http.headers]>> Host: api.weixin.qq.com
+[DEBUG][2017-04-08 17:41:44,374][org.apache.http.headers]>> Connection: Keep-Alive
+[DEBUG][2017-04-08 17:41:44,374][org.apache.http.headers]>> User-Agent: Apache-HttpClient/4.3.4 (java 1.5)
+[DEBUG][2017-04-08 17:41:44,374][org.apache.http.wire] >> "{"button":[{"name":"[0xe5][0x8d][0x9a][0xe5][0xae][0xa2]","type":"view","url":"http://www.cuiyongzhi.com"},{"name":"[0xe8][0x8f][0x9c][0xe5][0x8d][0x95]","sub_button":[{"key":"image","name":"[0xe5][0x9b][0x9e][0xe5][0xa4][0x8d][0xe5][0x9b][0xbe][0xe7][0x89][0x87]","type":"click"},{"$ref":"$.button[0]"}]},{"$ref":"$.button[1].sub_button[0]"}]}"
+[DEBUG][2017-04-08 17:41:44,475][org.apache.http.wire] << "HTTP/1.1 200 OK[\r][\n]"
+[DEBUG][2017-04-08 17:41:44,478][org.apache.http.wire] << "Connection: keep-alive[\r][\n]"
+[DEBUG][2017-04-08 17:41:44,478][org.apache.http.wire] << "Date: Sat, 08 Apr 2017 09:41:49 GMT[\r][\n]"
+[DEBUG][2017-04-08 17:41:44,478][org.apache.http.wire] << "Content-Type: application/json; encoding=utf-8[\r][\n]"
+[DEBUG][2017-04-08 17:41:44,479][org.apache.http.wire] << "Content-Length: 73[\r][\n]"
+[DEBUG][2017-04-08 17:41:44,479][org.apache.http.wire] << "[\r][\n]"
+[DEBUG][2017-04-08 17:41:44,479][org.apache.http.impl.conn.DefaultClientConnection]Receiving response: HTTP/1.1 200 OK
+[DEBUG][2017-04-08 17:41:44,479][org.apache.http.headers]<< HTTP/1.1 200 OK
+[DEBUG][2017-04-08 17:41:44,480][org.apache.http.headers]<< Connection: keep-alive
+[DEBUG][2017-04-08 17:41:44,480][org.apache.http.headers]<< Date: Sat, 08 Apr 2017 09:41:49 GMT
+[DEBUG][2017-04-08 17:41:44,480][org.apache.http.headers]<< Content-Type: application/json; encoding=utf-8
+[DEBUG][2017-04-08 17:41:44,480][org.apache.http.headers]<< Content-Length: 73
+[DEBUG][2017-04-08 17:41:44,482][org.apache.http.impl.client.DefaultHttpClient]Connection can be kept alive indefinitely
+[DEBUG][2017-04-08 17:41:44,497][org.apache.http.wire] << "{"errcode":42001,"errmsg":"access_token expired hint: [QBa2CA0509sz12!]"}"
+[DEBUG][2017-04-08 17:41:44,497][org.apache.http.impl.conn.BasicClientConnectionManager]Releasing connection org.apache.http.impl.conn.ManagedClientConnectionImpl@5cee5251
+[DEBUG][2017-04-08 17:41:44,499][org.apache.http.impl.conn.BasicClientConnectionManager]Connection can be kept alive indefinitely

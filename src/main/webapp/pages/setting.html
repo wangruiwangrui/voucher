@@ -79,6 +79,9 @@
 							<th data-align="left" data-field="campusName" >公众号名称</th>
 							<th data-align="left" data-field="customService" >电话号码</th>
 							<th data-align="left" data-field="homePage" >用户主页地址</th>
+							<th data-align="left" data-field="url" >URL(服务器地址)</th>
+							<th data-align="left" data-field="token" data-visible="false">Token验证</th>
+							<th data-align="left" data-field="userName" data-visible="false" >原始ID</th>
 							<th data-align="left" data-field="appId" data-visible="false" >AppID</th>
 							<th data-align="left" data-field="appSecret" data-visible="false" >AppSecret</th>
 						</tr>
@@ -139,6 +142,13 @@
 							</div>							
 						</div>
 						<div class="form-group">
+							<label class="control-label col-md-4" for="userName2">原始ID</label>
+							<div class="input-group  col-md-5">
+								<input class="form-control" type="text" id="userName2" name="userName"
+									placeholder="userName">
+							</div>
+						</div>
+						<div class="form-group">
 							<label class="control-label col-md-4" for="appId2">AppID</label>
 							<div class="input-group  col-md-5">
 								<input class="form-control" type="text" id="appId2" name="appId"
@@ -150,6 +160,14 @@
 							<div class="input-group  col-md-5">
 								<input class="form-control" type="text" id="appSecret2" name="appSecret"
 									placeholder="appSecret">
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="control-label col-md-4" for="token2">Token验证</label>
+							<div class="input-group  col-md-5">
+								<input class="form-control" type="text" id="token2" name="token"
+									placeholder="token">
 							</div>
 						</div>
                  </div>
@@ -165,8 +183,10 @@
 				    var campusId=$("#campusId2").val();
 		    	    var campusName=$("#campusName2").val();
 				    var customService=$("#customService2").val();
+				    var userName=$("#userName2").val();
 				    var appId=$("#appId2").val();
 				    var appSecret=$("#appSecret2").val();
+				    var token=$("#token2").val();
 				    
 				    if(campusName==null||campusName==""){
 				    	alert("公众号名称不能为空!");
@@ -177,6 +197,10 @@
 				    	customService="-";
 				    }
 				    
+				    if(userName==null||userName==""){
+				    	userName="-";
+				    }
+				    
 				    if(appId==null||appId==""){
 				    	appId="-";
 				    }
@@ -184,13 +208,19 @@
 				    if(appSecret==null||appSecret==""){
 				    	appSecret="-";
 				    }
-				        
+				     
+				    if(token==null||token==""){
+				    	token="-";
+				    }
+				    
 				    $.post("weixinset/insertIntoCampus.do", {
                         campusId:campusId,
 				    	campusName:campusName,
 				    	customService:customService,
+				    	userName:userName,
 				    	appId:appId,
-				    	appSecret:appSecret
+				    	appSecret:appSecret,
+				    	token:token
 					}, function(text) {
 						if (text == -1 || text == 0) {
 							$("#myModal").modal('hide');
@@ -245,7 +275,7 @@
 			$("#customService2").val(array[0].customService);
 			$("#appId2").val(array[0].appId);
 			$("#appSecret2").val(array[0].appSecret);
-
+			$("#token2").val(array[0].token);
 			/*
 			var status=document.getElementsByName("status")
 			status[1-array[0].status].checked=true;

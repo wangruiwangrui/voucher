@@ -3,9 +3,9 @@ $('#auser').click(function(){
    $('#content').attr('src','pages/user.html');
  });
 
-$('#aeject').click(function(){
-	   $('#content').load('pages/food.html');
-	   $('#content').attr('src','pages/food.html');
+$('#wechatMenu').click(function(){
+	   $('#content').load('pages/managerPage.html');
+	   $('#content').attr('src','pages/managerPage.html');
 	 });
 
 $('#business').click(function(){

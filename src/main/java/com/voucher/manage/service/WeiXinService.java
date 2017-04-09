@@ -21,4 +21,6 @@ public interface WeiXinService {
 	
 	Integer updateHomePageByCampusId(Map<String, Object> paramMap);
 	
+	Integer getCampusIdByUserName(String userName);
+	
 }

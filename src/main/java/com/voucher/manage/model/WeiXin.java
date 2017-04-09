@@ -12,11 +12,17 @@ public class WeiXin {
 	
 	private String homePage;
 	
+	private String userName; //公众号原始ID
+	
 	private String appId;
 	
 	private String appSecret;
 	
 	private String accessToken;
+	
+	private String token;
+	
+	private String url;
 	
 	public Integer getCampusId() {
 		return campusId;
@@ -83,5 +89,30 @@ public class WeiXin {
 	public void setHomePage(String homePage) {
 		this.homePage = homePage;
 	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
 	
 }

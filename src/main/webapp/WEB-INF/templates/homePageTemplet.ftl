@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1" charset='utf-8'>
+
 <link href="../../bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/bootstrap-table/bootstrap-table.css">
 <link rel="stylesheet" href="../../assets/bootstrap-table/bootstrap-editable.css">
@@ -19,19 +20,15 @@
   var redirectUrl="${homePages.redirectUrl}";
 </script>
 
+<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script type="text/javascript" src="/voucher/tpjs/pageHomeUser.js"></script>
 
 <link rel="stylesheet" href="../../weixinUI/style/weui.css"/>
 
 <div class="mainElement">
-<div class="navbar-inner" style="height:44px;">
-<a class="brand pull-left" style="padding:10px 0 0 2px"><img src="../../img/icon.png" width="20px" height="auto">&nbsp;</a>
-<a class="brand pull-left" id="brand" style="font-size:16px;color:#fff;padding:12px  0 0 0"></a>
-</div>
 <div class="user" style="height:44px;">
 <img class="headimgUrl" src="" width="44px" height="44px">
 <p class="nickName"></p>
-<p class="narrate">订单列表</p>
 </div>
 
 <div  style="height:2px; background-color:#c0c0c0"></div>
@@ -172,23 +169,7 @@ body {
     </div>
   </div>
 
- <div id="maintable" style="display:block" class="mainElement">
-			     <table id="table" data-id-field="foodId" data-striped="true"
-					data-pagination="true"  data-height="80%">
-					<thead>
-						<tr>
-							<th data-align="left" data-field="id">ID</th>
-							<th data-align="left" data-field="campusAdmin" data-formatter="actionName">商家</th>
-							<th data-align="left" data-field="name" data-formatter="actionName">商品名称</th>
-							<th data-align="left" data-field="createMobileTime" data-formatter="actionName">购买时间</th>
-							<th data-align="left" data-field="amount" data-formatter="actionName">数量</th>
-							<th data-align="left" data-field="consume" data-formatter="actionName">价格</th>
-							<th data-align="left" data-field="used" data-formatter="actionClaim">消费</th>
-							<th data-align="left" data-field="actionRefund" data-formatter="actionRefund">退款</th>
-						</tr>
-					</thead>
-				</table>
-		</div>
+ 
 </body>
 <script type="text/javascript">
 

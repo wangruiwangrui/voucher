@@ -2,6 +2,7 @@ package com.voucher.weixin.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -35,16 +36,29 @@ private WeiXinService weixinService;
 	getCampusInfo(HttpServletRequest request){		
 		String campusAdmin;
 		Short type;
-        Integer  campusId,cityId;
+        Integer  campusId,cityId,currentId;
 		List<WeiXin> weixins=new ArrayList<>();
+		WeiXin weixin;
 		
 		HttpSession session=request.getSession();  //取得session的type变量，判断是否为公众号管理员
 		type=(Short) session.getAttribute("type");
 		cityId=(Integer) session.getAttribute("cityId");
 	
+		//服务器端的相对地址
+        String homeUrl=request.getHeader("Host")+request.getContextPath();
+		
 		if(type==0){
 		   weixins=weixinService.getAllCampusById(cityId);
 		 }
+		
+		Iterator<WeiXin> iterator=weixins.iterator();
+		
+		while (iterator.hasNext()) {
+			weixin=iterator.next();
+			currentId=weixin.getCampusId();
+			weixin.setUrl("http://"+homeUrl+"/wechat/security.do?campusId="+currentId);
+		}
+		
 		return weixins;
 		
 	}
@@ -52,7 +66,8 @@ private WeiXinService weixinService;
 	@RequestMapping("insertIntoCampus")
 	public @ResponseBody 
 	Integer insetIntoCampus(HttpServletRequest request , @RequestParam Integer campusId,@RequestParam String campusName
-			,@RequestParam String customService,@RequestParam String appId , @RequestParam String appSecret) {
+			,@RequestParam String customService,@RequestParam String appId , @RequestParam String appSecret
+			,@RequestParam String token,@RequestParam String userName) {
 		Map<String, Object> paramMap=new HashMap<>();
 		Integer  cityId , flag ;
 		WeiXin be=null;
@@ -68,8 +83,10 @@ private WeiXinService weixinService;
 		paramMap.put("campusName", campusName);
 		paramMap.put("cityId", cityId);
 		paramMap.put("customService", customService);
+		paramMap.put("userName", userName);
 		paramMap.put("appId", appId);
 		paramMap.put("appSecret", appSecret);
+		paramMap.put("token", token);
 		
 		if(campusId!=null){
 		   be=weixinService.getByCampusIds(campusId);
