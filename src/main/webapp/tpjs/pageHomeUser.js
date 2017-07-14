@@ -82,11 +82,7 @@ function getQueryString(name) {
       	     /*
     	      * 此处需要两次执行相同的函数，否则返回ture时不能执行以下函数
     	      */  
-      	  
-			$("#table").bootstrapTable({
-				url : "/voucher/mobileConsume/getAllConsume.do"
-			});
-         
+      	          
 			function GetUrlRelativePath()
 			 {
 			 var url = document.location.toString();
