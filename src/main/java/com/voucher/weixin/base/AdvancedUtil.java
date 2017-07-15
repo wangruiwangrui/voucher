@@ -10,8 +10,8 @@ import com.alibaba.fastjson.JSONObject;
 
 public class AdvancedUtil {
 	
-	/*Õâ¸ö·½·¨ÓÃÓÚÍ¨¹ı»Øµ÷µÄcode»»È¡Ò»¸öÌØÊâµÄÍøÒ³ÊÚÈ¨access_token
-	 * ÕıÈ·Ê±·µ»ØµÄJSONÊı¾İ°üÈçÏÂ£º
+	/*è¿™ä¸ªæ–¹æ³•ç”¨äºé€šè¿‡å›è°ƒçš„codeæ¢å–ä¸€ä¸ªç‰¹æ®Šçš„ç½‘é¡µæˆæƒaccess_token
+	 * æ­£ç¡®æ—¶è¿”å›çš„JSONæ•°æ®åŒ…å¦‚ä¸‹ï¼š
 	 * { "access_token":"ACCESS_TOKEN",    
 	     "expires_in":7200,    
 	     "refresh_token":"REFRESH_TOKEN",    
@@ -20,12 +20,12 @@ public class AdvancedUtil {
 	 */
 	 public static WeixinOauth2Token getOauth2AccessToken(String appId, String appSecret, String code) {
 	        WeixinOauth2Token wat = null;
-	        // Æ´½ÓÇëÇóµØÖ·
+	        // æ‹¼æ¥è¯·æ±‚åœ°å€
 	        String requestUrl = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
 	        requestUrl = requestUrl.replace("APPID", appId);
 	        requestUrl = requestUrl.replace("SECRET", appSecret);
 	        requestUrl = requestUrl.replace("CODE", code);
-	        // »ñÈ¡ÍøÒ³ÊÚÈ¨Æ¾Ö¤
+	        // è·å–ç½‘é¡µæˆæƒå‡­è¯
 	        
 	        System.out.println("requesUrl="+requestUrl);
 	        
@@ -62,7 +62,7 @@ public class AdvancedUtil {
 	        return wat;
 	    }
 	 
-	 //´Ë·½·¨ÓÃÓÚ»ñÈ¡»ù´¡access_token
+	 //æ­¤æ–¹æ³•ç”¨äºè·å–åŸºç¡€access_token
 	  public static String getAccessToken(String appId, String appSecret){
 		   String requestUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=SECRET";
 	        requestUrl = requestUrl.replace("APPID", appId);
@@ -78,16 +78,16 @@ public class AdvancedUtil {
 	 
 	 
 	 
-	 //Õâ¸ö·½·¨µÄ×÷ÓÃÊÇ¿ÉÒÔÍ¨¹ıaccess_tokenºÍopenidÀ­È¡ÓÃ»§ĞÅÏ¢
+	 //è¿™ä¸ªæ–¹æ³•çš„ä½œç”¨æ˜¯å¯ä»¥é€šè¿‡access_tokenå’Œopenidæ‹‰å–ç”¨æˆ·ä¿¡æ¯
 	 @SuppressWarnings( { "deprecation", "unchecked" })
 	    public static SNSUserInfo getSNSUserInfo(String accessToken, String openId){
 	        SNSUserInfo snsUserInfo=new SNSUserInfo();
-	        // Æ´½ÓÇëÇóµØÖ·
+	        // æ‹¼æ¥è¯·æ±‚åœ°å€
 	    //    String requestUrl = "https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&openid=OPENID";
 	        String requestUrl ="https://api.weixin.qq.com/cgi-bin/user/info?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN";
 	        requestUrl = requestUrl.replace("ACCESS_TOKEN", accessToken).replace("OPENID", openId);
 	        System.out.println("requesturl="+requestUrl);
-	        // Í¨¹ıÍøÒ³ÊÚÈ¨»ñÈ¡ÓÃ»§ĞÅÏ¢
+	        // é€šè¿‡ç½‘é¡µæˆæƒè·å–ç”¨æˆ·ä¿¡æ¯
 	        JSONObject jsonObject = CommonUtil.httpsRequest(requestUrl, "GET", null);
               System.out.println("json="+jsonObject);
 	        if (jsonObject!=null) {
@@ -95,42 +95,42 @@ public class AdvancedUtil {
 	        		if(jsonObject.getString("errcode")!=null){
 		        		String errcode=jsonObject.getString("errcode");
 		        		System.out.println("errcoid="+errcode);
-                        snsUserInfo.setErrorCode(errcode);       //·µ»ØÎ¢ĞÅ´íÎó´úÂë£¬ÒÔ±ãgetUserInfo·½·¨ÖØĞÂÉú³Éaccess_token
+                        snsUserInfo.setErrorCode(errcode);       //è¿”å›å¾®ä¿¡é”™è¯¯ä»£ç ï¼Œä»¥ä¾¿getUserInfoæ–¹æ³•é‡æ–°ç”Ÿæˆaccess_token
                         return snsUserInfo;
 	        	  }
 	        	 }catch (Exception e) {
 					// TODO: handle exception
 				}
 	            try {
-	                // ÓÃ»§µÄ±êÊ¶
+	                // ç”¨æˆ·çš„æ ‡è¯†
 	                snsUserInfo.setOpenId(jsonObject.getString("openid"));
-	                //ÓÃ»§ÊÇ·ñ¶©ÔÄ¸Ã¹«ÖÚºÅ±êÊ¶
+	                //ç”¨æˆ·æ˜¯å¦è®¢é˜…è¯¥å…¬ä¼—å·æ ‡è¯†
 	                snsUserInfo.setSubScribe(Short.parseShort(jsonObject.getString("subscribe")));
-	                // êÇ³Æ
+	                // æ˜µç§°
 	                snsUserInfo.setNickname(jsonObject.getString("nickname"));
-	                // ĞÔ±ğ£¨1ÊÇÄĞĞÔ£¬2ÊÇÅ®ĞÔ£¬0ÊÇÎ´Öª£©
+	                // æ€§åˆ«ï¼ˆ1æ˜¯ç”·æ€§ï¼Œ2æ˜¯å¥³æ€§ï¼Œ0æ˜¯æœªçŸ¥ï¼‰
 	                snsUserInfo.setSex(Short.parseShort(jsonObject.getString("sex")));
-	                //ÓÃ»§µÄÓïÑÔ
+	                //ç”¨æˆ·çš„è¯­è¨€
 	                snsUserInfo.setLanguage(jsonObject.getString("language"));
-	                // ÓÃ»§ËùÔÚ¹ú¼Ò
+	                // ç”¨æˆ·æ‰€åœ¨å›½å®¶
 	                snsUserInfo.setCountry(jsonObject.getString("country"));
-	                // ÓÃ»§ËùÔÚÊ¡·İ
+	                // ç”¨æˆ·æ‰€åœ¨çœä»½
 	                snsUserInfo.setProvince(jsonObject.getString("province"));
-	                // ÓÃ»§ËùÔÚ³ÇÊĞ
+	                // ç”¨æˆ·æ‰€åœ¨åŸå¸‚
 	                snsUserInfo.setCity(jsonObject.getString("city"));
-	                // ÓÃ»§Í·Ïñ
+	                // ç”¨æˆ·å¤´åƒ
 	                snsUserInfo.setHeadImgUrl(jsonObject.getString("headimgurl"));
-	                //ÓÃ»§¹Ø×¢Ê±¼ä
+	                //ç”¨æˆ·å…³æ³¨æ—¶é—´
 	                Date date= new Date(Integer.parseInt(jsonObject.getString("subscribe_time")));
 	                snsUserInfo.setSubScribeTime(date);
 	                System.out.println("substiem="+date);
-	                //¹«ÖÚºÅÔËÓªÕß¶Ô·ÛË¿µÄ±¸×¢
+	                //å…¬ä¼—å·è¿è¥è€…å¯¹ç²‰ä¸çš„å¤‡æ³¨
 	                snsUserInfo.setRemark(jsonObject.getString("remark"));
-	                //ÓÃ»§ËùÔÚµÄ·Ö×éID
+	                //ç”¨æˆ·æ‰€åœ¨çš„åˆ†ç»„ID
 	                snsUserInfo.setGroupId(jsonObject.getString("groupid"));
-	                //Ö»ÓĞÔÚÓÃ»§½«¹«ÖÚºÅ°ó¶¨µ½Î¢ĞÅ¿ª·ÅÆ½Ì¨ÕÊºÅºó£¬²Å»á³öÏÖ¸Ã×Ö¶Î¡£
+	                //åªæœ‰åœ¨ç”¨æˆ·å°†å…¬ä¼—å·ç»‘å®šåˆ°å¾®ä¿¡å¼€æ”¾å¹³å°å¸å·åï¼Œæ‰ä¼šå‡ºç°è¯¥å­—æ®µã€‚
 	                snsUserInfo.setUnionid(jsonObject.getString("unionid"));
-	                // ÓÃ»§ÌØÈ¨ĞÅÏ¢
+	                // ç”¨æˆ·ç‰¹æƒä¿¡æ¯
 	                snsUserInfo.setPrivilegeList(jsonObject.getJSONArray("privilege"));
 	            } catch (Exception e) {
 	                snsUserInfo = null;

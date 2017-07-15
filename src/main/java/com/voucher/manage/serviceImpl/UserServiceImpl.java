@@ -1,7 +1,7 @@
 ﻿package com.voucher.manage.serviceImpl;
 
 import java.util.List;
-
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,6 +58,12 @@ public class UserServiceImpl implements UserService {
 	public Integer upUserByOpenId(SNSUserInfo snsUserInfo) {
 		// TODO Auto-generated method stub
 		return usersMapper.upUserByOpenId(snsUserInfo);
+	}
+
+	@Override
+	public Integer upsubscribeByOpenId(Map<String, Object> paramterMap) {
+		// TODO Auto-generated method stub
+		return usersMapper.upsubscribeByOpenId(paramterMap);
 	}
 
 }

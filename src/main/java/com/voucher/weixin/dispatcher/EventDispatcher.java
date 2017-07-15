@@ -7,22 +7,83 @@ import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
+import com.voucher.manage.model.Users;
+import com.voucher.manage.model.WeiXin;
+import com.voucher.manage.service.UserService;
+import com.voucher.manage.service.WeiXinService;
+import com.voucher.weixin.base.AdvancedUtil;
+import com.voucher.weixin.base.SNSUserInfo;
+import com.voucher.weixin.base.WeixinOauth2Token;
 import com.voucher.weixin.message.resp.Article;
-import com.voucher.weixin.message.resp.Image;
 import com.voucher.weixin.message.resp.ImageMessage;
 import com.voucher.weixin.message.resp.NewsMessage;
 import com.voucher.weixin.message.resp.TextMessage;
-import com.voucher.weixin.util.HttpPostUploadUtil;
 import com.voucher.weixin.util.MessageUtil;
 
 public class EventDispatcher {
-    public static String processEvent(Map<String, String> map) {
-        	String openid = map.get("FromUserName"); // 用户 openid
+	
+    public static String processEvent(Map<String, String> map,UserService userService,WeiXinService weixinService) {
+    	     Integer campusId=1; 
+    	    String openid = map.get("FromUserName"); // 用户 openid
         	String mpid = map.get("ToUserName"); // 公众号原始 ID
         	ImageMessage imgmsg = new ImageMessage();
 
         if (map.get("Event").equals(MessageUtil.EVENT_TYPE_SUBSCRIBE)) { // 关注事件
         	    System.out.println("==============这是关注事件！");
+        	    String accessToken,appId, appSecret;
+                WeiXin weiXin;
+
+                weiXin=weixinService.getCampusById(campusId);
+                
+                appId=weiXin.getAppId();
+                appSecret=weiXin.getAppSecret();
+                
+             	                  
+                 accessToken=weiXin.getAccessToken();
+                 System.out.println("accesstoke="+accessToken);   
+
+                	// 获取用户信息
+                    SNSUserInfo snsUserInfo;
+                        
+        			snsUserInfo = AdvancedUtil.getSNSUserInfo(accessToken, openid);
+              
+        			String errorCode;
+					try {
+        			   errorCode=snsUserInfo.getErrorCode();
+        			} catch (Exception e) {
+        				// TODO: handle exception
+        				e.printStackTrace();
+        			}
+                  
+            	    
+                    System.out.println("subscribe="+snsUserInfo.getSubScribe()+"   subsceibeTime="+
+                    snsUserInfo.getSubScribeTime()+"  nickName="+snsUserInfo.getNickname()+
+                    "  language="+snsUserInfo.getLanguage());
+              
+                 
+                 //写入新用户
+                 //判断是否存在openid
+                 int isOpenId=userService.getOpenId(campusId, openid);          
+                 snsUserInfo.setCampusId(campusId); 
+                 
+                 //不存在就插入新数据
+                 if(isOpenId==0){       	  
+                	  userService.insertUser(snsUserInfo);
+                  }else{       	  
+                    Users userinfo=userService.getUserInfoById(campusId, openid);                    
+                   //判断数据是否与原来数据相等，否则重新写入数据库
+                    if(userinfo.getSubScribe()!=(snsUserInfo.getSubScribe())||!userinfo.getNickname().equals(snsUserInfo.getNickname())||
+                		  !userinfo.getHeadImgUrl().equals(snsUserInfo.getHeadImgUrl())||!userinfo.getLanguage().equals(snsUserInfo.getLanguage())||
+                		   userinfo.getSubscribeTime().equals((snsUserInfo.getSubScribeTime()))||!userinfo.getSex().equals(snsUserInfo.getSex())||
+                		   !userinfo.getGroupId().equals(snsUserInfo.getGroupId())||
+                		   !userinfo.getRemark().equals(snsUserInfo.getRemark())){
+                    	 userService.upUserByOpenId(snsUserInfo);
+                	     System.out.println("NOT equals!!!!");
+                	   }else {
+        				System.out.println("OK !!!");
+        			}         
+                 }
+
         	   /*
         	    Image img = new Image();
         	    String access_token=map.get("access_token");
@@ -59,7 +120,13 @@ public class EventDispatcher {
         }
 
         if (map.get("Event").equals(MessageUtil.EVENT_TYPE_UNSUBSCRIBE)) { //取消关注事件
-            System.out.println("==============这是取消关注事件！");
+            Map<String, Object> paramterMap=new HashMap<>();
+            Integer subscribe=0;
+            paramterMap.put("subscribe", subscribe);
+            paramterMap.put("campusId", campusId);
+            paramterMap.put("openId", openid);
+            userService.upsubscribeByOpenId(paramterMap);
+        	System.out.println("==============这是取消关注事件！");
         }
 
         if (map.get("Event").equals(MessageUtil.EVENT_TYPE_SCAN)) { //扫描二维码事件

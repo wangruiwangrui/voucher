@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.voucher.manage.model.WeiXin;
+import com.voucher.manage.service.UserService;
 import com.voucher.manage.service.WeiXinService;
 import com.voucher.weixin.base.AdvancedUtil;
 import com.voucher.weixin.base.CommonUtil;
@@ -33,6 +34,13 @@ import com.voucher.weixin.base.Sign;
 public class WechatSecurity {
     private static Logger logger = Logger.getLogger(WechatSecurity.class);
 
+    private UserService userService;
+
+	@Autowired
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+    
    private WeiXinService weixinService;
 	
 	@Autowired
@@ -102,9 +110,15 @@ public class WechatSecurity {
      * @date 2016 年 3 月 7 日 下午 4:06:47
      */
     @RequestMapping(value = "security", method = RequestMethod.POST)
-    public void DoPost(HttpServletRequest request,HttpServletResponse response) {
-        try{
-            Map<String, String> map=MessageUtil.parseXml(request);
+    public void DoPost(HttpServletRequest request,HttpServletResponse response) {     
+            Map<String, String> map=null;
+            
+			try {
+				map = MessageUtil.parseXml(request);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
             String msgtype=map.get("MsgType");
             String userName=map.get("ToUserName");
             Integer campusId;
@@ -121,14 +135,10 @@ public class WechatSecurity {
             
             SNSUserInfo snsUserInfo;
             
+          try{ 
             snsUserInfo=AdvancedUtil.getSNSUserInfo(accessToken, openId);
+ 			errorCode=snsUserInfo.getErrorCode();
 
-            try {
- 			   errorCode=snsUserInfo.getErrorCode();
- 			} catch (Exception e) {
- 				// TODO: handle exception
- 				//e.printStackTrace();
- 			}
  			System.out.println("errorCode="+errorCode);
            if(errorCode!=null){
          	  if(errorCode.equals("40001")||errorCode.equals("42001")){
@@ -148,10 +158,14 @@ public class WechatSecurity {
             
             map.put("access_token", accessToken);
             map.put("nickName", snsUserInfo.getNickname());
-            
+           }catch (Exception e) {
+			// TODO: handle exception
+		}
+           
+          try{  
             if(MessageUtil.REQ_MESSAGE_TYPE_EVENT.equals(msgtype)){
             	response.setCharacterEncoding("utf-8");
-            	String respXML =EventDispatcher.processEvent(map); //进入事件处理
+            	String respXML =EventDispatcher.processEvent(map,userService,weixinService); //进入事件处理
             	PrintWriter out = response.getWriter();   //输出消息
                 out.print(respXML);
                 out.flush();

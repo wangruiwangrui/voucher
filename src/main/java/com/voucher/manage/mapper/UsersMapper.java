@@ -20,6 +20,7 @@ public interface UsersMapper {
 
     int updateByPrimaryKey(Users record);
 
+    Integer upsubscribeByOpenId(Map<String, Object> paramterMap);
     
     //**新增方法
 

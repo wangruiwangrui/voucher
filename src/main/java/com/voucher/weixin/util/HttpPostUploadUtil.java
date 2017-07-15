@@ -16,9 +16,9 @@ import javax.activation.MimetypesFileTypeMap;
 
 /**
  * ClassName: HttpPostUploadUtil
- * @Description: ¶àÃ½ÌåÉÏ´«
+ * @Description: å¤šåª’ä½“ä¸Šä¼ 
  * @author dapengniao
- * @date 2016 Äê 3 ÔÂ 14 ÈÕ ÉÏÎç 11:56:55
+ * @date 2016 å¹´ 3 æœˆ 14 æ—¥ ä¸Šåˆ 11:56:55
  */
 public class HttpPostUploadUtil {  
 
@@ -30,7 +30,7 @@ public class HttpPostUploadUtil {
     }
 
     /** 
-     * ÉÏ´«Í¼Æ¬ 
+     * ä¸Šä¼ å›¾ç‰‡ 
      *  
      * @param urlStr 
      * @param textMap 
@@ -42,7 +42,7 @@ public class HttpPostUploadUtil {
             Map<String, String> fileMap) {  
         String res = "";  
         HttpURLConnection conn = null;  
-        String BOUNDARY = "---------------------------123821742118716"; //boundary ¾ÍÊÇ request Í·ºÍÉÏ´«ÎÄ¼şÄÚÈİµÄ·Ö¸ô·û  
+        String BOUNDARY = "---------------------------123821742118716"; //boundary å°±æ˜¯ request å¤´å’Œä¸Šä¼ æ–‡ä»¶å†…å®¹çš„åˆ†éš”ç¬¦  
         try {  
             URL url = new URL(urlStr);  
             conn = (HttpURLConnection) url.openConnection();  
@@ -127,7 +127,7 @@ public class HttpPostUploadUtil {
             out.flush();  
             out.close();  
 
-            // ¶ÁÈ¡·µ»ØÊı¾İ  
+            // è¯»å–è¿”å›æ•°æ®  
             StringBuffer strBuf = new StringBuffer();  
             BufferedReader reader = new BufferedReader(new InputStreamReader(  
                     conn.getInputStream()));  
@@ -139,7 +139,7 @@ public class HttpPostUploadUtil {
             reader.close();  
             reader = null;  
         } catch (Exception e) {  
-            System.out.println("·¢ËÍ POST ÇëÇó³ö´í¡£" + urlStr);  
+            System.out.println("å‘é€ POST è¯·æ±‚å‡ºé”™ã€‚" + urlStr);  
             e.printStackTrace();  
         } finally {  
             if (conn != null) {  

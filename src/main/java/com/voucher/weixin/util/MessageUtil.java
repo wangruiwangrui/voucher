@@ -28,135 +28,135 @@ import com.voucher.weixin.message.resp.VoiceMessage;
 /**
  * ClassName: MessageUtil
  * 
- * @Description: ÏûÏ¢¹¤¾ßÀà
+ * @Description: æ¶ˆæ¯å·¥å…·ç±»
  * @author dapengniao
- * @date 2016 Äê 3 ÔÂ 7 ÈÕ ÉÏÎç 10:05:04
+ * @date 2016 å¹´ 3 æœˆ 7 æ—¥ ä¸Šåˆ 10:05:04
  */
 public class MessageUtil {
 
     /**
-     * ·µ»ØÏûÏ¢ÀàĞÍ£ºÎÄ±¾
+     * è¿”å›æ¶ˆæ¯ç±»å‹ï¼šæ–‡æœ¬
      */
     public static final String RESP_MESSAGE_TYPE_TEXT = "text";
 
     /**
-     * ·µ»ØÏûÏ¢ÀàĞÍ£ºÒôÀÖ
+     * è¿”å›æ¶ˆæ¯ç±»å‹ï¼šéŸ³ä¹
      */
     public static final String RESP_MESSAGE_TYPE_MUSIC = "music";
 
     /**
-     * ·µ»ØÏûÏ¢ÀàĞÍ£ºÍ¼ÎÄ
+     * è¿”å›æ¶ˆæ¯ç±»å‹ï¼šå›¾æ–‡
      */
     public static final String RESP_MESSAGE_TYPE_NEWS = "news";
 
     /**
-     * ·µ»ØÏûÏ¢ÀàĞÍ£ºÍ¼Æ¬
+     * è¿”å›æ¶ˆæ¯ç±»å‹ï¼šå›¾ç‰‡
      */
     public static final String RESP_MESSAGE_TYPE_Image = "image";
 
     /**
-     * ·µ»ØÏûÏ¢ÀàĞÍ£ºÓïÒô
+     * è¿”å›æ¶ˆæ¯ç±»å‹ï¼šè¯­éŸ³
      */
     public static final String RESP_MESSAGE_TYPE_Voice = "voice";
 
     /**
-     * ·µ»ØÏûÏ¢ÀàĞÍ£ºÊÓÆµ
+     * è¿”å›æ¶ˆæ¯ç±»å‹ï¼šè§†é¢‘
      */
     public static final String RESP_MESSAGE_TYPE_Video = "video";
 
     /**
-     * ÇëÇóÏûÏ¢ÀàĞÍ£ºÎÄ±¾
+     * è¯·æ±‚æ¶ˆæ¯ç±»å‹ï¼šæ–‡æœ¬
      */
     public static final String REQ_MESSAGE_TYPE_TEXT = "text";
 
     /**
-     * ÇëÇóÏûÏ¢ÀàĞÍ£ºÍ¼Æ¬
+     * è¯·æ±‚æ¶ˆæ¯ç±»å‹ï¼šå›¾ç‰‡
      */
     public static final String REQ_MESSAGE_TYPE_IMAGE = "image";
 
     /**
-     * ÇëÇóÏûÏ¢ÀàĞÍ£ºÁ´½Ó
+     * è¯·æ±‚æ¶ˆæ¯ç±»å‹ï¼šé“¾æ¥
      */
     public static final String REQ_MESSAGE_TYPE_LINK = "link";
 
     /**
-     * ÇëÇóÏûÏ¢ÀàĞÍ£ºµØÀíÎ»ÖÃ
+     * è¯·æ±‚æ¶ˆæ¯ç±»å‹ï¼šåœ°ç†ä½ç½®
      */
     public static final String REQ_MESSAGE_TYPE_LOCATION = "location";
 
     /**
-     * ÇëÇóÏûÏ¢ÀàĞÍ£ºÒôÆµ
+     * è¯·æ±‚æ¶ˆæ¯ç±»å‹ï¼šéŸ³é¢‘
      */
     public static final String REQ_MESSAGE_TYPE_VOICE = "voice";
 
     /**
-     * ÇëÇóÏûÏ¢ÀàĞÍ£ºÊÓÆµ
+     * è¯·æ±‚æ¶ˆæ¯ç±»å‹ï¼šè§†é¢‘
      */
     public static final String REQ_MESSAGE_TYPE_VIDEO = "video";
 
     /**
-     * ÇëÇóÏûÏ¢ÀàĞÍ£ºÍÆËÍ
+     * è¯·æ±‚æ¶ˆæ¯ç±»å‹ï¼šæ¨é€
      */
     public static final String REQ_MESSAGE_TYPE_EVENT = "event";
 
     /**
-     * ÊÂ¼şÀàĞÍ£ºsubscribe(¶©ÔÄ)
+     * äº‹ä»¶ç±»å‹ï¼šsubscribe(è®¢é˜…)
      */
     public static final String EVENT_TYPE_SUBSCRIBE = "subscribe";
 
     /**
-     * ÊÂ¼şÀàĞÍ£ºunsubscribe(È¡Ïû¶©ÔÄ)
+     * äº‹ä»¶ç±»å‹ï¼šunsubscribe(å–æ¶ˆè®¢é˜…)
      */
     public static final String EVENT_TYPE_UNSUBSCRIBE = "unsubscribe";
 
     /**
-     * ÊÂ¼şÀàĞÍ£ºCLICK(×Ô¶¨Òå²Ëµ¥µã»÷ÊÂ¼ş)
+     * äº‹ä»¶ç±»å‹ï¼šCLICK(è‡ªå®šä¹‰èœå•ç‚¹å‡»äº‹ä»¶)
      */
     public static final String EVENT_TYPE_CLICK = "CLICK";
 
     /**
-     * ÊÂ¼şÀàĞÍ£ºVIEW(×Ô¶¨Òå²Ëµ¥ URl ÊÓÍ¼)
+     * äº‹ä»¶ç±»å‹ï¼šVIEW(è‡ªå®šä¹‰èœå• URl è§†å›¾)
      */
     public static final String EVENT_TYPE_VIEW = "VIEW";
 
     /**
-     * ÊÂ¼şÀàĞÍ£ºLOCATION(ÉÏ±¨µØÀíÎ»ÖÃÊÂ¼ş)
+     * äº‹ä»¶ç±»å‹ï¼šLOCATION(ä¸ŠæŠ¥åœ°ç†ä½ç½®äº‹ä»¶)
      */
     public static final String EVENT_TYPE_LOCATION = "LOCATION";
 
     /**
-     * ÊÂ¼şÀàĞÍ£ºLOCATION(ÉÏ±¨µØÀíÎ»ÖÃÊÂ¼ş)
+     * äº‹ä»¶ç±»å‹ï¼šLOCATION(ä¸ŠæŠ¥åœ°ç†ä½ç½®äº‹ä»¶)
      */
     public static final String EVENT_TYPE_SCAN = "SCAN";
 
     /**
-     * @Description: ½âÎöÎ¢ĞÅ·¢À´µÄÇëÇó£¨XML£©
+     * @Description: è§£æå¾®ä¿¡å‘æ¥çš„è¯·æ±‚ï¼ˆXMLï¼‰
      * @param @param request
      * @param @return
      * @param @throws Exception
      * @author dapengniao
-     * @date 2016 Äê 3 ÔÂ 7 ÈÕ ÉÏÎç 10:04:02
+     * @date 2016 å¹´ 3 æœˆ 7 æ—¥ ä¸Šåˆ 10:04:02
      */
     @SuppressWarnings("unchecked")
     public static Map<String, String> parseXml(HttpServletRequest request)
             throws Exception {
-        // ½«½âÎö½á¹û´æ´¢ÔÚ HashMap ÖĞ
+        // å°†è§£æç»“æœå­˜å‚¨åœ¨ HashMap ä¸­
         Map<String, String> map = new HashMap<String, String>();
-        // ´Ó request ÖĞÈ¡µÃÊäÈëÁ÷
+        // ä» request ä¸­å–å¾—è¾“å…¥æµ
         InputStream inputStream = request.getInputStream();
-        // ¶ÁÈ¡ÊäÈëÁ÷
+        // è¯»å–è¾“å…¥æµ
         SAXReader reader = new SAXReader();
         Document document = reader.read(inputStream);
-        // µÃµ½ xml ¸ùÔªËØ
+        // å¾—åˆ° xml æ ¹å…ƒç´ 
         Element root = document.getRootElement();
-        // µÃµ½¸ùÔªËØµÄËùÓĞ×Ó½Úµã
+        // å¾—åˆ°æ ¹å…ƒç´ çš„æ‰€æœ‰å­èŠ‚ç‚¹
         List<Element> elementList = root.elements();
 
-        // ±éÀúËùÓĞ×Ó½Úµã
+        // éå†æ‰€æœ‰å­èŠ‚ç‚¹
         for (Element e : elementList)
             map.put(e.getName(), e.getText());
 
-        // ÊÍ·Å×ÊÔ´
+        // é‡Šæ”¾èµ„æº
         inputStream.close();
         inputStream = null;
 
@@ -164,11 +164,11 @@ public class MessageUtil {
     }
 
     /**
-     * @Description: ÎÄ±¾ÏûÏ¢¶ÔÏó×ª»»³É xml
+     * @Description: æ–‡æœ¬æ¶ˆæ¯å¯¹è±¡è½¬æ¢æˆ xml
      * @param @param textMessage
      * @param @return
      * @author dapengniao
-     * @date 2016 Äê 3 ÔÂ 8 ÈÕ ÏÂÎç 4:13:22
+     * @date 2016 å¹´ 3 æœˆ 8 æ—¥ ä¸‹åˆ 4:13:22
      */
     public static String textMessageToXml(TextMessage textMessage) {
         xstream.alias("xml", textMessage.getClass());
@@ -176,11 +176,11 @@ public class MessageUtil {
     }
 
     /**
-     * @Description: Í¼ÎÄÏûÏ¢¶ÔÏó×ª»»³É xml
+     * @Description: å›¾æ–‡æ¶ˆæ¯å¯¹è±¡è½¬æ¢æˆ xml
      * @param @param newsMessage
      * @param @return
      * @author dapengniao
-     * @date 2016 Äê 3 ÔÂ 8 ÈÕ ÏÂÎç 4:14:09
+     * @date 2016 å¹´ 3 æœˆ 8 æ—¥ ä¸‹åˆ 4:14:09
      */
     public static String newsMessageToXml(NewsMessage newsMessage) {
         xstream.alias("xml", newsMessage.getClass());
@@ -189,11 +189,11 @@ public class MessageUtil {
     }
 
     /**
-     * @Description: Í¼Æ¬ÏûÏ¢¶ÔÏó×ª»»³É xml
+     * @Description: å›¾ç‰‡æ¶ˆæ¯å¯¹è±¡è½¬æ¢æˆ xml
      * @param @param imageMessage
      * @param @return
      * @author dapengniao
-     * @date 2016 Äê 3 ÔÂ 9 ÈÕ ÉÏÎç 9:25:51
+     * @date 2016 å¹´ 3 æœˆ 9 æ—¥ ä¸Šåˆ 9:25:51
      */
     public static String imageMessageToXml(ImageMessage imageMessage) {
         xstream.alias("xml", imageMessage.getClass());
@@ -201,11 +201,11 @@ public class MessageUtil {
     }
 
     /**
-     * @Description: ÓïÒôÏûÏ¢¶ÔÏó×ª»»³É xml
+     * @Description: è¯­éŸ³æ¶ˆæ¯å¯¹è±¡è½¬æ¢æˆ xml
      * @param @param voiceMessage
      * @param @return
      * @author dapengniao
-     * @date 2016 Äê 3 ÔÂ 9 ÈÕ ÉÏÎç 9:27:26
+     * @date 2016 å¹´ 3 æœˆ 9 æ—¥ ä¸Šåˆ 9:27:26
      */
     public static String voiceMessageToXml(VoiceMessage voiceMessage) {
         xstream.alias("xml", voiceMessage.getClass());
@@ -213,11 +213,11 @@ public class MessageUtil {
     }
 
     /**
-     * @Description: ÊÓÆµÏûÏ¢¶ÔÏó×ª»»³É xml
+     * @Description: è§†é¢‘æ¶ˆæ¯å¯¹è±¡è½¬æ¢æˆ xml
      * @param @param videoMessage
      * @param @return
      * @author dapengniao
-     * @date 2016 Äê 3 ÔÂ 9 ÈÕ ÉÏÎç 9:31:09
+     * @date 2016 å¹´ 3 æœˆ 9 æ—¥ ä¸Šåˆ 9:31:09
      */
     public static String videoMessageToXml(VideoMessage videoMessage) {
         xstream.alias("xml", videoMessage.getClass());
@@ -225,11 +225,11 @@ public class MessageUtil {
     }
 
     /**
-     * @Description: ÒôÀÖÏûÏ¢¶ÔÏó×ª»»³É xml
+     * @Description: éŸ³ä¹æ¶ˆæ¯å¯¹è±¡è½¬æ¢æˆ xml
      * @param @param musicMessage
      * @param @return
      * @author dapengniao
-     * @date 2016 Äê 3 ÔÂ 8 ÈÕ ÏÂÎç 4:13:36
+     * @date 2016 å¹´ 3 æœˆ 8 æ—¥ ä¸‹åˆ 4:13:36
      */
     public static String musicMessageToXml(MusicMessage musicMessage) {
         xstream.alias("xml", musicMessage.getClass());
@@ -237,12 +237,12 @@ public class MessageUtil {
     }
 
     /**
-     * ¶ÔÏóµ½ xml µÄ´¦Àí
+     * å¯¹è±¡åˆ° xml çš„å¤„ç†
      */
     private static XStream xstream = new XStream(new XppDriver() {
         public HierarchicalStreamWriter createWriter(Writer out) {
             return new PrettyPrintWriter(out) {
-                // ¶ÔËùÓĞ xml ½ÚµãµÄ×ª»»¶¼Ôö¼Ó CDATA ±ê¼Ç
+                // å¯¹æ‰€æœ‰ xml èŠ‚ç‚¹çš„è½¬æ¢éƒ½å¢åŠ  CDATA æ ‡è®°
                 boolean cdata = true;
 
                 @SuppressWarnings("rawtypes")

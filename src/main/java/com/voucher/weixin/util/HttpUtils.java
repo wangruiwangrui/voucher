@@ -12,14 +12,14 @@ import org.apache.http.util.EntityUtils;
 
 public class HttpUtils {
 	/**
-     * @Description: http post ÇëÇó json Êı¾İ
+     * @Description: http post è¯·æ±‚ json æ•°æ®
      * @param @param urls
      * @param @param params
      * @param @return
      * @param @throws ClientProtocolException
      * @param @throws IOException
      * @author dapengniao
-     * @date 2016 Äê 3 ÔÂ 10 ÈÕ ÏÂÎç 3:58:15
+     * @date 2016 å¹´ 3 æœˆ 10 æ—¥ ä¸‹åˆ 3:58:15
      */
     public static String sendPostBuffer(String urls, String params)
             throws ClientProtocolException, IOException {
@@ -27,10 +27,10 @@ public class HttpUtils {
 
         StringEntity se = new StringEntity(params, HTTP.UTF_8);
         request.setEntity(se);
-        // ·¢ËÍÇëÇó
+        // å‘é€è¯·æ±‚
         @SuppressWarnings("resource")
         HttpResponse httpResponse = new DefaultHttpClient().execute(request);
-        // µÃµ½Ó¦´ğµÄ×Ö·û´®£¬ÕâÒ²ÊÇÒ»¸ö JSON ¸ñÊ½±£´æµÄÊı¾İ
+        // å¾—åˆ°åº”ç­”çš„å­—ç¬¦ä¸²ï¼Œè¿™ä¹Ÿæ˜¯ä¸€ä¸ª JSON æ ¼å¼ä¿å­˜çš„æ•°æ®
         String retSrc = EntityUtils.toString(httpResponse.getEntity());
         request.releaseConnection();
         return retSrc;

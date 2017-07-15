@@ -28,11 +28,11 @@ import com.voucher.weixin.base.WeixinOauth2Token;
 import cn.jpush.api.report.UsersResult.User;
 
 /**
-* ÀàÃû: OAuthServlet </br>
-* ÃèÊö: ÊÚÈ¨ºóµÄ»Øµ÷ÇëÇó´¦Àí </br>
-* ¿ª·¢ÈËÔ±£º souvc </br>
-* ´´½¨Ê±¼ä£º  2015-11-27 </br>
-* ·¢²¼°æ±¾£ºV1.0  </br>
+* ç±»å: OAuthServlet </br>
+* æè¿°: æˆæƒåçš„å›è°ƒè¯·æ±‚å¤„ç† </br>
+* å¼€å‘äººå‘˜ï¼š souvc </br>
+* åˆ›å»ºæ—¶é—´ï¼š  2015-11-27 </br>
+* å‘å¸ƒç‰ˆæœ¬ï¼šV1.0  </br>
  */
 @Controller
 @RequestMapping("/oauth")
@@ -61,14 +61,14 @@ public class OAuthServletController{
         
         Map<String, Object> map=new HashMap<>();
         
-        // »ñÈ¡Î¢ĞÅ·şÎñÆ÷·µ»ØµÄcode
+        // è·å–å¾®ä¿¡æœåŠ¡å™¨è¿”å›çš„code
         String code = request.getParameter("code");
         String state = request.getParameter("state");
         String errorCode=null;
         
         HttpSession session = request.getSession();
         
-        // ÍøÒ³ÊÚÈ¨½Ó¿Ú·ÃÎÊÆ¾Ö¤
+        // ç½‘é¡µæˆæƒæ¥å£è®¿é—®å‡­è¯
         String accessToken,appId, appSecret;
         WeiXin weiXin;
 
@@ -77,19 +77,19 @@ public class OAuthServletController{
         appId=weiXin.getAppId();
         appSecret=weiXin.getAppSecret();
         
-            // »ñÈ¡ÍøÒ³ÊÚÈ¨access_token
+            // è·å–ç½‘é¡µæˆæƒaccess_token
          WeixinOauth2Token weixinOauth2Token = AdvancedUtil.getOauth2AccessToken(appId, appSecret, code);
-            // ÍøÒ³ÊÚÈ¨½Ó¿Ú·ÃÎÊÆ¾Ö¤
+            // ç½‘é¡µæˆæƒæ¥å£è®¿é—®å‡­è¯
         	
             
          accessToken=weiXin.getAccessToken();
          System.out.println("accesstoke="+accessToken);   
         if(weixinOauth2Token!=null){
-        	// ÓÃ»§±êÊ¶
+        	// ç”¨æˆ·æ ‡è¯†
             String openId = weixinOauth2Token.getOpenId();
             
 
-        	// »ñÈ¡ÓÃ»§ĞÅÏ¢
+        	// è·å–ç”¨æˆ·ä¿¡æ¯
             SNSUserInfo snsUserInfo;
                 
 			snsUserInfo = AdvancedUtil.getSNSUserInfo(accessToken, openId);
@@ -113,7 +113,7 @@ public class OAuthServletController{
         		 
         		 snsUserInfo = AdvancedUtil.getSNSUserInfo(accessToken, openId);
         		 
-        		// ÉèÖÃÒª´«µİµÄ²ÎÊı
+        		// è®¾ç½®è¦ä¼ é€’çš„å‚æ•°
         		 map.put("campusName", weiXin.getCampusName());
                //  map.put("openId", snsUserInfo.getOpenId());
                  map.put("subscribe", snsUserInfo.getSubScribe());
@@ -132,7 +132,7 @@ public class OAuthServletController{
         	  }
         	  System.out.println("access_token errorCode : "+snsUserInfo.getErrorCode());
           }else{
-            // ÉèÖÃÒª´«µİµÄ²ÎÊı
+            // è®¾ç½®è¦ä¼ é€’çš„å‚æ•°
         	  map.put("campusName", weiXin.getCampusName());
         	 // map.put("openId", snsUserInfo.getOpenId());
               map.put("subscribe", snsUserInfo.getSubScribe());
@@ -155,17 +155,17 @@ public class OAuthServletController{
             
           }
          
-         //Ğ´ÈëĞÂÓÃ»§
-         //ÅĞ¶ÏÊÇ·ñ´æÔÚopenid
+         //å†™å…¥æ–°ç”¨æˆ·
+         //åˆ¤æ–­æ˜¯å¦å­˜åœ¨openid
          int isOpenId=userService.getOpenId(campusId, openId);          
          snsUserInfo.setCampusId(campusId); 
          
-         //²»´æÔÚ¾Í²åÈëĞÂÊı¾İ
+         //ä¸å­˜åœ¨å°±æ’å…¥æ–°æ•°æ®
          if(isOpenId==0){       	  
         	  userService.insertUser(snsUserInfo);
           }else{       	  
             Users userinfo=userService.getUserInfoById(campusId, openId);                    
-           //ÅĞ¶ÏÊı¾İÊÇ·ñÓëÔ­À´Êı¾İÏàµÈ£¬·ñÔòÖØĞÂĞ´ÈëÊı¾İ¿â
+           //åˆ¤æ–­æ•°æ®æ˜¯å¦ä¸åŸæ¥æ•°æ®ç›¸ç­‰ï¼Œå¦åˆ™é‡æ–°å†™å…¥æ•°æ®åº“
             if(userinfo.getSubScribe()!=(snsUserInfo.getSubScribe())||!userinfo.getNickname().equals(snsUserInfo.getNickname())||
         		  !userinfo.getHeadImgUrl().equals(snsUserInfo.getHeadImgUrl())||!userinfo.getLanguage().equals(snsUserInfo.getLanguage())||
         		   userinfo.getSubscribeTime().equals((snsUserInfo.getSubScribeTime()))||!userinfo.getSex().equals(snsUserInfo.getSex())||
@@ -201,7 +201,7 @@ public class OAuthServletController{
         if(openId!=null){
           System.out.println("openId=="+session.getAttribute("openId").toString());
           /*
-           * ²éÑ¯¸ÃopenIdÊÇ·ñÊôÓÚ´Ë¹«ÖÚºÅ
+           * æŸ¥è¯¢è¯¥openIdæ˜¯å¦å±äºæ­¤å…¬ä¼—å·
            */
           if(userService.getOpenId(campusId, openId)==1){
              return true;
@@ -243,7 +243,7 @@ public class OAuthServletController{
 	}
 	
 	/*
-	 * Õâ¸öÀàÊÇ¹ºÂòºó»Øµ÷µ½¸öÈËÖ÷Ò³£¬ÓëÉÏÃæµÄÀàµÄÇø±ğÊÇ²»ĞèÒª´«ÈëcampusId²ÎÊı
+	 * è¿™ä¸ªç±»æ˜¯è´­ä¹°åå›è°ƒåˆ°ä¸ªäººä¸»é¡µï¼Œä¸ä¸Šé¢çš„ç±»çš„åŒºåˆ«æ˜¯ä¸éœ€è¦ä¼ å…¥campusIdå‚æ•°
 	 */
 	@RequestMapping("getUserInfoByNull")
 	public @ResponseBody 
