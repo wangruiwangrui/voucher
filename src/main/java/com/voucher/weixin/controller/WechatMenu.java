@@ -64,7 +64,7 @@ public class WechatMenu {
 		System.out.println(url);
 		
 		 JSONObject jsonObject = CommonUtil.httpsRequest(url+accessToken, "GET", null);
-		 
+		 System.out.println("menu json="+jsonObject);
 		 if(jsonObject.getString("errcode").equals("40001")||jsonObject.getString("errcode").equals("42001")){
 			 appId=weixin.getAppId();
              appSecret=weixin.getAppSecret();
