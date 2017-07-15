@@ -35,7 +35,7 @@ public class WechatMenu {
 	
 	@RequestMapping("/query")
 	public @ResponseBody JSONObject
-	query(HttpServletRequest request,@RequestParam String type){  //typeÊÇÒª²éÑ¯µÄÀàĞÍ
+	query(HttpServletRequest request,@RequestParam String type){  //typeï¿½ï¿½Òªï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         WeiXin weixin;
         String url="";
 		Integer campusId=0;
@@ -101,7 +101,7 @@ public class WechatMenu {
 		
 		accessToken=weixin.getAccessToken();
 		
-	        //ÕâÀïÎªÇëÇó½Ó¿ÚµÄ url   +ºÅºóÃæµÄÊÇ token£¬ÕâÀï¾Í²»×ö¹ı¶à¶Ô token »ñÈ¡µÄ·½·¨½âÊÍ
+		//è¿™é‡Œä¸ºè¯·æ±‚æ¥å£çš„ url   +å·åé¢çš„æ˜¯ token
 	        String url="https://api.weixin.qq.com/cgi-bin/menu/create?access_token="+accessToken;
 	        
 	        JSONObject jObject;
@@ -128,7 +128,7 @@ public class WechatMenu {
 	            
 	            return jObject;
 	        }catch(Exception e){
-	            System.out.println("ÇëÇó´íÎó£¡");
+	            System.out.println("è¯·æ±‚é”™è¯¯");
 	            jObject=JSONObject.parseObject("error");
 	            return jObject;
 	        }

@@ -18,6 +18,7 @@ public class ChatTemplateProcessor {
 	
 	public String sendTemplateMessage(String accessToken, WxTemplate wxTemplate, WeiXinService weixinService) {	
 		String jsonString = new Gson().toJson(wxTemplate).toString();	
+		System.out.println("templatemessage="+jsonString);
 		String requestUrl = SEND_TEMPLAYE_MESSAGE_URL.replace("ACCESS_TOKEN", accessToken);	
 		JSONObject jsonObject = CommonUtil.httpsRequest(requestUrl, "POST", jsonString);
 		System.out.println("jsonObject="+jsonObject);	

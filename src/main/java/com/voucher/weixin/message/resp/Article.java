@@ -2,18 +2,18 @@ package com.voucher.weixin.message.resp;
 
 /**
  * ClassName: Article
- * @Description: Í¼ÎÄÏûÏ¢Ìå
+ * @Description: å›¾æ–‡æ¶ˆæ¯ä½“
  * @author dapengniao
- * @date 2016 Äê 3 ÔÂ 7 ÈÕ ÏÂÎç 3:16:28
+ * @date 2016 å¹´ 3 æœˆ 7 æ—¥ ä¸‹åˆ 3:16:28
  */
 public class Article {  
-    // Í¼ÎÄÏûÏ¢Ãû³Æ   
+    // å›¾æ–‡æ¶ˆæ¯åç§°   
     private String Title;  
-    // Í¼ÎÄÏûÏ¢ÃèÊö   
+    // å›¾æ–‡æ¶ˆæ¯æè¿°   
     private String Description;  
-    // Í¼Æ¬Á´½Ó£¬Ö§³Ö JPG¡¢PNG ¸ñÊ½£¬½ÏºÃµÄĞ§¹ûÎª´óÍ¼ 640*320£¬Ğ¡Í¼ 80*80£¬
+    // å›¾ç‰‡é“¾æ¥ï¼Œæ”¯æŒ JPGã€PNG æ ¼å¼ï¼Œè¾ƒå¥½çš„æ•ˆæœä¸ºå¤§å›¾ 640*320ï¼Œå°å›¾ 80*80ï¼Œ
     private String PicUrl;  
-    // µã»÷Í¼ÎÄÏûÏ¢Ìø×ªÁ´½Ó   
+    // ç‚¹å‡»å›¾æ–‡æ¶ˆæ¯è·³è½¬é“¾æ¥   
     private String Url;  
 
     public String getTitle() {  

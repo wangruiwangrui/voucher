@@ -2,20 +2,20 @@ package com.voucher.weixin.message.req;
 
 /**
  * ClassName: BaseMessage
- * @Description: Î¢ĞÅÇëÇóÏûÏ¢»ù±¾Àà
+ * @Description: å¾®ä¿¡è¯·æ±‚æ¶ˆæ¯åŸºæœ¬ç±»
  * @author dapengniao
- * @date 2016 Äê 3 ÔÂ 7 ÈÕ ÏÂÎç 3:03:59
+ * @date 2016 å¹´ 3 æœˆ 7 æ—¥ ä¸‹åˆ 3:03:59
  */
 public class BaseMessage {
-    // ¿ª·¢ÕßÎ¢ĞÅºÅ
+    // å¼€å‘è€…å¾®ä¿¡å·
     private String ToUserName;
-    // ·¢ËÍ·½ÕÊºÅ£¨Ò»¸ö OpenID£©
+    // å‘é€æ–¹å¸å·ï¼ˆä¸€ä¸ª OpenIDï¼‰
     private String FromUserName;
-    // ÏûÏ¢´´½¨Ê±¼ä £¨ÕûĞÍ£©
+    // æ¶ˆæ¯åˆ›å»ºæ—¶é—´ ï¼ˆæ•´å‹ï¼‰
     private long CreateTime;
-    // ÏûÏ¢ÀàĞÍ£¨text/image/location/link/video/shortvideo£©
+    // æ¶ˆæ¯ç±»å‹ï¼ˆtext/image/location/link/video/shortvideoï¼‰
     private String MsgType;
-    // ÏûÏ¢ id£¬64 Î»ÕûĞÍ
+    // æ¶ˆæ¯ idï¼Œ64 ä½æ•´å‹
     private long MsgId;
 
     public String getToUserName() {

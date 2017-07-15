@@ -17,12 +17,12 @@ import com.voucher.weixin.util.MessageUtil;
 
 public class EventDispatcher {
     public static String processEvent(Map<String, String> map) {
-        	String openid = map.get("FromUserName"); // ÓÃ»§ openid
-        	String mpid = map.get("ToUserName"); // ¹«ÖÚºÅÔ­Ê¼ ID
+        	String openid = map.get("FromUserName"); // ç”¨æˆ· openid
+        	String mpid = map.get("ToUserName"); // å…¬ä¼—å·åŸå§‹ ID
         	ImageMessage imgmsg = new ImageMessage();
 
-        if (map.get("Event").equals(MessageUtil.EVENT_TYPE_SUBSCRIBE)) { // ¹Ø×¢ÊÂ¼ş
-        	    System.out.println("==============ÕâÊÇ¹Ø×¢ÊÂ¼ş£¡");
+        if (map.get("Event").equals(MessageUtil.EVENT_TYPE_SUBSCRIBE)) { // å…³æ³¨äº‹ä»¶
+        	    System.out.println("==============è¿™æ˜¯å…³æ³¨äº‹ä»¶ï¼");
         	   /*
         	    Image img = new Image();
         	    String access_token=map.get("access_token");
@@ -41,7 +41,7 @@ public class EventDispatcher {
         	    System.out.println("meidaid="+mediaid);
         	    return MessageUtil.imageMessageToXml(imgmsg);
         	    */
-        	    //ÆÕÍ¨ÎÄ±¾ÏûÏ¢
+        	    //æ™®é€šæ–‡æœ¬æ¶ˆæ¯
 
                 TextMessage txtmsg=new TextMessage();
                 txtmsg.setToUserName(openid);
@@ -52,46 +52,46 @@ public class EventDispatcher {
                 String nickName=map.get("nickName");
                 
            
-                    txtmsg.setContent("ÄãºÃ£¬"+nickName);
+                    txtmsg.setContent("ä½ å¥½ï¼Œ"+nickName);
                     return MessageUtil.textMessageToXml(txtmsg);
 
         	
         }
 
-        if (map.get("Event").equals(MessageUtil.EVENT_TYPE_UNSUBSCRIBE)) { //È¡Ïû¹Ø×¢ÊÂ¼ş
-            System.out.println("==============ÕâÊÇÈ¡Ïû¹Ø×¢ÊÂ¼ş£¡");
+        if (map.get("Event").equals(MessageUtil.EVENT_TYPE_UNSUBSCRIBE)) { //å–æ¶ˆå…³æ³¨äº‹ä»¶
+            System.out.println("==============è¿™æ˜¯å–æ¶ˆå…³æ³¨äº‹ä»¶ï¼");
         }
 
-        if (map.get("Event").equals(MessageUtil.EVENT_TYPE_SCAN)) { //É¨Ãè¶şÎ¬ÂëÊÂ¼ş
-            System.out.println("==============ÕâÊÇÉ¨Ãè¶şÎ¬ÂëÊÂ¼ş£¡");
+        if (map.get("Event").equals(MessageUtil.EVENT_TYPE_SCAN)) { //æ‰«æäºŒç»´ç äº‹ä»¶
+            System.out.println("==============è¿™æ˜¯æ‰«æäºŒç»´ç äº‹ä»¶ï¼");
         }
 
-        if (map.get("Event").equals(MessageUtil.EVENT_TYPE_LOCATION)) { //Î»ÖÃÉÏ±¨ÊÂ¼ş
-            System.out.println("==============ÕâÊÇÎ»ÖÃÉÏ±¨ÊÂ¼ş£¡");
+        if (map.get("Event").equals(MessageUtil.EVENT_TYPE_LOCATION)) { //ä½ç½®ä¸ŠæŠ¥äº‹ä»¶
+            System.out.println("==============è¿™æ˜¯ä½ç½®ä¸ŠæŠ¥äº‹ä»¶ï¼");
         }
 
-        if (map.get("Event").equals(MessageUtil.EVENT_TYPE_CLICK)) { //×Ô¶¨Òå²Ëµ¥µã»÷ÊÂ¼ş
-            System.out.println("==============ÕâÊÇ×Ô¶¨Òå²Ëµ¥µã»÷ÊÂ¼ş£¡");
+        if (map.get("Event").equals(MessageUtil.EVENT_TYPE_CLICK)) { //è‡ªå®šä¹‰èœå•ç‚¹å‡»äº‹ä»¶
+            System.out.println("==============è¿™æ˜¯è‡ªå®šä¹‰èœå•ç‚¹å‡»äº‹ä»¶ï¼");
             NewsMessage newmsg=new NewsMessage();
             newmsg.setToUserName(openid);
             newmsg.setFromUserName(mpid);
             newmsg.setCreateTime(new Date().getTime());
             newmsg.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_NEWS);
             Article article=new Article();
-            article.setDescription("ÕâÊÇÍ¼ÎÄÏûÏ¢ 1"); //Í¼ÎÄÏûÏ¢µÄÃèÊö
-            article.setPicUrl("http://res.cuiyongzhi.com/2016/03/201603086749_6850.png"); //Í¼ÎÄÏûÏ¢Í¼Æ¬µØÖ·
-            article.setTitle("Í¼ÎÄÏûÏ¢ 1");  //Í¼ÎÄÏûÏ¢±êÌâ
-            article.setUrl("http://www.cuiyongzhi.com");  //Í¼ÎÄ url Á´½Ó
+            article.setDescription("è¿™æ˜¯å›¾æ–‡æ¶ˆæ¯ 1"); //å›¾æ–‡æ¶ˆæ¯çš„æè¿°
+            article.setPicUrl("http://res.cuiyongzhi.com/2016/03/201603086749_6850.png"); //å›¾æ–‡æ¶ˆæ¯å›¾ç‰‡åœ°å€
+            article.setTitle("å›¾æ–‡æ¶ˆæ¯ 1");  //å›¾æ–‡æ¶ˆæ¯æ ‡é¢˜
+            article.setUrl("http://www.cuiyongzhi.com");  //å›¾æ–‡ url é“¾æ¥
             List<Article> list=new ArrayList<Article>();
-            list.add(article);     //ÕâÀï·¢ËÍµÄÊÇµ¥Í¼ÎÄ£¬Èç¹ûĞèÒª·¢ËÍ¶àÍ¼ÎÄÔòÔÚÕâÀï list ÖĞ¼ÓÈë¶à¸ö Article ¼´¿É£¡
+            list.add(article);     //è¿™é‡Œå‘é€çš„æ˜¯å•å›¾æ–‡ï¼Œå¦‚æœéœ€è¦å‘é€å¤šå›¾æ–‡åˆ™åœ¨è¿™é‡Œ list ä¸­åŠ å…¥å¤šä¸ª Article å³å¯ï¼
             newmsg.setArticleCount(list.size());
             newmsg.setArticles(list);
             return MessageUtil.newsMessageToXml(newmsg);
 
         }
 
-        if (map.get("Event").equals(MessageUtil.EVENT_TYPE_VIEW)) { //×Ô¶¨Òå²Ëµ¥ View ÊÂ¼ş
-            System.out.println("==============ÕâÊÇ×Ô¶¨Òå²Ëµ¥ View ÊÂ¼ş£¡");
+        if (map.get("Event").equals(MessageUtil.EVENT_TYPE_VIEW)) { //è‡ªå®šä¹‰èœå• View äº‹ä»¶
+            System.out.println("==============è¿™æ˜¯è‡ªå®šä¹‰èœå• View äº‹ä»¶ï¼");
         }
 
         return null;

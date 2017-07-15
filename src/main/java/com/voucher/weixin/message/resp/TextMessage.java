@@ -2,12 +2,12 @@ package com.voucher.weixin.message.resp;
 
 /**
  * ClassName: TextMessage
- * @Description: ÎÄ±¾ÏûÏ¢ÏûÏ¢Ìå
+ * @Description: æ–‡æœ¬æ¶ˆæ¯æ¶ˆæ¯ä½“
  * @author dapengniao
- * @date 2016 Äê 3 ÔÂ 7 ÈÕ ÏÂÎç 3:54:22
+ * @date 2016 å¹´ 3 æœˆ 7 æ—¥ ä¸‹åˆ 3:54:22
  */
 public class TextMessage extends BaseMessage {  
-    // »Ø¸´µÄÏûÏ¢ÄÚÈİ   
+    // å›å¤çš„æ¶ˆæ¯å†…å®¹   
     private String Content;  
 
     public String getContent() {  

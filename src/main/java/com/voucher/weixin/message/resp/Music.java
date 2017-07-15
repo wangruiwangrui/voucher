@@ -2,21 +2,21 @@ package com.voucher.weixin.message.resp;
 
 /**
  * ClassName: Music
- * @Description: ÒôÀÖÏûÏ¢ÏûÏ¢Ìå
+ * @Description: éŸ³ä¹æ¶ˆæ¯æ¶ˆæ¯ä½“
  * @author dapengniao
- * @date 2016 Äê 3 ÔÂ 7 ÈÕ ÏÂÎç 3:54:00
+ * @date 2016 å¹´ 3 æœˆ 7 æ—¥ ä¸‹åˆ 3:54:00
  */
 public class Music {  
-    // ÒôÀÖÃû³Æ   
+    // éŸ³ä¹åç§°   
     private String Title;  
-    // ÒôÀÖÃèÊö   
+    // éŸ³ä¹æè¿°   
     private String Description;  
-    // ÒôÀÖÁ´½Ó   
+    // éŸ³ä¹é“¾æ¥   
     private String MusicUrl;  
-    // ¸ßÖÊÁ¿ÒôÀÖÁ´½Ó£¬WIFI »·¾³ÓÅÏÈÊ¹ÓÃ¸ÃÁ´½Ó²¥·ÅÒôÀÖ   
+    // é«˜è´¨é‡éŸ³ä¹é“¾æ¥ï¼ŒWIFI ç¯å¢ƒä¼˜å…ˆä½¿ç”¨è¯¥é“¾æ¥æ’­æ”¾éŸ³ä¹   
     private String HQMusicUrl;
 
-    private String ThumbMediaId; //ËõÂÔÍ¼µÄÃ½Ìå id
+    private String ThumbMediaId; //ç¼©ç•¥å›¾çš„åª’ä½“ id
 
     public String getThumbMediaId() {
         return ThumbMediaId;

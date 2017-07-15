@@ -2,18 +2,18 @@ package com.voucher.weixin.message.req;
 
 /**
  * ClassName: LocationMessage
- * @Description: µØÀíÎ»ÖÃÏûÏ¢
+ * @Description: åœ°ç†ä½ç½®æ¶ˆæ¯
  * @author dapengniao
- * @date 2016 Äê 3 ÔÂ 7 ÈÕ ÏÂÎç 3:06:10
+ * @date 2016 å¹´ 3 æœˆ 7 æ—¥ ä¸‹åˆ 3:06:10
  */
 public class LocationMessage extends BaseMessage {  
-    // µØÀíÎ»ÖÃÎ¬¶È   
+    // åœ°ç†ä½ç½®ç»´åº¦   
     private String Location_X;  
-    // µØÀíÎ»ÖÃ¾­¶È   
+    // åœ°ç†ä½ç½®ç»åº¦   
     private String Location_Y;  
-    // µØÍ¼Ëõ·Å´óĞ¡   
+    // åœ°å›¾ç¼©æ”¾å¤§å°   
     private String Scale;  
-    // µØÀíÎ»ÖÃĞÅÏ¢   
+    // åœ°ç†ä½ç½®ä¿¡æ¯   
     private String Label;  
 
     public String getLocation_X() {  

@@ -2,12 +2,12 @@ package com.voucher.weixin.message.resp;
 
 /**
  * ClassName: MusicMessage
- * @Description: ÒôÀÖÏûÏ¢
+ * @Description: éŸ³ä¹æ¶ˆæ¯
  * @author dapengniao
- * @date 2016 Äê 3 ÔÂ 7 ÈÕ ÏÂÎç 3:53:38
+ * @date 2016 å¹´ 3 æœˆ 7 æ—¥ ä¸‹åˆ 3:53:38
  */
 public class MusicMessage extends BaseMessage {  
-    // ÒôÀÖ   
+    // éŸ³ä¹   
     private Music Music;  
 
     public Music getMusic() {  

@@ -34,36 +34,37 @@ public class WechatSendMessageController {
 		weixin=weixinService.getCampusById(campusId);   	
 		accessToken=weixin.getAccessToken();
     	
-    	String openId="odos2s4KuZrdlm9-B3ryBhzO3iWg";
+    	String openId="odos2s-S4k3qupgn-pDW42osG1Gg";
     	ChatTemplateProcessor wechatTemplate=new ChatTemplateProcessor();
     	
     	WxTemplate templateData=new WxTemplate();
     	
-    	templateData.setUrl("/weixinTwo/gotoOrderConfirm?orderId=");
+    	templateData.setUrl("/baidu.com");
     	templateData.setTouser(openId);
     	templateData.setTopcolor("#000000");
     	templateData.setTemplate_id("--Eq06xssiUIGTrVcQs5KIpwaoMg_uvZiEpqg5XTUKU");
     	Map<String,TemplateData> m = new HashMap<String,TemplateData>();
     	TemplateData first = new TemplateData();
     	first.setColor("#000000");
-    	first.setValue("您好，您有一条待确认订单。");
+    	first.setValue("您好");
     	m.put("first", first);
     	TemplateData keyword1 = new TemplateData();
     	keyword1.setColor("#328392");
-    	keyword1.setValue("OD0001");
+    	keyword1.setValue("000001");
     	m.put("keyword1", keyword1);
     	TemplateData keyword2 = new TemplateData();
     	keyword2.setColor("#328392");
-    	keyword2.setValue("预定订单");
+    	keyword2.setValue("test");
     	m.put("keyword2", keyword2);
     	TemplateData keyword3 = new TemplateData();
     	keyword3.setColor("#328392");
-    	keyword3.setValue("大龙虾");
+    	keyword3.setValue("food");
     	m.put("keyword3", keyword3);
     	TemplateData remark = new TemplateData();
     	remark.setColor("#929232");
-    	remark.setValue("请及时确认订单！");
+    	remark.setValue("请确认");
     	m.put("remark", remark);
+    	templateData.setData(m);
     	
     	return wechatTemplate.sendTemplateMessage(accessToken, templateData,weixinService);
 	}

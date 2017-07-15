@@ -4,14 +4,14 @@ import java.util.List;
 
 /**
  * ClassName: NewsMessage
- * @Description: ¶àÍ¼ÎÄÏûÏ¢
+ * @Description: å¤šå›¾æ–‡æ¶ˆæ¯
  * @author dapengniao
- * @date 2016 Äê 3 ÔÂ 7 ÈÕ ÏÂÎç 3:52:18
+ * @date 2016 å¹´ 3 æœˆ 7 æ—¥ ä¸‹åˆ 3:52:18
  */
 public class NewsMessage extends BaseMessage {  
-    // Í¼ÎÄÏûÏ¢¸öÊı£¬ÏŞÖÆÎª 10 ÌõÒÔÄÚ   
+    // å›¾æ–‡æ¶ˆæ¯ä¸ªæ•°ï¼Œé™åˆ¶ä¸º 10 æ¡ä»¥å†…   
     private int ArticleCount;  
-    // ¶àÌõÍ¼ÎÄÏûÏ¢ĞÅÏ¢£¬Ä¬ÈÏµÚÒ»¸ö item Îª´óÍ¼   
+    // å¤šæ¡å›¾æ–‡æ¶ˆæ¯ä¿¡æ¯ï¼Œé»˜è®¤ç¬¬ä¸€ä¸ª item ä¸ºå¤§å›¾   
     private List<Article> Articles;  
 
     public int getArticleCount() {  

@@ -40,12 +40,12 @@ private WeiXinService weixinService;
 		List<WeiXin> weixins=new ArrayList<>();
 		WeiXin weixin;
 		
-		HttpSession session=request.getSession();  //取得session的type变量，判断是否为公众号管理员
+		HttpSession session=request.getSession();  //鍙栧緱session鐨則ype鍙橀噺锛屽垽鏂槸鍚︿负鍏紬鍙风鐞嗗憳
 		type=(Short) session.getAttribute("type");
 		cityId=(Integer) session.getAttribute("cityId");
-	
-		//服务器端的相对地址
-        String homeUrl=request.getHeader("Host")+request.getContextPath();
+
+		//鏈嶅姟鍣ㄧ鐨勭浉瀵瑰湴鍧�
+		String homeUrl=request.getHeader("Host")+request.getContextPath();
 		
 		if(type==0){
 		   weixins=weixinService.getAllCampusById(cityId);
@@ -72,7 +72,7 @@ private WeiXinService weixinService;
 		Integer  cityId , flag ;
 		WeiXin be=null;
 		
-		HttpSession session=request.getSession();  //取得session的type变量，判断是否为公众号管理员
+		HttpSession session=request.getSession();  //取锟斤拷session锟斤拷type锟斤拷锟斤拷锟斤拷锟叫讹拷锟角凤拷为锟斤拷锟节号癸拷锟斤拷员
 		cityId=(Integer) session.getAttribute("cityId");
 		
 		Short type=(Short)session.getAttribute("type");

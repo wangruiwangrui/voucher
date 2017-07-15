@@ -2,14 +2,14 @@ package com.voucher.weixin.message.req;
 
 /**
  * ClassName: VoiceMessage
- * @Description: ÓïÒôÏûÏ¢
+ * @Description: è¯­éŸ³æ¶ˆæ¯
  * @author dapengniao
- * @date 2016 Äê 3 ÔÂ 7 ÈÕ ÏÂÎç 3:07:10
+ * @date 2016 å¹´ 3 æœˆ 7 æ—¥ ä¸‹åˆ 3:07:10
  */
 public class VoiceMessage extends BaseMessage {  
-    // Ã½Ìå ID   
+    // åª’ä½“ ID   
     private String MediaId;  
-    // ÓïÒô¸ñÊ½   
+    // è¯­éŸ³æ ¼å¼   
     private String Format;  
 
     public String getMediaId() {  

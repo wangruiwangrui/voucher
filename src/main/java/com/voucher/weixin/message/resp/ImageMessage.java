@@ -2,9 +2,9 @@ package com.voucher.weixin.message.resp;
 
 /**
  * ClassName: ImageMessage
- * @Description: Í¼Æ¬ÏûÏ¢
+ * @Description: å›¾ç‰‡æ¶ˆæ¯
  * @author dapengniao
- * @date 2016 Äê 3 ÔÂ 8 ÈÕ ÏÂÎç 5:58:10
+ * @date 2016 å¹´ 3 æœˆ 8 æ—¥ ä¸‹åˆ 5:58:10
  */
 public class ImageMessage {
 

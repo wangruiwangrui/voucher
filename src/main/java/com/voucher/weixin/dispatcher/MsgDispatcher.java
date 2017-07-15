@@ -12,18 +12,18 @@ import com.voucher.weixin.util.MessageUtil;
 
 /**
  * ClassName: MsgDispatcher
- * @Description: ÏûÏ¢ÒµÎñ´¦Àí·Ö·¢Æ÷
+ * @Description: æ¶ˆæ¯ä¸šåŠ¡å¤„ç†åˆ†å‘å™¨
  * @author dapengniao
- * @date 2016 Äê 3 ÔÂ 7 ÈÕ ÏÂÎç 4:04:21
+ * @date 2016 å¹´ 3 æœˆ 7 æ—¥ ä¸‹åˆ 4:04:21
  */
 public class MsgDispatcher {
     public static String processMessage(Map<String, String> map) {
-        if (map.get("MsgType").equals(MessageUtil.REQ_MESSAGE_TYPE_TEXT)) { // ÎÄ±¾ÏûÏ¢
-            System.out.println("==============ÕâÊÇÎÄ±¾ÏûÏ¢£¡");
-            String openid=map.get("FromUserName"); //ÓÃ»§ openid
-            String mpid=map.get("ToUserName");   //¹«ÖÚºÅÔ­Ê¼ ID
+        if (map.get("MsgType").equals(MessageUtil.REQ_MESSAGE_TYPE_TEXT)) { // æ–‡æœ¬æ¶ˆæ¯
+            System.out.println("==============è¿™æ˜¯æ–‡æœ¬æ¶ˆæ¯ï¼");
+            String openid=map.get("FromUserName"); //ç”¨æˆ· openid
+            String mpid=map.get("ToUserName");   //å…¬ä¼—å·åŸå§‹ ID
 
-            //ÆÕÍ¨ÎÄ±¾ÏûÏ¢
+            //æ™®é€šæ–‡æœ¬æ¶ˆæ¯
 
             TextMessage txtmsg=new TextMessage();
             txtmsg.setToUserName(openid);
@@ -31,17 +31,17 @@ public class MsgDispatcher {
             txtmsg.setCreateTime(new Date().getTime());
             txtmsg.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_TEXT);
 
-            if (map.get("MsgType").equals(MessageUtil.REQ_MESSAGE_TYPE_TEXT)) { // ÎÄ±¾ÏûÏ¢
-                txtmsg.setContent("ÄãºÃ£¬ÕâÀïÊÇ"+openid+"¸öÈËÕËºÅ£¡");
+            if (map.get("MsgType").equals(MessageUtil.REQ_MESSAGE_TYPE_TEXT)) { // æ–‡æœ¬æ¶ˆæ¯
+                txtmsg.setContent("ä½ å¥½ï¼Œè¿™é‡Œæ˜¯"+openid+"ä¸ªäººè´¦å·ï¼");
                 return MessageUtil.textMessageToXml(txtmsg);
             }
         }
 
-        if (map.get("MsgType").equals(MessageUtil.REQ_MESSAGE_TYPE_IMAGE)) { // Í¼Æ¬ÏûÏ¢
-            System.out.println("==============ÕâÊÇÍ¼Æ¬ÏûÏ¢£¡");
-            //¶ÔÍ¼ÎÄÏûÏ¢
-            String openid=map.get("FromUserName"); //ÓÃ»§ openid
-            String mpid=map.get("ToUserName");   //¹«ÖÚºÅÔ­Ê¼ ID
+        if (map.get("MsgType").equals(MessageUtil.REQ_MESSAGE_TYPE_IMAGE)) { // å›¾ç‰‡æ¶ˆæ¯
+            System.out.println("==============è¿™æ˜¯å›¾ç‰‡æ¶ˆæ¯ï¼");
+            //å¯¹å›¾æ–‡æ¶ˆæ¯
+            String openid=map.get("FromUserName"); //ç”¨æˆ· openid
+            String mpid=map.get("ToUserName");   //å…¬ä¼—å·åŸå§‹ ID
             
             NewsMessage newmsg=new NewsMessage();
             newmsg.setToUserName(openid);
@@ -49,35 +49,35 @@ public class MsgDispatcher {
             newmsg.setCreateTime(new Date().getTime());
             newmsg.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_NEWS);
 
-            if (map.get("MsgType").equals(MessageUtil.REQ_MESSAGE_TYPE_IMAGE)) { // Í¼Æ¬ÏûÏ¢
-                System.out.println("==============ÕâÊÇÍ¼Æ¬ÏûÏ¢£¡");
+            if (map.get("MsgType").equals(MessageUtil.REQ_MESSAGE_TYPE_IMAGE)) { // å›¾ç‰‡æ¶ˆæ¯
+                System.out.println("==============è¿™æ˜¯å›¾ç‰‡æ¶ˆæ¯ï¼");
                 Article article=new Article();
-                article.setDescription("ÕâÊÇÍ¼ÎÄÏûÏ¢ 1"); //Í¼ÎÄÏûÏ¢µÄÃèÊö
-                article.setPicUrl("http://res.cuiyongzhi.com/2016/03/201603086749_6850.png"); //Í¼ÎÄÏûÏ¢Í¼Æ¬µØÖ·
-                article.setTitle("Í¼ÎÄÏûÏ¢ 1");  //Í¼ÎÄÏûÏ¢±êÌâ
-                article.setUrl("http://www.cuiyongzhi.com");  //Í¼ÎÄ url Á´½Ó
+                article.setDescription("è¿™æ˜¯å›¾æ–‡æ¶ˆæ¯ 1"); //å›¾æ–‡æ¶ˆæ¯çš„æè¿°
+                article.setPicUrl("http://res.cuiyongzhi.com/2016/03/201603086749_6850.png"); //å›¾æ–‡æ¶ˆæ¯å›¾ç‰‡åœ°å€
+                article.setTitle("å›¾æ–‡æ¶ˆæ¯ 1");  //å›¾æ–‡æ¶ˆæ¯æ ‡é¢˜
+                article.setUrl("http://www.cuiyongzhi.com");  //å›¾æ–‡ url é“¾æ¥
                 List<Article> list=new ArrayList<Article>();
-                list.add(article);     //ÕâÀï·¢ËÍµÄÊÇµ¥Í¼ÎÄ£¬Èç¹ûĞèÒª·¢ËÍ¶àÍ¼ÎÄÔòÔÚÕâÀï list ÖĞ¼ÓÈë¶à¸ö Article ¼´¿É£¡
+                list.add(article);     //è¿™é‡Œå‘é€çš„æ˜¯å•å›¾æ–‡ï¼Œå¦‚æœéœ€è¦å‘é€å¤šå›¾æ–‡åˆ™åœ¨è¿™é‡Œ list ä¸­åŠ å…¥å¤šä¸ª Article å³å¯ï¼
                 newmsg.setArticleCount(list.size());
                 newmsg.setArticles(list);
                 return MessageUtil.newsMessageToXml(newmsg);
             }      
         }
 
-        if (map.get("MsgType").equals(MessageUtil.REQ_MESSAGE_TYPE_LINK)) { // Á´½ÓÏûÏ¢
-            System.out.println("==============ÕâÊÇÁ´½ÓÏûÏ¢£¡");
+        if (map.get("MsgType").equals(MessageUtil.REQ_MESSAGE_TYPE_LINK)) { // é“¾æ¥æ¶ˆæ¯
+            System.out.println("==============è¿™æ˜¯é“¾æ¥æ¶ˆæ¯ï¼");
         }
 
-        if (map.get("MsgType").equals(MessageUtil.REQ_MESSAGE_TYPE_LOCATION)) { // Î»ÖÃÏûÏ¢
-            System.out.println("==============ÕâÊÇÎ»ÖÃÏûÏ¢£¡");
+        if (map.get("MsgType").equals(MessageUtil.REQ_MESSAGE_TYPE_LOCATION)) { // ä½ç½®æ¶ˆæ¯
+            System.out.println("==============è¿™æ˜¯ä½ç½®æ¶ˆæ¯ï¼");
         }
 
-        if (map.get("MsgType").equals(MessageUtil.REQ_MESSAGE_TYPE_VIDEO)) { // ÊÓÆµÏûÏ¢
-            System.out.println("==============ÕâÊÇÊÓÆµÏûÏ¢£¡");
+        if (map.get("MsgType").equals(MessageUtil.REQ_MESSAGE_TYPE_VIDEO)) { // è§†é¢‘æ¶ˆæ¯
+            System.out.println("==============è¿™æ˜¯è§†é¢‘æ¶ˆæ¯ï¼");
         }
 
-        if (map.get("MsgType").equals(MessageUtil.REQ_MESSAGE_TYPE_VOICE)) { // ÓïÒôÏûÏ¢
-            System.out.println("==============ÕâÊÇÓïÒôÏûÏ¢£¡");
+        if (map.get("MsgType").equals(MessageUtil.REQ_MESSAGE_TYPE_VOICE)) { // è¯­éŸ³æ¶ˆæ¯
+            System.out.println("==============è¿™æ˜¯è¯­éŸ³æ¶ˆæ¯ï¼");
         }
 
         return null;

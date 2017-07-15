@@ -2,16 +2,16 @@ package com.voucher.weixin.message.req;
 
 /**
  * ClassName: LinkMessage
- * @Description: Á¬½ÓÏûÏ¢
+ * @Description: è¿æ¥æ¶ˆæ¯
  * @author dapengniao
- * @date 2016 Äê 3 ÔÂ 7 ÈÕ ÏÂÎç 3:05:48
+ * @date 2016 å¹´ 3 æœˆ 7 æ—¥ ä¸‹åˆ 3:05:48
  */
 public class LinkMessage extends BaseMessage {
-    // ÏûÏ¢±êÌâ
+    // æ¶ˆæ¯æ ‡é¢˜
     private String Title;
-    // ÏûÏ¢ÃèÊö
+    // æ¶ˆæ¯æè¿°
     private String Description;
-    // ÏûÏ¢Á´½Ó
+    // æ¶ˆæ¯é“¾æ¥
     private String Url;
 
     public String getTitle() {

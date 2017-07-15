@@ -42,7 +42,7 @@ public class WechatSecurity {
     
     /**
      * 
-     * @Description: ÓÃÓÚ½ÓÊÕ get ²ÎÊı£¬·µ»ØÑéÖ¤²ÎÊı
+     * @Description: ç”¨äºæ¥æ”¶ get å‚æ•°ï¼Œè¿”å›éªŒè¯å‚æ•°
      * @param @param request
      * @param @param response
      * @param @param signature
@@ -50,7 +50,7 @@ public class WechatSecurity {
      * @param @param nonce
      * @param @param echostr
      * @author dapengniao
-     * @date 2016 Äê 3 ÔÂ 4 ÈÕ ÏÂÎç 6:20:00
+     * @date 2016 å¹´ 3 æœˆ 4 æ—¥ ä¸‹åˆ 6:20:00
      */
     @RequestMapping(value = "security", method = RequestMethod.GET)
     public void doGet(
@@ -73,7 +73,7 @@ public class WechatSecurity {
                 out.print(echostr);
                 out.close();
             } else {
-                logger.info("ÕâÀï´æÔÚ·Ç·¨ÇëÇó£¡");
+                logger.info("è¿™é‡Œå­˜åœ¨éæ³•è¯·æ±‚ï¼");
             }
         } catch (Exception e) {
             logger.error(e, e);
@@ -82,9 +82,9 @@ public class WechatSecurity {
 
     /*
     @RequestMapping(value = "security", method = RequestMethod.POST)
-    // post ·½·¨ÓÃÓÚ½ÓÊÕÎ¢ĞÅ·şÎñ¶ËÏûÏ¢
+    // post æ–¹æ³•ç”¨äºæ¥æ”¶å¾®ä¿¡æœåŠ¡ç«¯æ¶ˆæ¯
     public void DoPost(HttpServletRequest request,HttpServletResponse response) {
-        System.out.println("ÕâÊÇ post ·½·¨£¡");
+        System.out.println("è¿™æ˜¯ post æ–¹æ³•ï¼");
         try{
         Map<String, String> map=MessageUtil.parseXml(request);
         System.out.println("============================="+map.get("Content"));
@@ -95,11 +95,11 @@ public class WechatSecurity {
     */
     
     /**
-     * @Description: ½ÓÊÕÎ¢ĞÅ¶ËÏûÏ¢´¦Àí²¢×ö·Ö·¢
+     * @Description: æ¥æ”¶å¾®ä¿¡ç«¯æ¶ˆæ¯å¤„ç†å¹¶åšåˆ†å‘
      * @param @param request
      * @param @param response   
      * @author dapengniao
-     * @date 2016 Äê 3 ÔÂ 7 ÈÕ ÏÂÎç 4:06:47
+     * @date 2016 å¹´ 3 æœˆ 7 æ—¥ ä¸‹åˆ 4:06:47
      */
     @RequestMapping(value = "security", method = RequestMethod.POST)
     public void DoPost(HttpServletRequest request,HttpServletResponse response) {
@@ -114,7 +114,7 @@ public class WechatSecurity {
             WeiXin weiXin=weixinService.getCampusById(campusId);
             
             String accessToken=weiXin.getAccessToken();
-            String openId = map.get("FromUserName"); // ÓÃ»§ openid
+            String openId = map.get("FromUserName"); // ç”¨æˆ· openid
             String errorCode=null;
             String appId=weiXin.getAppId();
             String appSecret=weiXin.getAppSecret();
@@ -151,15 +151,15 @@ public class WechatSecurity {
             
             if(MessageUtil.REQ_MESSAGE_TYPE_EVENT.equals(msgtype)){
             	response.setCharacterEncoding("utf-8");
-            	String respXML =EventDispatcher.processEvent(map); //½øÈëÊÂ¼ş´¦Àí
-            	PrintWriter out = response.getWriter();   //Êä³öÏûÏ¢
+            	String respXML =EventDispatcher.processEvent(map); //è¿›å…¥äº‹ä»¶å¤„ç†
+            	PrintWriter out = response.getWriter();   //è¾“å‡ºæ¶ˆæ¯
                 out.print(respXML);
                 out.flush();
                 out.close();
             }else{                
                 response.setCharacterEncoding("utf-8");
-               String respXML = MsgDispatcher.processMessage(map); //½øÈëÏûÏ¢´¦Àí
-               PrintWriter out = response.getWriter();   //Êä³öÏûÏ¢
+               String respXML = MsgDispatcher.processMessage(map); //è¿›å…¥æ¶ˆæ¯å¤„ç†
+               PrintWriter out = response.getWriter();   //è¾“å‡ºæ¶ˆæ¯
                 out.print(respXML);
                 out.flush();
                 out.close();

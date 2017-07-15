@@ -2,14 +2,14 @@ package com.voucher.weixin.message.req;
 
 /**
  * ClassName: VideoMessage
- * @Description: ÊÓÆµ/Ğ¡ÊÓÆÁÏûÏ¢
+ * @Description: è§†é¢‘/å°è§†å±æ¶ˆæ¯
  * @author dapengniao
- * @date 2016 Äê 3 ÔÂ 7 ÈÕ ÏÂÎç 3:12:51
+ * @date 2016 å¹´ 3 æœˆ 7 æ—¥ ä¸‹åˆ 3:12:51
  */
 public class VideoMessage extends BaseMessage {
 
-    private String MediaId; // ÊÓÆµÏûÏ¢Ã½Ìå id£¬¿ÉÒÔµ÷ÓÃ¶àÃ½ÌåÎÄ¼şÏÂÔØ½Ó¿ÚÀ­È¡Êı¾İ
-    private String ThumbMediaId; // ÊÓÆµÏûÏ¢ËõÂÔÍ¼µÄÃ½Ìå id£¬¿ÉÒÔµ÷ÓÃ¶àÃ½ÌåÎÄ¼şÏÂÔØ½Ó¿ÚÀ­È¡Êı¾İ
+    private String MediaId; // è§†é¢‘æ¶ˆæ¯åª’ä½“ idï¼Œå¯ä»¥è°ƒç”¨å¤šåª’ä½“æ–‡ä»¶ä¸‹è½½æ¥å£æ‹‰å–æ•°æ®
+    private String ThumbMediaId; // è§†é¢‘æ¶ˆæ¯ç¼©ç•¥å›¾çš„åª’ä½“ idï¼Œå¯ä»¥è°ƒç”¨å¤šåª’ä½“æ–‡ä»¶ä¸‹è½½æ¥å£æ‹‰å–æ•°æ®
 
     public String getMediaId() {
         return MediaId;
