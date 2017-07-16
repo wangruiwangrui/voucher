@@ -3,9 +3,13 @@ package com.voucher.weixin.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.voucher.manage.model.WeiXin;
@@ -27,20 +31,20 @@ public class WechatSendMessageController {
 	}
 	
 	@RequestMapping("/send")
-	public @ResponseBody String template() {
+	public @ResponseBody String template(HttpServletRequest request,HttpServletResponse response,
+			@RequestParam String openid) {
 		String accessToken;
     	WeiXin weixin;
 		
 		weixin=weixinService.getCampusById(campusId);   	
 		accessToken=weixin.getAccessToken();
     	
-    	String openId="odos2s-S4k3qupgn-pDW42osG1Gg";
     	ChatTemplateProcessor wechatTemplate=new ChatTemplateProcessor();
     	
     	WxTemplate templateData=new WxTemplate();
     	
     	templateData.setUrl("/baidu.com");
-    	templateData.setTouser(openId);
+    	templateData.setTouser(openid);
     	templateData.setTopcolor("#000000");
     	templateData.setTemplate_id("--Eq06xssiUIGTrVcQs5KIpwaoMg_uvZiEpqg5XTUKU");
     	Map<String,TemplateData> m = new HashMap<String,TemplateData>();

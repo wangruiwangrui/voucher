@@ -54,26 +54,33 @@ public class WechatMenu {
 		weixin=weixinService.getCampusById(campusId);
 		
 		accessToken=weixin.getAccessToken();
-		
+		System.out.println("type="+type);
 		if(type.equals("menu")){
 		 url="https://api.weixin.qq.com/cgi-bin/"+type+"/get?access_token=";
 		}else if(type.equals("get_material")){
 		 url="https://api.weixin.qq.com/cgi-bin/material/"+type+"?access_token=";
 		}
 		
-		System.out.println(url);
-		
 		 JSONObject jsonObject = CommonUtil.httpsRequest(url+accessToken, "GET", null);
+		 System.out.println(url+accessToken);
 		 System.out.println("menu json="+jsonObject);
+		 try{
 		 if(jsonObject.getString("errcode").equals("40001")||jsonObject.getString("errcode").equals("42001")){
 			 appId=weixin.getAppId();
              appSecret=weixin.getAppSecret();
              accessToken=AdvancedUtil.getAccessToken(appId, appSecret); 
- 
+             Map<String, Object> paramMap=new HashMap<>();
+             accessToken=AdvancedUtil.getAccessToken(appId, appSecret);
+             paramMap.put("accessToken", accessToken);
+     		 paramMap.put("campusId", campusId);
+     		 System.out.println("errorcode="+jsonObject.getString("errcode")+"   accessToken="+accessToken);
+     		 weixinService.updateCampusById(paramMap);
              
              jsonObject = CommonUtil.httpsRequest(url+accessToken, "GET", null);
 		 }
-		 
+		 }catch (Exception e) {
+			// TODO: handle exception
+		}
 		 System.out.println("json="+jsonObject);
 		 
 		 return jsonObject;
@@ -114,8 +121,12 @@ public class WechatMenu {
 	            if(jsonObject.getString("errcode").equals("40001")||jsonObject.getString("errcode").equals("42001")){
 	            	appId=weixin.getAppId();
 	                appSecret=weixin.getAppSecret();
+	                Map<String, Object> paramMap=new HashMap<>();
 	                accessToken=AdvancedUtil.getAccessToken(appId, appSecret);
-	                
+	                paramMap.put("accessToken", accessToken);
+	        		 paramMap.put("campusId", campusId);
+	        		 System.out.println("errorcode="+jsonObject.getString("errcode")+"   accessToken="+accessToken);
+	        		 weixinService.updateCampusById(paramMap);
 	                url="https://api.weixin.qq.com/cgi-bin/menu/create?access_token="+accessToken;
 	                
 	                rs=HttpUtils.sendPostBuffer(url, menu);

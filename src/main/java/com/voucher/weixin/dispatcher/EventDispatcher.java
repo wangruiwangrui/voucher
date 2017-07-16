@@ -23,7 +23,10 @@ import com.voucher.weixin.util.MessageUtil;
 public class EventDispatcher {
 	
     public static String processEvent(Map<String, String> map,UserService userService,WeiXinService weixinService) {
-    	     Integer campusId=1; 
+    	     String userName=map.get("ToUserName");
+             Integer campusId;
+             //通过通过原始ID查询公众号id
+             campusId=weixinService.getCampusIdByUserName(userName);
     	    String openid = map.get("FromUserName"); // 用户 openid
         	String mpid = map.get("ToUserName"); // 公众号原始 ID
         	ImageMessage imgmsg = new ImageMessage();

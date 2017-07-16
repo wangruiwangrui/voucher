@@ -122,7 +122,7 @@ public class WechatSecurity {
             String msgtype=map.get("MsgType");
             String userName=map.get("ToUserName");
             Integer campusId;
-            
+            //通过通过原始ID查询公众号id
             campusId=weixinService.getCampusIdByUserName(userName);
             
             WeiXin weiXin=weixinService.getCampusById(campusId);

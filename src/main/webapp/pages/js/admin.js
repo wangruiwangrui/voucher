@@ -8,9 +8,9 @@ $('#wechatMenu').click(function(){
 	   $('#content').attr('src','pages/managerPage.html');
 	 });
 
-$('#business').click(function(){
-	   $('#content').load('pages/business.html');
-	   $('#content').attr('src','pages/business.html');
+$('#ahouse').click(function(){
+	   $('#content').load('pages/house.html');
+	   $('#content').attr('src','pages/house.html');
 	 });
 
 $('#orders').click(function(){
