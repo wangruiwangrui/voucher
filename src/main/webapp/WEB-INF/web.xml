@@ -157,15 +157,6 @@
 		<mime-type>application/air</mime-type>
 	</mime-mapping>
   
-	<servlet>  
-    <servlet-name>sse</servlet-name>  
-    <servlet-class>com.voucher.manage.controller.SSEServlet</servlet-class>  
-   </servlet>  
-  
-   <servlet-mapping>  
-    <servlet-name>sse</servlet-name>  
-    <url-pattern>/sse</url-pattern>  
-   </servlet-mapping>
  
  <!-- 配置中的url-pattern来访问druid内置监控页面 -->
    <servlet>  
