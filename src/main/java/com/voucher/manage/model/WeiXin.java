@@ -1,5 +1,9 @@
 package com.voucher.manage.model;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class WeiXin {
 
 	private Integer campusId;
@@ -12,7 +16,7 @@ public class WeiXin {
 	
 	private String homePage;
 	
-	private String userName; //公众号原始ID
+	private String userName; //锟斤拷锟节猴拷原始ID
 	
 	private String appId;
 	
@@ -21,6 +25,8 @@ public class WeiXin {
 	private String accessToken;
 	
 	private String token;
+	
+	private Date createTime;
 	
 	private String url;
 	
@@ -112,6 +118,23 @@ public class WeiXin {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public String getCreateTime() {
+		 SimpleDateFormat format =  new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
+
+	       Long time=new Long(createTime.getTime());
+	       String date = format.format(time);
+	       
+	       return date;
+	}
+
+	public Date getOverTime() {
+		return createTime;
+	}
+	
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
 
 	

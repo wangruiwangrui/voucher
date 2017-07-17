@@ -31,6 +31,8 @@ public class EventDispatcher {
         	String mpid = map.get("ToUserName"); // 公众号原始 ID
         	ImageMessage imgmsg = new ImageMessage();
 
+        	System.out.println("event="+map.get("Event"));
+        	
         if (map.get("Event").equals(MessageUtil.EVENT_TYPE_SUBSCRIBE)) { // 关注事件
         	    System.out.println("==============这是关注事件！");
         	    String accessToken,appId, appSecret;
@@ -132,6 +134,18 @@ public class EventDispatcher {
         	System.out.println("==============这是取消关注事件！");
         }
 
+        if (map.get("Event").equals(MessageUtil.REQ_MESSAGE_TYPE_IMAGE)) { //扫描二维码事件
+            System.out.println("==============这是图片事件！");
+        }
+
+        if (map.get("Event").equals(MessageUtil.REQ_MESSAGE_TYPE_VIDEO)) { //扫描二维码事件
+            System.out.println("==============这是视频事件！");
+        }
+        
+        if (map.get("Event").equals(MessageUtil.RESP_MESSAGE_TYPE_Voice)) { //扫描二维码事件
+            System.out.println("==============这是语音事件！");
+        }
+        
         if (map.get("Event").equals(MessageUtil.EVENT_TYPE_SCAN)) { //扫描二维码事件
             System.out.println("==============这是扫描二维码事件！");
         }

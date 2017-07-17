@@ -13,12 +13,13 @@
 	 <result column="app_secret" property="appSecret" jdbcType="VARCHAR" />
 	 <result column="token" property="token" jdbcType="VARCHAR" />
 	 <result column="access_token" property="accessToken" jdbcType="VARCHAR" />
+	 <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
 	</resultMap>
 	
 
     <select id="getAccessToken" resultMap="BaseResultMap">
       select
-       access_token
+       access_token,create_time
       from
       campus
       where
@@ -32,7 +33,8 @@
         user_name,
         app_id,app_secret,
         token,
-        access_token
+        access_token,
+        create_time
       from
       campus
       where
@@ -46,7 +48,8 @@
         user_name,
         app_id,app_secret,
         token,
-        access_token
+        access_token,
+        create_time
       from
       campus
       where
@@ -124,6 +127,9 @@
 			</if>
 			<if test="accessToken!=null">
 			 access_token=#{accessToken,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime!=null">
+			 create_time=#{createTime,jdbcType=TIMESTAMP},
 			</if>
 			<if test="token!=null">
 			 token=#{token,jdbcType=VARCHAR},

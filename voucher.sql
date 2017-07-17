@@ -33,6 +33,7 @@ CREATE TABLE `campus` (
   `app_secret` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `token` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `access_token` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '1',
+  `create_time` datetime DEFAULT '2000-01-01 01:01:01',
   PRIMARY KEY (`campus_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -43,7 +44,7 @@ CREATE TABLE `campus` (
 
 LOCK TABLES `campus` WRITE;
 /*!40000 ALTER TABLE `campus` DISABLE KEYS */;
-INSERT INTO `campus` VALUES (1,'测试号',1,'12345678','52393.viphk.ngrok.org/voucher/mobile/home/1.html','gh_b806f58c5c3c','wx99f6d05c1d414d1d','f598372149a6b093434009568b207522','dsfreg4we5g43','kRPZ2ZqVLX4uTf8zlz9ebQdUcrAunE6uAQ_Qh34QxuSuM9gfyE-1tCIC6wBFt9DhJ7taNa93msmr5_NE5S2zS1AIw8FwXISqSlk6JdkvXZK1xgEDt-5NCerc5RXpVMvgJDIhAJADXC'),(2,'房惠安居',1,'-','52393.viphk.ngrok.org/voucher/mobile/home/2.html','gh_626e6ef9f275','wxd060f18ab72b4397','fe80e15ec3d76700aea5ed41e3503691','joijojljoijhoiljo78989','rHQ_9gJScHQqCWJ3KqQMtIwW1NjF22jp2Ec3JMLydNINWAosTDJrXIwJqrvGbYKCiopoUp6LrjBsCJGG2NYNUBsLp9mlXImhWcVPBqa2MkwXxKJ8dbofYKir6WbAHuJpOVPfAIAXEY'),(3,'test公众号',1,NULL,NULL,NULL,NULL,NULL,NULL,'1'),(6,'公众号5',4,NULL,NULL,NULL,NULL,NULL,NULL,'1'),(7,'公众号6',4,NULL,NULL,NULL,NULL,NULL,NULL,'1'),(29,'1111111111',1,'-',NULL,NULL,'-','-',NULL,'1'),(30,'qwe',1,'-',NULL,NULL,'-','-',NULL,'1');
+INSERT INTO `campus` VALUES (1,'测试号',1,'12345678','dxvdsfdsfdsfdsf.cn/voucher/mobile/home/1.html','gh_b806f58c5c3c','wx99f6d05c1d414d1d','f598372149a6b093434009568b207522','dsfreg4we5g43','jvlmwEyLNgYCXgDrLYpZV2vUfWellpINriQSEENJDjth7wb_KtimDGHPLM90kxI4TlJ-DfXN30OifJClO76Xzea1mnt3JqQMDTjVVj0PD01s_onDIYR8ojWx216QtnRlTSTaAJAIHI','2017-07-17 22:43:55'),(2,'房惠安居',1,'-','dxvdsfdsfdsfdsf.cn/voucher/mobile/home/2.html','gh_626e6ef9f275','wxd060f18ab72b4397','6d3b8c93df8e19689b2498966cb700d8','joijojljoijhoiljo78989','96l2e7JFe7f2i1I6VgV86f3tEVNovC7WeSMyObamHi0tSSdjvmO7Wy0nIVCNWhfgGmDSkOiMzlbRwn2OlfEFO1YPXkiJ2NYCV89MY_QeiONo9Uqs_qq9-RrA7GHfqKP5GJEfABALOJ','2000-01-01 01:01:01'),(3,'test公众号',1,NULL,NULL,NULL,NULL,NULL,NULL,'1','2000-01-01 01:01:01'),(6,'公众号5',4,NULL,NULL,NULL,NULL,NULL,NULL,'1','2000-01-01 01:01:01'),(7,'公众号6',4,NULL,NULL,NULL,NULL,NULL,NULL,'1','2000-01-01 01:01:01'),(29,'1111111111',1,'-',NULL,NULL,'-','-',NULL,'1','2000-01-01 01:01:01'),(30,'qwe',1,'-',NULL,NULL,'-','-',NULL,'1','2000-01-01 01:01:01');
 /*!40000 ALTER TABLE `campus` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -76,7 +77,7 @@ CREATE TABLE `campus_admin` (
 
 LOCK TABLES `campus_admin` WRITE;
 /*!40000 ALTER TABLE `campus_admin` DISABLE KEYS */;
-INSERT INTO `campus_admin` VALUES ('1','202cb962ac59075b964b07152d234b70',0,1,NULL,NULL,'2017-04-09 09:08:14',NULL),('12','202cb962ac59075b964b07152d234b70',0,4,NULL,NULL,'2016-11-09 21:28:29',NULL),('123456','96e79218965eb72c92a549dd5a330112',1,NULL,123456,'1232132132',NULL,NULL),('15818','96e79218965eb72c92a549dd5a330112',1,9,1961655,'12313312',NULL,'2016-11-17 20:41:29'),('178','202cb962ac59075b964b07152d234b70',1,NULL,NULL,NULL,'2017-04-06 21:24:56',NULL),('18860902711','202cb962ac59075b964b07152d234b70',0,2,NULL,NULL,'2015-12-20 00:00:00',NULL),('18896554880','202cb962ac59075b964b07152d234b70',1,NULL,NULL,NULL,'2015-12-20 00:00:00',NULL),('2','202cb962ac59075b964b07152d234b70',1,NULL,123,'123456789为','2016-11-18 11:30:48',NULL),('aaaa','96e79218965eb72c92a549dd5a330112',1,5,111111,'111','2016-11-17 16:30:13',NULL),('aaaaa','0b4e7a0e5fe84ad35fb5f95b9ceeac79',1,6,111111,'aaaa',NULL,NULL),('assssssss','96e79218965eb72c92a549dd5a330112',1,7,1111111,'11',NULL,NULL),('bbbb','96e79218965eb72c92a549dd5a330112',1,8,111111,'3629',NULL,'2016-11-17 16:35:28');
+INSERT INTO `campus_admin` VALUES ('1','202cb962ac59075b964b07152d234b70',0,1,NULL,NULL,'2017-07-17 22:31:46',NULL),('12','202cb962ac59075b964b07152d234b70',0,4,NULL,NULL,'2016-11-09 21:28:29',NULL),('123456','96e79218965eb72c92a549dd5a330112',1,NULL,123456,'1232132132',NULL,NULL),('15818','96e79218965eb72c92a549dd5a330112',1,9,1961655,'12313312',NULL,'2016-11-17 20:41:29'),('178','202cb962ac59075b964b07152d234b70',1,NULL,NULL,NULL,'2017-04-06 21:24:56',NULL),('18860902711','202cb962ac59075b964b07152d234b70',0,2,NULL,NULL,'2015-12-20 00:00:00',NULL),('18896554880','202cb962ac59075b964b07152d234b70',1,NULL,NULL,NULL,'2015-12-20 00:00:00',NULL),('2','202cb962ac59075b964b07152d234b70',1,NULL,123,'123456789为','2016-11-18 11:30:48',NULL),('aaaa','96e79218965eb72c92a549dd5a330112',1,5,111111,'111','2016-11-17 16:30:13',NULL),('aaaaa','0b4e7a0e5fe84ad35fb5f95b9ceeac79',1,6,111111,'aaaa',NULL,NULL),('assssssss','96e79218965eb72c92a549dd5a330112',1,7,1111111,'11',NULL,NULL),('bbbb','96e79218965eb72c92a549dd5a330112',1,8,111111,'3629',NULL,'2016-11-17 16:35:28');
 /*!40000 ALTER TABLE `campus_admin` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -214,6 +215,31 @@ INSERT INTO `orders` VALUES (4,'odos2s-S4k3qupgn-pDW42osG1Gg',1,'2',100144,1,'20
 UNLOCK TABLES;
 
 --
+-- Table structure for table `photo`
+--
+
+DROP TABLE IF EXISTS `photo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `photo` (
+  `campus_id` int(10) DEFAULT NULL,
+  `open_id` varchar(255) DEFAULT NULL,
+  `image_url` varchar(255) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `photo`
+--
+
+LOCK TABLES `photo` WRITE;
+/*!40000 ALTER TABLE `photo` DISABLE KEYS */;
+INSERT INTO `photo` VALUES (1,'odos2s-S4k3qupgn-pDW42osG1Gg','/voucher/mobile/photo/735BJLRFRXyHVZfTAOI_bDwx42OXOHM0gb51gkDefcE5ubYUuKwzGm4k8_6jzY8g0k.jpg','2017-07-17 22:59:44');
+/*!40000 ALTER TABLE `photo` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `test`
 --
 
@@ -306,7 +332,7 @@ CREATE TABLE `users` (
   `remark` varchar(10) DEFAULT NULL,
   `total_amount` float(6,2) DEFAULT '0.00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -315,7 +341,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'11111111111',1,NULL,'evolsnow','http://dabijie.info/bbs2/source/plugin/hejin_toupiao/Uploads/0703183601-803.png',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0.00),(2,'12',1,NULL,'程序猿吗','http://dabijie.info/bbs2/source/plugin/hejin_toupiao/Uploads/0703183601-803.png',NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0.00),(3,'12345676543',1,NULL,'222','http://dabijie.info/bbs2/source/plugin/hejin_toupiao/Uploads/0703183601-803.png',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0.00),(4,'12345678901',1,NULL,'test','http://dabijie.info/bbs2/source/plugin/hejin_toupiao/Uploads/0703183601-803.png',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0.00),(5,'12345678909',1,NULL,'1234','http://dabijie.info/bbs2/source/plugin/hejin_toupiao/Uploads/0703183601-803.png',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0.00),(6,'12345678911',1,NULL,'123·','http://dabijie.info/bbs2/source/plugin/hejin_toupiao/Uploads/0703183601-803.png',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0.00),(7,'13160076967',1,NULL,'1','http://dabijie.info/bbs2/source/plugin/hejin_toupiao/Uploads/0703183601-803.png',NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0.00),(8,'13160076990',2,NULL,'1','http://dabijie.info/bbs2/source/plugin/hejin_toupiao/Uploads/0703183601-803.png',NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0.00),(9,'13270722790',2,NULL,'1','http://dabijie.info/bbs2/source/plugin/hejin_toupiao/Uploads/0703183601-803.png',NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0.00),(10,'13312345678',2,NULL,'niuyan','http://dabijie.info/bbs2/source/plugin/hejin_toupiao/Uploads/0703183601-803.png',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0.00),(11,'13382402235',1,NULL,'1','http://dabijie.info/bbs2/source/plugin/hejin_toupiao/Uploads/0703183601-803.png',NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0.00),(12,'13451895624',1,NULL,'1','http://dabijie.info/bbs2/source/plugin/hejin_toupiao/Uploads/0703183601-803.png',NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0.00),(13,'13814504204',1,NULL,'1','http://dabijie.info/bbs2/source/plugin/hejin_toupiao/Uploads/0703183601-803.png',NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0.00),(14,'13815445502',1,NULL,'1','http://dabijie.info/bbs2/source/plugin/hejin_toupiao/Uploads/0703183601-803.png',NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0.00),(15,'13851558735',1,NULL,'1','http://dabijie.info/bbs2/source/plugin/hejin_toupiao/Uploads/0703183601-803.png',NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0.00),(16,'13852290859',2,NULL,'1','http://dabijie.info/bbs2/source/plugin/hejin_toupiao/Uploads/0703183601-803.png',NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0.00),(17,'13861605337',2,NULL,'1','http://dabijie.info/bbs2/source/plugin/hejin_toupiao/Uploads/0703183601-803.png',NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0.00),(18,'13901496157',2,NULL,'1','http://dabijie.info/bbs2/source/plugin/hejin_toupiao/Uploads/0703183601-803.png',NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0.00),(19,'13913287690',2,NULL,'蒋震震','http://dabijie.info/bbs2/source/plugin/hejin_toupiao/Uploads/0703183601-803.png',NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,0.00),(20,'13913976839',3,NULL,'1','http://dabijie.info/bbs2/source/plugin/hejin_toupiao/Uploads/0703183601-803.png',NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0.00),(21,'13914083434',3,NULL,'abc','http://dabijie.info/bbs2/source/plugin/hejin_toupiao/Uploads/0703183601-803.png',NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0.00),(22,'13914720105',3,NULL,'1','http://dabijie.info/bbs2/source/plugin/hejin_toupiao/Uploads/0703183601-803.png',NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0.00),(55,'odos2s-S4k3qupgn-pDW42osG1Gg',1,1,'wangji','http://wx.qlogo.cn/mmopen/BaaUZepLicyjztPiadbUqVic2IcdFLciaZ4x5DtzUjxicLJfAUNwWpyCAhNjMYWzfFicpMMbLEm72TTxK7udcMmw0o7mkgicgYJS20p/0','zh_CN','1970-01-18 09:52:27','四川','0','中国','泸州',1,'',54.00),(56,'odos2syWNnnLc6q4TYFZi9aEHDDg',1,1,'a','http://wx.qlogo.cn/mmopen/MicUxVSMfMMq4G1BmVphVjxJy4wjeJib9w1nnl5ia8Ysu1Fh3fpchfw5CiaHDHHtoWtkYcJ0OOLxPwtdknN99aCF42UdqZPUr8re/0','zh_CN','1970-01-18 10:10:09','','0','','',0,'',0.00),(57,'oJ-HUw9CQBv2lhYVVEXaWnfKqq9I',2,1,'wangji','http://wx.qlogo.cn/mmopen/sxloaGf66AamK0yvSexFzL1mU2uKaUcaMnYY3E0DU7BcLx5OVSwXZbcQGnZibEd9G43FSZiaC2KzRwLkmwKgTyPIxqI4UOp0jO/0','zh_CN','1970-01-18 10:15:52','四川','0','中国','泸州',1,'',0.00),(58,'oJ-HUw-V4dztX7HbEgQlqU2Wys_M',2,1,'a','http://wx.qlogo.cn/mmopen/UwsrJjGdjJP7LASp1qKolbib7oNpz6ia0ZicPRxUibuRPhstIhqzj3UibZ61I2iaIV6libiajge25xpg2RfgowEG7PmpBw364wrjaOwic/0','zh_CN','1970-01-18 10:17:35','','0','','',0,'',0.00),(59,'odos2s4KuZrdlm9-B3ryBhzO3iWg',1,1,'钟钟','http://wx.qlogo.cn/mmopen/5dCambrP9xdGvrxgBxO1kbSXvJsJibzlQ8uYXWGcjdTzeZjMcMu6icXtsm9jOGf1T3up31zKgJYNQBK5iaEEA54upuFjMA2wEic6/0','zh_CN','1970-01-18 02:05:14','四川','0','中国','泸州',2,'',0.00),(60,'oJ-HUw3vZfDIF0yk8qP1fFx2q6DY',2,1,'钟钟','http://wx.qlogo.cn/mmopen/avI9iacfCia8BUiabJrcpdvZDbbdbao4us4dicB2415KwzJrLtHKVbSyibrc662hF3pyV0uaYqGUQWzZj4O7kysAVPFYfb6icqxBsd/0','zh_CN','1970-01-18 10:17:35','四川','0','中国','泸州',2,'',0.00);
+INSERT INTO `users` VALUES (56,'odos2syWNnnLc6q4TYFZi9aEHDDg',1,1,'a','http://wx.qlogo.cn/mmopen/MicUxVSMfMMq4G1BmVphVjxJy4wjeJib9w1nnl5ia8Ysu1Fh3fpchfw5CiaHDHHtoWtkYcJ0OOLxPwtdknN99aCF42UdqZPUr8re/0','zh_CN','1970-01-18 10:10:09','','0','','',0,'',0.00),(58,'oJ-HUw-V4dztX7HbEgQlqU2Wys_M',2,1,'a','http://wx.qlogo.cn/mmopen/UwsrJjGdjJP7LASp1qKolbib7oNpz6ia0ZicPRxUibuRPhstIhqzj3UibZ61I2iaIV6libiajge25xpg2RfgowEG7PmpBw364wrjaOwic/0','zh_CN','1970-01-18 10:17:35','','0','','',0,'',0.00),(59,'odos2s4KuZrdlm9-B3ryBhzO3iWg',1,1,'A宝寶儿钟钟','http://wx.qlogo.cn/mmopen/BaaUZepLicyh0P6I5f7AVzDxQ1uZdst4g3qSWF50BeuOS5vyLuQ0ATUs2neakJkccBVaacnb5su5OLRjSQ2GINaOz9MMeXWs5/0','zh_CN','1970-01-18 02:05:14','四川','0','中国','泸州',2,'',0.00),(60,'oJ-HUw3vZfDIF0yk8qP1fFx2q6DY',2,1,'钟钟','http://wx.qlogo.cn/mmopen/avI9iacfCia8BUiabJrcpdvZDbbdbao4us4dicB2415KwzJrLtHKVbSyibrc662hF3pyV0uaYqGUQWzZj4O7kysAVPFYfb6icqxBsd/0','zh_CN','1970-01-18 10:17:35','四川','0','中国','泸州',2,'',0.00),(64,'odos2s-S4k3qupgn-pDW42osG1Gg',1,1,'wangji','http://wx.qlogo.cn/mmopen/ajNVdqHZLLCtE2PoTVU3qs0hYax8b7vnDL1ZjAiasiaJkytJk07xrgqFAicNE2dgV2fl4lgAb3nFZ9COOquktu6vkV9ACCr5ajdA7KibQE2BreU/0','zh_CN','1970-01-18 16:41:24','四川','0','中国','泸州',1,'',0.00),(65,NULL,2,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0.00),(66,NULL,2,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0.00);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -355,4 +381,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-04-09 11:31:31
+-- Dump completed on 2017-07-17 23:01:55

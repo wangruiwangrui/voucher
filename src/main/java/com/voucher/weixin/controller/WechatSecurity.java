@@ -1,6 +1,7 @@
 package com.voucher.weixin.controller;
 
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -147,6 +148,9 @@ public class WechatSecurity {
          		 
          		 paramMap.put("accessToken", accessToken);
          		 paramMap.put("campusId", campusId);
+         		paramMap.put("campusId", campusId);
+        		 Date date=new Date();
+        		 paramMap.put("createTime", date);
          		 System.out.println("errorcode="+errorCode+"   accessToken="+accessToken);
          		 weixinService.updateCampusById(paramMap);
          		 
@@ -161,7 +165,7 @@ public class WechatSecurity {
            }catch (Exception e) {
 			// TODO: handle exception
 		}
-           
+
           try{  
             if(MessageUtil.REQ_MESSAGE_TYPE_EVENT.equals(msgtype)){
             	response.setCharacterEncoding("utf-8");

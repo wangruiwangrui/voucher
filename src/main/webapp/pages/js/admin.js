@@ -13,6 +13,12 @@ $('#ahouse').click(function(){
 	   $('#content').attr('src','pages/house.html');
 	 });
 
+$('#photo').click(function(){
+	   $('#content').load('pages/photo.html');
+	   $('#content').attr('src','pages/photo.html');
+	 });
+
+
 $('#orders').click(function(){
 	   $('#content').load('pages/orders.html');
 	   $('#content').attr('src','pages/orders.html');

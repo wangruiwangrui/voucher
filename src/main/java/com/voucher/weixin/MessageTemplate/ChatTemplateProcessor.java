@@ -1,5 +1,6 @@
 package com.voucher.weixin.MessageTemplate;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,6 +40,9 @@ public class ChatTemplateProcessor {
        		     Map<String, Object> paramMap=new HashMap<>();  
        		     paramMap.put("accessToken", accessToken);
       		    paramMap.put("campusId", campusId);
+      		    paramMap.put("campusId", campusId);
+      		    Date date=new Date();
+      		    paramMap.put("createTime", date);
       		    System.out.println("errorcode="+errorCode+"   accessToken="+accessToken);
       		     weixinService.updateCampusById(paramMap);
       		    requestUrl = SEND_TEMPLAYE_MESSAGE_URL.replace("ACCESS_TOKEN", accessToken);

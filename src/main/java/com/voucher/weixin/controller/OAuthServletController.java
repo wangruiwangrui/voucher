@@ -1,6 +1,7 @@
 package com.voucher.weixin.controller;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -108,6 +109,8 @@ public class OAuthServletController{
         		 
         		 paramMap.put("accessToken", accessToken);
         		 paramMap.put("campusId", campusId);
+        		 Date date=new Date();
+       		     paramMap.put("createTime", date);
         		 System.out.println("errorcode="+errorCode+"   accessToken="+accessToken);
         		 weixinService.updateCampusById(paramMap);
         		 

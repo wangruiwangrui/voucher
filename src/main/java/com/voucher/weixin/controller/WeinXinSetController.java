@@ -1,6 +1,7 @@
 package com.voucher.weixin.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -87,7 +88,9 @@ private WeiXinService weixinService;
 		paramMap.put("appId", appId);
 		paramMap.put("appSecret", appSecret);
 		paramMap.put("token", token);
-		
+		paramMap.put("campusId", campusId);
+		 Date date=new Date();
+		 paramMap.put("createTime", date);
 		if(campusId!=null){
 		   be=weixinService.getByCampusIds(campusId);
 		}

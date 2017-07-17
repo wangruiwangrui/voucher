@@ -1,5 +1,6 @@
 package com.voucher.weixin.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -73,6 +74,8 @@ public class WechatMenu {
              accessToken=AdvancedUtil.getAccessToken(appId, appSecret);
              paramMap.put("accessToken", accessToken);
      		 paramMap.put("campusId", campusId);
+     		 Date date=new Date();
+     		 paramMap.put("createTime", date);
      		 System.out.println("errorcode="+jsonObject.getString("errcode")+"   accessToken="+accessToken);
      		 weixinService.updateCampusById(paramMap);
              
@@ -125,6 +128,9 @@ public class WechatMenu {
 	                accessToken=AdvancedUtil.getAccessToken(appId, appSecret);
 	                paramMap.put("accessToken", accessToken);
 	        		 paramMap.put("campusId", campusId);
+	        		 paramMap.put("campusId", campusId);
+	         		 Date date=new Date();
+	         		 paramMap.put("createTime", date);
 	        		 System.out.println("errorcode="+jsonObject.getString("errcode")+"   accessToken="+accessToken);
 	        		 weixinService.updateCampusById(paramMap);
 	                url="https://api.weixin.qq.com/cgi-bin/menu/create?access_token="+accessToken;

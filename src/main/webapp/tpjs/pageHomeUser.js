@@ -1,9 +1,12 @@
+var campusId; //公众号id
+
 function actionName(value, row, index) {
 	return [
 			'<div onclick="getName(this);">',
 			value,
 			'</div>'].join('');
 }
+
 
 function getName(temp){
 	var hang = $(temp.parentNode).parent().prevAll().length+1;  //jquery获取td所在的行和列
@@ -370,6 +373,8 @@ function getQueryString(name) {
 			        	        success: function (res) {
 			        	          i++;
 			        	          alert('已上传：' + i + '/' + length);
+			        	        //返回图片的服务器端ID res.serverId,然后调用wxImgCallback函数进行下载图片操作
+	                                wxImgCallback(res.serverId);
 			        	          images.serverId.push(res.serverId);
 			        	          if (i < length) {
 			        	            upload();
@@ -383,6 +388,24 @@ function getQueryString(name) {
 			        	    upload();
 			        	  };
 
+			        	  function wxImgCallback(serverId) {
+			        		    //将serverId传给wx_upload.php的upload方法
+			        		    var url = "../../mobile/file/upload.do";
+			        		    $.get(url,{
+			        		    	campusId:campusId,
+			        		    	serverId:serverId
+			        		    }, function(data){
+			        		    	alert(data);
+			        		        if (data.code == 0) {
+			        		            alert(data.msg);
+			        		        } else if (data.code == 1) {
+			        		            //存储到服务器成功后的处理
+			        		            //
+			        		        }
+			        		    });
+			        		}
+			        	  
+			        	  
 			        	  // 5.4 下载图片
 			        	  document.querySelector('#downloadImage').onclick = function () {
 			        	    if (images.serverId.length === 0) {
