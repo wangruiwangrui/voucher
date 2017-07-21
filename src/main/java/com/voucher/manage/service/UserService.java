@@ -27,5 +27,7 @@ public interface UserService {
 	Integer upUserByOpenId(SNSUserInfo snsUserInfo);
 	
 	Integer upsubscribeByOpenId(Map<String, Object> paramterMap);
+	
+	int upAtionFormatter(Map<String, Object> paramterMap);
 
 }

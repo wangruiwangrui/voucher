@@ -105,6 +105,18 @@ public class UserController {
 	}
 
 	
+	@RequestMapping(value="/upAtionFormatter")
+	public @ResponseBody Integer upAtionFormatter(HttpServletRequest request,@RequestParam String openId,
+			@RequestParam Integer campusId,@RequestParam Integer place){
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("openId", openId);
+		map.put("place", place);
+		map.put("campusId", campusId);
+		
+		return userService.upAtionFormatter(map);
+	}
+	
 	/**
 	 * 閫�鍑虹櫥褰�
 	 * @param request

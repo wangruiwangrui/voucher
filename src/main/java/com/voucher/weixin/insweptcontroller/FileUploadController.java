@@ -62,7 +62,7 @@ public class FileUploadController {
         String filePath=pathRoot+path;  
         
          File savePath = new File(filePath);//创建新文件  
-         System.out.println("filePath"+filePath);
+         System.out.println("filePath="+filePath);
          if (!savePath.exists()) {   
              savePath.mkdir();   
          }  

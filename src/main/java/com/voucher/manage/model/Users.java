@@ -38,6 +38,8 @@ public class Users {
     
     private String name;
     
+    private Integer place;
+    
     private String phone;
     
     private String defaultAddress;
@@ -214,6 +216,14 @@ public class Users {
 
 	public void setTotalAmount(Float totalAmount) {
 		this.totalAmount = totalAmount;
+	}
+
+	public Integer getPlace() {
+		return place;
+	}
+
+	public void setPlace(Integer place) {
+		this.place = place;
 	}
 
 }

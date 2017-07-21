@@ -66,4 +66,10 @@ public class UserServiceImpl implements UserService {
 		return usersMapper.upsubscribeByOpenId(paramterMap);
 	}
 
+	@Override
+	public int upAtionFormatter(Map<String, Object> paramterMap) {
+		// TODO Auto-generated method stub
+		return usersMapper.upAtionFormatter(paramterMap);
+	}
+
 }

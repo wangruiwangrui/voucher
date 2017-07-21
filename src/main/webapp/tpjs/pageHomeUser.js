@@ -369,13 +369,14 @@ function getQueryString(name) {
 			        	    images.serverId = [];
 			        	    function upload() {
 			        	      wx.uploadImage({
-			        	        localId: images.localId[i],
+			        	        localId: images.localId[i].toString(),
+			        	        isShowProgressTips: images.localId[i].toString(),
 			        	        success: function (res) {
 			        	          i++;
 			        	          alert('已上传：' + i + '/' + length);
 			        	        //返回图片的服务器端ID res.serverId,然后调用wxImgCallback函数进行下载图片操作
 	                                wxImgCallback(res.serverId);
-			        	          images.serverId.push(res.serverId);
+			        	       //   images.serverId.push(res.serverId);
 			        	          if (i < length) {
 			        	            upload();
 			        	          }
