@@ -37,5 +37,7 @@ public interface UserService {
     int insertUsersInfo(Users users);
     
     int updateUsersInfo(Users users);
+    
+    Users getUserByOnlyOpenId(String openId);
 
 }

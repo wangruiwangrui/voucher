@@ -85,7 +85,7 @@
 		<filter-class>com.voucher.manage.filter.IsLoginFilter</filter-class>
 		<init-param>
 			<param-name>loginStrings</param-name><!-- 对登录页面不进行过滤 -->
-			<param-value>/login.html;/seller;/newmsg;/register;version.html;/mobile;/oauth;/wechat;/test</param-value>
+			<param-value>/login.html;/seller;/newmsg;/register;version.html;/mobile;/oauth;/wechat;/test;/safety;/guidance</param-value>
 		</init-param>
 		<init-param>
 			<param-name>includeStrings</param-name><!-- 只对指定过滤参数后缀进行过滤 -->
@@ -103,33 +103,30 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
-   <!-- 对移动页面的文件栏截 -->
+   <!-- 对普通员工栏截 -->
     <filter>
 		<filter-name>MobileSessionFilter</filter-name>
 		<filter-class>com.voucher.manage.filter.MobileIsLoginFilter</filter-class>
 		<init-param>
-			<param-name>loginStrings</param-name>
-			<param-value>/mobile;/oauth;/getCampusId;/beg;/claim;</param-value>
+			<param-name>loginStrings</param-name><!-- 对页面不进行过滤 -->
+			<param-value>/mobile;/oauth;/getCampusId;/beg;/claim;/guidance</param-value>
 		</init-param>
 		<init-param>
 			<param-name>includeStrings</param-name>
-			<param-value>.do</param-value>
+			<param-value>.html;.do</param-value>
 		</init-param>
 		<init-param>
 			<param-name>redirectPath</param-name>
-			<param-value>/mobile/admin/login.html</param-value>
+			<param-value>/mobile/1/restrict.html</param-value>
 		</init-param>
 	</filter>
 	
 	<filter-mapping>
 		<filter-name>MobileSessionFilter</filter-name>
-		<url-pattern>/mobile/*</url-pattern>
-		<url-pattern>/mobileConsume/*</url-pattern>
-		<url-pattern>/mobilePay/*</url-pattern>
-		<url-pattern>/mobilePurchase/*</url-pattern>
+		<url-pattern>/safety/*</url-pattern>
 	</filter-mapping>
 
-	<!-- 对移动管理员后台页面的文件栏截 -->
+	<!-- 对普通员工和安全人员栏截 -->
     <filter>
 		<filter-name>MobileAdminSessionFilter</filter-name>
 		<filter-class>com.voucher.manage.filter.MobileAdminIsLoginFilter</filter-class>
@@ -143,13 +140,13 @@
 		</init-param>
 		<init-param>
 			<param-name>redirectPath</param-name>
-			<param-value>/mobile/admin/login.html</param-value>
+			<param-value>/mobile/1/restrict.html</param-value>
 		</init-param>
 	</filter>
 	
 	<filter-mapping>
 		<filter-name>MobileAdminSessionFilter</filter-name>
-		<url-pattern>/mobile/admin/*</url-pattern>
+		<url-pattern>/guidance/*</url-pattern>
 	</filter-mapping>
 
 	  <mime-mapping>

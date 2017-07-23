@@ -52,6 +52,25 @@
 	</select>
 
 
+  <select id="getUserByOnlyOpenId" resultMap="BaseResultMap" useCache="false">
+		select
+		id,users.open_id,total_amount,
+		campus_id,subscribe,nickname, headimg_url,
+		language,province,groupid,country,
+		city,sex,remark,
+		subscribe_time,
+		usersinfo.name,users.place,	
+		usersinfo.headship,usersinfo.email,	
+		address ,phone
+		from users
+		left join usersinfo
+		on
+		users.open_id = usersinfo.open_id
+		<where>
+			users.open_id=#{openId,jdbcType=VARCHAR}
+	    </where>
+	</select>
+
    <select id="getOpenId"  resultType="Integer" useCache="false">
     select
      count(*)

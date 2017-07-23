@@ -11,9 +11,17 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
-import javax.servlet.http.HttpSession;   
+import javax.servlet.http.HttpSession;
+
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import com.voucher.manage.mapper.UsersMapper;
+import com.voucher.manage.model.Users;   
   
 public class MobileAdminIsLoginFilter implements Filter {   
+	private UsersMapper usersMapper;
+	
     public FilterConfig config2=null;
     @Override  
     public void destroy() {   
@@ -45,18 +53,29 @@ public class MobileAdminIsLoginFilter implements Filter {
 	            return;
 	        }
 	        
-	        String user = ( String ) hrequest.getSession().getAttribute("campusAdmin");
 	        String openId=( String ) hrequest.getSession().getAttribute("openId");
 	        
-	        if (user == null||openId!=null) {
-	        	HttpSession session = hrequest.getSession();	        	  
-	        	session.invalidate();         //如果微信登录后就清除session再登陆管理员页面
-	        	System.out.println("clear session user="+user+"    openId="+openId);
+	        HttpServletRequest httpRequest = (HttpServletRequest) request;
+			WebApplicationContext wac = WebApplicationContextUtils    //controller浠ュ鐨勫寘鍒濆鍖栫被
+					.getRequiredWebApplicationContext(httpRequest.getSession()
+							.getServletContext());
+	        
+			usersMapper=wac.getBean(UsersMapper.class);
+	        
+	        if (openId==null) {
+	        //	HttpSession session = hrequest.getSession();	        	  
+	        //	session.invalidate();         //濡傛灉寰俊鐧诲綍鍚庡氨娓呴櫎session鍐嶇櫥闄嗙鐞嗗憳椤甸潰
 	        	wrapper.sendRedirect(redirectPath);
 	            return;
 	        }else {
-	        	System.out.println("true user="+user+"    openId="+openId);
-	            chain.doFilter(request, response);
+	        	System.out.println("mobileAdminIsLoginFilter openid="+openId);
+	        	Users users=usersMapper.getUserByOnlyOpenId(openId);
+	        	System.out.println("mobileAdminIsLoginFilter openId ="+openId);
+	           if(users.getPlace()>=2){  //閫氳繃place鍒ゆ柇鐢ㄦ埛鐨勮闂潈闄愶紝鏁板瓧瓒婂ぇ鏉冮檺瓒婇珮
+	             chain.doFilter(request, response);
+	            }else{
+	        	 wrapper.sendRedirect(redirectPath);
+	        	}
 	            return;
 	        }   
     }   

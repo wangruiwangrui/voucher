@@ -32,6 +32,8 @@ public interface UsersMapper {
     
     int updateUsersInfo(Users users);
     
+    Users getUserByOnlyOpenId(String openId);
+    
     //**新增方法
 
 	List<Users> getAllFullUser(@Param(value="campusId")Integer campusId,@Param(value="limit")Integer limit, @Param(value="offset")Integer offset, @Param(value="sort")String sort, @Param(value="order")String order,@Param(value="search")String search);

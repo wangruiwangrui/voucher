@@ -96,4 +96,10 @@ public class UserServiceImpl implements UserService {
 		return usersMapper.updateUsersInfo(users);
 	}
 
+	@Override
+	public Users getUserByOnlyOpenId(String openId) {
+		// TODO Auto-generated method stub
+		return usersMapper.getUserByOnlyOpenId(openId);
+	}
+
 }

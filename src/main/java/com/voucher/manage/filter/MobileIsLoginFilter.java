@@ -13,7 +13,17 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import com.voucher.manage.mapper.UsersMapper;
+import com.voucher.manage.model.Users;
+import com.voucher.manage.service.UserService;
+
 public class MobileIsLoginFilter implements Filter{
+	private UsersMapper usersMapper;
+	
 	 public FilterConfig config3=null;
 	    @Override  
 	    public void destroy() {   
@@ -47,15 +57,27 @@ public class MobileIsLoginFilter implements Filter{
 		        
 		        String openId=( String ) hrequest.getSession().getAttribute("openId");
 		        
+		        HttpServletRequest httpRequest = (HttpServletRequest) request;
+				WebApplicationContext wac = WebApplicationContextUtils    //controller以外的包初始化类
+						.getRequiredWebApplicationContext(httpRequest.getSession()
+								.getServletContext());
+		        
+				usersMapper=wac.getBean(UsersMapper.class);
+				
 		        if (openId==null) {
-		        	HttpSession session = hrequest.getSession();
-		        	  session.invalidate();         //�������Ա��¼������session��campusAdmin
-		        	System.out.println("mobile openId is "+openId);
+		        //	HttpSession session = hrequest.getSession();
+		        //	  session.invalidate();       
 		        	wrapper.sendRedirect(redirectPath);
 		            return;
 		        }else {
-		        	System.out.println("mobile openId ="+openId);
-		            chain.doFilter(request, response);
+		        	System.out.println("mobileIsLoginFilter openid="+openId);
+		        	Users users=usersMapper.getUserByOnlyOpenId(openId);
+		        	System.out.println("mobileIsLoginFilter openId ="+openId);
+		           if(users.getPlace()>=1){  //通过place判断用户的访问权限，数字越大权限越高
+		             chain.doFilter(request, response);
+		            }else{
+		        	 wrapper.sendRedirect(redirectPath);
+		        	}
 		            return;
 		        }   
 	    }   

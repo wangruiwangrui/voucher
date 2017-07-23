@@ -75,7 +75,14 @@ $.get("/voucher/oauth/test.do", {
 		      	      * 此处需要两次执行相同的函数，否则回调后不能执行以下函数
 		      	      */ 
 			    	 wx.ready(function () {
-
+			    		 document.querySelector('#hiddentrouble').onclick =function(){
+			    			 location.href="../../guidance/a.html";
+			    		 }
+			    		 
+			    		 document.querySelector('#report').onclick =function(){
+			    			 location.href="../../safety/a.html";
+			    		 }
+			    		 
 			    		 document.querySelector('#userSetting').onclick =function(){
 			    			 location.href="userSetting.html";
 			    		 }
@@ -244,6 +251,15 @@ $.get("/voucher/oauth/test.do", {
 		      	      */ 
  			    	 wx.ready(function () {
  			  
+ 			    		document.querySelector('#hiddentrouble').onclick =function(){
+			    			 location.href="../../guidance/a.html";
+			    		 }
+ 			    		 
+ 			    		document.querySelector('#report').onclick =function(){
+			    			 location.href="../../safety/a.html";
+			    		 }
+ 			    		 
+ 			    		 
  			    		document.querySelector('#userSetting').onclick =function(){
 			    			 location.href="userSetting.html";
 			    		 }
