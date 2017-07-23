@@ -1,4 +1,4 @@
-package com.voucher.manage.controller;
+package com.voucher.weixin.insweptcontroller;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,23 +18,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.voucher.manage.model.Sellers;
+import com.voucher.manage.model.Users;
 import com.voucher.manage.service.SellerService;
+import com.voucher.manage.service.UserService;
 import com.voucher.manage.tools.Constants;
 import com.voucher.manage.tools.Md5;
 import com.voucher.manage.tools.verifycode.Captcha;
 import com.voucher.manage.tools.verifycode.SpecCaptcha;
 
 @Controller
-@RequestMapping("/register")
-public class RegisterController {
+@RequestMapping("/mobile/register")
+public class UserRegisterController {
 
 	private String verifyCode;
 	
-	private SellerService sellerService;
+	private UserService userService;
 	
 	@Autowired
-	public void setSellerService(SellerService sellerService) {
-		this.sellerService = sellerService;
+	public void setUserService(UserService userService) {
+		this.userService = userService;
 	}
 	
 	/*
@@ -60,24 +63,20 @@ public class RegisterController {
 	
 	@RequestMapping("testName")
 	public @ResponseBody Map<String, Object>
-	testName(@RequestParam String username){
+	testName(@RequestParam String name){
 		Map<String, Object> map=new HashMap<>();
 		
-		int repeat=sellerService.selectRepeatAdmin(username);
+		int repeat=userService.selectRepeatUser(name);
 		
-		if(username.equals("")){
+		if(name.equals("")){
 			map.put("data", "用户名不能空");
 			return map;
 		}
 		
-		if(username.length()<4||username.length()>16){
-			map.put("data", "用户名必须是4-16个字符之间（包括4、16）");
-			return map;
-		}
 		
 		String regEx="[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";  
 		Pattern   p   =   Pattern.compile(regEx);     
-	    Matcher   m   =   p.matcher(username); 
+	    Matcher   m   =   p.matcher(name); 
 	      
 	    if(m.find()){
 	    	map.put("data", "用户名含有非法字符");
@@ -124,15 +123,10 @@ public class RegisterController {
         Pattern p1 = null,p2 = null;
         Matcher m = null;
         boolean b = false;  
-        p1 = Pattern.compile("^[0][1-9]{2,3}-[0-9]{5,10}$");  // 验证带区号的
-        p2 = Pattern.compile("^[1-9]{1}[0-9]{5,8}$");         // 验证没有区号的
-        if(str.length() >9)
-        {   m = p1.matcher(str);
-           b = m.matches();  
-        }else{
-            m = p2.matcher(str);
-           b = m.matches(); 
-        }  
+        p1 = Pattern.compile("^((13[0-9])|(15[^4])|(18[0,2,3,5-9])|(17[0-8])|(147))\\d{8}$");
+
+         m = p1.matcher(str);
+         b = m.matches();  
         return b;
      }
 	
@@ -142,12 +136,12 @@ public class RegisterController {
 	    Map<String, Object> map=new HashMap<>();
 		
 		if(telephone.equals("")){
-			map.put("data", "电话号码不能空");
+			map.put("data", "手机号码不能空");
 			return map;
 		}
 		
 		if(!isPhone(telephone)){
-			map.put("data", "请输入正确的电话号码");
+			map.put("data", "请输入正确的手机号码");
 			return map;
 		}
 		
@@ -161,74 +155,101 @@ public class RegisterController {
    testEmail(@RequestParam String email){
 	   Map<String, Object> map=new HashMap<>();
 	   
-	   if(email.equals("")){
-			map.put("data", "门店地址不能空");
-			return map;
-		}
-	   
-	   String regEx="[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";  
+	   String regEx="[`~!#$%^&*()+=|{}':;',\\[\\]<>/?~！#￥%……&*（）——+|{}【】‘；：”“’。，、？]";  
 		Pattern   p   =   Pattern.compile(regEx);     
 	    Matcher   m   =   p.matcher(email); 
 	      
 	    if(m.find()){
-	    	map.put("data", "门店地址含有非法字符");
+	    	map.put("data", "Email含有非法字符");
 			return map;
 	    }
 	    
-        map.put("data", "succeed");
-		
+	    String REGEX_EMAIL = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+	    
+	    if(Pattern.matches(REGEX_EMAIL, email)){	    
+          map.put("data", "succeed");
+	    }else {
+	    	map.put("data", "Email地址错误");
+		}
 		return map;
    }
 	
    @RequestMapping("insert")
-   public @ResponseBody Map<String, Object>
-   insert(@RequestParam String username,@RequestParam String password,
-		   @RequestParam Integer telephone,@RequestParam String email,
-		   @RequestParam String regtlx){
-	   Map<String, Object> map=new HashMap<>();
+   public @ResponseBody Integer
+   insert(HttpServletRequest request,@RequestParam String name,
+		   @RequestParam String headship,
+		   @RequestParam String phone,@RequestParam String email,
+		   @RequestParam String address,@RequestParam String regtlx){
 	   
-	   System.out.println("use="+username+"pw="+password
-			   +"tp="+telephone+"mail="+email);
-	   
+	   HttpSession session = request.getSession();
+       String openId=null;
+       System.out.println("name="+name+"  headship="+headship+"   phone="
+    		   +phone+"   email="+email+"    address="+address+"  regtlx="+regtlx);
+       try{
+         openId=session.getAttribute("openId").toString();
+         }catch (Exception e) {
+			// TODO: handle exception
+        	 e.printStackTrace();
+		  }
+	  
 	   if(regtlx.equals("")){
-		   map.put("data", "regtlx_null");
-		   return map;
+		   return 2;
 	   }
 	   
 	   if(!regtlx.equals(verifyCode)){
-		   map.put("data", "regtlx_error");   //验证码错误
 		   verifyCode=null;
-		   return map;
+		   return 2;
 	   }
-	   
-	   String campusAdmin=username;
-	   String address=email;
-	   Integer cityId=sellerService.selectMaxCityId();
-	   Date registerTime=new Date();
+	
+	   Date upTime=new Date();
 	   
 	   try {		
-				String passwordMd5 = Md5.GetMD5Code(password);
-				Sellers seller = new Sellers();
-				seller.setCampusAdmin(campusAdmin);
-				seller.setPassword(passwordMd5);
-				seller.setType((short) 1);     //新注册类型为非管理员
-				seller.setCityId(cityId+1);    //公众号id为最大公众号id数加1
-				seller.setTelePhone(telephone);
-				seller.setAddress(address);
-				seller.setRegisterTime(registerTime);
+                Users users=new Users();
+                users.setOpenId(openId);
+                if(phone!=null)
+                users.setPhone(phone);
+                if(!name.equals(""))
+                users.setName(name);
+                if(!headship.equals(""))
+                users.setHeadship(headship);
+                if(!email.equals(""))
+                users.setEmail(email);
+                if(!address.equals(""))
+                users.setAddress(address);
+				users.setUpTime(upTime);
 				
-				sellerService.addASeller(seller);	
+				int testRepeat=userService.selectRepeatUserByOpenId(openId);
 				
-				map.put("data", "succeed");
-				return map;
+				int type;
+				
+				if(testRepeat==1){
+					type=userService.updateUsersInfo(users);
+				}else{
+					type=userService.insertUsersInfo(users);
+				}
+
+				return type;
 			
 			}
 		    catch (Exception e) {
 		    	e.printStackTrace();
-		    	
-	            map.put("data", "false");
-	            return map;
+
+	            return 3;
 		    }
    }
    
+   @RequestMapping("/userinfoByopenId")
+   public @ResponseBody Users 
+   userinfoByopenId(HttpServletRequest request,@RequestParam Integer campusId){
+	   HttpSession session = request.getSession();
+       String openId=null;
+       try{
+           openId=session.getAttribute("openId").toString();
+           }catch (Exception e) {
+  			// TODO: handle exception
+          	 e.printStackTrace();
+  		  }
+       
+       return userService.getUserInfoById(campusId, openId);
+   }
 }

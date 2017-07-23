@@ -76,6 +76,9 @@ $.get("/voucher/oauth/test.do", {
 		      	      */ 
 			    	 wx.ready(function () {
 
+			    		 document.querySelector('#userSetting').onclick =function(){
+			    			 location.href="userSetting.html";
+			    		 }
 			    		 
 			    		// 5 图片接口
 			        	  // 5.1 拍照、本地选图
@@ -241,9 +244,67 @@ $.get("/voucher/oauth/test.do", {
 		      	      */ 
  			    	 wx.ready(function () {
  			  
- 			    	 
+ 			    		document.querySelector('#userSetting').onclick =function(){
+			    			 location.href="userSetting.html";
+			    		 }
+ 			    		
+ 			    	// 5 图片接口
+			        	  // 5.1 拍照、本地选图
+			        	  var images = {
+			        	    localId: [],
+			        	    serverId: []
+			        	  };
+			    		 document.querySelector('#photo').onclick = function () {
+			    			 wx.chooseImage({
+				        	      success: function (res) {
+				        	        images.localId = res.localIds;
+				        	        alert('已选择 ' + res.localIds.length + ' 张图片');
+				        	        
+				        	        var i = 0, length = images.localId.length;
+					        	    images.serverId = [];
+					        	    function upload() {
+					        	      wx.uploadImage({
+					        	        localId: images.localId[i].toString(),
+					        	        isShowProgressTips: images.localId[i].toString(),
+					        	        success: function (res) {
+					        	          i++;
+					        	          alert('已上传：' + i + '/' + length);
+					        	        //返回图片的服务器端ID res.serverId,然后调用wxImgCallback函数进行下载图片操作
+			                                wxImgCallback(res.serverId);
+					        	       //   images.serverId.push(res.serverId);
+					        	          if (i < length) {
+					        	            upload();
+					        	          }
+					        	        },
+					        	        fail: function (res) {
+					        	          alert(JSON.stringify(res));
+					        	        }
+					        	      });
+					        	    }
+					        	    upload();
+				        	      }
+				        	    });
+			    		 }
+			    		 
+			    		 function wxImgCallback(serverId) {
+			        		    //将serverId传给wx_upload.php的upload方法
+			        		    var url = "../../mobile/file/upload.do";
+			        		    $.get(url,{
+			        		    	campusId:campusId,
+			        		    	serverId:serverId
+			        		    }, function(data){
+			        		    	alert(data);
+			        		        if (data.code == 0) {
+			        		            alert(data.msg);
+			        		        } else if (data.code == 1) {
+			        		            //存储到服务器成功后的处理
+			        		            //
+			        		        }
+			        		    });
+			        		}	
+ 			    		
+ 			    		
                    document.querySelector('#map').onclick = function () {
-
                        // 2. 分享接口
                        wx.getLocation({
                             success : function(res) {

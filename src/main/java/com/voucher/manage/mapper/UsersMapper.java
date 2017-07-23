@@ -24,6 +24,14 @@ public interface UsersMapper {
     
     int upAtionFormatter(Map<String, Object> paramterMap);
     
+    int selectRepeatUser(@Param(value="name") String name);
+    
+    int selectRepeatUserByOpenId(@Param(value="openId") String openId);
+    
+    int insertUsersInfo(Users users);
+    
+    int updateUsersInfo(Users users);
+    
     //**新增方法
 
 	List<Users> getAllFullUser(@Param(value="campusId")Integer campusId,@Param(value="limit")Integer limit, @Param(value="offset")Integer offset, @Param(value="sort")String sort, @Param(value="order")String order,@Param(value="search")String search);

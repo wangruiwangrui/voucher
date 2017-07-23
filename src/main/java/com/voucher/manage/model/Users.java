@@ -42,9 +42,15 @@ public class Users {
     
     private String phone;
     
-    private String defaultAddress;
+    private String headship;
+    
+    private String email;
+    
+    private String address;
     
     private String rank;
+    
+    private Date upTime;
     
     public Integer getCampusId() {
 		return campusId;
@@ -194,13 +200,6 @@ public class Users {
 		this.name = name;
 	}
 
-	public String getDefaultAddress() {
-		return defaultAddress;
-	}
-
-	public void setDefaultAddress(String defaultAddress) {
-		this.defaultAddress = defaultAddress;
-	}
 
 	public String getRank() {
 		return rank;
@@ -224,6 +223,38 @@ public class Users {
 
 	public void setPlace(Integer place) {
 		this.place = place;
+	}
+
+	public String getHeadship() {
+		return headship;
+	}
+
+	public void setHeadship(String headship) {
+		this.headship = headship;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public Date getUpTime() {
+		return upTime;
+	}
+
+	public void setUpTime(Date upTime) {
+		this.upTime = upTime;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 }

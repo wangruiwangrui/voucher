@@ -72,4 +72,28 @@ public class UserServiceImpl implements UserService {
 		return usersMapper.upAtionFormatter(paramterMap);
 	}
 
+	@Override
+	public int selectRepeatUser(String name) {
+		// TODO Auto-generated method stub
+		return usersMapper.selectRepeatUser(name);
+	}
+
+	@Override
+	public int selectRepeatUserByOpenId(String openId) {
+		// TODO Auto-generated method stub
+		return usersMapper.selectRepeatUserByOpenId(openId);
+	}
+
+	@Override
+	public int insertUsersInfo(Users users) {
+		// TODO Auto-generated method stub
+		return usersMapper.insertUsersInfo(users);
+	}
+
+	@Override
+	public int updateUsersInfo(Users users) {
+		// TODO Auto-generated method stub
+		return usersMapper.updateUsersInfo(users);
+	}
+
 }

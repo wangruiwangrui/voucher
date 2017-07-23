@@ -46,12 +46,10 @@ public class MobileIsLoginFilter implements Filter{
 		        }
 		        
 		        String openId=( String ) hrequest.getSession().getAttribute("openId");
-		        String campusAdmin=( String ) hrequest.getSession().getAttribute("campusAdmin");
 		        
 		        if (openId==null) {
 		        	HttpSession session = hrequest.getSession();
-		        	if(campusAdmin!=null)
-		        	  session.invalidate();         //Èç¹û¹ÜÀíÔ±µÇÂ¼ºó¾ÍÇå³ýsessionµÄcampusAdmin
+		        	  session.invalidate();         //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô±ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sessionï¿½ï¿½campusAdmin
 		        	System.out.println("mobile openId is "+openId);
 		        	wrapper.sendRedirect(redirectPath);
 		            return;

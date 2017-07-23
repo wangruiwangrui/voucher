@@ -21,10 +21,13 @@
 		<result column="total_amount" property="totalAmount" jdbcType="REAL" />
 		<result column="name" property="name" jdbcType="VARCHAR" />
 	    <result column="phone" property="phone" jdbcType="VARCHAR" />
-		<result column="default_address" property="defaultAddress"
+		<result column="address" property="address"
 			jdbcType="VARCHAR" />	
 		<result column="rank" property="rank" jdbcType="VARCHAR" />	
-		<result column="place" property="place" jdbcType="INTEGER" />	
+		<result column="place" property="place" jdbcType="INTEGER" />
+		<result column="headship" property="headship" jdbcType="VARCHAR" />	
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="up_time" property="upTime" jdbcType="TIMESTAMP" />
 	</resultMap>
    
    <select id="getUserByOpenId" resultMap="BaseResultMap" useCache="false">
@@ -34,9 +37,9 @@
 		language,province,groupid,country,
 		city,sex,remark,
 		subscribe_time,
-		usersinfo.name,users.place,		
+		usersinfo.name,users.place,	
+		usersinfo.headship,usersinfo.email,	
 		address ,phone
-		 as default_address
 		from users
 		left join usersinfo
 		on
@@ -68,10 +71,10 @@
 		language,province,groupid,country,
 		city,sex,remark,
 		usersinfo.name,users.place,
+		usersinfo.headship,usersinfo.email,	
 		total_amount,
 		subscribe_time,
-		phone,
-		address as default_address
+		address,phone
 		from users
 		left join usersinfo
 		on
@@ -213,4 +216,96 @@
         </where>
      </update>
      
+     
+     <!-- 用户信息修改 -->
+     
+   <select id="selectRepeatUser" parameterType="java.lang.String"
+          resultType="Integer">
+     select count(*) 
+     from 
+     usersinfo
+     <where>
+      name=#{name,jdbcType=VARCHAR}
+     </where>    
+   </select>
+     
+     
+   <select id="selectRepeatUserByOpenId" parameterType="java.lang.String"
+          resultType="Integer">
+     select count(*) 
+     from 
+     usersinfo
+     <where>
+      open_id=#{openId,jdbcType=VARCHAR}
+     </where>    
+   </select>
+   
+   <insert id="insertUsersInfo" parameterType="com.voucher.manage.model.Users">
+         insert into usersinfo
+         <trim prefix="(" suffix=")" suffixOverrides=",">
+          open_id,
+          <if test="phone!= null">
+          phone,
+          </if>
+          <if test="name!= null">
+          name,
+          </if>
+          <if test="headship!= null">
+          headship,
+          </if>
+          <if test="email!= null">
+          email,
+          </if>
+          <if test="address!= null">
+          address,
+          </if>
+          up_time,
+         </trim> 
+       <trim prefix="values (" suffix=")" suffixOverrides=",">
+		#{openId,jdbcType=VARCHAR}, 
+		<if test="phone!= null">
+		#{phone,jdbcType=VARCHAR},
+		</if>
+		<if test="name!= null">
+		#{name,jdbcType=VARCHAR},
+		</if>
+		<if test="headship!= null">
+		#{headship,jdbcType=VARCHAR},
+		</if>
+		<if test="email!= null">
+		#{email,jdbcType=VARCHAR},
+		</if>
+		<if test="address!= null">
+		#{address,jdbcType=VARCHAR},
+		</if>
+        #{upTime,jdbcType=TIMESTAMP},
+	  </trim>
+   </insert>
+    
+    
+    <update id="updateUsersInfo" parameterType="com.voucher.manage.model.Users">
+      update usersinfo
+      <set>
+       <if test="phone!= null">
+		 phone=#{phone,jdbcType=VARCHAR},
+		</if>
+		<if test="name!= null">
+		 name=#{name,jdbcType=VARCHAR},
+		</if>
+		<if test="headship!= null">
+		 headship=#{headship,jdbcType=VARCHAR},
+		</if>
+		<if test="email!= null">
+		 email=#{email,jdbcType=VARCHAR},
+		</if>
+		<if test="address!= null">
+		 address=#{address,jdbcType=VARCHAR},
+		</if>
+         up_time=#{upTime,jdbcType=TIMESTAMP},
+      </set>
+      <where>
+		  open_id=#{openId,jdbcType=VARCHAR}
+       </where>
+    </update>
+    
 </mapper>

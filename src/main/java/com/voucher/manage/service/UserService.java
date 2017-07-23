@@ -29,5 +29,13 @@ public interface UserService {
 	Integer upsubscribeByOpenId(Map<String, Object> paramterMap);
 	
 	int upAtionFormatter(Map<String, Object> paramterMap);
+	
+	int selectRepeatUser(@Param(value="name") String name);
+	
+	int selectRepeatUserByOpenId(@Param(value="openId") String openId);
+	
+    int insertUsersInfo(Users users);
+    
+    int updateUsersInfo(Users users);
 
 }
