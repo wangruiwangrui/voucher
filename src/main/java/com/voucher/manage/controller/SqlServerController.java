@@ -17,7 +17,7 @@ import com.voucher.manage.daoModel.Users;
 import com.voucher.manage.tools.Md5;
 
 @Controller
-@RequestMapping("/house")
+@RequestMapping("/houses")
 public class SqlServerController {
 
 	ApplicationContext applicationContext=new ClassPathXmlApplicationContext("spring-sqlservers.xml");
