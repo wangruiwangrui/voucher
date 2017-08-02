@@ -3,6 +3,7 @@
 	<name>voucher</name>
 	<comment></comment>
 	<projects>
+		<project>hadoop</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

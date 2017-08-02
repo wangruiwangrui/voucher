@@ -34,4 +34,8 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
         <property name="jdbcTemplate" ref="jdbcTemplate"></property>
    </bean>
   
+   <bean id="roomInfodao" class="com.voucher.manage.daoImpl.RoomInfoDaoImpl">
+        <property name="jdbcTemplate" ref="jdbcTemplate"></property>
+   </bean>
+  
 </beans>

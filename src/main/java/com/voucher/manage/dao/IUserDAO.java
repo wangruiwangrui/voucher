@@ -7,8 +7,10 @@ import com.voucher.manage.daoModel.Users;
 
 public interface IUserDAO {
 
-    public void addUser(Users user);
+    public Integer addUser(Users user);
 
+    public Integer addUser2(Users users);
+    
     public void deleteUser(int id);
 
     public void updateUser(Users user);

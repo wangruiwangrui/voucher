@@ -13,12 +13,19 @@ import com.voucher.manage.daoModel.Users;
 
 public class UserDAOImpl extends JdbcDaoSupport implements IUserDAO {
 
-    public void addUser(Users users) {
+    public Integer addUser(Users users) {
         String sql = "insert into users values(?,?,?)";
-        this.getJdbcTemplate().update(sql, users.getId(), users.getUsername(),
+        return this.getJdbcTemplate().update(sql, users.getId(), users.getUsername(),
                 users.getPassword());
     }
 
+    @Override
+    public Integer addUser2(Users users) {
+        String sql = "insert into users2 values(?,?,?)";
+        return this.getJdbcTemplate().update(sql, users.getId(), users.getUsername(),
+                users.getPassword());
+    }
+    
     public void deleteUser(int id) {
         String sql = "delete from users where id=?";
         this.getJdbcTemplate().update(sql, id);
