@@ -14,7 +14,7 @@ public class RoomInfoRowMapper implements RowMapper<RoomInfo> {
         roomInfo.setNum(rs.getString("Num"));
         roomInfo.setOriginalNum(rs.getString("OriginalNum"));
         roomInfo.setAddress(rs.getString("Address"));
-        roomInfo.setOriginalAddress("OriginalAddress");
+        roomInfo.setOriginalAddress(rs.getString("OriginalAddress"));
         return roomInfo;
     }
 
