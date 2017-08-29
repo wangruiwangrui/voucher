@@ -1,6 +1,10 @@
 package com.voucher.manage.daoModel;
 
-public class RoomInfo {
+import java.io.Serializable;
+
+public class RoomInfo implements Serializable{
+   private static final long serialVersionUID = 1L; 	
+
    private String GUID;
    
    private String Num;

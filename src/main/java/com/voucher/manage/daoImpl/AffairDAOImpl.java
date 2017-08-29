@@ -22,21 +22,21 @@ public class AffairDAOImpl extends JdbcDaoSupport implements AffairDAO{
 		// TODO Auto-generated method stub
 		String sql=" insert into  [TTT].[dbo].[test]  values(?,?)";
 		
-		return this.getJdbcTemplate().update(sql, 1,"qq");
+		return this.getJdbcTemplate().update(sql, paramMap.get("id"),paramMap.get("val"));
 	}
 
 	@Override
 	public int insertTest2(Map<String, Object> paramMap) {
 		// TODO Auto-generated method stub
 		String sql="insert into  [TTT].[dbo].[test2]  values(?,?)";
-		return this.getJdbcTemplate().update(sql, 1,"ww");
+		return this.getJdbcTemplate().update(sql, paramMap.get("id"),paramMap.get("val"));
 	}
 
 	@Override
-	public int  insertTest3(Map<String, Object> paramMap3) {
+	public int  insertTest3(Map<String, Object> paramMap) {
 		// TODO Auto-generated method stub
-		String sql=" insert into  test3  values('1','ww')";
-		return this.getJdbcTemplate().queryForInt(sql);
+		String sql=" update  [TTT].[dbo].[test3] set amount=amount-1 WHERE id=1 and amount>0";
+		return this.getJdbcTemplate().update(sql);
 	}
 
 	public int  insertAll(Map<String, Object> paramMap) {

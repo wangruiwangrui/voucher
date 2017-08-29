@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.context.ApplicationContext;
@@ -26,8 +25,6 @@ public class RoomInfoController {
 	public @ResponseBody Map<String, Object> RoomInfo(Integer limit,Integer offset,String sort,String order,
 			String search,HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		String type,campusAdmin;
-		Integer campusId=0;
 
 		if(sort!=null&&sort.equals("subscribeTime")){
 			sort="subscribe_time";
@@ -54,21 +51,15 @@ public class RoomInfoController {
 			search="%"+search+"%";
 		}		
 		
-		Cookie[] cookies = request.getCookies();  
-		if(cookies!=null){
-			for(Cookie i:cookies){
-				if(i.getName().equalsIgnoreCase("campusId"))
-					campusId=Integer.parseInt(i.getValue());
-			}
-		}
+
 		RoomInfoDao roomInfoDao=(RoomInfoDao) applicationContext.getBean("roomInfodao");
 		
-		List<RoomInfo> roomInfos=roomInfoDao.findAllRoomInfo(campusId,limit,offset,sort,
+		List<RoomInfo> roomInfos=roomInfoDao.findAllRoomInfo(limit,offset,sort,
 				order,search);
 		
 		map.put("rows", roomInfos);
 		
-		Integer total=roomInfoDao.getRoomInfoCount(campusId, search);
+		Integer total=roomInfoDao.getRoomInfoCount(search);
 		
         map.put("total", total);
 		

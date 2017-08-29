@@ -16,7 +16,7 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 
 	
 	@Override
-	public List<RoomInfo> findAllRoomInfo(Integer campusId,Integer limit, Integer offset, String sort,
+	public List<RoomInfo> findAllRoomInfo(Integer limit, Integer offset, String sort,
 			String order,String search) {
 		// TODO Auto-generated method stub
 		
@@ -38,7 +38,7 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 	}
 
 	@Override
-	public Integer getRoomInfoCount(Integer campusId, String search) {
+	public Integer getRoomInfoCount(String search) {
 		// TODO Auto-generated method stub
 		Map<String,Object> map=new HashMap<>();
 		String sql="SELECT count(*) FROM [TTT].[dbo].[RoomInfo]";
