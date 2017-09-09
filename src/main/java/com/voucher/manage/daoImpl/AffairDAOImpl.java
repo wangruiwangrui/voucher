@@ -5,13 +5,10 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.voucher.manage.dao.AffairDAO;
-import com.voucher.manage.daoModel.RoomInfoRowMapper;
 import com.voucher.manage.model.Affair;
 
 public class AffairDAOImpl extends JdbcDaoSupport implements AffairDAO{
@@ -57,6 +54,12 @@ public class AffairDAOImpl extends JdbcDaoSupport implements AffairDAO{
 	        if(i==0){                 //��������0��ȡ�����׻ع����ύ����
 	        	TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 	        }
+	        
+	        i=insertTest3(paramMap3);
+	        if(i==0){                 //��������0��ȡ�����׻ع����ύ����
+	        	TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+	        }
+	        
 	        logger.info("i=-===="+i);
 		}else{
 			i=0;
