@@ -2,19 +2,57 @@ package com.voucher.manage.daoModel;
 
 import java.io.Serializable;
 
+import com.voucher.manage.daoSQL.annotations.DBTable;
+import com.voucher.manage.daoSQL.annotations.QualifiLimit;
+import com.voucher.manage.daoSQL.annotations.QualifiNotIn;
+import com.voucher.manage.daoSQL.annotations.QualifiOffset;
+import com.voucher.manage.daoSQL.annotations.QualifiOrder;
+import com.voucher.manage.daoSQL.annotations.QualifiSort;
+import com.voucher.manage.daoSQL.annotations.QualifiWhere;
+import com.voucher.manage.daoSQL.annotations.SQLString;
+
+
+@DBTable(name="[TTT].[dbo].[RoomInfo]")
 public class RoomInfo implements Serializable{
    private static final long serialVersionUID = 1L; 	
 
-   private String GUID;
+   @SQLString(name="GUID")
+   public String GUID;
    
+   @SQLString(name="Num")
    private String Num;
    
+   @SQLString(name="OriginalNum")
    private String OriginalNum;
    
+   @SQLString(name="OriginalAddress")
    private String OriginalAddress;
    
+   @SQLString(name="Address")
    private String Address;
 
+   @QualifiNotIn(name="GUID")
+   private String notIn;
+   
+   
+   /*
+    * 数据库查询参数
+    */
+   
+   @QualifiLimit(name="limit")
+   private Integer limit;
+   @QualifiOffset(name="offset")
+   private Integer offset;
+   @QualifiSort(name="sort")
+   private String sort;
+   @QualifiOrder(name="order")
+   private String order;
+   /*
+    * 数据库查询where变量
+    */
+   @QualifiWhere(name="where")
+   private String[] where;
+   
    public String getGUID() {
 	  return GUID;
    }
@@ -53,5 +91,47 @@ public String getAddress() {
 
 public void setAddress(String address) {
 	Address = address;
+}
+
+
+
+public Integer getOffset() {
+	return offset;
+}
+
+public void setOffset(Integer offset) {
+	this.offset = offset;
+}
+
+public String getSort() {
+	return sort;
+}
+
+public void setSort(String sort) {
+	this.sort = sort;
+}
+
+public String getOrder() {
+	return order;
+}
+
+public void setOrder(String order) {
+	this.order = order;
+}
+
+public Integer getLimit() {
+	return limit;
+}
+
+public void setLimit(Integer limit) {
+	this.limit = limit;
+}
+
+public String[] getWhere() {
+	return where;
+}
+
+public void setWhere(String[] where) {
+	this.where = where;
 }
 }

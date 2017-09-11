@@ -48,7 +48,7 @@ public class RoomInfoController {
 		}
 		
 		if(search!=null&&!search.trim().equals("")){
-			search="%"+search+"%";
+			search="'%"+search+"%'";                 //sqlserver 必须加''
 		}		
 		
 

@@ -2,8 +2,13 @@ package com.voucher.manage.daoSQL;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import com.voucher.manage.daoSQL.annotations.DBTable;
 import com.voucher.manage.daoSQL.annotations.QualifiLimit;
@@ -17,18 +22,15 @@ import com.voucher.manage.daoSQL.annotations.SQLInteger;
 import com.voucher.manage.daoSQL.annotations.SQLString;
 import com.voucher.manage.daoSQL.annotations.QualifiWhere;
 
-
-
 public class SelectSQL {
-
 	
-	
-	public static String get(Class className) throws ClassNotFoundException{
+	public static String get(Object object) throws ClassNotFoundException{
+		Class className=object.getClass();
    	    String name = className.getName();                                    //从控制台输入一个类名，我们输入User即可
         Class<?> cl = Class.forName(name);                         //加载类，如果该类不在默认路径底下，会报 java.lang.ClassNotFoundException
         DBTable dbTable = cl.getAnnotation(DBTable.class);         //从User类中获取DBTable注解
-        Integer limit=0;
-		Integer offset=10; 
+        Integer limit=10;
+		Integer offset=0; 
 		String notIn="";
     	String sort="";
 		String order="";
@@ -42,7 +44,7 @@ public class SelectSQL {
 		 }
          List<String> columnDefs = new ArrayList<String>();
          String[] columnWhere=null;
-         boolean term=false;
+         boolean term=false;       //判断是否有where
         for(Field field : cl.getDeclaredFields())                  //获取声明的属性
         {
             String columnName = null;           
@@ -76,22 +78,29 @@ public class SelectSQL {
                 columnDefs.add(columnName);
             }else
             if(anns[0] instanceof QualifiWhere)
-            {
-            	term=true;
+            {            	
                 QualifiWhere sStr = (QualifiWhere) anns[0];
-                columnWhere = sStr.where();
+                columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
+                columnWhere = AReflectGet.getArrayMethods(object, className, field, columnName);
+                System.out.println("columnWhere="+columnWhere);
+                if(columnWhere!=null){
+                	term=true;
+                }
             }else
             if(anns[0] instanceof QualifiLimit)
             {
             	 QualifiLimit sStr = (QualifiLimit) anns[0];
                  columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
-                 limit=Integer.parseInt(columnName);
+                 
+                 String filedName = field.getName();  
+                 limit=AReflectGet.getIntMethods(object, className, field,columnName);
+                 
              }else	
             if(anns[0] instanceof QualifiOffset)
             {
             	QualifiOffset sStr = (QualifiOffset) anns[0];
                 columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
-                offset=Integer.parseInt(columnName);
+                offset=AReflectGet.getIntMethods(object, className, field,columnName);
              }else
              if(anns[0] instanceof QualifiNotIn)
              {
@@ -124,7 +133,7 @@ public class SelectSQL {
         select=select+
         		 "\n  where "+notIn+
                  " not in("+
-                 " select top "+offset+" "+notIn+" FROM [TTT].[dbo].[RoomInfo])";
+                 " select top "+offset+" "+notIn+" FROM "+tableName+")";
         
         if(term){
           StringBuilder whereCommand = new StringBuilder();
@@ -146,8 +155,9 @@ public class SelectSQL {
         return select;
    }
 	
-	public static String getCount(Class className) throws ClassNotFoundException{
-	   	 String name = className.getName();                                    //从控制台输入一个类名，我们输入User即可
+	public static String getCount(Object object) throws ClassNotFoundException{
+		    Class className=object.getClass();
+   	        String name = className.getName();                                    //从控制台输入一个类名，我们输入User即可
 	        Class<?> cl = Class.forName(name);                         //加载类，如果该类不在默认路径底下，会报 java.lang.ClassNotFoundException
 	        DBTable dbTable = cl.getAnnotation(DBTable.class);         //从User类中获取DBTable注解
 	        String tableName="";
@@ -168,45 +178,20 @@ public class SelectSQL {
 	            {
 	                continue;
 	            }else
-	            if(anns[0] instanceof SQLInteger)                //判断注解类型
-	            {
-	                SQLInteger sInt = (SQLInteger)anns[0];
-	                columnName = (sInt.name().length()<1)?field.getName():sInt.name();//获取列名称与获取表名一样
-	                columnDefs.add(columnName);//使用一个方法，自己写的getConstraints(Constraints constraints)获取列定义
-	            }else
-	            if(anns[0] instanceof SQLString)
-	            {
-	                SQLString sStr = (SQLString)anns[0];
-	                columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
-	                columnDefs.add(columnName);
-	            }else
-	            if(anns[0] instanceof SQLFloat)
-	            {
-	                SQLFloat sStr = (SQLFloat) anns[0];
-	                columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
-	                columnDefs.add(columnName);
-	            }else
-	            if(anns[0] instanceof SQLDateTime)
-	            {
-	                SQLDateTime sStr = (SQLDateTime) anns[0];
-	                columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
-	                columnDefs.add(columnName);
-	            }else
+	            
 	            if(anns[0] instanceof QualifiWhere)
-	            {
-	            	term=true;
+	            {	            	
 	                QualifiWhere sStr = (QualifiWhere) anns[0];
-	                columnWhere = sStr.where();
+	                columnWhere = AReflectGet.getArrayMethods(object, className, field, columnName);
+	                if(columnWhere!=null){
+	                	term=true;
+	                }
 	             }
 	        }
 	        
-	        StringBuilder selectCommand = new StringBuilder("SELECT ");
-	                
-	        for(String columnDef :columnDefs){
-	            selectCommand.append("\n    "+columnDef+",");
-	        }
-	        
-	        String select=selectCommand.substring(0,selectCommand.length()-1)+"\n FROM \n   "+tableName;
+	        StringBuilder selectCommand = new StringBuilder("SELECT COUNT(*)");
+
+	        String select=selectCommand+"\n FROM \n   "+tableName;
 	        
 	        if(term){
 	          StringBuilder whereCommand = new StringBuilder();
@@ -217,7 +202,7 @@ public class SelectSQL {
 	        		  whereCommand.append(whereterm+"\n  AND ");
 	        	   }else{
 	        		//  System.out.println("奇数");
-	        		  whereCommand.append("\n   "+whereterm+"=");
+	        		  whereCommand.append("\n   "+whereterm);
 	        	   }
 	           i++;
 	          }
@@ -226,4 +211,5 @@ public class SelectSQL {
 	              
 	        return select;
 	   }
+	
 }

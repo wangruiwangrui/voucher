@@ -1,7 +1,8 @@
 package voucher;
 
 import java.sql.Date;
-import com.voucher.manage.daoSQL.CreateSQL;
+
+import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoSQL.SelectSQL;
 import com.voucher.manage.daoSQL.annotations.DBTable;
 import com.voucher.manage.daoSQL.annotations.QualifiLimit;
@@ -17,15 +18,25 @@ import com.voucher.manage.daoSQL.annotations.QualifiWhere;
 public class sqltest {
 
 	public static void main(String[] args) throws ClassNotFoundException {
-	       
-        String tableCreate = CreateSQL.get(User.class);
+	   
+		String a="ddddddddddddddd";
+		String tableCreate;
+		
+      //  tableCreate = CreateSQL.get(User.class);
+     //   System.out.println(tableCreate);                        //打印出来
+        
+		RoomInfo roomInfo=new RoomInfo();
+		roomInfo.setLimit(30);
+		roomInfo.setOffset(10);
+		String[] where={"Region=","'江阳区'"};
+		roomInfo.setWhere(where);
+        tableCreate = SelectSQL.get(roomInfo);
         System.out.println(tableCreate);                        //打印出来
         
-        tableCreate = SelectSQL.get(User.class);
-        System.out.println(tableCreate);                        //打印出来
-        
-        tableCreate = SelectSQL.getCount(RoomInfo.class);
+        tableCreate = SelectSQL.getCount(roomInfo);
         System.out.println(tableCreate);  
+     
+
 	}
 }
 
@@ -33,7 +44,7 @@ public class sqltest {
 class User {
     @SQLInteger(name="id")
     public Integer id;
-    @SQLString(value=30)
+    @SQLString(name="30")
     public String name;
     @SQLString(name="passwd")
     public String password;
@@ -44,10 +55,10 @@ class User {
     
     @SQLFloat(name="bbb")
     public Float bbb;
-    @SQLDateTime(name="time")
+    @SQLDateTime(name="rrrrrr")
     public Date time;
     
-    @QualifiWhere(where={"a=","b","c>","d","e>","h"})
+    @QualifiWhere(name="ss")
     public String where;
     
     @QualifiLimit(name="20")
@@ -57,11 +68,12 @@ class User {
     public String NotIn;
 }
 
+
 @DBTable(name="[TTT].[dbo].[RoomInfo]")
-class RoomInfo{
+class RoomInfo2{
 	@SQLString(name="count(*)")
 	public String count;
 	
-	@QualifiWhere(where={"a","b","c","d"})
+	@QualifiWhere(name="ww")
     public String where;
 }
