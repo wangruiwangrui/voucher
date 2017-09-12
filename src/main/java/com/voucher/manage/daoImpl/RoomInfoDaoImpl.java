@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.RoomInfoRowMapper;
+import com.voucher.manage.daoModel.RowMappers;
 import com.voucher.manage.daoSQL.SelectSQL;
 
 public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
@@ -52,7 +53,8 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 			e.printStackTrace();
 		}
 		
-		return this.getJdbcTemplate().query(sql, new RoomInfoRowMapper());
+		//return this.getJdbcTemplate().query(sql, new RoomInfoRowMapper());
+		return this.getJdbcTemplate().query(sql, new RowMappers(RoomInfo.class));
 	}
 
 	@Override
