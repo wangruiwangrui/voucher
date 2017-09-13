@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -19,25 +20,23 @@ import com.voucher.manage.daoSQL.annotations.SQLFloat;
 import com.voucher.manage.daoSQL.annotations.SQLInteger;
 import com.voucher.manage.daoSQL.annotations.SQLString;
 
+/*
+ * 根据class类型动态生成mapRow的返回值
+ */
+
 public class RowMappers<T> implements RowMapper<T>{
 
-	Class className;
+	Class<?> className;
 	
-	public RowMappers(Class className) {
+	public RowMappers(Class<?> className) {
 		// TODO Auto-generated constructor stub
 		this.className=className;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public T mapRow(ResultSet rs, int rowNum) throws SQLException{
 		// TODO Auto-generated method stub
-		
-		RoomInfo roomInfo=new RoomInfo();
-        roomInfo.setGUID(rs.getString("GUID"));
-        roomInfo.setNum(rs.getString("Num"));
-        roomInfo.setOriginalNum(rs.getString("OriginalNum"));
-        roomInfo.setAddress(rs.getString("Address"));
-        roomInfo.setOriginalAddress(rs.getString("OriginalAddress"));
         
         Object object=null;
 		try {
@@ -58,8 +57,7 @@ public class RowMappers<T> implements RowMapper<T>{
 			e.printStackTrace();
 		}
         
-        List<Map> columnDefs = new ArrayList<Map>();
- 
+
         for(Field field : cl.getDeclaredFields())                  //获取声明的属性
         {
         	String columnName = null;           
@@ -75,7 +73,8 @@ public class RowMappers<T> implements RowMapper<T>{
                 columnName = (sInt.name().length()<1)?field.getName():sInt.name();//获取列名称与获取表名一样
                 map.put("field", field);//使用一个方法，自己写的getConstraints(Constraints constraints)获取列定义
                 map.put("columnName", columnName);
-                columnDefs.add(map);
+                setIntMethods(rs, object, cl, field, columnName);
+
             }else
             if(anns[0] instanceof SQLString)
             {
@@ -83,7 +82,7 @@ public class RowMappers<T> implements RowMapper<T>{
                 columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
                 map.put("field", field);
                 map.put("columnName", columnName);  
-                columnDefs.add(map);
+                setStringMethods(rs,object, className, field, columnName);
             }else
             if(anns[0] instanceof SQLFloat)
             {
@@ -91,7 +90,7 @@ public class RowMappers<T> implements RowMapper<T>{
                 columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
                 map.put("field", field);
                 map.put("columnName", columnName); 
-                columnDefs.add(map);
+                setFloatMethods(rs, object, cl, field, columnName);
             }else
             if(anns[0] instanceof SQLDateTime)
             {
@@ -99,20 +98,10 @@ public class RowMappers<T> implements RowMapper<T>{
                 columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
                 map.put("field", field);
                 map.put("columnName", columnName); 
-                columnDefs.add(map);
+                setDateTimeMethods(rs, object, cl, field, columnName);
             }
         }
-        
-        Iterator<Map> iterator=columnDefs.iterator();
-
-        while (iterator.hasNext()) {
-        	Map<String, Object> map=iterator.next();
-        	Field field=(Field) map.get("field");
-        	String columnName=(String) map.get("columnName");
-        	setStringMethods(rs,object, className, field, columnName);
-
-		}
-        
+   
         
         return (T) object;
 	}
@@ -122,13 +111,112 @@ public class RowMappers<T> implements RowMapper<T>{
         //获取相应字段的getXXX()方法  
         String setMethodName = "set" + filedName.substring(0, 1).toUpperCase()  
                 + filedName.substring(1);
-        System.out.println("setMethodName="+setMethodName);
+     //   System.out.println("setMethodName="+setMethodName);
        try {
        	 Method setMethod =className.getDeclaredMethod(setMethodName,String.class);
-       	 System.out.println("setmethod="+setMethod);
+     //  	 System.out.println("setmethod="+setMethod);
        	 String aa=rs.getString(columnName);
-       	 System.out.println("aa="+aa);
+     //  	 System.out.println("aa="+aa);
 		 setMethod.invoke(object,aa);
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch (SQLException e) {  // ResultSet的异常
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		   }
+	}
+	
+	public static void setIntMethods(ResultSet rs,Object object,Class className,Field field,String columnName){
+        String filedName = field.getName();  
+        //获取相应字段的getXXX()方法  
+        String setMethodName = "set" + filedName.substring(0, 1).toUpperCase()  
+                + filedName.substring(1);
+     //   System.out.println("setMethodName="+setMethodName);
+       try {
+       	 Method setMethod =className.getDeclaredMethod(setMethodName,Integer.class);
+     //  	 System.out.println("setmethod="+setMethod);
+       	     int aa=rs.getInt(columnName);
+     //  	 System.out.println("aa="+aa);
+		     setMethod.invoke(object,aa);
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch (SQLException e) {  // ResultSet的异常
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		   }
+	}
+	
+	public static void setFloatMethods(ResultSet rs,Object object,Class className,Field field,String columnName){
+        String filedName = field.getName();  
+        //获取相应字段的getXXX()方法  
+        String setMethodName = "set" + filedName.substring(0, 1).toUpperCase()  
+                + filedName.substring(1);
+     //   System.out.println("setMethodName="+setMethodName);
+       try {
+       	 Method setMethod =className.getDeclaredMethod(setMethodName,Float.class);
+     //  	 System.out.println("setmethod="+setMethod);
+       	     float aa=rs.getFloat(columnName);
+     //  	 System.out.println("aa="+aa);
+		     setMethod.invoke(object,aa);
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch (SQLException e) {  // ResultSet的异常
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		   }
+	}
+	
+	public static void setDateTimeMethods(ResultSet rs,Object object,Class className,Field field,String columnName){
+        String filedName = field.getName();  
+        //获取相应字段的getXXX()方法  
+        String setMethodName = "set" + filedName.substring(0, 1).toUpperCase()  
+                + filedName.substring(1);
+     //   System.out.println("setMethodName="+setMethodName);
+       try {
+       	 Method setMethod =className.getDeclaredMethod(setMethodName,Date.class);
+     //  	 System.out.println("setmethod="+setMethod);
+       	     Date aa=rs.getDate(columnName);
+     //  	 System.out.println("aa="+aa);
+		     setMethod.invoke(object,aa);
 		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

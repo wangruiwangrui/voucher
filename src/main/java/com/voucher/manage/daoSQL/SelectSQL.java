@@ -45,8 +45,11 @@ public class SelectSQL {
          List<String> columnDefs = new ArrayList<String>();
          String[] columnWhere=null;
          boolean term=false;       //判断是否有where
+         int j=0;
         for(Field field : cl.getDeclaredFields())                  //获取声明的属性
         {
+        	System.out.println("j="+j);
+        	j++;
             String columnName = null;           
             Annotation[] anns = field.getDeclaredAnnotations();//获取注解，一个属性可以有多个注解，所以是数组类型
             if(anns.length < 1)
@@ -94,19 +97,19 @@ public class SelectSQL {
                  
                  String filedName = field.getName();  
                  limit=AReflectGet.getIntMethods(object, className, field,columnName);
-                 
+                 System.out.println("limit="+limit);
              }else	
             if(anns[0] instanceof QualifiOffset)
             {
             	QualifiOffset sStr = (QualifiOffset) anns[0];
                 columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
-                offset=AReflectGet.getIntMethods(object, className, field,columnName);
-             }else
+                offset=AReflectGet.getIntMethods(object, className, field,columnName);                
+            }else
              if(anns[0] instanceof QualifiNotIn)
              {
             	QualifiNotIn sStr = (QualifiNotIn) anns[0];
                 columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
-                notIn=columnName;
+                notIn=AReflectGet.getStringMethods(object, className, field,columnName);
              }else	
             if(anns[0] instanceof QualifiSort)
             {
@@ -130,10 +133,7 @@ public class SelectSQL {
         
         String select=selectCommand.substring(0,selectCommand.length()-1)+"\n FROM \n   "+tableName;
         
-        select=select+
-        		 "\n  where "+notIn+
-                 " not in("+
-                 " select top "+offset+" "+notIn+" FROM "+tableName+")";
+        
         
         if(term){
           StringBuilder whereCommand = new StringBuilder();
@@ -148,7 +148,17 @@ public class SelectSQL {
         	   }
            i++;
           }
+          select=select+   //sqlserver分页需要在top也加上where条件
+            		 "\n  where "+notIn+
+                     " not in("+
+                     " select top "+offset+" "+notIn+" FROM "+tableName+" where "+
+                      whereCommand.substring(0,whereCommand.length()-7)+")";
           select=select+"\n  AND "+whereCommand.substring(0,whereCommand.length()-7);
+        }else{
+        	select=select+
+           		 "\n  where "+notIn+
+                    " not in("+
+                    " select top "+offset+" "+notIn+" FROM "+tableName+")";
         }
 
         

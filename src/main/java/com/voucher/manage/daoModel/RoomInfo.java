@@ -31,27 +31,7 @@ public class RoomInfo implements Serializable{
    @SQLString(name="Address")
    private String Address;
 
-   @QualifiNotIn(name="GUID")
-   private String notIn;
-   
-   
-   /*
-    * 数据库查询参数
-    */
-   
-   @QualifiLimit(name="limit")
-   private Integer limit;
-   @QualifiOffset(name="offset")
-   private Integer offset;
-   @QualifiSort(name="sort")
-   private String sort;
-   @QualifiOrder(name="order")
-   private String order;
-   /*
-    * 数据库查询where变量
-    */
-   @QualifiWhere(name="where")
-   private String[] where;
+    
    
    public String getGUID() {
 	  return GUID;
@@ -94,44 +74,72 @@ public void setAddress(String address) {
 }
 
 
+/*
+ * 数据库查询参数
+ */
+ 
+ @QualifiLimit(name="limit")
+ private Integer limit;
+ @QualifiOffset(name="offset")
+ private Integer offset;
+ @QualifiNotIn(name="notIn")
+ private String notIn;
+ @QualifiSort(name="sort")
+ private String sort;
+ @QualifiOrder(name="order")
+ private String order;
+ /*
+  * 数据库查询where变量
+  */
+ @QualifiWhere(name="where")
+ private String[] where;
+ 
+ public Integer getOffset() {
+		return offset;
+	}
 
-public Integer getOffset() {
-	return offset;
-}
+	public void setOffset(Integer offset) {
+		this.offset = offset;
+	}
 
-public void setOffset(Integer offset) {
-	this.offset = offset;
-}
+	public String getSort() {
+		return sort;
+	}
 
-public String getSort() {
-	return sort;
-}
+	public void setSort(String sort) {
+		this.sort = sort;
+	}
 
-public void setSort(String sort) {
-	this.sort = sort;
-}
+	public String getOrder() {
+		return order;
+	}
 
-public String getOrder() {
-	return order;
-}
+	public void setOrder(String order) {
+		this.order = order;
+	}
 
-public void setOrder(String order) {
-	this.order = order;
-}
+	public Integer getLimit() {
+		return limit;
+	}
 
-public Integer getLimit() {
-	return limit;
-}
+	public void setLimit(Integer limit) {
+		this.limit = limit;
+	}
 
-public void setLimit(Integer limit) {
-	this.limit = limit;
-}
+	public String[] getWhere() {
+		return where;
+	}
 
-public String[] getWhere() {
-	return where;
-}
+	public void setWhere(String[] where) {
+		this.where = where;
+	}
 
-public void setWhere(String[] where) {
-	this.where = where;
-}
+	public String getNotIn() {
+		return notIn;
+	}
+
+	public void setNotIn(String notIn) {
+		this.notIn = notIn;
+	}
+
 }

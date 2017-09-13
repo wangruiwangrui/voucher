@@ -41,6 +41,7 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		RoomInfo roomInfo=new RoomInfo();
 		roomInfo.setLimit(limit);
 		roomInfo.setOffset(offset);
+		roomInfo.setNotIn("[GUID]");
 		if(search!=null&&!search.trim().equals("")){
 		  String[] where={"Address like ",search};
 		  roomInfo.setWhere(where);
