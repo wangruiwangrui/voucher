@@ -2,8 +2,11 @@ package voucher;
 
 import java.sql.Date;
 
+import com.voucher.manage.daoModel.RoomChangeHireLog;
+import com.voucher.manage.daoModel.RoomChartLog;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoSQL.SelectSQL;
+import com.voucher.manage.daoSQL.SelectSQLJion;
 import com.voucher.manage.daoSQL.annotations.DBTable;
 import com.voucher.manage.daoSQL.annotations.QualifiLimit;
 import com.voucher.manage.daoSQL.annotations.QualifiNotIn;
@@ -30,11 +33,23 @@ public class sqltest {
 		roomInfo.setOffset(10);
 		String[] where={"Region=","'江阳区'"};
 		roomInfo.setWhere(where);
-        tableCreate = SelectSQL.get(roomInfo);
-        System.out.println(tableCreate);                        //打印出来
-        
-        tableCreate = SelectSQL.getCount(roomInfo);
-        System.out.println(tableCreate);  
+ 
+		RoomChangeHireLog roomChangeHireLog=new RoomChangeHireLog();
+		
+		roomChangeHireLog.setLimit(30);
+		roomChangeHireLog.setOffset(10);
+		roomChangeHireLog.setNotIn("[GUID]");
+		
+		
+		RoomChartLog roomChartLog=new RoomChartLog();
+		roomChartLog.setLimit(30);
+		roomChartLog.setOffset(10);
+		roomChartLog.setNotIn("[GUID]");
+		Object[] objects={roomChangeHireLog,roomChartLog};
+		
+		String sql=new SelectSQLJion().get(objects,"[GUID]");
+		
+		System.out.println(sql);
      
 
 	}
