@@ -34,6 +34,12 @@ public class RoomChangeHireLog implements Serializable{
 	@SQLDateTime(name="ConcludeDate")
 	private Date ConcludeDate;
 	
+	@SQLString(name="OriginalUnit")
+	private String OriginalUnit;
+	
+	@SQLString(name="Region")
+	private String Region;
+	
 	public String getRoomAddress() {
 		return RoomAddress;
 	}
@@ -141,6 +147,22 @@ public class RoomChangeHireLog implements Serializable{
 
 		public void setNotIn(String notIn) {
 			this.notIn = notIn;
+		}
+
+		public String getOriginalUnit() {
+			return OriginalUnit;
+		}
+
+		public void setOriginalUnit(String originalUnit) {
+			OriginalUnit = originalUnit;
+		}
+
+		public String getRegion() {
+			return Region;
+		}
+
+		public void setRegion(String region) {
+			Region = region;
 		}
 	
 }

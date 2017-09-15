@@ -8,7 +8,7 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 import com.voucher.manage.dao.RoomChangeHireLogDAO;
 import com.voucher.manage.daoModel.RoomChangeHireLog;
-import com.voucher.manage.daoModel.RowMappers;
+import com.voucher.manage.daoRowMapper.RowMappers;
 import com.voucher.manage.daoSQL.SelectSQL;
 
 

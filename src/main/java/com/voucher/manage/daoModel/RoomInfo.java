@@ -31,7 +31,8 @@ public class RoomInfo implements Serializable{
    @SQLString(name="Address")
    private String Address;
 
-    
+   @SQLString(name="Region")
+   private String Region;
    
    public String getGUID() {
 	  return GUID;
@@ -140,6 +141,14 @@ public void setAddress(String address) {
 
 	public void setNotIn(String notIn) {
 		this.notIn = notIn;
+	}
+
+	public String getRegion() {
+		return Region;
+	}
+
+	public void setRegion(String region) {
+		Region = region;
 	}
 
 }

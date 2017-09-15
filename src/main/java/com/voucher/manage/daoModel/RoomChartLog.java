@@ -23,14 +23,17 @@ public class RoomChartLog {
 	@SQLString(name="Charter")
 	private String Charter;
 	
-	@SQLFloat(name="OHire")
-	private Float OHire;
-	
 	@SQLFloat(name="Area")
 	private Float Area;
 	
 	@SQLDateTime(name="ConcludeDate")
 	private Date ConcludeDate;
+	
+	@SQLString(name="ChartType")
+	private String ChartType;
+	
+	@SQLDateTime(name="ChartBeginDate")
+	private Date ChartBeginDate;
 	
 	public String getRoomAddress() {
 		return RoomAddress;
@@ -48,13 +51,6 @@ public class RoomChartLog {
 		Charter = charter;
 	}
 
-	public Float getOHire() {
-		return OHire;
-	}
-
-	public void setOHire(Float oHire) {
-		OHire = oHire;
-	}
 
 	public Float getArea() {
 		return Area;
@@ -139,6 +135,22 @@ public class RoomChartLog {
 
 		public void setNotIn(String notIn) {
 			this.notIn = notIn;
+		}
+
+		public String getChartType() {
+			return ChartType;
+		}
+
+		public void setChartType(String chartType) {
+			ChartType = chartType;
+		}
+
+		public Date getChartBeginDate() {
+			return ChartBeginDate;
+		}
+
+		public void setChartBeginDate(Date chartBeginDate) {
+			ChartBeginDate = chartBeginDate;
 		}
 	
 }
