@@ -25,7 +25,9 @@ public class RoomChangeHireLogImpl extends JdbcDaoSupport implements RoomChangeH
 		roomChangeHireLog.setOffset(offset);
 		roomChangeHireLog.setNotIn("[GUID]");
 		if(search!=null&&!search.trim().equals("")){
-			  String[] where={"RoomAddress like ",search};
+			String[] where={"RoomAddress like ",search,"Charter like ",search,
+					  "OHire like ",search,"Area like ",search};
+			  roomChangeHireLog.setWhereTerm("OR");
 		      roomChangeHireLog.setWhere(where);
 		}
 		
@@ -53,7 +55,9 @@ public class RoomChangeHireLogImpl extends JdbcDaoSupport implements RoomChangeH
 		RoomChangeHireLog roomChangeHireLog=new RoomChangeHireLog();
 		
 		if(search!=null&&!search.trim().equals("")){
-			  String[] where={"RoomAddress like ",search};
+			  String[] where={"RoomAddress like ",search,"Charter like ",search,
+					  "OHire like ",search,"Area like ",search};
+			  roomChangeHireLog.setWhereTerm("OR");
 		      roomChangeHireLog.setWhere(where);
 		}
 		
@@ -67,7 +71,7 @@ public class RoomChangeHireLogImpl extends JdbcDaoSupport implements RoomChangeH
 		}
 		
 		sql=(String) map2.get("sql");
-		List params=(List) map.get("params");
+		List params=(List) map2.get("params");
 		map=this.getJdbcTemplate().queryForMap(sql,params.toArray());
 		
 		return (Integer) map.get("");
