@@ -19,6 +19,7 @@
 
     <!-- 数据库连接 -->
     <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+        connectionURL="jdbc:mysql://220.166.104.133:3306/voucher?characterEncoding=utf8"
         userId="root"
         password="123">
     </jdbcConnection>
@@ -44,6 +45,7 @@
     </javaClientGenerator>
 
     <!-- 要对那些数据表进行生成操作，必须要有一个. -->
+    <table  tableName="users" domainObjectName="users" 
         enableCountByExample="false" enableUpdateByExample="false"
         enableDeleteByExample="false" enableSelectByExample="false"
         selectByExampleQueryId="false">     
