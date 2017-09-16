@@ -6,6 +6,7 @@ import com.voucher.manage.daoSQL.annotations.QualifiOffset;
 import com.voucher.manage.daoSQL.annotations.QualifiOrder;
 import com.voucher.manage.daoSQL.annotations.QualifiSort;
 import com.voucher.manage.daoSQL.annotations.QualifiWhere;
+import com.voucher.manage.daoSQL.annotations.QualifiWhereTerm;
 
 /*
  * 每个Model类都需要的数据库where参数
@@ -31,6 +32,8 @@ public class BasicTerm {
 	    */
 	   @QualifiWhere(name="where")
 	   private String[] where;
+	   @QualifiWhereTerm(name="whereTerm") 
+	   private String whereTerm;         //多个where的连接条件
 	   
 	   public Integer getOffset() {
 			return offset;
@@ -78,6 +81,14 @@ public class BasicTerm {
 
 		public void setNotIn(String notIn) {
 			this.notIn = notIn;
+		}
+
+		public String getWhereTerm() {
+			return whereTerm;
+		}
+
+		public void setWhereTerm(String whereTerm) {
+			this.whereTerm = whereTerm;
 		}
 	
 }

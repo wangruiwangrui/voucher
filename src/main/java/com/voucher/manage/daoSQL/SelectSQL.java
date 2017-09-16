@@ -5,7 +5,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,10 +23,11 @@ import com.voucher.manage.daoSQL.annotations.SQLFloat;
 import com.voucher.manage.daoSQL.annotations.SQLInteger;
 import com.voucher.manage.daoSQL.annotations.SQLString;
 import com.voucher.manage.daoSQL.annotations.QualifiWhere;
+import com.voucher.manage.daoSQL.annotations.QualifiWhereTerm;
 
 public class SelectSQL {
 	
-	public static String get(Object object) throws ClassNotFoundException{
+	public static Map<String, Object> get(Object object) throws ClassNotFoundException{
 		Class className=object.getClass();
    	    String name = className.getName();                                    //从控制台输入一个类名，我们输入User即可
         Class<?> cl = Class.forName(name);                         //加载类，如果该类不在默认路径底下，会报 java.lang.ClassNotFoundException
@@ -35,8 +38,11 @@ public class SelectSQL {
     	String sort="";
 		String order="";
         String tableName="";
+        String Term="AND";
         
-        try{
+        Map<String, Object> map=new HashMap<>();
+        
+       try{
          tableName = (dbTable.name().length()<1)?cl.getName():dbTable.name();//获取表的名字，如果没有在DBTable中定义，则获取类名作为Table的名字
         }catch (Exception e) {
 			// TODO: handle exception
@@ -46,6 +52,8 @@ public class SelectSQL {
          String[] columnWhere=null;
          boolean term=false;       //判断是否有where
          int j=0;
+         List<Object> params=new ArrayList<Object>();
+         
         for(Field field : cl.getDeclaredFields())                  //获取声明的属性
         {
         	System.out.println("j="+j);
@@ -90,6 +98,16 @@ public class SelectSQL {
                 	term=true;
                 }
             }else
+            if(anns[0] instanceof QualifiWhereTerm)
+            {            	
+                 QualifiWhereTerm sStr = (QualifiWhereTerm) anns[0];
+                 columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
+                 String current= AReflectGet.getStringMethods(object, className, field, columnName);
+                 System.out.println("columnWhere="+columnWhere);
+                 if(current!=null){
+                     Term=current;
+                  }
+             }else
             if(anns[0] instanceof QualifiLimit)
             {
             	 QualifiLimit sStr = (QualifiLimit) anns[0];
@@ -125,11 +143,15 @@ public class SelectSQL {
              }
         }
         
-        StringBuilder selectCommand = new StringBuilder("SELECT top "+limit);
-                
+        StringBuilder selectCommand = new StringBuilder("SELECT top (?)");
+        
+               
         for(String columnDef :columnDefs){
             selectCommand.append("\n    "+columnDef+",");
         }
+        
+       
+        params.add(0,limit); //把limit插入到最前面
         
         String select=selectCommand.substring(0,selectCommand.length()-1)+"\n FROM \n   "+tableName;
         
@@ -141,36 +163,76 @@ public class SelectSQL {
           for(String whereterm:columnWhere){
         	  if(i%2==0){
         		//  System.out.println("偶数");
-        		  whereCommand.append(whereterm+"\n  AND ");
         	   }else{
         		//  System.out.println("奇数");
-        		  whereCommand.append("\n   "+whereterm);
+        		   whereCommand.append(whereterm+"? \n  "+Term+" ");
         	   }
            i++;
           }
-          select=select+   //sqlserver分页需要在top也加上where条件
+       /*   select=select+   //sqlserver分页需要在top也加上where条件
             		 "\n  where "+notIn+
                      " not in("+
                      " select top "+offset+" "+notIn+" FROM "+tableName+" where "+
                       whereCommand.substring(0,whereCommand.length()-7)+")";
+          select=select+"\n  AND "+whereCommand.substring(0,whereCommand.length()-7);*/
+          select=select+   //sqlserver分页需要在top也加上where条件
+         		 "\n  where "+notIn+
+                  " not in("+
+                  " select top "+offset+" "+notIn+" FROM "+tableName+" where "+
+                   whereCommand.substring(0,whereCommand.length()-7)+")";
+          i=1;
+          for(String whereterm:columnWhere){
+        	  if(i%2==0){
+        		//  System.out.println("偶数");
+        		  params.add(whereterm);
+        	   }else{
+        		//  System.out.println("奇数");
+        		 
+        	   }
+              i++;
+          }
+
           select=select+"\n  AND "+whereCommand.substring(0,whereCommand.length()-7);
+
+          i=1;
+          for(String whereterm:columnWhere){
+        	  if(i%2==0){
+        		//  System.out.println("偶数");
+        		  params.add(whereterm);
+        	   }else{
+        		//  System.out.println("奇数");
+        		  
+        	   }
+             i++;
+           }
         }else{
-        	select=select+
+        /*	select=select+
            		 "\n  where "+notIn+
                     " not in("+
-                    " select top "+offset+" "+notIn+" FROM "+tableName+")";
+                    " select top "+offset+" "+notIn+" FROM "+tableName+")";*/
+        	select=select+
+              		 "\n  where "+notIn+
+                       " not in("+
+                       " select top "+offset+" "+notIn+" FROM "+tableName+")";
+        	
         }
 
-        
-        return select;
+        map.put("sql", select);
+        map.put("params", params);
+        return map;
    }
 	
-	public static String getCount(Object object) throws ClassNotFoundException{
+	public static Map<String, Object> getCount(Object object) throws ClassNotFoundException{
 		    Class className=object.getClass();
    	        String name = className.getName();                                    //从控制台输入一个类名，我们输入User即可
 	        Class<?> cl = Class.forName(name);                         //加载类，如果该类不在默认路径底下，会报 java.lang.ClassNotFoundException
 	        DBTable dbTable = cl.getAnnotation(DBTable.class);         //从User类中获取DBTable注解
 	        String tableName="";
+	        List<Object> params=new ArrayList<Object>();
+	        String Term="AND";
+	        
+	        Map<String, Object> map=new HashMap<>();
+	        
 	        try{
 	         tableName = (dbTable.name().length()<1)?cl.getName():dbTable.name();//获取表的名字，如果没有在DBTable中定义，则获取类名作为Table的名字
 	        }catch (Exception e) {
@@ -187,8 +249,7 @@ public class SelectSQL {
 	            if(anns.length < 1)
 	            {
 	                continue;
-	            }else
-	            
+	            }else	            
 	            if(anns[0] instanceof QualifiWhere)
 	            {	            	
 	                QualifiWhere sStr = (QualifiWhere) anns[0];
@@ -196,6 +257,16 @@ public class SelectSQL {
 	                if(columnWhere!=null){
 	                	term=true;
 	                }
+	            }else
+	            if(anns[0] instanceof QualifiWhereTerm)
+	            {            	
+	                 QualifiWhereTerm sStr = (QualifiWhereTerm) anns[0];
+	                 columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
+	                 String current= AReflectGet.getStringMethods(object, className, field, columnName);
+	                 System.out.println("columnWhere="+columnWhere);
+	                 if(current!=null){
+	                     Term=current;
+	                  }
 	             }
 	        }
 	        
@@ -204,22 +275,39 @@ public class SelectSQL {
 	        String select=selectCommand+"\n FROM \n   "+tableName;
 	        
 	        if(term){
-	          StringBuilder whereCommand = new StringBuilder();
-	          int i=1;
-	          for(String whereterm:columnWhere){
-	        	  if(i%2==0){
-	        		//  System.out.println("偶数");
-	        		  whereCommand.append(whereterm+"\n  AND ");
-	        	   }else{
-	        		//  System.out.println("奇数");
-	        		  whereCommand.append("\n   "+whereterm);
-	        	   }
-	           i++;
+	            StringBuilder whereCommand = new StringBuilder();
+	            int i=1;
+	            for(String whereterm:columnWhere){
+	          	  if(i%2==0){
+	          		//  System.out.println("偶数");
+	          	   }else{
+	          		//  System.out.println("奇数");
+	          		   whereCommand.append(whereterm+"? \n  "+Term+" ");
+	          	   }
+	             i++;
+	            }
+	        select=select+   //sqlserver分页需要在top也加上where条件
+	           		 "\n  where "+
+	                     whereCommand.substring(0,whereCommand.length()-7);
+	            i=1;
+	            for(String whereterm:columnWhere){
+	          	  if(i%2==0){
+	          		//  System.out.println("偶数");
+	          		  params.add(whereterm);
+	          	   }else{
+	          		//  System.out.println("奇数");
+	          		 
+	          	   }
+	                i++;
+	            }
+
+	          
 	          }
-	          select=select+"\n  WHERE "+whereCommand.substring(0,whereCommand.length()-7);
-	        }
+	        
+	          map.put("sql", select);
+	          map.put("params", params);
 	              
-	        return select;
+	        return map;
 	   }
 	
 }

@@ -29,15 +29,19 @@ public class RoomChangeHireLogImpl extends JdbcDaoSupport implements RoomChangeH
 		      roomChangeHireLog.setWhere(where);
 		}
 		
-		String sql="";
+		 String sql="";
+	     Map<String,Object> map=new HashMap<>();
 		try {
-			sql = SelectSQL.get(roomChangeHireLog);
+			map = SelectSQL.get(roomChangeHireLog);
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		return this.getJdbcTemplate().query(sql, new RowMappers(RoomChangeHireLog.class));
+		sql=(String) map.get("sql");
+		List params=(List) map.get("params");
+		
+		return this.getJdbcTemplate().query(sql,params.toArray(),new RowMappers(RoomChangeHireLog.class));
 	}
 
 	@Override
@@ -53,15 +57,18 @@ public class RoomChangeHireLogImpl extends JdbcDaoSupport implements RoomChangeH
 		      roomChangeHireLog.setWhere(where);
 		}
 		
-		String sql="";
+		 String sql="";
+	        Map<String,Object> map2=new HashMap<>();
 		try {
-			sql = SelectSQL.getCount(roomChangeHireLog);
+			map2 = SelectSQL.getCount(roomChangeHireLog);
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		map=this.getJdbcTemplate().queryForMap(sql);
+		sql=(String) map2.get("sql");
+		List params=(List) map.get("params");
+		map=this.getJdbcTemplate().queryForMap(sql,params.toArray());
 		
 		return (Integer) map.get("");
 	}

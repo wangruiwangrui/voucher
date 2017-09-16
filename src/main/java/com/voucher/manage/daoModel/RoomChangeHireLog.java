@@ -10,6 +10,7 @@ import com.voucher.manage.daoSQL.annotations.QualifiOffset;
 import com.voucher.manage.daoSQL.annotations.QualifiOrder;
 import com.voucher.manage.daoSQL.annotations.QualifiSort;
 import com.voucher.manage.daoSQL.annotations.QualifiWhere;
+import com.voucher.manage.daoSQL.annotations.QualifiWhereTerm;
 import com.voucher.manage.daoSQL.annotations.SQLDateTime;
 import com.voucher.manage.daoSQL.annotations.SQLFloat;
 import com.voucher.manage.daoSQL.annotations.SQLInteger;
@@ -100,6 +101,8 @@ public class RoomChangeHireLog implements Serializable{
 	    */
 	   @QualifiWhere(name="where")
 	   private String[] where;
+	   @QualifiWhereTerm(name="whereTerm")
+	   private String whereTerm;              //多个where的连接条件     
 	   
 	   public Integer getOffset() {
 			return offset;
@@ -163,6 +166,14 @@ public class RoomChangeHireLog implements Serializable{
 
 		public void setRegion(String region) {
 			Region = region;
+		}
+
+		public String getWhereTerm() {
+			return whereTerm;
+		}
+
+		public void setWhereTerm(String whereTerm) {
+			this.whereTerm = whereTerm;
 		}
 	
 }

@@ -63,7 +63,7 @@ public class AffairServiceImpl implements AffairService{
 			paramMap3.put("amount", j+1);
 		    
 	        i=insertTest3(paramMap3);
-	        if(i==0){                 //总数少于0，取消交易回滚已提交数据
+	        if(i==0){                 //锟斤拷锟斤拷锟斤拷锟斤拷0锟斤拷取锟斤拷锟斤拷锟阶回癸拷锟斤拷锟结交锟斤拷锟斤拷
 	        	TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 	        }
 	        logger.info("i=-===="+i);
@@ -94,7 +94,7 @@ public class AffairServiceImpl implements AffairService{
 		paramMap3.put("amount", j+1);
 	    
         i=insertTest3(paramMap3);
-        if(i==0){                 //总数少于0，取消交易回滚已提交数据
+        if(i==0){                 //锟斤拷锟斤拷锟斤拷锟斤拷0锟斤拷取锟斤拷锟斤拷锟阶回癸拷锟斤拷锟结交锟斤拷锟斤拷
         	TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }
         logger.info("i=-===="+i);
@@ -122,7 +122,7 @@ public class AffairServiceImpl implements AffairService{
 		paramMap3.put("amount", j+1);
 	    
         i=insertTest3(paramMap3);
-        if(i==0){                 //总数少于0，取消交易回滚已提交数据
+        if(i==0){                 //锟斤拷锟斤拷锟斤拷锟斤拷0锟斤拷取锟斤拷锟斤拷锟阶回癸拷锟斤拷锟结交锟斤拷锟斤拷
         	TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }
         logger.info("i=-===="+i);

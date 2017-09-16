@@ -9,6 +9,7 @@ import com.voucher.manage.daoSQL.annotations.QualifiOffset;
 import com.voucher.manage.daoSQL.annotations.QualifiOrder;
 import com.voucher.manage.daoSQL.annotations.QualifiSort;
 import com.voucher.manage.daoSQL.annotations.QualifiWhere;
+import com.voucher.manage.daoSQL.annotations.QualifiWhereTerm;
 import com.voucher.manage.daoSQL.annotations.SQLDateTime;
 import com.voucher.manage.daoSQL.annotations.SQLFloat;
 import com.voucher.manage.daoSQL.annotations.SQLString;
@@ -88,6 +89,9 @@ public class RoomChartLog {
 	    */
 	   @QualifiWhere(name="where")
 	   private String[] where;
+	   @QualifiWhereTerm(name="whereTerm")
+	   private String whereTerm;              //多个where的连接条件        
+	   
 	   
 	   public Integer getOffset() {
 			return offset;
@@ -151,6 +155,14 @@ public class RoomChartLog {
 
 		public void setChartBeginDate(Date chartBeginDate) {
 			ChartBeginDate = chartBeginDate;
+		}
+
+		public String getWhereTerm() {
+			return whereTerm;
+		}
+
+		public void setWhereTerm(String whereTerm) {
+			this.whereTerm = whereTerm;
 		}
 	
 }

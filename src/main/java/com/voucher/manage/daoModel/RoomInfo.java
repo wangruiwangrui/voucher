@@ -9,6 +9,7 @@ import com.voucher.manage.daoSQL.annotations.QualifiOffset;
 import com.voucher.manage.daoSQL.annotations.QualifiOrder;
 import com.voucher.manage.daoSQL.annotations.QualifiSort;
 import com.voucher.manage.daoSQL.annotations.QualifiWhere;
+import com.voucher.manage.daoSQL.annotations.QualifiWhereTerm;
 import com.voucher.manage.daoSQL.annotations.SQLString;
 
 
@@ -94,6 +95,9 @@ public void setAddress(String address) {
   */
  @QualifiWhere(name="where")
  private String[] where;
+ @QualifiWhereTerm(name="whereTerm")
+ private String whereTerm;              //多个where的连接条件            
+ 
  
  public Integer getOffset() {
 		return offset;
@@ -149,6 +153,14 @@ public void setAddress(String address) {
 
 	public void setRegion(String region) {
 		Region = region;
+	}
+
+	public String getWhereTerm() {
+		return whereTerm;
+	}
+
+	public void setWhereTerm(String whereTerm) {
+		this.whereTerm = whereTerm;
 	}
 
 }

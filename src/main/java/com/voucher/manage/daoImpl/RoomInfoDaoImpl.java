@@ -13,6 +13,7 @@ import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.RoomInfoRowMapper;
 import com.voucher.manage.daoRowMapper.RowMappers;
 import com.voucher.manage.daoSQL.SelectSQL;
+import com.voucher.manage.tools.MyTestUtil;
 
 public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 
@@ -47,15 +48,22 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		  roomInfo.setWhere(where);
 		}
         String sql="";
+        Map<String,Object> map=new HashMap<>();
 		try {
-			sql = SelectSQL.get(roomInfo);
+			map = SelectSQL.get(roomInfo);
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
+		sql=(String) map.get("sql");
+		List params=(List) map.get("params");
+		
 		//return this.getJdbcTemplate().query(sql, new RoomInfoRowMapper());
-		return this.getJdbcTemplate().query(sql, new RowMappers(RoomInfo.class));
+		List list= this.getJdbcTemplate().query(sql,params.toArray(),new RowMappers(RoomInfo.class));
+		MyTestUtil.print(map);
+		MyTestUtil.print(list);
+		return list;
 	}
 
 	@Override
@@ -69,15 +77,17 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 			  String[] where={"Address like ",search};
 			  roomInfo.setWhere(where);
 			}
-        String sql="";
+		 String sql="";
+	        Map<String,Object> map2=new HashMap<>();
 		try {
-			sql = SelectSQL.getCount(roomInfo);
+			map2 = SelectSQL.getCount(roomInfo);
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		map=this.getJdbcTemplate().queryForMap(sql);
+		sql=(String) map2.get("sql");
+		List params=(List) map.get("params");
+		map=this.getJdbcTemplate().queryForMap(sql,params.toArray());
 	
 		/*
 		Set  set=map.entrySet();       	    

@@ -1,8 +1,10 @@
 package voucher;
 
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -10,6 +12,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import com.voucher.manage.daoModel.RoomChangeHireLog;
 import com.voucher.manage.daoModel.RoomChartLog;
 import com.voucher.manage.daoModel.RoomInfo;
+import com.voucher.manage.daoModel.RoomInfoRowMapper;
 import com.voucher.manage.daoRowMapper.RowMappers;
 import com.voucher.manage.daoRowMapper.RowMappersJoin;
 import com.voucher.manage.daoSQL.SelectSQL;
@@ -40,8 +43,8 @@ public class sqltest {
 		roomInfo.setLimit(30);
 		roomInfo.setOffset(10);
 		roomInfo.setNotIn("[GUID]");
-		String[] where={"[TTT].[dbo].[RoomInfo].Region=","'江阳区'"};
-		roomInfo.setWhere(where);
+	//	String[] where={"[TTT].[dbo].[RoomInfo].Region=","'江阳区'"};
+	//	roomInfo.setWhere(where);
  
 		RoomChangeHireLog roomChangeHireLog=new RoomChangeHireLog();
 		
@@ -96,8 +99,31 @@ public class sqltest {
 		   j++;
 		}
 		
-		String sqlcount=SelectSQLJoin.getCount(objects, "[Charter]");
-		System.out.println(sqlcount);
+	//	String sqlcount=SelectSQLJoin.getCount(objects, "[Charter]");
+	//	System.out.println(sqlcount);
+		roomInfo.setLimit(1);
+		roomInfo.setOffset(10);
+		roomInfo.setNotIn("[GUID]");
+		String[] where={"[TTT].[dbo].[RoomInfo].Region=","江阳区","[TTT].[dbo].[RoomInfo].Region=","江阳区"};
+		roomInfo.setWhere(where);
+	//	roomInfo.setWhereTerm("OR");
+	//	Map map=SelectSQL.get(roomInfo);
+		
+		Map map=SelectSQL.getCount(roomInfo);
+		
+		MyTestUtil.print(map);
+		sql=(String) map.get("sql");
+	/*	sql="SELECT top (?) * "+
+	    	 " FROM [TTT].[dbo].[RoomInfo] "+
+	    	  " where Region=?";*/
+		List params=(List) map.get("params");
+       System.out.println(sql);
+       MyTestUtil.print(params);
+
+    //   Object[] ss=new Object[]{1,"江阳区"};
+	//	List list2=getJdbcTemplate.query(sql,params.toArray(),new RoomInfoRowMapper());
+	   Map map2=getJdbcTemplate.queryForMap(sql,params.toArray());
+       MyTestUtil.print(map2);
 	}
 }
 
