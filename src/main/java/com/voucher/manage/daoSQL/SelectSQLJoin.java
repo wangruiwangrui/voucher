@@ -3,8 +3,10 @@ package com.voucher.manage.daoSQL;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.voucher.manage.daoSQL.annotations.DBTable;
 import com.voucher.manage.daoSQL.annotations.QualifiLimit;
@@ -13,13 +15,14 @@ import com.voucher.manage.daoSQL.annotations.QualifiOffset;
 import com.voucher.manage.daoSQL.annotations.QualifiOrder;
 import com.voucher.manage.daoSQL.annotations.QualifiSort;
 import com.voucher.manage.daoSQL.annotations.QualifiWhere;
+import com.voucher.manage.daoSQL.annotations.QualifiWhereTerm;
 import com.voucher.manage.daoSQL.annotations.SQLDateTime;
 import com.voucher.manage.daoSQL.annotations.SQLFloat;
 import com.voucher.manage.daoSQL.annotations.SQLInteger;
 import com.voucher.manage.daoSQL.annotations.SQLString;
 
 public class SelectSQLJoin {
-	public static String get(Object[] objects,String joinParameter) throws ClassNotFoundException{
+	public static Map<String, Object> get(Object[] objects,String joinParameter) throws ClassNotFoundException{
         Integer limit=10;
 		Integer offset=0; 
 		String notIn="";
@@ -34,9 +37,15 @@ public class SelectSQLJoin {
         List wheres=new ArrayList<String[]>();
         boolean term=false;       //判断是否有where
         String leftJionTableName="";
-
-      int i=0;
+        String Term="AND";
         
+        Map<String, Object> map=new HashMap<>();
+        
+        List<Object> params=new ArrayList<Object>();
+        
+        int i=0;
+             
+      
 	  for(Object object:objects){
 		Class className=object.getClass();
    	    String name = className.getName();                                    //从控制台输入一个类名，我们输入User即可
@@ -105,6 +114,16 @@ public class SelectSQLJoin {
                 	term=true;
                 }
             }else
+            if(anns[0] instanceof QualifiWhereTerm)
+            {            	
+                QualifiWhereTerm sStr = (QualifiWhereTerm) anns[0];
+                columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
+                String current= AReflectGet.getStringMethods(object, className, field, columnName);
+                System.out.println("columnWhere="+columnWhere);
+                 if(current!=null){
+                      Term=current;
+                    }
+            }else
             if(anns[0] instanceof QualifiLimit)
             {
             	 QualifiLimit sStr = (QualifiLimit) anns[0];
@@ -152,6 +171,8 @@ public class SelectSQLJoin {
         i++;
    }
         
+	//  params.add(0,limit); //把limit插入到最前面
+  
 	  if(term){
           StringBuilder whereCommand = new StringBuilder();         
           Iterator<String[]> iterator=wheres.iterator();
@@ -162,35 +183,83 @@ public class SelectSQLJoin {
         	  for(String whereterm:columnWhere){
             	  if(k%2==0){
             		//  System.out.println("偶数");
-            		  whereCommand.append(whereterm+"\n  AND ");
+            		//  whereCommand.append(whereterm+"\n  AND ");
             	   }else{
             		//  System.out.println("奇数");
-            		  whereCommand.append("\n   "+whereterm);
+            		//  whereCommand.append("\n   "+whereterm);
+            		   whereCommand.append(whereterm+"? \n  "+Term+" ");
             	   }
                k++;
                System.out.println("whereCommand="+whereCommand);
               }
 		  }
           
-          select=select+   //sqlserver分页需要在top也加上where条件
+       /*   select=select+   //sqlserver分页需要在top也加上where条件
             		 "\n  where "+firstTableName+"."+notIn+
                      " not in("+
                      " select top "+offset+" "+firstTableName+"."+notIn+" FROM "+firstTableName+" where "+
-                      whereCommand.substring(0,whereCommand.length()-7)+")";
-          System.out.println("select="+select);
+                      whereCommand.substring(0,whereCommand.length()-7)+")";*/
+          
+          select=select+   //sqlserver分页需要在top也加上where条件
+         		 "\n  where "+firstTableName+"."+notIn+
+                  " not in("+
+                  " select top "+offset+" "+firstTableName+"."+notIn+" FROM "+firstTableName+" where "+
+                   whereCommand.substring(0,whereCommand.length()-7)+")";
+       //   System.out.println("select="+select);
+          i=1;
+          int length=objects.length;
+          iterator=wheres.iterator();
+          System.out.println("wheres="+wheres);
+          int k;
+          while (iterator.hasNext()) {
+        	  columnWhere=iterator.next();
+          for(k=1;k<length;k++){
+           for(String whereterm:columnWhere){
+        	  if(i%2==0){
+        		//  System.out.println("偶数");
+        		  params.add(whereterm);
+        	   }else{
+        		//  System.out.println("奇数");
+        		 
+        	   }
+              i++;
+             }
+            }
+          }
+          
           select=select+"\n  AND "+whereCommand.substring(0,whereCommand.length()-7);
-          System.out.println("select="+select);
+       //   System.out.println("select="+select);
+          i=1;
+      
+          while (iterator.hasNext()) {
+        	  columnWhere=iterator.next();
+        for(k=1;k<length;k++){
+          for(String whereterm:columnWhere){
+        	  if(i%2==0){
+        		//  System.out.println("偶数");
+        		  params.add(whereterm);
+        	   }else{
+        		//  System.out.println("奇数");
+        		 
+        	   }
+              i++;
+           }
+          }
+         }
+          
         }else{
         	select=select+
-           		 "\n  where "+firstTableName+"."+firstTableName+"."+notIn+
+           		 "\n  where "+firstTableName+"."+notIn+
                     " not in("+
                     " select top "+offset+" "+firstTableName+"."+notIn+" FROM "+firstTableName+")";
         }
 	  
-        return select;
+	  map.put("sql", select);
+      map.put("params", params);
+      return map;
    }
 	
-	public static String getCount(Object[] objects,String joinParameter) throws ClassNotFoundException{
+	public static Map<String, Object> getCount(Object[] objects,String joinParameter) throws ClassNotFoundException{
 		List<String> columnDefs = new ArrayList<String>();
         String[] columnWhere=null;
         List wheres=new ArrayList<String[]>();
@@ -200,7 +269,11 @@ public class SelectSQLJoin {
         String select="";
         boolean term=false;       //判断是否有where
         String leftJionTableName="";
-
+        List<Object> params=new ArrayList<Object>();
+        String Term="AND";
+        
+        Map<String, Object> map=new HashMap<>();
+        
         int i=0;
         
 		for(Object object:objects){
@@ -246,7 +319,17 @@ public class SelectSQLJoin {
 	                	wheres.add(columnWhere);
 	                	term=true;
 	                }
-	            }
+	            }else
+		        if(anns[0] instanceof QualifiWhereTerm)
+		         {            	
+		             QualifiWhereTerm sStr = (QualifiWhereTerm) anns[0];
+		             columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
+		             String current= AReflectGet.getStringMethods(object, className, field, columnName);
+		             System.out.println("columnWhere="+columnWhere);
+		              if(current!=null){
+		                    Term=current;
+		               }
+		          }
 	        }
 	        
 	        StringBuilder selectCommand = new StringBuilder("SELECT count(*)");
@@ -271,25 +354,44 @@ public class SelectSQLJoin {
 	        	  for(String whereterm:columnWhere){
 	            	  if(k%2==0){
 	            		//  System.out.println("偶数");
-	            		  whereCommand.append(whereterm+"\n  AND ");
+	            		//  whereCommand.append(whereterm+"\n  AND ");
 	            	   }else{
 	            		//  System.out.println("奇数");
-	            		  whereCommand.append("\n   "+whereterm);
+	            		//  whereCommand.append("\n   "+whereterm);
+	            		   whereCommand.append(whereterm+"? \n  "+Term+" ");
 	            	   }
 	               k++;
-	              // System.out.println("whereCommand="+whereCommand);
+	               System.out.println("whereCommand="+whereCommand);
 	              }
 			  }
+	          select=select+   //sqlserver分页需要在top也加上where条件
+	          		 "\n  where "+
+	                    whereCommand.substring(0,whereCommand.length()-7);
 	          
-	       //   System.out.println("select="+select);
-	          select=select+"\n  WHERE "+whereCommand.substring(0,whereCommand.length()-7);
-	       //   System.out.println("select="+select);
-	        }else{
-	        	select=select+
-	           		 "\n  where "+firstTableName+"."+firstTableName;
+	         int length=objects.length;
+	       
+	        iterator=wheres.iterator();
+	        while (iterator.hasNext()) {
+	        	  columnWhere=iterator.next();
+	        
+	          for(String whereterm:columnWhere){
+	        	  if(i%2==0){
+	        		//  System.out.println("偶数");
+	        		  params.add(whereterm);
+	        	   }else{
+	        		//  System.out.println("奇数");
+	        		 
+	        	   }
+	              i++;
+	           }	         
+	         }
+	          
 	        }
 		
-	        return select;
+		 map.put("sql", select);
+         map.put("params", params);
+             
+       return map;
 	   }
 	
 }
