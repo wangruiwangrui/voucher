@@ -110,15 +110,15 @@ public class RowMappersJoin<T> implements RowMapper<T> {
         //获取相应字段的getXXX()方法  
         String setMethodName = "set" + filedName.substring(0, 1).toUpperCase()  
                 + filedName.substring(1);
-       System.out.println("setMethodName="+setMethodName);
+    //   System.out.println("setMethodName="+setMethodName);
  
        Class className=object.getClass();
-       System.out.println("classname="+className);
+    //   System.out.println("classname="+className);
        try {
        	 Method setMethod =className.getDeclaredMethod(setMethodName,String.class);
-      	 System.out.println("setmethod="+setMethod);
+      //	 System.out.println("setmethod="+setMethod);
        	 String aa=rs.getString(columnName);
-      	 System.out.println("aa="+aa+"        object="+object.getClass());
+      //	 System.out.println("aa="+aa+"        object="+object.getClass());
 		 setMethod.invoke(object,aa);
 		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block

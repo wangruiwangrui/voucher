@@ -10,6 +10,7 @@ import com.voucher.manage.daoSQL.annotations.QualifiOrder;
 import com.voucher.manage.daoSQL.annotations.QualifiSort;
 import com.voucher.manage.daoSQL.annotations.QualifiWhere;
 import com.voucher.manage.daoSQL.annotations.QualifiWhereTerm;
+import com.voucher.manage.daoSQL.annotations.SQLFloat;
 import com.voucher.manage.daoSQL.annotations.SQLString;
 
 
@@ -34,6 +35,9 @@ public class RoomInfo implements Serializable{
 
    @SQLString(name="Region")
    private String Region;
+   
+   @SQLFloat(name="BuildArea")
+   private Float BuildArea;
    
    public String getGUID() {
 	  return GUID;
@@ -161,6 +165,14 @@ public void setAddress(String address) {
 
 	public void setWhereTerm(String whereTerm) {
 		this.whereTerm = whereTerm;
+	}
+
+	public Float getBuildArea() {
+		return BuildArea;
+	}
+
+	public void setBuildArea(Float buildArea) {
+		BuildArea = buildArea;
 	}
 
 }

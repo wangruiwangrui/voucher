@@ -44,10 +44,18 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		roomInfo.setOffset(offset);
 		roomInfo.setNotIn("[GUID]");
 		if(search!=null&&!search.trim().equals("")){
-		  String[] where={"Address like ",search," OriginalAddress like ",search};
+		  String[] where={"Address like ",search};
 		  roomInfo.setWhereTerm("OR");
 		  roomInfo.setWhere(where);
 		}
+		System.out.println("impl sort="+sort+ "   order="+order);
+
+		if(sort!=null)
+			roomInfo.setSort(sort);
+		if(order!=null)
+			roomInfo.setOrder(order);
+		
+
         String sql="";
         Map<String,Object> map=new HashMap<>();
 		try {
@@ -75,7 +83,8 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		
 		RoomInfo roomInfo=new RoomInfo();
 		if(search!=null&&!search.trim().equals("")){
-			  String[] where={"Address like ",search};
+			String[] where={"Address like ",search};
+			  roomInfo.setWhereTerm("OR");
 			  roomInfo.setWhere(where);
 			}
 		 String sql="";

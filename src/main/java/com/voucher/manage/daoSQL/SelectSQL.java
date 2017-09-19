@@ -35,8 +35,8 @@ public class SelectSQL {
         Integer limit=10;
 		Integer offset=0; 
 		String notIn="";
-    	String sort="";
-		String order="";
+    	String sort=null;
+		String order=null;
         String tableName="";
         String Term="AND";
         
@@ -133,13 +133,15 @@ public class SelectSQL {
             {
             	QualifiSort sStr = (QualifiSort) anns[0];
                 columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
-                sort=columnName;
+                 sort=AReflectGet.getStringMethods(object, className, field,columnName);
+              //  System.out.println("sort="+sort);
              }else
             if(anns[0] instanceof QualifiOrder)
             {
             	QualifiOrder sStr = (QualifiOrder) anns[0];
                 columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
-                order=columnName;
+                order=AReflectGet.getStringMethods(object, className, field,columnName);
+             //   System.out.println("order="+order);
              }
         }
         
@@ -179,7 +181,17 @@ public class SelectSQL {
          		 "\n  where "+notIn+
                   " not in("+
                   " select top "+offset+" "+notIn+" FROM "+tableName+" where "+
-                   whereCommand.substring(0,whereCommand.length()-7)+")";
+                   whereCommand.substring(0,whereCommand.length()-7);
+           if(sort!=null){
+          	select=select+" ORDER BY "+sort;
+            }
+          
+           if(order!=null&&sort!=null){       	
+          	select=select+" "+order;        	
+           }
+          
+          select=select+")";
+          
           i=1;
           for(String whereterm:columnWhere){
         	  if(i%2==0){
@@ -213,10 +225,29 @@ public class SelectSQL {
         	select=select+
               		 "\n  where "+notIn+
                        " not in("+
-                       " select top "+offset+" "+notIn+" FROM "+tableName+")";
+                       " select top "+offset+" "+notIn+" FROM "+tableName;
         	
+        	 if(sort!=null){
+               	select=select+" ORDER BY "+sort;
+                 }
+               
+                if(order!=null&&sort!=null){       	
+               	select=select+" "+order;        	
+                }
+               
+             select=select+")";
         }
-
+       
+        
+        if(sort!=null){
+        	System.out.println("selectsql order="+sort);
+        	select=select+" ORDER BY "+sort;
+        }
+        
+        if(order!=null&&sort!=null){       	
+        	select=select+" "+order;        	
+        }
+        
         map.put("sql", select);
         map.put("params", params);
         return map;

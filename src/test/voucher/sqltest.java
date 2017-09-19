@@ -52,22 +52,28 @@ public class sqltest {
 		roomInfo.setLimit(30);
 		roomInfo.setOffset(0);
 		roomInfo.setNotIn("[GUID]");
-		String[] where={"[TTT].[dbo].[RoomInfo].Region=","江阳区"};
-		//roomInfo.setWhere(where);
+	//	roomInfo.setSort("BuildArea");
+	//	roomInfo.setOrder("desc");
+	//	String[] where={"[TTT].[dbo].[RoomInfo].Region=","江阳区"};
+	//	roomInfo.setWhere(where);
  
 		RoomChangeHireLog roomChangeHireLog=new RoomChangeHireLog();
 		
 		roomChangeHireLog.setLimit(30);
 		roomChangeHireLog.setOffset(0);
 		roomChangeHireLog.setNotIn("[GUID]");
-		String[] where3={"[RoomManage].[dbo].[RoomChangeHireLog].Charter=","林忠英"};
+		roomChangeHireLog.setSort("Area");
+	//	roomChangeHireLog.setOrder("desc");
+		
+	//	String[] where3={"[RoomManage].[dbo].[RoomChangeHireLog].Charter=","林忠英"};
+		String[] where3={"[RoomManage].[dbo].[RoomChangeHireLog].Region=","江阳区"};
 		roomChangeHireLog.setWhere(where3);
 		
 		RoomChartLog roomChartLog=new RoomChartLog();
 		roomChartLog.setLimit(30);
 		roomChartLog.setOffset(10);
 		roomChartLog.setNotIn("[GUID]");
-		
+	/*	
 		String[] where2={"[RoomManage].[dbo].[RoomChartLog].Charter=","廖常青"};
 	//	roomChartLog.setWhere(where2);
 		roomChartLog.setWhereTerm("OR");
@@ -101,7 +107,7 @@ public class sqltest {
 		
     //	MyTestUtil.print(list);
 		
-	/*	
+		
 		Iterator iterator=list.iterator();
 		
 		int j=0;
@@ -112,30 +118,36 @@ public class sqltest {
 		   System.out.println("j="+j);
 		   j++;
 		}
-		
+		*/
 	//	String sqlcount=SelectSQLJoin.getCount(objects, "[Charter]");
 	//	System.out.println(sqlcount);
-		roomInfo.setLimit(1);
-		roomInfo.setOffset(10);
-		roomInfo.setNotIn("[GUID]");
+		Object[] objects={roomChangeHireLog,roomChartLog,roomInfo};
+		Class<?>[] classs={roomChangeHireLog.getClass(),roomChangeHireLog.getClass(),roomInfo.getClass()};
+		Map map2=new SelectSQLJoin().get(objects,"[GUID]");
+	//	Map map2=new SelectSQL().get(roomInfo);
+
 	//	String[] where={"[TTT].[dbo].[RoomInfo].Region=","江阳区","[TTT].[dbo].[RoomInfo].Region=","江阳区"};
-		String[] where={"Address like ","%新二村%"};
+	//	String[] where={"Address like ","%新二村%"};
 	//	roomInfo.setWhere(where);
 	//	roomInfo.setWhereTerm("OR");
 	//	Map map=SelectSQL.get(roomInfo);
 		
+	//	Map map=SelectSQLJoin.getCount(objects,"[GUID]");
 		Map map=SelectSQL.getCount(roomInfo);
 		
 		MyTestUtil.print(map);
 	//	sql=(String) map.get("sql");
-		List params=(List) map.get("params");
+		List params=(List) map2.get("params");
+		String sql=(String) map2.get("sql");
        System.out.println(sql);
        MyTestUtil.print(params);
-
+       System.out.println("order="+roomChangeHireLog.getOrder());
     //   Object[] ss=new Object[]{1,"江阳区"};
-    	List list2=getJdbcTemplate.query(sql,params.toArray(),new RoomInfoRowMapper());
+    	List list2=getJdbcTemplate.query(sql,params.toArray(),new RowMappersJoin(classs, RoomChangeHireLog_RoomChartLog.class));
+    //  List list2=getJdbcTemplate.query(sql,params.toArray(),new RowMappers(RoomInfo.class));
 	//   Map map2=getJdbcTemplate.queryForMap(sql,params.toArray());
-       MyTestUtil.print(list2);*/
+       MyTestUtil.print(list2);
+       
 	}
 }
 

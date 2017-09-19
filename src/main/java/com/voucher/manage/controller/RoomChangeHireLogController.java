@@ -26,26 +26,19 @@ public class RoomChangeHireLogController {
 			String search,HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<String, Object>();
 
-		if(sort!=null&&sort.equals("subscribeTime")){
-			sort="subscribe_time";
+		if(sort!=null&&sort.equals("Charter")){
+			sort="Charter";
 		}
 		
-		if(sort!=null&&sort.equals("totalAmount")){
-			sort="total_amount";
+		if(sort!=null&&sort.equals("OHire")){
+			sort="OHire";
 		}
 		
-		if(sort!=null&&sort.equals("defaultAddress")){
-			sort="default_address";
+		if(sort!=null&&sort.equals("Area")){
+			sort="Area";
 		}
 		
-		/*
-		 * 前端的user表与其它表不一样，必须指定查询参数，否则抛出sql异常
-		 * 默认按id降序排列
-		 */
-		if(sort==null){
-			sort="id";
-			order="desc";
-		}
+	
 		
 		if(search!=null&&!search.trim().equals("")){
 			search="%"+search+"%";                 //sqlserver 必须加''

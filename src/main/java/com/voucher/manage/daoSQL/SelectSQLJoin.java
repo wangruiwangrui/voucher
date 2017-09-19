@@ -26,8 +26,8 @@ public class SelectSQLJoin {
         Integer limit=10;
 		Integer offset=0; 
 		String notIn="";
-    	String sort="";
-		String order="";
+    	String sort=null;
+		String order=null;
         String tableName="";
         String tableName0="";
         String firstTableName="";
@@ -131,7 +131,6 @@ public class SelectSQLJoin {
                  
                  String filedName = field.getName();  
                  limit=AReflectGet.getIntMethods(object, className, field,columnName);
-                 System.out.println("limit="+limit);
              }else	
             if(anns[0] instanceof QualifiOffset)
             {
@@ -149,13 +148,17 @@ public class SelectSQLJoin {
             {
             	QualifiSort sStr = (QualifiSort) anns[0];
                 columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
-                sort=columnName;
+                String sor=AReflectGet.getStringMethods(object, className, field,columnName);
+                if(sor!=null)
+                	sort=tableName+"."+sor;
              }else
             if(anns[0] instanceof QualifiOrder)
             {
             	QualifiOrder sStr = (QualifiOrder) anns[0];
                 columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
-                order=columnName;
+                String orde=AReflectGet.getStringMethods(object, className, field,columnName);
+                if(orde!=null)
+                	order=orde;
              }
         }
         
@@ -204,7 +207,17 @@ public class SelectSQLJoin {
          		 "\n  where "+firstTableName+"."+notIn+
                   " not in("+
                   " select top "+offset+" "+firstTableName+"."+notIn+" FROM "+firstTableName+" where "+
-                   whereCommand.substring(0,whereCommand.length()-7)+")";
+                   whereCommand.substring(0,whereCommand.length()-7);
+           if(sort!=null&&sort!=null){
+        	  select=select+" ORDER BY "+sort;         	
+            }
+    	  
+           if(order!=null){
+      		 select=select+" "+order;        	
+            }
+           
+           select=select+")";
+           
        //   System.out.println("select="+select);
           i=1;
           int length=objects.length;
@@ -251,9 +264,30 @@ public class SelectSQLJoin {
         	select=select+
            		 "\n  where "+firstTableName+"."+notIn+
                     " not in("+
-                    " select top "+offset+" "+firstTableName+"."+notIn+" FROM "+firstTableName+")";
+                    " select top "+offset+" "+firstTableName+"."+notIn+" FROM "+firstTableName;
+        	
+        	 if(sort!=null&&sort!=null){
+          	  select=select+" ORDER BY "+sort;
+            	
+             }
+      	  
+             if(order!=null){
+        		 select=select+" "+order;        	
+              }
+        	
+        	select=select+")";
         }
+	  	 
+      
+      if(sort!=null&&sort!=null){
+    	  select=select+" ORDER BY "+sort;
+      	
+      }
 	  
+      if(order!=null){
+  		 select=select+" "+order;        	
+       }
+      
 	  map.put("sql", select);
       map.put("params", params);
       return map;

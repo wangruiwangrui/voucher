@@ -31,6 +31,11 @@ public class RoomChangeHireLogImpl extends JdbcDaoSupport implements RoomChangeH
 		      roomChangeHireLog.setWhere(where);
 		}
 		
+		if(sort!=null)
+			roomChangeHireLog.setSort(sort);
+		if(order!=null)
+			roomChangeHireLog.setOrder(order);
+		
 		 String sql="";
 	     Map<String,Object> map=new HashMap<>();
 		try {
