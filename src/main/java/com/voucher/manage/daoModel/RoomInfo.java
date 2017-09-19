@@ -1,6 +1,7 @@
 package com.voucher.manage.daoModel;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import com.voucher.manage.daoSQL.annotations.DBTable;
 import com.voucher.manage.daoSQL.annotations.QualifiLimit;
@@ -10,6 +11,7 @@ import com.voucher.manage.daoSQL.annotations.QualifiOrder;
 import com.voucher.manage.daoSQL.annotations.QualifiSort;
 import com.voucher.manage.daoSQL.annotations.QualifiWhere;
 import com.voucher.manage.daoSQL.annotations.QualifiWhereTerm;
+import com.voucher.manage.daoSQL.annotations.SQLDateTime;
 import com.voucher.manage.daoSQL.annotations.SQLFloat;
 import com.voucher.manage.daoSQL.annotations.SQLString;
 
@@ -38,6 +40,9 @@ public class RoomInfo implements Serializable{
    
    @SQLFloat(name="BuildArea")
    private Float BuildArea;
+   
+   @SQLDateTime(name="InDate")
+   private Date InDate;
    
    public String getGUID() {
 	  return GUID;
@@ -173,6 +178,14 @@ public void setAddress(String address) {
 
 	public void setBuildArea(Float buildArea) {
 		BuildArea = buildArea;
+	}
+
+	public Date getInDate() {
+		return InDate;
+	}
+
+	public void setInDate(Date inDate) {
+		InDate = inDate;
 	}
 
 }

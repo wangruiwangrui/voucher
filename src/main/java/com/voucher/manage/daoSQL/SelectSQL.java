@@ -2,15 +2,10 @@ package com.voucher.manage.daoSQL;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import com.voucher.manage.daoSQL.annotations.DBTable;
 import com.voucher.manage.daoSQL.annotations.QualifiLimit;
@@ -51,13 +46,10 @@ public class SelectSQL {
          List<String> columnDefs = new ArrayList<String>();
          String[] columnWhere=null;
          boolean term=false;       //判断是否有where
-         int j=0;
          List<Object> params=new ArrayList<Object>();
          
         for(Field field : cl.getDeclaredFields())                  //获取声明的属性
         {
-        	System.out.println("j="+j);
-        	j++;
             String columnName = null;           
             Annotation[] anns = field.getDeclaredAnnotations();//获取注解，一个属性可以有多个注解，所以是数组类型
             if(anns.length < 1)
