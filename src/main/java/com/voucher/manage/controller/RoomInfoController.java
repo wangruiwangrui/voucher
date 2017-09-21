@@ -14,12 +14,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModel.RoomInfo;
+import com.voucher.sqlserver.context.Connect;
 
 @Controller
 @RequestMapping("/roominfo")
 public class RoomInfoController {
 
-	ApplicationContext applicationContext=new ClassPathXmlApplicationContext("spring-sqlservers.xml");
+	ApplicationContext applicationContext=new Connect().get();
 	
 	@RequestMapping("/getAll")
 	public @ResponseBody Map<String, Object> RoomInfo(Integer limit,Integer offset,String sort,String order,

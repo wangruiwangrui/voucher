@@ -14,12 +14,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.voucher.manage.dao.RoomChangeHireLogDAO;
 import com.voucher.manage.daoModel.RoomChangeHireLog;
+import com.voucher.sqlserver.context.Connect;
 
 @Controller
 @RequestMapping("/roomChangeHireLog")
 public class RoomChangeHireLogController {
 
-	ApplicationContext applicationContext=new ClassPathXmlApplicationContext("spring-sqlservers.xml");
+	ApplicationContext applicationContext=new Connect().get();
 	
 	@RequestMapping("/getAll")
 	public @ResponseBody Map<String, Object> RoomChangeHireLog(Integer limit,Integer offset,String sort,String order,
