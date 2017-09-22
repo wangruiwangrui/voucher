@@ -1,6 +1,7 @@
 package com.voucher.manage.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -13,4 +14,7 @@ public interface RoomInfoDao {
 	
 	Integer getRoomInfoCount(@Param(value="search")String search);
 	
+	
+	public Map<String, Object> findAllChangehire_CharLog(Integer limit, Integer offset, String sort,
+			String order,String search);
 }

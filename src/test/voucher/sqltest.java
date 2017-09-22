@@ -59,7 +59,7 @@ public class sqltest {
  
 		RoomChangeHireLog roomChangeHireLog=new RoomChangeHireLog();
 		
-		roomChangeHireLog.setLimit(30);
+		roomChangeHireLog.setLimit(10);
 		roomChangeHireLog.setOffset(0);
 		roomChangeHireLog.setNotIn("[GUID]");
 		roomChangeHireLog.setSort("Area");
@@ -67,12 +67,13 @@ public class sqltest {
 		
 	//	String[] where3={"[RoomManage].[dbo].[RoomChangeHireLog].Charter=","林忠英"};
 		String[] where3={"[RoomManage].[dbo].[RoomChangeHireLog].Region=","江阳区"};
+		String[] where={"[RoomManage].[dbo].[RoomChangeHireLog].Region=","江阳区","[RoomManage].[dbo].[RoomChangeHireLog].Region=","江阳区"};
 		roomChangeHireLog.setWhere(where3);
 		
 		RoomChartLog roomChartLog=new RoomChartLog();
-		roomChartLog.setLimit(30);
+		roomChartLog.setLimit(10);
 		roomChartLog.setOffset(10);
-		roomChartLog.setNotIn("[GUID]");
+		roomChartLog.setNotIn("[Charter]");
 	/*	
 		String[] where2={"[RoomManage].[dbo].[RoomChartLog].Charter=","廖常青"};
 	//	roomChartLog.setWhere(where2);
@@ -121,9 +122,10 @@ public class sqltest {
 		*/
 	//	String sqlcount=SelectSQLJoin.getCount(objects, "[Charter]");
 	//	System.out.println(sqlcount);
-		Object[] objects={roomChangeHireLog,roomChartLog,roomInfo};
-		Class<?>[] classs={roomChangeHireLog.getClass(),roomChangeHireLog.getClass(),roomInfo.getClass()};
-		Map map2=new SelectSQLJoin().get(objects,"[GUID]");
+		Object[] objects={roomChangeHireLog,roomChartLog};
+		Class<?>[] classs={roomChangeHireLog.getClass(),roomChangeHireLog.getClass()};
+	//	Map map2=new SelectSQLJoin().get(objects,"[Charter]");
+		Map map2=new SelectSQLJoin().getCount(objects,"[Charter]");
 	//	Map map2=new SelectSQL().get(roomInfo);
 
 	//	String[] where={"[TTT].[dbo].[RoomInfo].Region=","江阳区","[TTT].[dbo].[RoomInfo].Region=","江阳区"};
@@ -143,11 +145,11 @@ public class sqltest {
        MyTestUtil.print(params);
        System.out.println("order="+roomChangeHireLog.getOrder());
     //   Object[] ss=new Object[]{1,"江阳区"};
-    	List list2=getJdbcTemplate.query(sql,params.toArray(),new RowMappersJoin(classs, RoomChangeHireLog_RoomChartLog.class));
+    //	List list2=getJdbcTemplate.query(sql,params.toArray(),new RowMappersJoin(classs, RoomChangeHireLog_RoomChartLog.class));
     //  List list2=getJdbcTemplate.query(sql,params.toArray(),new RowMappers(RoomInfo.class));
-	//   Map map2=getJdbcTemplate.queryForMap(sql,params.toArray());
-       MyTestUtil.print(list2);
-       
+	  Map map4=getJdbcTemplate.queryForMap(sql,params.toArray());
+    //   MyTestUtil.print(list2);
+	  MyTestUtil.print(map4);
 	}
 }
 

@@ -9,10 +9,15 @@ import java.util.Set;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 import com.voucher.manage.dao.RoomInfoDao;
+import com.voucher.manage.daoModel.RoomChangeHireLog;
+import com.voucher.manage.daoModel.RoomChartLog;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.RoomInfoRowMapper;
+import com.voucher.manage.daoModelJoin.RoomChangeHireLog_RoomChartLog;
 import com.voucher.manage.daoRowMapper.RowMappers;
+import com.voucher.manage.daoRowMapper.RowMappersJoin;
 import com.voucher.manage.daoSQL.SelectSQL;
+import com.voucher.manage.daoSQL.SelectSQLJoin;
 import com.voucher.manage.tools.MyTestUtil;
 
 public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
@@ -110,6 +115,76 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		*/
 		
 		return (Integer) map.get("");
+	}
+
+	@Override
+	public Map<String, Object> findAllChangehire_CharLog(Integer limit, Integer offset, String sort, String order,
+			String search) {
+		// TODO Auto-generated method stub
+		
+		RoomChangeHireLog roomChangeHireLog=new RoomChangeHireLog();
+		RoomChartLog roomChartLog=new RoomChartLog();
+		
+		roomChangeHireLog.setLimit(limit);
+		roomChangeHireLog.setOffset(offset);
+		roomChangeHireLog.setSort(sort);
+		roomChangeHireLog.setOrder(order);
+		roomChangeHireLog.setNotIn("[GUID]");
+		roomChangeHireLog.setWhereTerm("OR");
+		
+		roomChartLog.setLimit(limit);
+		roomChartLog.setOffset(offset);
+		roomChartLog.setSort(sort);
+		roomChartLog.setOrder(order);
+		roomChartLog.setNotIn("[Charter]");
+		roomChartLog.setWhereTerm("OR");
+		
+		System.out.println("srot="+sort);
+		
+		if(search!=null&&!search.trim().equals("")){
+		 String[] where={"[RoomManage].[dbo].[RoomChangeHireLog].Charter LIKE",search,
+				"[RoomManage].[dbo].[RoomChangeHireLog].Region LIKE",search};
+		 roomChangeHireLog.setWhere(where);
+		}
+		
+		
+		
+		Object[] objects={roomChangeHireLog,roomChartLog};
+		Class<?>[] classes={roomChangeHireLog.getClass(),roomChartLog.getClass()};
+		Map map2=null;
+		try {
+			map2=new SelectSQLJoin().get(objects,"[Charter]");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		List params=(List) map2.get("params");
+		String sql=(String) map2.get("sql");
+		
+		System.out.println("params="+params);
+		
+		List list=this.getJdbcTemplate().query(sql,params.toArray(), new RowMappersJoin(classes, RoomChangeHireLog_RoomChartLog.class));
+		
+		Map map=new HashMap<String, Object>();
+		
+		map.put("value", list);
+		
+		try {
+			map2=new SelectSQLJoin().getCount(objects, "[Charter]")	;
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		params=(List) map2.get("params");
+		sql=(String) map2.get("sql");
+		
+		Map map3=this.getJdbcTemplate().queryForMap(sql,params.toArray());
+		
+		map.put("rows", map3.get(""));
+		
+		return map;
 	}
 
 }

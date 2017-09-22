@@ -30,6 +30,7 @@ public class SelectSQLJoin {
 		String order=null;
         String tableName="";
         String tableName0="";
+        String defaultTable="";
         String firstTableName="";
         String select="";
         List<String> columnDefs = new ArrayList<String>();
@@ -44,7 +45,18 @@ public class SelectSQLJoin {
         List<Object> params=new ArrayList<Object>();
         
         int i=0;
-             
+        for(Object object:objects){
+    		Class className=object.getClass();
+       	    String name = className.getName();                                    //从控制台输入一个类名，我们输入User即可
+            Class<?> cl = Class.forName(name);                         //加载类，如果该类不在默认路径底下，会报 java.lang.ClassNotFoundException
+            DBTable dbTable = cl.getAnnotation(DBTable.class);
+            
+            tableName = (dbTable.name().length()<1)?cl.getName():dbTable.name();//获取表的名字，如果没有在DBTable中定义，则获取类名作为Table的名字
+            
+            defaultTable=tableName;   //把第一张表设为默认表,用于定义默认order的表的值
+            break;
+            
+        }
       
 	  for(Object object:objects){
 		Class className=object.getClass();
@@ -68,11 +80,8 @@ public class SelectSQLJoin {
 		 }
        
          
-         int j=0;
         for(Field field : cl.getDeclaredFields())                  //获取声明的属性
         {
-        	System.out.println("j="+j);
-        	j++;
             String columnName = null;           
             Annotation[] anns = field.getDeclaredAnnotations();//获取注解，一个属性可以有多个注解，所以是数组类型
             if(anns.length < 1)
@@ -108,7 +117,7 @@ public class SelectSQLJoin {
                 QualifiWhere sStr = (QualifiWhere) anns[0];
                 columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
                 columnWhere = AReflectGet.getArrayMethods(object, className, field, columnName);
-                System.out.println("columnWhere="+columnWhere);
+             //   System.out.println("columnWhere="+columnWhere);
                 if(columnWhere!=null){
                 	wheres.add(columnWhere);
                 	term=true;
@@ -119,7 +128,7 @@ public class SelectSQLJoin {
                 QualifiWhereTerm sStr = (QualifiWhereTerm) anns[0];
                 columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
                 String current= AReflectGet.getStringMethods(object, className, field, columnName);
-                System.out.println("columnWhere="+columnWhere);
+              //  System.out.println("columnWhere="+columnWhere);
                  if(current!=null){
                       Term=current;
                     }
@@ -150,7 +159,7 @@ public class SelectSQLJoin {
                 columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
                 String sor=AReflectGet.getStringMethods(object, className, field,columnName);
                 if(sor!=null)
-                	sort=tableName+"."+sor;
+                	sort=defaultTable+"."+sor;  //避免多表造成混乱,以第一张表为主排序
              }else
             if(anns[0] instanceof QualifiOrder)
             {
@@ -173,7 +182,12 @@ public class SelectSQLJoin {
    
         i++;
    }
-        
+     
+      if(sort==null){
+    	  sort=defaultTable+"."+notIn;  //sqlserver有版本分页存在bug,需要加上排序参数
+      } 
+	  
+	  
 	//  params.add(0,limit); //把limit插入到最前面
   
 	  if(term){
@@ -197,24 +211,22 @@ public class SelectSQLJoin {
               }
 		  }
           
-       /*   select=select+   //sqlserver分页需要在top也加上where条件
-            		 "\n  where "+firstTableName+"."+notIn+
-                     " not in("+
-                     " select top "+offset+" "+firstTableName+"."+notIn+" FROM "+firstTableName+" where "+
-                      whereCommand.substring(0,whereCommand.length()-7)+")";*/
           
           select=select+   //sqlserver分页需要在top也加上where条件
          		 "\n  where "+firstTableName+"."+notIn+
                   " not in("+
-                  " select top "+offset+" "+firstTableName+"."+notIn+" FROM "+firstTableName+" where "+
+                  " select top "+offset+" "+firstTableName+"."+notIn+" FROM "+firstTableName+leftJionTableName+" where "+
                    whereCommand.substring(0,whereCommand.length()-7);
-           if(sort!=null&&sort!=null){
-        	  select=select+" ORDER BY "+sort;         	
-            }
-    	  
-           if(order!=null){
-      		 select=select+" "+order;        	
-            }
+
+ 
+          
+          if(sort!=null){
+            	select=select+" ORDER BY "+sort;
+              }
+            
+             if(order!=null&&sort!=null){       	
+            	select=select+" "+order;        	
+             }
            
            select=select+")";
            
@@ -222,19 +234,20 @@ public class SelectSQLJoin {
           i=1;
           int length=objects.length;
           iterator=wheres.iterator();
-          System.out.println("wheres="+wheres);
+          System.out.println("wheres1="+wheres);
           int k;
           while (iterator.hasNext()) {
-        	  columnWhere=iterator.next();
-          for(k=1;k<length;k++){
-           for(String whereterm:columnWhere){
-        	  if(i%2==0){
+        	columnWhere=iterator.next();
+        	System.out.println("");
+            for(k=1;k<length;k++){
+             for(String whereterm:columnWhere){
+        	   if(i%2==0){
         		//  System.out.println("偶数");
         		  params.add(whereterm);
-        	   }else{
+        	    }else{
         		//  System.out.println("奇数");
         		 
-        	   }
+        	    }
               i++;
              }
             }
@@ -243,11 +256,12 @@ public class SelectSQLJoin {
           select=select+"\n  AND "+whereCommand.substring(0,whereCommand.length()-7);
        //   System.out.println("select="+select);
           i=1;
-      
+          iterator=wheres.iterator();
+          System.out.println("wheres2="+wheres);
           while (iterator.hasNext()) {
-        	  columnWhere=iterator.next();
-        for(k=1;k<length;k++){
-          for(String whereterm:columnWhere){
+          columnWhere=iterator.next();
+          for(k=1;k<length;k++){
+            for(String whereterm:columnWhere){
         	  if(i%2==0){
         		//  System.out.println("偶数");
         		  params.add(whereterm);
@@ -264,29 +278,27 @@ public class SelectSQLJoin {
         	select=select+
            		 "\n  where "+firstTableName+"."+notIn+
                     " not in("+
-                    " select top "+offset+" "+firstTableName+"."+notIn+" FROM "+firstTableName;
+                    " select top "+offset+" "+firstTableName+"."+notIn+" FROM "+firstTableName+leftJionTableName;
         	
-        	 if(sort!=null&&sort!=null){
-          	  select=select+" ORDER BY "+sort;
-            	
-             }
-      	  
-             if(order!=null){
-        		 select=select+" "+order;        	
-              }
+        	if(sort!=null){
+              	select=select+" ORDER BY "+sort;
+                }
+              
+               if(order!=null&&sort!=null){       	
+              	select=select+" "+order;        	
+               }
         	
         	select=select+")";
         }
 	  	 
       
-      if(sort!=null&&sort!=null){
-    	  select=select+" ORDER BY "+sort;
-      	
-      }
-	  
-      if(order!=null){
-  		 select=select+" "+order;        	
-       }
+	  if(sort!=null){
+        	select=select+" ORDER BY "+sort;
+          }
+        
+         if(order!=null&&sort!=null){       	
+        	select=select+" "+order;        	
+         }
       
 	  map.put("sql", select);
       map.put("params", params);
@@ -335,8 +347,7 @@ public class SelectSQLJoin {
 	         int j=0;
 	        for(Field field : cl.getDeclaredFields())                  //获取声明的属性
 	        {
-	        	System.out.println("j="+j);
-	        	j++;
+
 	            String columnName = null;           
 	            Annotation[] anns = field.getDeclaredAnnotations();//获取注解，一个属性可以有多个注解，所以是数组类型
 	            if(anns.length < 1)
@@ -359,7 +370,7 @@ public class SelectSQLJoin {
 		             QualifiWhereTerm sStr = (QualifiWhereTerm) anns[0];
 		             columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
 		             String current= AReflectGet.getStringMethods(object, className, field, columnName);
-		             System.out.println("columnWhere="+columnWhere);
+		         //    System.out.println("columnWhere="+columnWhere);
 		              if(current!=null){
 		                    Term=current;
 		               }
@@ -402,23 +413,21 @@ public class SelectSQLJoin {
 	          		 "\n  where "+
 	                    whereCommand.substring(0,whereCommand.length()-7);
 	          
-	         int length=objects.length;
-	       
-	        iterator=wheres.iterator();
-	        while (iterator.hasNext()) {
+	       iterator=wheres.iterator();
+	       while (iterator.hasNext()) {
 	        	  columnWhere=iterator.next();
-	        
-	          for(String whereterm:columnWhere){
-	        	  if(i%2==0){
-	        		//  System.out.println("偶数");
-	        		  params.add(whereterm);
-	        	   }else{
-	        		//  System.out.println("奇数");
-	        		 
-	        	   }
-	              i++;
-	           }	         
-	         }
+	        	  int k=1;
+	        	  for(String whereterm:columnWhere){
+	            	  if(k%2==0){
+	            		//  System.out.println("偶数");
+	            		  params.add(whereterm);
+	            	   }else{
+	            		//  System.out.println("奇数");
+	            		//  whereCommand.append("\n   "+whereterm);
+	            	   }
+	               k++;
+	              }
+			  }
 	          
 	        }
 		

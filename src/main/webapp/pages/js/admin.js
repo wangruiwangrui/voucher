@@ -18,6 +18,12 @@ $('#roomChangeHireLog').click(function(){
 	   $('#content').attr('src','pages/roomChangeHireLog.html');
 	 });
 
+
+$('#roomChange').click(function(){
+	   $('#content').load('pages/findChange.html');
+	   $('#content').attr('src','pages/findChange.html');
+	 });
+
 $('#photo').click(function(){
 	   $('#content').load('pages/photo.html');
 	   $('#content').attr('src','pages/photo.html');

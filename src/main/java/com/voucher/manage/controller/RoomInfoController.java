@@ -69,4 +69,45 @@ public class RoomInfoController {
 		
 		return map;
 	}
+	
+	
+	@RequestMapping("/findChange")
+	public @ResponseBody Map<String, Object> findAllChangehire_CharLog(Integer limit,Integer offset,String sort,String order,
+			String search,HttpServletRequest request) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		RoomInfoDao roomInfoDao=(RoomInfoDao) applicationContext.getBean("roomInfodao");
+		
+		if(sort!=null&&sort.equals("buildArea")){
+			sort="BuildArea";
+		}
+		
+		if(sort!=null&&sort.equals("address")){
+			sort="Address";
+		}
+		if(order!=null&&order.equals("asc")){
+			order="asc";
+		}
+		
+		if(order!=null&&order.equals("desc")){
+			order="desc";
+		}
+	
+		
+		
+
+		
+		if(search!=null&&!search.trim().equals("")){
+			search="%"+search+"%";              
+		}	
+		
+		
+		Map map2=roomInfoDao.findAllChangehire_CharLog(limit, offset, sort, order, search);
+		
+		map.put("rows", map2.get("value"));
+		map.put("total", map2.get("rows"));
+		
+		return map;
+	}
+	
 }
