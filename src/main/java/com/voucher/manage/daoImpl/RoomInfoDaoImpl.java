@@ -13,6 +13,7 @@ import com.voucher.manage.daoModel.RoomChangeHireLog;
 import com.voucher.manage.daoModel.RoomChartLog;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.RoomInfoRowMapper;
+import com.voucher.manage.daoModel.TTT.Floor;
 import com.voucher.manage.daoModelJoin.RoomChangeHireLog_RoomChartLog;
 import com.voucher.manage.daoRowMapper.RowMappers;
 import com.voucher.manage.daoRowMapper.RowMappersJoin;
@@ -187,4 +188,47 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		return map;
 	}
 
+	@Override
+	public Map<String, Object> findAllFloor(Integer limit, Integer offset, String sort, String order, String search) {
+		// TODO Auto-generated method stub
+		Floor floor=new Floor();
+		floor.setLimit(limit);
+		floor.setOffset(offset);
+		floor.setSort(sort);
+		floor.setOrder(order);
+		
+		Map<String,Object> map=new HashMap<>();
+	        Map<String,Object> map2=new HashMap<>();
+			try {
+				map2 = SelectSQL.get(floor);
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+			List params=(List) map2.get("params");
+			String sql=(String) map2.get("sql");
+			
+			List list=this.getJdbcTemplate().query(sql,params.toArray(), new RowMappers(Floor.class));
+			
+			map.put("value", list);
+			
+			try {
+				map2=new SelectSQL().getCount(floor);
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			params=(List) map2.get("params");
+			sql=(String) map2.get("sql");
+			
+			Map map3=this.getJdbcTemplate().queryForMap(sql,params.toArray());
+			
+			map.put("rows", map3.get(""));
+			
+		return map;
+	}
+
+	
 }

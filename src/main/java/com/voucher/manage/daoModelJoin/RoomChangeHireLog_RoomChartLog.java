@@ -1,8 +1,11 @@
 package com.voucher.manage.daoModelJoin;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class RoomChangeHireLog_RoomChartLog{
+public class RoomChangeHireLog_RoomChartLog implements Serializable{
+	private static final long serialVersionUID = 1L; 
+	
 	private String RoomAddress;
 
 	private String Charter;

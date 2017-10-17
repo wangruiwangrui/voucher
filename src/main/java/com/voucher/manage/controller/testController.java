@@ -2,37 +2,39 @@ package com.voucher.manage.controller;
 
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.voucher.manage.model.Affair;
+import com.voucher.manage.redis.Orders;
+import com.voucher.manage.redis.RedisDao;
 import com.voucher.manage.service.AffairService;
-import com.voucher.manage.serviceImpl.AffairServiceImpl;
 
-import redis.clients.jedis.Jedis;
 
 @Controller
 @RequestMapping("/test")
 public class testController {
 	
-	private static final Logger logger = LoggerFactory.getLogger("test");
-	
-	private Jedis jedis;
-	
-  private AffairService testService;
 	
 	
+     private AffairService testService;
+	
+	
+     private RedisDao orderDao;
+ 	
+ 	@Autowired
+ 	public void setOrderDao(RedisDao orderDao) {
+ 		this.orderDao = orderDao;
+ 	}
+ 	
+     
 	@Transactional(rollbackFor = { Exception.class })
 	@Autowired
 	public void setTestService(AffairService testService) {
@@ -91,4 +93,50 @@ public class testController {
 		return i;
 	}
 
+
+	@RequestMapping("save")
+	public @ResponseBody String save(@RequestParam String id,@RequestParam 
+			String name){
+		Orders order=new Orders();
+		order.setId(id);
+		order.setName(name);
+		
+		orderDao.save(order);
+		
+		return "1";
+		
+	}
+	
+	@RequestMapping("read")
+	public @ResponseBody String read(@RequestParam String id){
+		Orders order= (Orders) orderDao.read(id);
+		
+		return order.getName();
+	}
+	
+	@RequestMapping("getAll")
+	public @ResponseBody Map getAll(){
+		Map<String, Object> map=new HashMap();
+		Set set= orderDao.getAll();
+		Iterator<String> iterator=set.iterator();
+		while (iterator.hasNext()) {
+			String key=iterator.next();
+		//	Orders order=orderDao.read(key);
+			map.put(key, "");			
+		}
+		return map;
+	}
+	
+	@RequestMapping("del")
+	public @ResponseBody Integer del(@RequestParam String id){
+		orderDao.delete(id);
+		return 1;
+	}
+	
+	@RequestMapping("delAll")
+	public @ResponseBody Set delAll(){
+		Set set= orderDao.getAll();
+		orderDao.deleteAll();
+		return set;
+	}
 }

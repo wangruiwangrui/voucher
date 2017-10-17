@@ -44,5 +44,37 @@ public class AssetsImpl implements Assets{
 		
 		return map;
 	}
+
+	@Override
+	public Map<String, Object> findAllChangehire_CharLog(Integer limit, Integer offset, String sort, String order,
+			String search) {
+		// TODO Auto-generated method stub
+		
+		RoomInfoDao roomInfoDao=(RoomInfoDao) applicationContext.getBean("roomInfodao");
+
+		if(order!=null&&order.equals("asc")){
+			order="asc";
+		}
+		
+		if(order!=null&&order.equals("desc")){
+			order="desc";
+		}
+	
+		
+		
+
+		
+		if(search!=null&&!search.trim().equals("")){
+			search="%"+search+"%";              
+		}	
+		
+		
+		Map map2=roomInfoDao.findAllChangehire_CharLog(limit, offset, sort, order, search);
+		
+
+		
+		return map2;
+		
+	}
 	
 }
