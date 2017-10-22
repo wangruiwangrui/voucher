@@ -121,8 +121,8 @@ public class testController {
 		Iterator<String> iterator=set.iterator();
 		while (iterator.hasNext()) {
 			String key=iterator.next();
-		//	Orders order=orderDao.read(key);
-			map.put(key, "");			
+			Orders order=(Orders) orderDao.read(key);
+			map.put(key, order);			
 		}
 		return map;
 	}

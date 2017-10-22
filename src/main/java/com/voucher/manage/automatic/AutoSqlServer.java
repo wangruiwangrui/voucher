@@ -30,8 +30,8 @@ class DBUtils {
         }  
     }  
       
-    public static Connection getConnection() throws Exception{  
-        return DriverManager.getConnection(prop.getProperty("url"),prop.getProperty("username"),prop.getProperty("password"));  
+    public static Connection getConnection(String url) throws Exception{  
+        return DriverManager.getConnection(url,prop.getProperty("username"),prop.getProperty("password"));  
     }  
       
     public static void close(Connection conn){  
@@ -59,14 +59,15 @@ public class AutoSqlServer {
     private boolean f_Blob = false;//是否需要导入java.sql.* 
     
     public AutoSqlServer(){}  
-    public AutoSqlServer(String tabName){  
-          
+    public AutoSqlServer(String url,String dataBase,String tabName,String filePath){  
         Connection conn = null;  
-        String sql = "select * from " + tabName;  
+        String sql = "select top 1 * from " + tabName;  
+        System.out.println("sql="+sql);
         try {  
-            conn = DBUtils.getConnection();  
+            conn = DBUtils.getConnection(url+dataBase);  
             PreparedStatement prep = conn.prepareStatement(sql);  
-            ResultSetMetaData rsmd = prep.getMetaData();  
+            ResultSetMetaData rsmd = prep.getMetaData(); 
+            System.out.println("rsmd="+rsmd);
             int size = rsmd.getColumnCount();//共有多少列  
             colNames = new String[size];  
             colType = new String[size];  
@@ -86,7 +87,7 @@ public class AutoSqlServer {
                 colSize[i] = rsmd.getColumnDisplaySize(i+1);  
             }  
             String content = parse(tabName, colNames, colType, colSize);  
-            FileWriter fw = new FileWriter("C:\\Users\\WangJing\\Desktop\\bb\\"+initCap(tabName)+".java");  
+            FileWriter fw = new FileWriter(filePath+initCap(tabName)+".java");  
             PrintWriter pw = new PrintWriter(fw);  
             pw.println(content);  
             pw.flush();  
@@ -130,7 +131,7 @@ public class AutoSqlServer {
         sb.append("    private static final long serialVersionUID = 1L;\n\n");
         processAllAttrs(sb);  
         processAllMethod(sb);  
-        processBasicTerm(sb);
+        processBasicTerm(sb);  //不添加自己的查询函数
         sb.append("}\r\n");  
         return sb.toString();  
     }  
@@ -263,13 +264,13 @@ public class AutoSqlServer {
      * @return表名的String数组 
      *  
      */  
-    private static List<String> getTabNames(){  
+    public static List<String> getTabNames(String url,String dataBase){  
         Connection conn = null;  
-        String sql = "SELECT Name FROM TTT..SysObjects Where XType='U' ORDER BY Name";  
+        String sql = "SELECT Name FROM "+dataBase+"..SysObjects Where XType='U' ORDER BY Name";  
         ArrayList<String> tabNames = null;  
           
         try {  
-            conn = DBUtils.getConnection();  
+            conn = DBUtils.getConnection(url);  
             PreparedStatement  prep = conn.prepareStatement(sql);  
             ResultSet rs = prep.executeQuery();   
             tabNames = new ArrayList<String>();  
@@ -322,13 +323,16 @@ public class AutoSqlServer {
          }  
     }
     
-    public static void main(String[] args){  
-    	List<String> tabNames = getTabNames();  
+    public static void main(String[] args){
+        String url="jdbc:jtds:sqlserver://127.0.0.1:1433/";
+    	String dataBase="TTT";
+    	String filePath="C:\\Users\\WangJing\\Desktop\\bb\\sqlserver\\";
+    	List<String> tabNames = getTabNames(url,dataBase);  
         Iterator<String> iterator=tabNames.iterator();
         int i=0;
         while (iterator.hasNext()) {
         	String tabName=iterator.next();
-        	new AutoSqlServer(tabName);  
+        	new AutoSqlServer(url,dataBase,tabName,filePath);  
         	System.out.println(i+"   "+tabName);
         	i++;
 		}       

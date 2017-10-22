@@ -40,6 +40,11 @@ $('#setting').click(function(){
 	   $('#content').attr('src','pages/setting.html');
 	 });
 
+$('#qrCode').click(function(){
+	   $('#content').load('pages/qrCode.html');
+	   $('#content').attr('src','pages/qrCode.html');
+	 });
+
 if(getCookie("type")==0)
  $('#brand').text("用户 : "+getCookie("campusAdmin")+" (管理员)");
 else
