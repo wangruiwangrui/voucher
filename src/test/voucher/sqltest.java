@@ -124,10 +124,10 @@ public class sqltest {
 	//	System.out.println(sqlcount);
 		Object[] objects={roomChangeHireLog,roomChartLog};
 		Class<?>[] classs={roomChangeHireLog.getClass(),roomChangeHireLog.getClass()};
-	//	Map map2=new SelectSQLJoin().get(objects,"[Charter]");
-		Map map2=new SelectSQLJoin().getCount(objects,"[Charter]");
+		Map map2=new SelectSQLJoin().get(objects,"[Charter]");
+	//	Map map2=new SelectSQLJoin().getCount(objects,"[Charter]");
 	//	Map map2=new SelectSQL().get(roomInfo);
-
+        MyTestUtil.print(map2);
 	//	String[] where={"[TTT].[dbo].[RoomInfo].Region=","江阳区","[TTT].[dbo].[RoomInfo].Region=","江阳区"};
 	//	String[] where={"Address like ","%新二村%"};
 	//	roomInfo.setWhere(where);
@@ -135,7 +135,7 @@ public class sqltest {
 	//	Map map=SelectSQL.get(roomInfo);
 		
 	//	Map map=SelectSQLJoin.getCount(objects,"[GUID]");
-		Map map=SelectSQL.getCount(roomInfo);
+	/*	Map map=SelectSQL.getCount(roomInfo);
 		
 		MyTestUtil.print(map);
 	//	sql=(String) map.get("sql");
@@ -149,7 +149,7 @@ public class sqltest {
     //  List list2=getJdbcTemplate.query(sql,params.toArray(),new RowMappers(RoomInfo.class));
 	  Map map4=getJdbcTemplate.queryForMap(sql,params.toArray());
     //   MyTestUtil.print(list2);
-	  MyTestUtil.print(map4);
+	  MyTestUtil.print(map4);*/
 	}
 }
 

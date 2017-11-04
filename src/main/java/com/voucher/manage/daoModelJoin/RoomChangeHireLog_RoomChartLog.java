@@ -8,6 +8,8 @@ public class RoomChangeHireLog_RoomChartLog implements Serializable{
 	
 	private String RoomAddress;
 
+	private String Address;
+	
 	private String Charter;
 	
 	private Float Area;
@@ -96,5 +98,13 @@ public class RoomChangeHireLog_RoomChartLog implements Serializable{
 
 	public void setChartBeginDate(Date chartBeginDate) {
 		ChartBeginDate = chartBeginDate;
+	}
+
+	public String getAddress() {
+		return Address;
+	}
+
+	public void setAddress(String address) {
+		Address = address;
 	}
 }
