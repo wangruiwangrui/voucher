@@ -20,7 +20,7 @@ import com.voucher.inswept.topic.producer.TopicSender;
  * @描述 测试 
  */
 @Controller
-@RequestMapping("/activemq")
+@RequestMapping("/test/activemq")
 public class ActivemqController {
 	
 	@Resource TopicSender topicSender;

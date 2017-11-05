@@ -17,6 +17,7 @@ import com.voucher.manage.daoModel.TTT.Floor;
 import com.voucher.manage.daoModelJoin.RoomChangeHireLog_RoomChartLog;
 import com.voucher.manage.daoRowMapper.RowMappers;
 import com.voucher.manage.daoRowMapper.RowMappersJoin;
+import com.voucher.manage.daoSQL.SelectJoinExe;
 import com.voucher.manage.daoSQL.SelectSQL;
 import com.voucher.manage.daoSQL.SelectSQLJoin;
 import com.voucher.manage.tools.MyTestUtil;
@@ -151,6 +152,7 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		
 		
 		Object[] objects={roomChangeHireLog,roomChartLog};
+		/*
 		Class<?>[] classes={roomChangeHireLog.getClass(),roomChartLog.getClass()};
 		Map map2=null;
 		try {
@@ -182,7 +184,16 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		sql=(String) map2.get("sql");
 		
 		Map map3=this.getJdbcTemplate().queryForMap(sql,params.toArray());
+		*/
 		
+		Map map=new HashMap<String, Object>();
+		
+		RoomChangeHireLog_RoomChartLog roomChangeHireLog_RoomChartLog=new RoomChangeHireLog_RoomChartLog();
+		
+		List list=SelectJoinExe.get(this.getJdbcTemplate(), objects, roomChangeHireLog_RoomChartLog, "[Charter]");
+		map.put("value", list);
+		
+		Map map3=SelectJoinExe.getCount(this.getJdbcTemplate(), objects, "[Charter]");
 		map.put("rows", map3.get(""));
 		
 		return map;

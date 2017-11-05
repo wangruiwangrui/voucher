@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
+import com.voucher.manage.daoModel.RoomChangeHireLog;
 import com.voucher.manage.daoModel.RoomChartLog;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModelJoin.RoomChangeHireLog_RoomChartLog;
@@ -57,9 +58,7 @@ public class sqltest4 {
 		MyTestUtil.print(map);
 		*/
 	//	roomInfo=new RoomInfo();
-		roomInfo.setNotIn("[GUID]");
-		roomInfo.setLimit(10);
-		roomInfo.setOffset(0);
+		RoomChangeHireLog roomChangeHireLog=new RoomChangeHireLog();
 		 String[] where={"[TTT].[dbo].[RoomInfo].Address like ","%江阳区%"};
 	     roomInfo.setWhere(where);
 		RoomChartLog roomChartLog=new RoomChartLog();
@@ -68,12 +67,12 @@ public class sqltest4 {
 		roomChartLog.setNotIn("[GUID]");
 		RoomChangeHireLog_RoomChartLog roomChangeHireLog_RoomChartLog=new RoomChangeHireLog_RoomChartLog();
 	
-		Object[] objects={roomInfo,roomChartLog};
+		Object[] objects={roomChangeHireLog,roomChartLog};
 		
 		List list2=SelectJoinExe.get(getJdbcTemplate, objects, roomChangeHireLog_RoomChartLog, "[GUID]");
 		MyTestUtil.print(list2);
 		
-		Map map=SelectJoinExe.getCount(getJdbcTemplate, objects, "[GUID]");
+		Map map=SelectJoinExe.getCount(getJdbcTemplate, objects, "[Charter]");
 		MyTestUtil.print(map);
 	}
 }

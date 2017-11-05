@@ -252,6 +252,12 @@
           <artifactId>activemq-core</artifactId>
           <version>5.7.0</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.activemq/activemq-pool -->
+        <dependency>
+          <groupId>org.apache.activemq</groupId>
+          <artifactId>activemq-pool</artifactId>
+           <version>5.15.0</version>
+        </dependency>
         
         <!-- xbean 如<amq:connectionFactory /> -->
 		<dependency>
