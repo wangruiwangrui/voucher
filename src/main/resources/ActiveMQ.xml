@@ -13,6 +13,7 @@
         http://activemq.apache.org/schema/core
         http://activemq.apache.org/schema/core/activemq-core-5.8.0.xsd">
 
+  
 	<amq:connectionFactory id="amqConnectionFactory"
 		brokerURL="tcp://localhost:61616" userName="admin" password="admin" />
 
@@ -24,10 +25,23 @@
 	
 	<!-- ====Producer side start====-->
 	
-	
+	 <!-- 连接工厂 
+    <bean id="activeMQConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="tcp://localhost:61616"/>
+    </bean>
+    -->
+     <!-- 连接池  
+    <bean id="pooledConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory" destroy-method="stop">
+        <property name="connectionFactory">
+            <bean class="org.apache.activemq.ActiveMQConnectionFactory">
+                <property name="brokerURL" value="tcp://localhost:61616"/>
+            </bean>
+        </property>
+    </bean>
+	-->
 	<!-- 定义JmsTemplate的Topic类型 -->
 	<bean id="jmsTopicTemplate" class="org.springframework.jms.core.JmsTemplate">
-		<constructor-arg ref="connectionFactory" />
+		<constructor-arg ref="connectionFactory" /> 
 		<!-- pub/sub模型（发布/订阅） -->
 		<property name="pubSubDomain" value="true" />
 	</bean>
@@ -44,5 +58,27 @@
 		<jms:listener destination="general" ref="topicReceiver2"/>
 	</jms:listener-container>
 	
+	
+	<!--  
+	<bean id="queueDestination" class="org.apache.activemq.command.ActiveMQQueue">
+     <constructor-arg value="queue"/>
+    </bean>
+    -->
+    <!--这个是主题目的地，一对多的
+   <bean id="topicDestination" class="org.apache.activemq.command.ActiveMQTopic">
+     <constructor-arg value="general"/>
+   </bean>
+   -->
+   <!-- 消息监听器 
+    <bean id="consumerMessageListener" class="com.voucher.inswept.topic.consumer.TopicReceiver"/>
+    -->
+    <!-- 消息监听容器
+    <bean id="jmsContainer"
+        class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="pooledConnectionFactory" />
+        <property name="destination" ref="topicDestination" />
+        <property name="messageListener" ref="consumerMessageListener" />
+    </bean>
+   -->
 	<!-- ====Consumer side end==== -->
 </beans>  
