@@ -1,6 +1,7 @@
 package com.voucher.manage.controller;
 
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -12,7 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.rmi.server.AssetsImpl;
+import com.voucher.manage.file.AbstractFileUpload.type;
 import com.voucher.manage.redis.Orders;
 import com.voucher.manage.redis.RedisDao;
 import com.voucher.manage.service.AffairService;
@@ -26,14 +30,14 @@ public class testController {
 	
      private AffairService testService;
 	
-	
+	/*
      private RedisDao orderDao;
  	
  	@Autowired
  	public void setOrderDao(RedisDao orderDao) {
  		this.orderDao = orderDao;
  	}
- 	
+ 	*/
      
 	@Transactional(rollbackFor = { Exception.class })
 	@Autowired
@@ -46,8 +50,14 @@ public class testController {
 	public @ResponseBody
 	String aaa() {
 		
-		return "sdddddddlllllllll";
+		AssetsImpl assetsImpl=new AssetsImpl();
 		
+	    File file=new File("G:\\tencent\\MicroMsg\\64986cf0bcebc18abfd6b8056731cd9b\\video\\17163009081731641021030.jpg");
+	    System.out.println("file size is:"+file.length());//打印文件长度
+	    type fileType=type.IMAGE;
+		return assetsImpl.uploadFile(file,fileType);
+
+		 
 	}
 	
 	
@@ -94,6 +104,7 @@ public class testController {
 	}
 
 
+	/*
 	@RequestMapping("save")
 	public @ResponseBody String save(@RequestParam String id,@RequestParam 
 			String name){
@@ -106,6 +117,7 @@ public class testController {
 		return "1";
 		
 	}
+	
 	
 	@RequestMapping("read")
 	public @ResponseBody String read(@RequestParam String id){
@@ -139,4 +151,5 @@ public class testController {
 		orderDao.deleteAll();
 		return set;
 	}
+	*/
 }

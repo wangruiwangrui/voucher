@@ -15,11 +15,14 @@ http://www.springframework.org/schema/context/spring-context-4.0.xsd
 	<context:component-scan base-package="com.voucher.manage.service" />
 	
 	<context:component-scan base-package="com.voucher.manage.serviceImpl" />
-
+    
+    <!--  
 	<context:component-scan base-package="com.voucher.inswept.topic.consumer"></context:component-scan>
     <context:component-scan base-package="com.voucher.inswept.topic.producer"></context:component-scan>
 	
 	<context:component-scan base-package="com.voucher.manage.redis"></context:component-scan>
+	-->
+	
 	<!-- <bean id="keyMapper" class="com.voucher.manage.mapper.KeyMapper">
 	</bean> -->
 </beans>

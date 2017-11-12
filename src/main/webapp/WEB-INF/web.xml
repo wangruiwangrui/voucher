@@ -6,8 +6,8 @@
 	<display-name>voucher</display-name>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:spring.xml,classpath:spring-mybatis.xml,classpath:spring-sqlservers.xml,classpath:ActiveMQ.xml
-		              ,classpath:spring-redis.xml</param-value>
+		<param-value>classpath:spring.xml,classpath:spring-mybatis.xml,classpath:spring-sqlservers.xml
+		             </param-value>
 	</context-param>
 
    <filter>
