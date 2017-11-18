@@ -16,13 +16,13 @@ import java.util.Map;
 
 import org.springframework.context.ApplicationContext;
 
-import com.rmi.server.entity.ImageUploadResult;
+import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModel.RoomInfo;
-import com.voucher.manage.file.AbstractFileUpload.type;
+import com.voucher.manage.file.DocFileFactory;
 import com.voucher.manage.file.ImageFileFactory;
-import com.voucher.manage.model.Photo;
-import com.voucher.manage.tools.FileTypeTest;
+import com.voucher.manage.file.PdfFileFactory;
+import com.voucher.manage.file.XlsFileFactory;
 import com.voucher.sqlserver.context.Connect;
 
 public class AssetsImpl implements Assets{
@@ -36,16 +36,16 @@ public class AssetsImpl implements Assets{
 	
 	@Override
 	public Map<String, Object> getRoomInfo(Integer limit,Integer offset,String sort,String order,
-			String search) {
+			Map search) {
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		
 	
-		
+		/*
 		if(search!=null&&!search.trim().equals("")){
 			search="%"+search+"%";
 		}		
-		
+		*/
 
 
 		RoomInfoDao roomInfoDao=(RoomInfoDao) applicationContext.getBean("roomInfodao");
@@ -94,9 +94,38 @@ public class AssetsImpl implements Assets{
 	}
 
 	@Override
-	public String uploadFile(File imageFile,type fileType) {
-	     return new ImageFileFactory().upload(imageFile,fileType);
+	public String uploadImageFile(File imageFile) {
+	     return new ImageFileFactory().upload(imageFile);
     }
+
+	@Override
+	public String uploadPdfFile(File file) {
+		// TODO Auto-generated method stub
+		return new PdfFileFactory().upload(file);
+	}
+
+	@Override
+	public String uploadDocFile(File file) {
+		// TODO Auto-generated method stub
+		return new DocFileFactory().upload(file);
+	}
+
+	@Override
+	public String uploadXlsFile(File file) {
+		// TODO Auto-generated method stub
+		return new XlsFileFactory().upload(file);
+	}
+
+	@Override
+	public Map<String, Object> findAllHidden(Integer limit, Integer offset, String sort, String order, Map search) {
+		// TODO Auto-generated method stub
+		
+		HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
+		
+		Map map=hiddenDAO.findAllHidden(limit, offset, sort, order, search);
+		
+		return map;
+	}
 
 	
 	

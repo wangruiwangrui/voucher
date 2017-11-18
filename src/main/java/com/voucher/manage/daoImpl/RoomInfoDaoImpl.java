@@ -21,13 +21,14 @@ import com.voucher.manage.daoSQL.SelectJoinExe;
 import com.voucher.manage.daoSQL.SelectSQL;
 import com.voucher.manage.daoSQL.SelectSQLJoin;
 import com.voucher.manage.tools.MyTestUtil;
+import com.voucher.manage.tools.TransMapToString;
 
 public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 
 	
 	@Override
 	public List<RoomInfo> findAllRoomInfo(Integer limit, Integer offset, String sort,
-			String order,String search) {
+			String order,Map search) {
 		// TODO Auto-generated method stub
 		/*
 		String sql="SELECT top "+ limit+" [GUID],[Num],[OriginalNum],[Address],[OriginalAddress],[Region],[Segment],[ManageRegion]"+
@@ -50,11 +51,20 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		roomInfo.setLimit(limit);
 		roomInfo.setOffset(offset);
 		roomInfo.setNotIn("[GUID]");
+		/*
 		if(search!=null&&!search.trim().equals("")){
 		  String[] where={"Address like ",search};
 		  roomInfo.setWhereTerm("OR");
 		  roomInfo.setWhere(where);
 		}
+		*/
+		
+		if(!search.isEmpty()){
+		    String[] where=TransMapToString.get(search);
+		    roomInfo.setWhereTerm("OR");
+		    roomInfo.setWhere(where);
+		}
+		
 		System.out.println("impl sort="+sort+ "   order="+order);
 
 		if(sort!=null)
@@ -83,17 +93,26 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 	}
 
 	@Override
-	public Integer getRoomInfoCount(String search) {
+	public Integer getRoomInfoCount(Map search) {
 		// TODO Auto-generated method stub
 		Map<String,Object> map=new HashMap<>();
 		//String sql="SELECT count(*) FROM [TTT].[dbo].[RoomInfo]";
 		
 		RoomInfo roomInfo=new RoomInfo();
+		/*
 		if(search!=null&&!search.trim().equals("")){
 			String[] where={"Address like ",search};
 			  roomInfo.setWhereTerm("OR");
 			  roomInfo.setWhere(where);
 			}
+			*/
+		
+		if(!search.isEmpty()){
+		    String[] where=TransMapToString.get(search);
+		    roomInfo.setWhereTerm("OR");
+		    roomInfo.setWhere(where);
+		}
+		
 		 String sql="";
 	        Map<String,Object> map2=new HashMap<>();
 		try {

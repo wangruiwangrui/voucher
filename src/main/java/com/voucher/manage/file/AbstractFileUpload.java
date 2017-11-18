@@ -9,17 +9,11 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.voucher.manage.tools.FileTypeTest;
 import com.voucher.manage.tools.Md5;
 
-import freemarker.core.ReturnInstruction.Return;
-import javafx.scene.image.Image;
-
 public abstract class AbstractFileUpload {
-	
 	public enum type{
 		IMAGE,XLS,PDF,DOC;
 	}
@@ -116,5 +110,5 @@ public abstract class AbstractFileUpload {
    	  }   
 	}
 	
-	public abstract String upload(File file,type fileType);
+	public abstract String upload(File file);
 }

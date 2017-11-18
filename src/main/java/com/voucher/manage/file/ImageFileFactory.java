@@ -4,11 +4,11 @@ import java.io.File;
 
 
 public class ImageFileFactory extends AbstractFileUpload{
-
+    private type fileType=type.IMAGE;
+	
 	@Override
-	public String upload(File file,type fileType) {
+	public String upload(File file) {
 		// TODO Auto-generated method stub
-		String path="\\Desktop\\bb\\photo";  
         return uploadFile(file,fileType);
 
 	}

@@ -69,6 +69,9 @@ http://www.springframework.org/schema/context
         <property name="jdbcTemplate" ref="jdbcTemplate"></property>
    </bean>
 
+   <bean id="hiddenDao" class="com.voucher.manage.daoImpl.HiddenDAOImpl">
+        <property name="jdbcTemplate" ref="jdbcTemplate"></property>
+   </bean>
    <!-- 配置事务管理器 -->
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

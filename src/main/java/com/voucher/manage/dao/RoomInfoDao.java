@@ -10,9 +10,9 @@ import com.voucher.manage.daoModel.RoomInfo;
 public interface RoomInfoDao {
 
 	public List<RoomInfo> findAllRoomInfo(Integer limit, Integer offset, String sort,
-			String order,String search);
+			String order,Map search);
 	
-	Integer getRoomInfoCount(@Param(value="search")String search);
+	Integer getRoomInfoCount(Map search);
 	
 	
 	public Map<String, Object> findAllChangehire_CharLog(Integer limit, Integer offset, String sort,

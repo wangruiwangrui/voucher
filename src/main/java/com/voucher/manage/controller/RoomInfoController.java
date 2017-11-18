@@ -46,24 +46,29 @@ public class RoomInfoController {
 	
 		
 		
-
+		Map where=new HashMap<>();
 		
 		if(search!=null&&!search.trim().equals("")){
-			search="%"+search+"%";              
+			search="%"+search+"%";  
+			where.put("Address like ", search);
 		}		
 		System.out.println("roominfocontroller sort="+sort+"   order="+order);
 
 		RoomInfoDao roomInfoDao=(RoomInfoDao) applicationContext.getBean("roomInfodao");
 		
+		
+		
+		
+		
 		List<RoomInfo> roomInfos=roomInfoDao.findAllRoomInfo(limit,offset,sort,
-				order,search);
+				order,where);
 		System.out.println("roominfocontroller sort="+sort+"   order="+order);
 		map.put("rows", roomInfos);
 	
 		
 		
 		
-		Integer total=roomInfoDao.getRoomInfoCount(search);
+		Integer total=roomInfoDao.getRoomInfoCount(where);
 		
         map.put("total", total);
 		
