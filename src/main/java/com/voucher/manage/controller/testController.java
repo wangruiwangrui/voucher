@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,19 +18,24 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import com.rmi.server.AssetsImpl;
+import com.voucher.manage.dao.HiddenDAO;
+import com.voucher.manage.daoImpl.HiddenDAOImpl;
 import com.voucher.manage.redis.Orders;
 import com.voucher.manage.redis.RedisDao;
 import com.voucher.manage.service.AffairService;
+import com.voucher.sqlserver.context.Connect;
 
 
 @Controller
 @RequestMapping("/test")
 public class testController {
 	
-	
+	ApplicationContext applicationContext=new Connect().get();
 	
      private AffairService testService;
 	
+     private HiddenDAO hiddenDAO;
+     
 	/*
      private RedisDao orderDao;
  	
@@ -50,12 +56,11 @@ public class testController {
 	public @ResponseBody
 	String aaa() {
 		
-		AssetsImpl assetsImpl=new AssetsImpl();
+		HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
 		
-	    File file=new File("G:\\tencent\\MicroMsg\\64986cf0bcebc18abfd6b8056731cd9b\\video\\17163009081731641021030.jpg");
-	    System.out.println("file size is:"+file.length());//打印文件长度
-		return assetsImpl.uploadImageFile(file);
+		hiddenDAO.findAllHidden(10, 0, null, "asc", new HashMap<>());
 
+		return "aaa";
 		 
 	}
 	

@@ -10,8 +10,10 @@ import java.util.Map;
 
 import com.voucher.manage.daoSQL.annotations.DBTable;
 import com.voucher.manage.daoSQL.annotations.SQLDateTime;
+import com.voucher.manage.daoSQL.annotations.SQLDouble;
 import com.voucher.manage.daoSQL.annotations.SQLFloat;
 import com.voucher.manage.daoSQL.annotations.SQLInteger;
+import com.voucher.manage.daoSQL.annotations.SQLLong;
 import com.voucher.manage.daoSQL.annotations.SQLString;
 
 public class InsertSQL {
@@ -73,6 +75,26 @@ public class InsertSQL {
                       columnDefs.add(columnName);
                       params.add(fResult);
                     }
+                }else
+                if(anns[0] instanceof SQLDouble)
+                {
+                     SQLDouble sStr =  (SQLDouble) anns[0];
+                     columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
+                     Double fResult=AReflectGet.getDoubleMethods(object, className, field, columnName);
+                     if(fResult!=null){
+                         columnDefs.add(columnName);
+                         params.add(fResult);
+                      }
+                 }else
+                 if(anns[0] instanceof SQLLong)
+                 {
+                      SQLLong sStr = (SQLLong) anns[0];
+                      columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
+                      Long fResult=AReflectGet.getLongMethods(object, className, field, columnName);
+                      if(fResult!=null){
+                           columnDefs.add(columnName);
+                           params.add(fResult);
+                       }
                 }else
                 if(anns[0] instanceof SQLDateTime)
                 {

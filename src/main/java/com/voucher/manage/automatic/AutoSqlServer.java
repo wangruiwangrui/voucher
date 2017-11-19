@@ -86,7 +86,7 @@ public class AutoSqlServer {
                 }
                 colSize[i] = rsmd.getColumnDisplaySize(i+1);  
             }  
-            String content = parse(tabName, colNames, colType, colSize);  
+            String content = parse(dataBase,tabName, colNames, colType, colSize);  
             FileWriter fw = new FileWriter(filePath+initCap(tabName)+".java");  
             PrintWriter pw = new PrintWriter(fw);  
             pw.println(content);  
@@ -103,7 +103,7 @@ public class AutoSqlServer {
     /* 
      * 解析处理，生成java实体类主体代码 
      */  
-    private String parse(String tabName,String[] colNames,String[] colType,int[] colSize){  
+    private String parse(String dataBase,String tabName,String[] colNames,String[] colType,int[] colSize){  
         StringBuffer sb = new StringBuffer();  
         if(packageName!=null&&!packageName.equals("")){
         	sb.append(packageName);
@@ -124,7 +124,7 @@ public class AutoSqlServer {
         sb.append("import java.io.Serializable;\n\n");
         sb.append("import com.voucher.manage.daoSQL.annotations.*;\n\n");
         
-        String prefix="[TTT].[dbo].[";
+        String prefix="["+dataBase+"].[dbo].[";
         sb.append("@DBTable(name=\""+prefix+tabName+"]\")\n");
         sb.append("public class "+initCap(tabName)+" implements Serializable{\r\n"); 
         sb.append("\n");

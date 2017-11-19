@@ -14,8 +14,10 @@ import com.voucher.manage.daoSQL.annotations.QualifiOffset;
 import com.voucher.manage.daoSQL.annotations.QualifiOrder;
 import com.voucher.manage.daoSQL.annotations.QualifiSort;
 import com.voucher.manage.daoSQL.annotations.SQLDateTime;
+import com.voucher.manage.daoSQL.annotations.SQLDouble;
 import com.voucher.manage.daoSQL.annotations.SQLFloat;
 import com.voucher.manage.daoSQL.annotations.SQLInteger;
+import com.voucher.manage.daoSQL.annotations.SQLLong;
 import com.voucher.manage.daoSQL.annotations.SQLString;
 import com.voucher.manage.daoSQL.annotations.QualifiWhere;
 import com.voucher.manage.daoSQL.annotations.QualifiWhereTerm;
@@ -73,6 +75,18 @@ public class SelectSQL {
                 SQLFloat sStr = (SQLFloat) anns[0];
                 columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
                 columnDefs.add(columnName);
+            }else
+            if(anns[0] instanceof SQLDouble)
+            {
+                 SQLDouble sStr =  (SQLDouble) anns[0];
+                 columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
+                 columnDefs.add(columnName);
+            }else
+            if(anns[0] instanceof SQLLong)
+            {
+                 SQLLong sStr = (SQLLong) anns[0];
+                 columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
+                 columnDefs.add(columnName);
             }else
             if(anns[0] instanceof SQLDateTime)
             {

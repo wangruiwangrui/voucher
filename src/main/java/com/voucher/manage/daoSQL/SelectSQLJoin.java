@@ -17,8 +17,10 @@ import com.voucher.manage.daoSQL.annotations.QualifiSort;
 import com.voucher.manage.daoSQL.annotations.QualifiWhere;
 import com.voucher.manage.daoSQL.annotations.QualifiWhereTerm;
 import com.voucher.manage.daoSQL.annotations.SQLDateTime;
+import com.voucher.manage.daoSQL.annotations.SQLDouble;
 import com.voucher.manage.daoSQL.annotations.SQLFloat;
 import com.voucher.manage.daoSQL.annotations.SQLInteger;
+import com.voucher.manage.daoSQL.annotations.SQLLong;
 import com.voucher.manage.daoSQL.annotations.SQLString;
 
 public class SelectSQLJoin {
@@ -106,6 +108,18 @@ public class SelectSQLJoin {
                 columnName = tableName+"."+((sStr.name().length()<1)?field.getName().toUpperCase():sStr.name());
                 columnDefs.add(columnName);
             }else
+             if(anns[0] instanceof SQLDouble)
+             {
+                 SQLDouble sStr =  (SQLDouble) anns[0];
+                 columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
+                 columnDefs.add(columnName);
+              }else
+             if(anns[0] instanceof SQLLong)
+             {
+                  SQLLong sStr = (SQLLong) anns[0];
+                  columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
+                  columnDefs.add(columnName);
+             }else
             if(anns[0] instanceof SQLDateTime)
             {
                 SQLDateTime sStr = (SQLDateTime) anns[0];

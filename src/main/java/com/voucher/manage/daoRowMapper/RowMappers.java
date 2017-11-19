@@ -12,8 +12,10 @@ import java.util.Date;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.voucher.manage.daoSQL.annotations.SQLDateTime;
+import com.voucher.manage.daoSQL.annotations.SQLDouble;
 import com.voucher.manage.daoSQL.annotations.SQLFloat;
 import com.voucher.manage.daoSQL.annotations.SQLInteger;
+import com.voucher.manage.daoSQL.annotations.SQLLong;
 import com.voucher.manage.daoSQL.annotations.SQLString;
 
 /*
@@ -81,12 +83,24 @@ public class RowMappers<T> implements RowMapper<T>{
                 columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
                 setFloatMethods(rs, object, cl, field, columnName);
             }else
-            if(anns[0] instanceof SQLDateTime)
+            if(anns[0] instanceof SQLDouble)
             {
+                 SQLDouble sStr =  (SQLDouble) anns[0];
+                 columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
+                 setDoubleMethods(rs, object, cl, field, columnName);
+             }else
+             if(anns[0] instanceof SQLLong)
+             {
+                  SQLLong sStr = (SQLLong) anns[0];
+                  columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
+                  setLongMethods(rs, object, cl, field, columnName);
+             }else
+             if(anns[0] instanceof SQLDateTime)
+             {
                 SQLDateTime sStr = (SQLDateTime) anns[0];
                 columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
                 setDateTimeMethods(rs, object, cl, field, columnName);
-            }
+             }
         }
    
         
@@ -169,6 +183,72 @@ public class RowMappers<T> implements RowMapper<T>{
        	 Method setMethod =className.getDeclaredMethod(setMethodName,Float.class);
      //  	 System.out.println("setmethod="+setMethod);
        	     float aa=rs.getFloat(columnName);
+     //  	 System.out.println("aa="+aa);
+		     setMethod.invoke(object,aa);
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch (SQLException e) {  // ResultSet的异常
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		   }
+	}
+	
+	public static void setDoubleMethods(ResultSet rs,Object object,Class className,Field field,String columnName){
+        String filedName = field.getName();  
+        //获取相应字段的getXXX()方法  
+        String setMethodName = "set" + filedName.substring(0, 1).toUpperCase()  
+                + filedName.substring(1);
+     //   System.out.println("setMethodName="+setMethodName);
+       try {
+       	 Method setMethod =className.getDeclaredMethod(setMethodName,Double.class);
+     //  	 System.out.println("setmethod="+setMethod);
+       	     Double aa=rs.getDouble(columnName);
+     //  	 System.out.println("aa="+aa);
+		     setMethod.invoke(object,aa);
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch (SQLException e) {  // ResultSet的异常
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		   }
+	}
+	
+	public static void setLongMethods(ResultSet rs,Object object,Class className,Field field,String columnName){
+        String filedName = field.getName();  
+        //获取相应字段的getXXX()方法  
+        String setMethodName = "set" + filedName.substring(0, 1).toUpperCase()  
+                + filedName.substring(1);
+     //   System.out.println("setMethodName="+setMethodName);
+       try {
+       	 Method setMethod =className.getDeclaredMethod(setMethodName,Long.class);
+     //  	 System.out.println("setmethod="+setMethod);
+       	     Long aa=rs.getLong(columnName);
      //  	 System.out.println("aa="+aa);
 		     setMethod.invoke(object,aa);
 		} catch (NoSuchMethodException e) {

@@ -102,6 +102,66 @@ public class AReflectGet {
        return f;
 	}
 	
+	public static Double getDoubleMethods(Object object,Class className,Field field,String columnName){
+        String filedName = field.getName();  
+        //获取相应字段的getXXX()方法  
+        String getMethodName = "get" + filedName.substring(0, 1).toUpperCase()  
+                + filedName.substring(1);
+       // System.out.println(getMethodName);
+        Double f=null;
+       try {
+       	Method getMethod =className.getMethod(getMethodName);
+			f= (Double) getMethod.invoke(object);
+			return f;
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+       return f;
+	}
+	
+	public static Long getLongMethods(Object object,Class className,Field field,String columnName){
+        String filedName = field.getName();  
+        //获取相应字段的getXXX()方法  
+        String getMethodName = "get" + filedName.substring(0, 1).toUpperCase()  
+                + filedName.substring(1);
+       // System.out.println(getMethodName);
+        Long f=null;
+       try {
+       	Method getMethod =className.getMethod(getMethodName);
+			f= (Long) getMethod.invoke(object);
+			return f;
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+       return f;
+	}
+	
 	public static Date getDateMethods(Object object,Class className,Field field,String columnName){
         String filedName = field.getName();  
         //获取相应字段的getXXX()方法  
