@@ -1,16 +1,7 @@
 package com.rmi.server;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +11,6 @@ import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Assets.Hidden;
-import com.voucher.manage.daoModel.Assets.Hidden2;
 import com.voucher.manage.file.DocFileFactory;
 import com.voucher.manage.file.ImageFileFactory;
 import com.voucher.manage.file.PdfFileFactory;
@@ -139,12 +129,12 @@ public class AssetsImpl implements Assets{
 	}
 
 	@Override
-	public Integer updateHidden(Hidden2 hidden2) {
+	public Integer updateHidden(Hidden hidden) {
 		// TODO Auto-generated method stub
 		
 		HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
 		
-		return hiddenDAO.updateHidden(hidden2);
+		return hiddenDAO.updateHidden(hidden);
 	}
 
 	

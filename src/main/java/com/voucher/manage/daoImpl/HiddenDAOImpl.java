@@ -8,7 +8,6 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.daoModel.Assets.Hidden;
-import com.voucher.manage.daoModel.Assets.Hidden2;
 import com.voucher.manage.daoSQL.InsertExe;
 import com.voucher.manage.daoSQL.SelectExe;
 import com.voucher.manage.daoSQL.UpdateExe;
@@ -57,11 +56,8 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	}
 
 	@Override
-	public Integer updateHidden(Hidden2 hidden2) {
+	public Integer updateHidden(Hidden hidden2) {
 		// TODO Auto-generated method stub
-		String[] where={"id=",String.valueOf(hidden2.getId())};
-		hidden2.setWhere(where);
-	    MyTestUtil.print(hidden2);
 	    
 		return UpdateExe.get(this.getJdbcTemplate(), hidden2);
 	}

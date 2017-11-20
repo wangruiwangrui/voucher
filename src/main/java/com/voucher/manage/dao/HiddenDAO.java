@@ -3,7 +3,6 @@ package com.voucher.manage.dao;
 import java.util.Map;
 
 import com.voucher.manage.daoModel.Assets.Hidden;
-import com.voucher.manage.daoModel.Assets.Hidden2;
 
 public interface HiddenDAO {
 
@@ -12,5 +11,5 @@ public interface HiddenDAO {
 	
 	public Integer insertIntoHidden(Hidden hidden);
 	
-	public Integer updateHidden(Hidden2 hidden2);
+	public Integer updateHidden(Hidden hidden);
 }
