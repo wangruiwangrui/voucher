@@ -92,6 +92,7 @@ public class Hidden implements Serializable{
 	}
 
 	public void setTime(Date time){
+		System.out.println("time="+time.getTime());
 		this.time = time;
 	}
 

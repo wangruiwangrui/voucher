@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.daoModel.Assets.Hidden;
+import com.voucher.manage.daoSQL.DeleteExe;
 import com.voucher.manage.daoSQL.InsertExe;
 import com.voucher.manage.daoSQL.SelectExe;
 import com.voucher.manage.daoSQL.UpdateExe;
@@ -17,7 +18,7 @@ import com.voucher.manage.tools.TransMapToString;
 public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 
 	@Override
-	public Map<String, Object> findAllHidden(Integer limit, Integer offset, String sort, String order, Map<String, String> search) {
+	public Map<String, Object> selectAllHidden(Integer limit, Integer offset, String sort, String order, Map<String, String> search) {
 		// TODO Auto-generated method stub
         Hidden hidden=new Hidden();
 		
@@ -56,10 +57,17 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	}
 
 	@Override
-	public Integer updateHidden(Hidden hidden2) {
+	public Integer updateHidden(Hidden hidden) {
 		// TODO Auto-generated method stub
 	    
-		return UpdateExe.get(this.getJdbcTemplate(), hidden2);
+		return UpdateExe.get(this.getJdbcTemplate(), hidden);
+	}
+
+	@Override
+	public Integer deleteHidden(Hidden hidden) {
+		// TODO Auto-generated method stub
+		
+		return DeleteExe.get(this.getJdbcTemplate(), hidden);
 	}
 
 }

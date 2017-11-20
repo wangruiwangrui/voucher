@@ -58,7 +58,7 @@ public class testController {
 		
 		HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
 		
-		hiddenDAO.findAllHidden(10, 0, null, "asc", new HashMap<>());
+		hiddenDAO.selectAllHidden(10, 0, null, "asc", new HashMap<>());
 
 		return "aaa";
 		 

@@ -7,6 +7,8 @@ import java.util.Map;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
+import com.voucher.manage.daoModel.Hidden;
+import com.voucher.manage.daoModel.HiddenRowMapper;
 import com.voucher.manage.daoModel.RoomChangeHireLog;
 import com.voucher.manage.daoModel.RoomChartLog;
 import com.voucher.manage.daoModel.RoomInfo;
@@ -58,7 +60,7 @@ public class sqltest4 {
 		MyTestUtil.print(map);
 		*/
 	//	roomInfo=new RoomInfo();
-		RoomChangeHireLog roomChangeHireLog=new RoomChangeHireLog();
+		/*RoomChangeHireLog roomChangeHireLog=new RoomChangeHireLog();
 		 String[] where={"[TTT].[dbo].[RoomInfo].Address like ","%江阳区%"};
 	     roomInfo.setWhere(where);
 		RoomChartLog roomChartLog=new RoomChartLog();
@@ -74,5 +76,12 @@ public class sqltest4 {
 		
 		Map map=SelectJoinExe.getCount(getJdbcTemplate, objects, "[Charter]");
 		MyTestUtil.print(map);
+		*/
+		
+		String sql="SELECT top 10 id,HiddenLevel,ChangeSpeed,HiddenInstance,"+
+    "doubletest,floattest,longtest,time"+
+    " FROM  [Assets].[dbo].[Hidden]";
+		
+		List<Hidden> hiddens=getJdbcTemplate.query(sql, new HiddenRowMapper());
 	}
 }

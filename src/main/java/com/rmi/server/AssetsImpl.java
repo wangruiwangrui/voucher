@@ -109,12 +109,12 @@ public class AssetsImpl implements Assets{
 	}
 
 	@Override
-	public Map<String, Object> findAllHidden(Integer limit, Integer offset, String sort, String order, Map search) {
+	public Map<String, Object> selectAllHidden(Integer limit, Integer offset, String sort, String order, Map search) {
 		// TODO Auto-generated method stub
 		
 		HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
 		
-		Map map=hiddenDAO.findAllHidden(limit, offset, sort, order, search);
+		Map map=hiddenDAO.selectAllHidden(limit, offset, sort, order, search);
 		
 		return map;
 	}
@@ -135,6 +135,14 @@ public class AssetsImpl implements Assets{
 		HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
 		
 		return hiddenDAO.updateHidden(hidden);
+	}
+
+	@Override
+	public Integer deleteHidden(Hidden hidden) {
+		// TODO Auto-generated method stub
+		HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
+		
+		return hiddenDAO.deleteHidden(hidden);
 	}
 
 	
