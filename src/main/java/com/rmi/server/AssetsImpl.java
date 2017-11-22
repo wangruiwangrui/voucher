@@ -86,26 +86,26 @@ public class AssetsImpl implements Assets{
 	}
 
 	@Override
-	public String uploadImageFile(File imageFile) {
-	     return new ImageFileFactory().upload(imageFile);
+	public String uploadImageFile(String name, byte[] file) {
+	     return new ImageFileFactory().upload(name,file);
     }
 
 	@Override
-	public String uploadPdfFile(File file) {
+	public String uploadPdfFile(String name, byte[] file) {
 		// TODO Auto-generated method stub
-		return new PdfFileFactory().upload(file);
+		return new PdfFileFactory().upload(name,file);
 	}
 
 	@Override
-	public String uploadDocFile(File file) {
+	public String uploadDocFile(String name, byte[] file) {
 		// TODO Auto-generated method stub
-		return new DocFileFactory().upload(file);
+		return new DocFileFactory().upload(name,file);
 	}
 
 	@Override
-	public String uploadXlsFile(File file) {
+	public String uploadXlsFile(String name, byte[] file) {
 		// TODO Auto-generated method stub
-		return new XlsFileFactory().upload(file);
+		return new XlsFileFactory().upload(name,file);
 	}
 
 	@Override
