@@ -6,6 +6,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -220,11 +222,15 @@ public class RowMappersJoin<T> implements RowMapper<T> {
         Class className=object.getClass();
      //   System.out.println("classname="+className);
        try {
-       	 Method setMethod =className.getDeclaredMethod(setMethodName,Date.class);
-      // 	 System.out.println("setmethod="+setMethod);
-       	     Date aa=rs.getDate(columnName);
-      // 	 System.out.println("aa="+aa);
-		     setMethod.invoke(object,aa);
+    	 	 Method setMethod =className.getDeclaredMethod(setMethodName,Date.class);
+    	//   System.out.println("setmethod="+setMethod);
+    	     String aa=rs.getString(columnName);       	     
+    	     SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+    	     if(aa!=null){
+    	      Date date = sdf.parse(aa);
+    	   // System.out.println("Date="+date);
+    		  setMethod.invoke(object,date);
+    	     }
 		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block
 		//	e.printStackTrace();
@@ -243,7 +249,10 @@ public class RowMappersJoin<T> implements RowMapper<T> {
 		}catch (SQLException e) {  // ResultSet的异常
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		   }
+		   } catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
 

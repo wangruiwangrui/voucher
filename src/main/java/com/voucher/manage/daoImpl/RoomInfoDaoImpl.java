@@ -9,19 +9,25 @@ import java.util.Set;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 import com.voucher.manage.dao.RoomInfoDao;
+import com.voucher.manage.daoModel.Floor;
+import com.voucher.manage.daoModel.Position;
 import com.voucher.manage.daoModel.RoomChangeHireLog;
 import com.voucher.manage.daoModel.RoomChartLog;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.RoomInfoRowMapper;
-import com.voucher.manage.daoModel.TTT.Floor;
 import com.voucher.manage.daoModelJoin.RoomChangeHireLog_RoomChartLog;
+import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 import com.voucher.manage.daoRowMapper.RowMappers;
 import com.voucher.manage.daoRowMapper.RowMappersJoin;
+import com.voucher.manage.daoSQL.DeleteExe;
 import com.voucher.manage.daoSQL.SelectJoinExe;
 import com.voucher.manage.daoSQL.SelectSQL;
 import com.voucher.manage.daoSQL.SelectSQLJoin;
+import com.voucher.manage.daoSQL.UpdateExe;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.manage.tools.TransMapToString;
+
+import voucher.UpdateSql;
 
 public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 
@@ -257,6 +263,54 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 			
 			map.put("rows", map3.get(""));
 			
+		return map;
+	}
+
+	@Override
+	public Integer updateRoomInfo(RoomInfo roomInfo) {
+		// TODO Auto-generated method stub
+		int i=UpdateExe.get(this.getJdbcTemplate(), roomInfo);
+		return i;
+	}
+
+	@Override
+	public Integer deleteRoomInfo(RoomInfo roomInfo) {
+		// TODO Auto-generated method stub
+		int i=DeleteExe.get(this.getJdbcTemplate(), roomInfo);
+		return i;
+	}
+
+	@Override
+	public Map<String, Object> findAllRoomInfo_Position(Integer limit, Integer offset, String sort, String order,
+			Map search) {
+		// TODO Auto-generated method stub
+		RoomInfo roomInfo=new RoomInfo();
+		Position position=new Position();
+		
+		roomInfo.setLimit(limit);
+		roomInfo.setOffset(offset);
+		roomInfo.setSort(sort);
+		roomInfo.setOrder(order);
+		roomInfo.setNotIn("[GUID]");
+		
+		position.setLimit(limit);
+		position.setOffset(offset);
+		position.setSort(sort);
+		position.setOrder(order);
+		position.setNotIn("[GUID]");
+		
+		Object[] objects={roomInfo,position};
+		
+		Map map=new HashMap<String, Object>();
+		
+		RoomInfo_Position roomInfo_Position=new RoomInfo_Position();
+		
+		List list=SelectJoinExe.get(this.getJdbcTemplate(), objects, roomInfo_Position, "[GUID]");		
+        map.put("rows", list);
+		
+		Map map3=SelectJoinExe.getCount(this.getJdbcTemplate(), objects, "[GUID]");
+		map.put("total", map3.get(""));
+		
 		return map;
 	}
 

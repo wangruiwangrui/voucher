@@ -1,4 +1,4 @@
-package com.voucher.manage.daoModel.TTT;
+package com.voucher.manage.daoModel;
 
 import java.util.Date;
 
@@ -6,37 +6,37 @@ import java.io.Serializable;
 
 import com.voucher.manage.daoSQL.annotations.*;
 
-@DBTable(name="[TTT].[dbo].[PreMessage]")
-public class PreMessage implements Serializable{
+@DBTable(name="[Assets].[dbo].[Position]")
+public class Position implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
     @SQLString(name="GUID")
 	private String GUID;
 
-    @SQLString(name="Phone")
-	private String Phone;
+    @SQLString(name="province")
+	private String province;
 
-    @SQLString(name="PhoneWho")
-	private String PhoneWho;
+    @SQLString(name="city")
+	private String city;
 
-    @SQLString(name="Message")
-	private String Message;
+    @SQLString(name="district")
+	private String district;
 
-    @SQLString(name="WhenSend")
-	private String WhenSend;
+    @SQLString(name="street")
+	private String street;
 
-    @SQLString(name="OptAdd")
-	private String OptAdd;
+    @SQLString(name="street_number")
+	private String street_number;
 
-    @SQLDateTime(name="OptDate")
-	private Date OptDate;
+    @SQLDouble(name="lng")
+	private Double lng;
 
-    @SQLString(name="State")
-	private String State;
+    @SQLDouble(name="lat")
+	private Double lat;
 
-    @SQLString(name="UnitBelong")
-	private String UnitBelong;
+    @SQLDateTime(name="date")
+	private Date date;
 
 	public void setGUID(String GUID){
 		this.GUID = GUID;
@@ -46,68 +46,68 @@ public class PreMessage implements Serializable{
 		return GUID;
 	}
 
-	public void setPhone(String Phone){
-		this.Phone = Phone;
+	public void setProvince(String province){
+		this.province = province;
 	}
 
-	public String getPhone(){
-		return Phone;
+	public String getProvince(){
+		return province;
 	}
 
-	public void setPhoneWho(String PhoneWho){
-		this.PhoneWho = PhoneWho;
+	public void setCity(String city){
+		this.city = city;
 	}
 
-	public String getPhoneWho(){
-		return PhoneWho;
+	public String getCity(){
+		return city;
 	}
 
-	public void setMessage(String Message){
-		this.Message = Message;
+	public void setDistrict(String district){
+		this.district = district;
 	}
 
-	public String getMessage(){
-		return Message;
+	public String getDistrict(){
+		return district;
 	}
 
-	public void setWhenSend(String WhenSend){
-		this.WhenSend = WhenSend;
+	public void setStreet(String street){
+		this.street = street;
 	}
 
-	public String getWhenSend(){
-		return WhenSend;
+	public String getStreet(){
+		return street;
 	}
 
-	public void setOptAdd(String OptAdd){
-		this.OptAdd = OptAdd;
+	public void setStreet_number(String street_number){
+		this.street_number = street_number;
 	}
 
-	public String getOptAdd(){
-		return OptAdd;
+	public String getStreet_number(){
+		return street_number;
 	}
 
-	public void setOptDate(Date OptDate){
-		this.OptDate = OptDate;
+	public void setLng(Double lng){
+		this.lng = lng;
 	}
 
-	public Date getOptDate(){
-		return OptDate;
+	public Double getLng(){
+		return lng;
 	}
 
-	public void setState(String State){
-		this.State = State;
+	public void setLat(Double lat){
+		this.lat = lat;
 	}
 
-	public String getState(){
-		return State;
+	public Double getLat(){
+		return lat;
 	}
 
-	public void setUnitBelong(String UnitBelong){
-		this.UnitBelong = UnitBelong;
+	public void setDate(Date date){
+		this.date = date;
 	}
 
-	public String getUnitBelong(){
-		return UnitBelong;
+	public Date getDate(){
+		return date;
 	}
 
 

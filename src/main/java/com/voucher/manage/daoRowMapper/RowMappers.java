@@ -285,9 +285,11 @@ public class RowMappers<T> implements RowMapper<T>{
      //  	 System.out.println("setmethod="+setMethod);
        	     String aa=rs.getString(columnName);       	     
        	     SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
-       	     Date date = sdf.parse(aa);
-       	   // System.out.println("Date="+date);
-		     setMethod.invoke(object,date);
+       	    if(aa!=null){
+    	      Date date = sdf.parse(aa);
+    	   // System.out.println("Date="+date);
+    		  setMethod.invoke(object,date);
+    	     }
 		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -309,6 +311,9 @@ public class RowMappers<T> implements RowMapper<T>{
 		 }catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-	    }
+	    }catch (NullPointerException e) {
+			// TODO: handle exception
+	    	e.printStackTrace();
+		}
 	}
 }

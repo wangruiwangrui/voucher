@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.voucher.manage.dao.AssetsDAO;
-import com.voucher.manage.daoModel.Assets.Hidden;
+import com.voucher.manage.daoModel.Hidden;
 import com.voucher.manage.tools.TransMapToString;
 
 public class AssetsDAOImpl implements AssetsDAO{

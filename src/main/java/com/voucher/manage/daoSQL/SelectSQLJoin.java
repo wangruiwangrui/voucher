@@ -111,13 +111,13 @@ public class SelectSQLJoin {
              if(anns[0] instanceof SQLDouble)
              {
                  SQLDouble sStr =  (SQLDouble) anns[0];
-                 columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
+                 columnName = tableName+"."+((sStr.name().length()<1)?field.getName().toUpperCase():sStr.name());
                  columnDefs.add(columnName);
               }else
              if(anns[0] instanceof SQLLong)
              {
                   SQLLong sStr = (SQLLong) anns[0];
-                  columnName = (sStr.name().length()<1)?field.getName().toUpperCase():sStr.name();
+                  columnName = tableName+"."+((sStr.name().length()<1)?field.getName().toUpperCase():sStr.name());
                   columnDefs.add(columnName);
              }else
             if(anns[0] instanceof SQLDateTime)

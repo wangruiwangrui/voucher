@@ -2,7 +2,7 @@ package com.voucher.manage.dao;
 
 import java.util.Map;
 
-import com.voucher.manage.daoModel.Assets.Hidden;
+import com.voucher.manage.daoModel.Hidden;
 
 public interface HiddenDAO {
 

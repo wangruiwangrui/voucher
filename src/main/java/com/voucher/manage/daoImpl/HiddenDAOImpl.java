@@ -7,7 +7,7 @@ import java.util.Map;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 import com.voucher.manage.dao.HiddenDAO;
-import com.voucher.manage.daoModel.Assets.Hidden;
+import com.voucher.manage.daoModel.Hidden;
 import com.voucher.manage.daoSQL.DeleteExe;
 import com.voucher.manage.daoSQL.InsertExe;
 import com.voucher.manage.daoSQL.SelectExe;

@@ -1,6 +1,4 @@
-package com.voucher.manage.daoModel.TTT;
-
-import java.util.Date;
+package com.voucher.manage.daoModel;
 
 import java.sql.Clob;
 
@@ -8,22 +6,37 @@ import java.io.Serializable;
 
 import com.voucher.manage.daoSQL.annotations.*;
 
-@DBTable(name="[TTT].[dbo].[Information]")
-public class Information implements Serializable{
+@DBTable(name="[TTT].[dbo].[Floor]")
+public class Floor implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
     @SQLString(name="GUID")
 	private String GUID;
 
-    @SQLString(name="Title")
-	private String Title;
+    @SQLString(name="Name")
+	private String Name;
 
-    @SQLDateTime(name="sDate")
-	private Date sDate;
+    @SQLString(name="structure")
+	private String structure;
 
-    @SQLClob(name="Content")
-	private Clob Content;
+    @SQLInteger(name="Floors")
+	private Integer Floors;
+
+    @SQLInteger(name="FactRooms")
+	private Integer FactRooms;
+
+    @SQLClob(name="Memo")
+	private Clob Memo;
+
+    @SQLBoolean(name="NegativeOne")
+	private Boolean NegativeOne;
+
+    @SQLBoolean(name="NegativeTwo")
+	private Boolean NegativeTwo;
+
+    @SQLString(name="BelongUnit")
+	private String BelongUnit;
 
 	public void setGUID(String GUID){
 		this.GUID = GUID;
@@ -33,28 +46,68 @@ public class Information implements Serializable{
 		return GUID;
 	}
 
-	public void setTitle(String Title){
-		this.Title = Title;
+	public void setName(String Name){
+		this.Name = Name;
 	}
 
-	public String getTitle(){
-		return Title;
+	public String getName(){
+		return Name;
 	}
 
-	public void setSDate(Date sDate){
-		this.sDate = sDate;
+	public void setStructure(String structure){
+		this.structure = structure;
 	}
 
-	public Date getSDate(){
-		return sDate;
+	public String getStructure(){
+		return structure;
 	}
 
-	public void setContent(Clob Content){
-		this.Content = Content;
+	public void setFloors(Integer Floors){
+		this.Floors = Floors;
 	}
 
-	public Clob getContent(){
-		return Content;
+	public Integer getFloors(){
+		return Floors;
+	}
+
+	public void setFactRooms(Integer FactRooms){
+		this.FactRooms = FactRooms;
+	}
+
+	public Integer getFactRooms(){
+		return FactRooms;
+	}
+
+	public void setMemo(Clob Memo){
+		this.Memo = Memo;
+	}
+
+	public Clob getMemo(){
+		return Memo;
+	}
+
+	public void setNegativeOne(Boolean NegativeOne){
+		this.NegativeOne = NegativeOne;
+	}
+
+	public Boolean getNegativeOne(){
+		return NegativeOne;
+	}
+
+	public void setNegativeTwo(Boolean NegativeTwo){
+		this.NegativeTwo = NegativeTwo;
+	}
+
+	public Boolean getNegativeTwo(){
+		return NegativeTwo;
+	}
+
+	public void setBelongUnit(String BelongUnit){
+		this.BelongUnit = BelongUnit;
+	}
+
+	public String getBelongUnit(){
+		return BelongUnit;
 	}
 
 

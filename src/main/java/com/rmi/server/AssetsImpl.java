@@ -9,8 +9,8 @@ import org.springframework.context.ApplicationContext;
 
 import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.dao.RoomInfoDao;
+import com.voucher.manage.daoModel.Hidden;
 import com.voucher.manage.daoModel.RoomInfo;
-import com.voucher.manage.daoModel.Assets.Hidden;
 import com.voucher.manage.file.DocFileFactory;
 import com.voucher.manage.file.ImageFileFactory;
 import com.voucher.manage.file.PdfFileFactory;
@@ -143,6 +143,31 @@ public class AssetsImpl implements Assets{
 		HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
 		
 		return hiddenDAO.deleteHidden(hidden);
+	}
+
+	@Override
+	public Integer updateRoomInfo(RoomInfo roomInfo) {
+		// TODO Auto-generated method stub
+		RoomInfoDao roomInfoDao=(RoomInfoDao) applicationContext.getBean("roomInfodao");
+		return roomInfoDao.updateRoomInfo(roomInfo);
+	}
+
+	@Override
+	public Integer deleteRoomInfo(RoomInfo roomInfo) {
+		// TODO Auto-generated method stub
+		RoomInfoDao roomInfoDao=(RoomInfoDao) applicationContext.getBean("roomInfodao");
+		return roomInfoDao.deleteRoomInfo(roomInfo);
+	}
+
+	@Override
+	public Map<String, Object> findAllRoomInfo_Position(Integer limit, Integer offset, String sort, String order,
+			Map search) {
+		// TODO Auto-generated method stub
+		RoomInfoDao roomInfoDao=(RoomInfoDao) applicationContext.getBean("roomInfodao");
+		
+		Map map=roomInfoDao.findAllRoomInfo_Position(limit, offset, sort, order, search);
+		
+		return map;
 	}
 
 	
