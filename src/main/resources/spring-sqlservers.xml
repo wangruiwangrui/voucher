@@ -57,6 +57,10 @@ http://www.springframework.org/schema/context
         <property name="jdbcTemplate" ref="jdbcTemplate"></property>
    </bean>
   
+  <bean id="assetsdao" class="com.voucher.manage.daoImpl.AssetsDAOImpl">
+        <property name="jdbcTemplate" ref="jdbcTemplate"></property>
+   </bean>
+  
    <bean id="dao" class="com.voucher.manage.daoImpl.UserDAOImpl">
         <property name="jdbcTemplate" ref="jdbcTemplate"></property>
    </bean>

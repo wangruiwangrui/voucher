@@ -299,6 +299,12 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		position.setOrder(order);
 		position.setNotIn("[GUID]");
 		
+		if(!search.isEmpty()){
+		    String[] where=TransMapToString.get(search);
+		    roomInfo.setWhere(where);
+		    position.setWhere(where);
+		}
+		
 		Object[] objects={roomInfo,position};
 		
 		Map map=new HashMap<String, Object>();

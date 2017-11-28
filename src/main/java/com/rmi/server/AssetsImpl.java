@@ -7,9 +7,11 @@ import java.util.Map;
 
 import org.springframework.context.ApplicationContext;
 
+import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModel.Hidden;
+import com.voucher.manage.daoModel.Position;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.file.DocFileFactory;
 import com.voucher.manage.file.ImageFileFactory;
@@ -168,6 +170,14 @@ public class AssetsImpl implements Assets{
 		Map map=roomInfoDao.findAllRoomInfo_Position(limit, offset, sort, order, search);
 		
 		return map;
+	}
+
+	@Override
+	public Integer updatePosition(Position position) {
+		// TODO Auto-generated method stub
+		AssetsDAO assetsDAO=(AssetsDAO) applicationContext.getBean("assetsdao");
+		
+		return assetsDAO.updatePosition(position);
 	}
 
 	

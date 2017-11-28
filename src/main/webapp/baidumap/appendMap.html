@@ -21,8 +21,15 @@
 </body>
 </html>
 <script type="text/javascript">
-        // 百度地图API功能
-    var map = new BMap.Map("allmap");
+    //百度地图API功能
+    var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
+    var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
+    
+   // var map = new BMap.Map("allmap");
+    var map = new BMap.Map("allmap", {enableMapClick:false});//构造底图时，关闭底图可点功能
+    
+    map.addControl(top_left_control);        
+	map.addControl(top_left_navigation); 
     
     var xhm=new XMLHttpRequest();
     xhm.open("GET","../baiduMap/location.do",false);
@@ -34,6 +41,7 @@
     
     map.enableScrollWheelZoom(true);
     var geoc = new BMap.Geocoder();  
+    
     map.addEventListener("click", function(e){    
     	 var pt = e.point;
          geoc.getLocation(pt, function(rs){
@@ -51,46 +59,5 @@
          });        
     }
     );
-    
-    var menu = new BMap.ContextMenu();
-	var txtMenuItem = [
-		{
-			text:'放大',
-			callback:function(){map.zoomIn()}
-		},
-		{
-			text:'缩小',
-			callback:function(){map.zoomOut()}
-		}
-	];
-	for(var i=0; i < txtMenuItem.length; i++){
-		menu.addItem(new BMap.MenuItem(txtMenuItem[i].text,txtMenuItem[i].callback,100));
-	}
-	map.addContextMenu(menu);
-    
-      
-
-    //获取标注位置信息    
-    function getAttr(){
-		var p = marker.getPosition();       //获取marker的位置
-		alert("marker的位置是" + p.lng + "," + p.lat);   
-	}
-
-    // 随机向地图添加5个标注
-    var bounds = map.getBounds();
-    var sw = bounds.getSouthWest();
-    var ne = bounds.getNorthEast();
-    var lngSpan = Math.abs(sw.lng - ne.lng);
-    var latSpan = Math.abs(ne.lat - sw.lat);
-    for (var i = 0; i < 5; i ++) {
-        var point = new BMap.Point(sw.lng + lngSpan * (Math.random() * 0.7), ne.lat - latSpan * (Math.random() * 0.7));
-        //创建自定义图标
-        var myIcon = new BMap.Icon("../img/logo.gif", new BMap.Size(300,157));
-        var marker = new BMap.Marker(point,{icon:myIcon});// 创建标注
-    	map.addOverlay(marker);              // 将标注添加到地图中
-    	marker.addEventListener("click",getAttr);
-    }
-
-    
-   
+       
 </script>
