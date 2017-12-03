@@ -7,8 +7,6 @@ import java.util.Map;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
-import com.voucher.manage.daoModel.Hidden;
-import com.voucher.manage.daoModel.HiddenRowMapper;
 import com.voucher.manage.daoModel.RoomChangeHireLog;
 import com.voucher.manage.daoModel.RoomChartLog;
 import com.voucher.manage.daoModel.RoomInfo;
@@ -82,6 +80,5 @@ public class sqltest4 {
     "doubletest,floattest,longtest,time"+
     " FROM  [Assets].[dbo].[Hidden]";
 		
-		List<Hidden> hiddens=getJdbcTemplate.query(sql, new HiddenRowMapper());
 	}
 }

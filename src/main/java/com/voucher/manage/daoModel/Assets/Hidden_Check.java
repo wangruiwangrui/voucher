@@ -1,4 +1,4 @@
-package com.voucher.manage.daoModel;
+package com.voucher.manage.daoModel.Assets;
 
 import java.util.Date;
 
@@ -6,37 +6,36 @@ import java.io.Serializable;
 
 import com.voucher.manage.daoSQL.annotations.*;
 
-@DBTable(name="[Assets].[dbo].[Position]")
-public class Position implements Serializable{
+@DBTable(name="[Assets].[dbo].[Hidden_Check]")
+public class Hidden_Check implements Serializable{
 
     private static final long serialVersionUID = 1L;
+
+    @SQLInteger(name="id")
+	private Integer id;
 
     @SQLString(name="GUID")
 	private String GUID;
 
-    @SQLString(name="province")
-	private String province;
+    @SQLInteger(name="check_id")
+	private Integer check_id;
 
-    @SQLString(name="city")
-	private String city;
-
-    @SQLString(name="district")
-	private String district;
-
-    @SQLString(name="street")
-	private String street;
-
-    @SQLString(name="street_number")
-	private String street_number;
-
-    @SQLDouble(name="lng")
-	private Double lng;
-
-    @SQLDouble(name="lat")
-	private Double lat;
+    @SQLString(name="check_circs")
+	private String check_circs;
 
     @SQLDateTime(name="date")
 	private Date date;
+
+    @SQLString(name="remark")
+	private String remark;
+
+	public void setId(Integer id){
+		this.id = id;
+	}
+
+	public Integer getId(){
+		return id;
+	}
 
 	public void setGUID(String GUID){
 		this.GUID = GUID;
@@ -46,60 +45,20 @@ public class Position implements Serializable{
 		return GUID;
 	}
 
-	public void setProvince(String province){
-		this.province = province;
+	public void setCheck_id(Integer check_id){
+		this.check_id = check_id;
 	}
 
-	public String getProvince(){
-		return province;
+	public Integer getCheck_id(){
+		return check_id;
 	}
 
-	public void setCity(String city){
-		this.city = city;
+	public void setCheck_circs(String check_circs){
+		this.check_circs = check_circs;
 	}
 
-	public String getCity(){
-		return city;
-	}
-
-	public void setDistrict(String district){
-		this.district = district;
-	}
-
-	public String getDistrict(){
-		return district;
-	}
-
-	public void setStreet(String street){
-		this.street = street;
-	}
-
-	public String getStreet(){
-		return street;
-	}
-
-	public void setStreet_number(String street_number){
-		this.street_number = street_number;
-	}
-
-	public String getStreet_number(){
-		return street_number;
-	}
-
-	public void setLng(Double lng){
-		this.lng = lng;
-	}
-
-	public Double getLng(){
-		return lng;
-	}
-
-	public void setLat(Double lat){
-		this.lat = lat;
-	}
-
-	public Double getLat(){
-		return lat;
+	public String getCheck_circs(){
+		return check_circs;
 	}
 
 	public void setDate(Date date){
@@ -108,6 +67,14 @@ public class Position implements Serializable{
 
 	public Date getDate(){
 		return date;
+	}
+
+	public void setRemark(String remark){
+		this.remark = remark;
+	}
+
+	public String getRemark(){
+		return remark;
 	}
 
 

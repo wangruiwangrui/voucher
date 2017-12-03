@@ -2,7 +2,7 @@ package com.voucher.manage.dao;
 
 import java.util.Map;
 
-import com.voucher.manage.daoModel.Position;
+import com.voucher.manage.daoModel.Assets.Position;
 
 public interface AssetsDAO {
 
@@ -10,4 +10,6 @@ public interface AssetsDAO {
 			Map<String, String> search);
 	
 	public Integer updatePosition(Position position);
+	
+	public Map findAllPosition();
 }

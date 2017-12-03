@@ -2,6 +2,8 @@ package com.voucher.manage.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,20 +17,37 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.voucher.manage.dao.AssetsDAO;
+import com.voucher.manage.tools.MyTestUtil;
+import com.voucher.sqlserver.context.Connect;
+
+import voucher.Mybatis;
 
 @Controller
 @RequestMapping("/baiduMap")
 public class BaiduMapController {
 
+	ApplicationContext applicationContext=new Connect().get();
+	
 	@RequestMapping("/get")
-	public @ResponseBody Double test() {
-		return 28.797;
+	public @ResponseBody List test() {
+		
+		AssetsDAO assetsDAO=(AssetsDAO) applicationContext.getBean("assetsdao");
+		
+		Map map=assetsDAO.findAllPosition();
+		
+		MyTestUtil.print(map);
+		
+		List list=(List) map.get("row");
+		
+		return list;
 	}
 	
 	@RequestMapping("/location")

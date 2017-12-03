@@ -125,9 +125,9 @@ public class RowMappersJoin<T> implements RowMapper<T> {
     //   System.out.println("classname="+className);
        try {
        	 Method setMethod =className.getDeclaredMethod(setMethodName,String.class);
-      	 System.out.println("setmethod="+setMethod);
+      //	 System.out.println("setmethod="+setMethod);
        	 String aa=rs.getString(columnName);
-      	 System.out.println("aa="+aa+"        object="+object.getClass());
+      //	 System.out.println("aa="+aa+"        object="+object.getClass());
 		 setMethod.invoke(object,aa);
 		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block
@@ -230,9 +230,9 @@ public class RowMappersJoin<T> implements RowMapper<T> {
         Class className=object.getClass();
        try {
        	 Method setMethod =className.getDeclaredMethod(setMethodName,Double.class);
-       	 System.out.println("setmethod="+setMethod);
+      // 	 System.out.println("setmethod="+setMethod);
        	     Double aa=rs.getDouble(columnName);
-       	  System.out.println("aa="+aa+"        object="+object.getClass());
+      // 	  System.out.println("aa="+aa+"        object="+object.getClass());
 		     setMethod.invoke(object,aa);
 		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block

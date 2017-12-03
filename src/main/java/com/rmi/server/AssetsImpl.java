@@ -1,6 +1,5 @@
 package com.rmi.server;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,9 +9,10 @@ import org.springframework.context.ApplicationContext;
 import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.dao.RoomInfoDao;
-import com.voucher.manage.daoModel.Hidden;
-import com.voucher.manage.daoModel.Position;
 import com.voucher.manage.daoModel.RoomInfo;
+import com.voucher.manage.daoModel.Assets.Hidden;
+import com.voucher.manage.daoModel.Assets.Hidden_Level;
+import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.file.DocFileFactory;
 import com.voucher.manage.file.ImageFileFactory;
 import com.voucher.manage.file.PdfFileFactory;
@@ -56,58 +56,28 @@ public class AssetsImpl implements Assets{
 		return map;
 	}
 
-	@Override
-	public Map<String, Object> findAllChangehire_CharLog(Integer limit, Integer offset, String sort, String order,
-			String search) {
-		// TODO Auto-generated method stub
-		
-		RoomInfoDao roomInfoDao=(RoomInfoDao) applicationContext.getBean("roomInfodao");
-
-		if(order!=null&&order.equals("asc")){
-			order="asc";
-		}
-		
-		if(order!=null&&order.equals("desc")){
-			order="desc";
-		}
-	
-		
-		
-
-		
-		if(search!=null&&!search.trim().equals("")){
-			search="%"+search+"%";              
-		}	
-		
-		
-		Map map2=roomInfoDao.findAllChangehire_CharLog(limit, offset, sort, order, search);
-		
-
-		return map2;
-		
-	}
 
 	@Override
-	public String uploadImageFile(String name, byte[] file) {
-	     return new ImageFileFactory().upload(name,file);
+	public Integer uploadImageFile(String GUID,List<String> names, List<byte[]> files) {
+	     return new ImageFileFactory().upload(GUID, names, files);
     }
 
 	@Override
-	public String uploadPdfFile(String name, byte[] file) {
+	public Integer uploadPdfFile(String GUID,List<String> names, List<byte[]> files) {
 		// TODO Auto-generated method stub
-		return new PdfFileFactory().upload(name,file);
+		return new PdfFileFactory().upload(GUID, names, files);
 	}
 
 	@Override
-	public String uploadDocFile(String name, byte[] file) {
+	public Integer uploadDocFile(String GUID,List<String> names, List<byte[]> files) {
 		// TODO Auto-generated method stub
-		return new DocFileFactory().upload(name,file);
+		return new DocFileFactory().upload(GUID, names, files);
 	}
 
 	@Override
-	public String uploadXlsFile(String name, byte[] file) {
+	public Integer uploadXlsFile(String GUID,List<String> names, List<byte[]> files) {
 		// TODO Auto-generated method stub
-		return new XlsFileFactory().upload(name,file);
+		return new XlsFileFactory().upload(GUID, names, files);
 	}
 
 	@Override
@@ -178,6 +148,52 @@ public class AssetsImpl implements Assets{
 		AssetsDAO assetsDAO=(AssetsDAO) applicationContext.getBean("assetsdao");
 		
 		return assetsDAO.updatePosition(position);
+	}
+
+
+	@Override
+	public List<Hidden_Level> setctAllHiddenLevel() {		
+		// TODO Auto-generated method stub
+		HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
+		
+		return hiddenDAO.setctAllHiddenLevel();
+	}
+
+
+	@Override
+	public Integer insertHiddenLevel(Hidden_Level hidden_level) {
+		// TODO Auto-generated method stub
+		HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
+		
+		return hiddenDAO.insertHiddenLevel(hidden_level);
+	}
+
+
+	@Override
+	public Integer deleteHiddenLevel(Hidden_Level hidden_level) {
+		// TODO Auto-generated method stub
+		HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
+		
+		return hiddenDAO.deleteHiddenLevel(hidden_level);
+	}
+
+
+	@Override
+	public Map<String, Object> selectAllHidden_Jion(Integer limit, Integer offset, String sort, String order,
+			Map<String, String> search) {
+		// TODO Auto-generated method stub
+		HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
+		
+		return hiddenDAO.selectAllHidden_Jion(limit, offset, sort, order, search);
+	}
+
+
+	@Override
+	public Map<String, Object> selectAllHiddenDate(String GUID) {
+		// TODO Auto-generated method stub
+		HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
+		
+		return hiddenDAO.selectAllHiddenDate(GUID);
 	}
 
 	

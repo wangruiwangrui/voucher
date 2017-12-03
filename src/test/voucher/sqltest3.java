@@ -7,7 +7,6 @@ import org.springframework.context.ApplicationContext;
 
 import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModel.RoomInfo;
-import com.voucher.manage.daoModel.TTT.Floor;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
 
@@ -29,8 +28,6 @@ public class sqltest3 {
 		Map map=roomInfoDao.findAllFloor(limit, offset, sort, order, search);
 		//List<RoomInfo> map=roomInfoDao.findAllRoomInfo(limit, offset, sort, order, search);
 		MyTestUtil.print(map);
-		
-		List<Floor> list=(List<Floor>) map.get("value");
-		MyTestUtil.print(list);
+
 	}
 }

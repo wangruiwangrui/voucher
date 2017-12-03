@@ -75,7 +75,6 @@ public class RoomInfo_Position implements Serializable{
 	}
 
 	public void setCity(String city) {
-		System.out.println("city="+city);
 		this.city = city;
 	}
 
@@ -108,7 +107,6 @@ public class RoomInfo_Position implements Serializable{
 	}
 
 	public void setLng(Double lng) {
-		System.out.println("lng="+lng);
 		this.lng = lng;
 	}
 

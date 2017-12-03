@@ -2,72 +2,60 @@ package com.voucher.manage.file;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.context.ApplicationContext;
+
+import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.tools.FileTypeTest;
 import com.voucher.manage.tools.Md5;
+import com.voucher.sqlserver.context.Connect;
 
 public abstract class AbstractFileUpload {
 	public enum type{
 		IMAGE,XLS,PDF,DOC;
 	}
 	
-	private final static String imageFilePath="\\Desktop\\bb\\photo";
-	private final static String xlsFilePath="\\Desktop\\bb\\xls";
-	private final static String pdfFilePath="\\Desktop\\bb\\pdf";
-	private final static String docFilePath="\\Desktop\\bb\\doc";
+	ApplicationContext applicationContext=new Connect().get();
+	
+	HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
+	
+	public final static String filePath="\\Desktop\\bb\\photo";
 	
 	public AbstractFileUpload() {
 		// TODO Auto-generated constructor stub
 		
 	}
 	
-	public String uploadFile(String name, byte[] file,type fileType) {
+	public Integer uploadFile(String GUID,List<String> names, List<byte[]> files,type fileType) {
         String pathRoot = System.getProperty("user.home");
-        
-        String filePath="";
-        
+               
         BufferedOutputStream os=null;
         
       //mime type 检测文件类型
         String mimeType="";
         Map<String,String> map=FileTypeTest.getFileType();
         Iterator<Map.Entry<String, String>> entryiterator = map.entrySet().iterator();
-        
-        if(mimeType.equals("")){
-        	String s=name;
-     		mimeType=s.substring(s.lastIndexOf('.')+1); //获取后缀名
-         }
-         
-         if(fileType==type.IMAGE){
-         	filePath=imageFilePath;
-         }else if(fileType==type.XLS){
-         	filePath=xlsFilePath;
-         }else if(fileType==type.PDF){
-         	filePath=pdfFilePath;
-         }else if(fileType==type.DOC){
-         	filePath=docFilePath;
-         }else{
-         	return "文件类型错误";
-         }
-
-         
+       
          File savePath = new File(pathRoot+filePath);//创建新文件  
          System.out.println("filePath="+filePath);
          if (!savePath.exists()) {   
              savePath.mkdir();   
          }  
 		
-		try {  
-             File newFile = new File(savePath+"//"+name);//创建新文件  
+       Iterator<byte[]> iterator=files.iterator();
+
+       int i=0;
+       try {  
+         while(iterator.hasNext()){
+        	 String name=names.get(i);
+        	 byte[] file=iterator.next();
+             File newFile = new File(savePath+"\\"+name);//创建新文件  
              if(newFile!=null && !newFile.exists()){  
                  newFile.createNewFile();  
              }  
@@ -92,17 +80,23 @@ public abstract class AbstractFileUpload {
      		
      		String fileName=Md5.GetMD5Code(uuid.toString())+date.getTime();
          
-            File newFile2 = new File(savePath+"//"+fileName+"."+mimeType); 
+            File newFile2 = new File(savePath+"\\"+fileName+"."+mimeType); 
             System.out.println("newFile="+newFile.getName());
             newFile.renameTo(newFile2);
             System.out.println("newFile2="+newFile2.getName());
-            return savePath+"//"+fileName+"."+mimeType;
+            String uri=fileName+"."+mimeType;
+            System.out.println("uri="+savePath+"\\"+fileName+"."+mimeType);
+            hiddenDAO.InsertIntoHiddenData(GUID,name,fileType.toString(), uri);
+            i++;
+          }  
+          return 1;
         }catch (Exception e) {
      		// TODO: handle exception
        	  e.printStackTrace();
-       	    return e.toString();
+       	  return 0;
    	    } 
+
 	}
 	
-	public abstract String upload(String name, byte[] file);
+	protected abstract Integer upload(String GUID,List<String> names, List<byte[]> files);
 }

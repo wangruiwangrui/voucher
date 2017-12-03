@@ -48,7 +48,18 @@
 		alert("marker的位置是" + p.lng + "," + p.lat);   
 	}
 
-    var json_data = [[116.400,39.900],[116.380000,39.91000],[116.38000,39.93000]];
+    var xhm=new XMLHttpRequest();
+    xhm.open("GET","../baiduMap/get.do",false);
+    xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    xhm.send();
+    var ticket=JSON.parse(xhm.responseText);
+    console.log(ticket);
+    var json_data = new Array();
+    
+    for(var i=0;i<ticket.length;i++){
+    	json_data[i]=[ticket[i].lng,ticket[i].lat];
+    }
+    
 	var pointArray = new Array();
 	for(var i=0;i<json_data.length;i++){
 		var marker = new BMap.Marker(new BMap.Point(json_data[i][0], json_data[i][1])); // 创建点
