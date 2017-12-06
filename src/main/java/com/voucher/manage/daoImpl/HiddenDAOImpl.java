@@ -21,7 +21,6 @@ import com.voucher.manage.daoSQL.SelectExe;
 import com.voucher.manage.daoSQL.SelectJoinExe;
 import com.voucher.manage.daoSQL.UpdateExe;
 import com.voucher.manage.file.AbstractFileUpload;
-import com.voucher.manage.file.AbstractFileUpload.type;
 import com.voucher.manage.tools.FileConvect;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.manage.tools.TransMapToString;
@@ -52,7 +51,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		String filePath=pathRoot+AbstractFileUpload.filePath;
 		
 		List<String> names=new ArrayList<String>();
-		
+		List<String> types=new ArrayList<String>();
 		List<byte[]> fileBytes=new ArrayList<byte[]>();
 		
 		// TODO Auto-generated method stub
@@ -77,7 +76,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 			byte[] fileByte=FileConvect.fileToByte(file);
 			
 			names.add(hidden_Data2.getNAME());
-			
+			types.add(hidden_Data2.getTYPE());
 			fileBytes.add(fileByte);
 			
 		}
@@ -85,7 +84,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		Map<String, Object> map=new HashMap<>();
 		
 		map.put("names", names);
-		
+		map.put("types", types);
 		map.put("fileBytes", fileBytes);
 		
 		return map;

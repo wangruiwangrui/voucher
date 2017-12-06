@@ -17,10 +17,7 @@ import com.voucher.manage.tools.Md5;
 import com.voucher.sqlserver.context.Connect;
 
 public abstract class AbstractFileUpload {
-	public enum type{
-		IMAGE,XLS,PDF,DOC;
-	}
-	
+
 	ApplicationContext applicationContext=new Connect().get();
 	
 	HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
@@ -32,7 +29,7 @@ public abstract class AbstractFileUpload {
 		
 	}
 	
-	public Integer uploadFile(String GUID,List<String> names, List<byte[]> files,type fileType) {
+	public Integer uploadFile(String GUID,List<String> names, List<byte[]> files) {
         String pathRoot = System.getProperty("user.home");
                
         BufferedOutputStream os=null;
@@ -75,6 +72,11 @@ public abstract class AbstractFileUpload {
                  }
               }
           
+            if(mimeType.equals("")){
+            	String s=name;
+          		mimeType=s.substring(s.lastIndexOf('.')+1); //获取后缀名
+             }
+             
      		UUID uuid=UUID.randomUUID();		
      		Date date=new Date();
      		
@@ -86,7 +88,7 @@ public abstract class AbstractFileUpload {
             System.out.println("newFile2="+newFile2.getName());
             String uri=fileName+"."+mimeType;
             System.out.println("uri="+savePath+"\\"+fileName+"."+mimeType);
-            hiddenDAO.InsertIntoHiddenData(GUID,name,fileType.toString(), uri);
+            hiddenDAO.InsertIntoHiddenData(GUID,name,mimeType, uri);
             i++;
           }  
           return 1;
