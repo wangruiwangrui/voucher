@@ -24,7 +24,7 @@ import com.voucher.manage.daoSQL.annotations.SQLLong;
 import com.voucher.manage.daoSQL.annotations.SQLString;
 
 public class SelectSQLJoin {
-	public static Map<String, Object> get(Object[] objects,String joinParameter) throws ClassNotFoundException{
+	public static Map<String, Object> get(Object[] objects,String[] joinParameters) throws ClassNotFoundException{
         Integer limit=10;
 		Integer offset=0; 
 		String notIn="";
@@ -60,6 +60,8 @@ public class SelectSQLJoin {
             
         }
       
+        
+      int s=0;  
 	  for(Object object:objects){
 		Class className=object.getClass();
    	    String name = className.getName();                                    //从控制台输入一个类名，我们输入User即可
@@ -71,10 +73,12 @@ public class SelectSQLJoin {
          if(i==0){
           firstTableName=tableName;
           tableName0=firstTableName;
-         }else{         
-          leftJionTableName=leftJionTableName+" left join "+tableName+" on " +tableName0+"."+joinParameter
+         }else{  
+          String joinParameter=joinParameters[s];
+          leftJionTableName=leftJionTableName+" left join "+tableName+" on " +defaultTable+"."+joinParameter
         		  +"="+tableName+"."+joinParameter;
           tableName0=tableName;
+          s++;
          }
         }catch (Exception e) {
 			// TODO: handle exception
@@ -319,13 +323,14 @@ public class SelectSQLJoin {
       return map;
    }
 	
-	public static Map<String, Object> getCount(Object[] objects,String joinParameter) throws ClassNotFoundException{
+	public static Map<String, Object> getCount(Object[] objects,String[] joinParameters) throws ClassNotFoundException{
 		List<String> columnDefs = new ArrayList<String>();
         String[] columnWhere=null;
         List wheres=new ArrayList<String[]>();
         String tableName="";
         String tableName0="";
         String firstTableName="";
+        String defaultTable="";
         String select="";
         boolean term=false;       //判断是否有where
         String leftJionTableName="";
@@ -334,7 +339,22 @@ public class SelectSQLJoin {
         
         Map<String, Object> map=new HashMap<>();
         
+        for(Object object:objects){
+    		Class className=object.getClass();
+       	    String name = className.getName();                                    //从控制台输入一个类名，我们输入User即可
+            Class<?> cl = Class.forName(name);                         //加载类，如果该类不在默认路径底下，会报 java.lang.ClassNotFoundException
+            DBTable dbTable = cl.getAnnotation(DBTable.class);
+            
+            tableName = (dbTable.name().length()<1)?cl.getName():dbTable.name();//获取表的名字，如果没有在DBTable中定义，则获取类名作为Table的名字
+            
+            defaultTable=tableName;   //把第一张表设为默认表,用于定义默认order的表的值
+            break;
+            
+        }
+        
         int i=0;
+        
+        int s=0;
         
 		for(Object object:objects){
 			Class className=object.getClass();
@@ -347,10 +367,12 @@ public class SelectSQLJoin {
 	         if(i==0){
 	          firstTableName=tableName;
 	          tableName0=firstTableName;
-	         }else{         
-	          leftJionTableName=leftJionTableName+" left join "+tableName+" on " +tableName0+"."+joinParameter
+	         }else{    
+	          String joinParameter=joinParameters[s];
+	          leftJionTableName=leftJionTableName+" left join "+tableName+" on " +defaultTable+"."+joinParameter
 	        		  +"="+tableName+"."+joinParameter;
 	          tableName0=tableName;
+	          s++;
 	         }
 	        }catch (Exception e) {
 				// TODO: handle exception

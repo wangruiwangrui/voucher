@@ -10,7 +10,7 @@ import com.voucher.manage.daoRowMapper.RowMappersJoin;
 
 public class SelectJoinExe {
 	public static List get(JdbcTemplate getJdbcTemplate,Object[] objects,
-			Object object,String joinParame){
+			Object object,String[] joinParames){
 		   String sql="";
 	        Map<String,Object> map=new HashMap<>();
 	        int amount=objects.length;
@@ -24,7 +24,7 @@ public class SelectJoinExe {
 	        }
 	        
 	        try {
-				map=new SelectSQLJoin().get(objects,joinParame);
+				map=new SelectSQLJoin().get(objects,joinParames);
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -38,11 +38,11 @@ public class SelectJoinExe {
 	}
 	
 	public static Map getCount(JdbcTemplate getJdbcTemplate,Object[] objects,
-			String joinParame) {
+			String[] joinParames) {
 		String sql="";
      Map<String,Object> map=new HashMap<>();
 		try {
-			map = SelectSQLJoin.getCount(objects,joinParame);
+			map = SelectSQLJoin.getCount(objects,joinParames);
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -215,10 +215,12 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		
 		RoomChangeHireLog_RoomChartLog roomChangeHireLog_RoomChartLog=new RoomChangeHireLog_RoomChartLog();
 		
-		List list=SelectJoinExe.get(this.getJdbcTemplate(), objects, roomChangeHireLog_RoomChartLog, "[Charter]");
+		String[] join={"[Charter]"};
+		
+		List list=SelectJoinExe.get(this.getJdbcTemplate(), objects, roomChangeHireLog_RoomChartLog, join);
 		map.put("value", list);
 		
-		Map map3=SelectJoinExe.getCount(this.getJdbcTemplate(), objects, "[Charter]");
+		Map map3=SelectJoinExe.getCount(this.getJdbcTemplate(), objects, join);
 		map.put("rows", map3.get(""));
 		
 		return map;
@@ -311,10 +313,12 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		
 		RoomInfo_Position roomInfo_Position=new RoomInfo_Position();
 		
-		List list=SelectJoinExe.get(this.getJdbcTemplate(), objects, roomInfo_Position, "[GUID]");		
+		String[] join={"[GUID]"};
+		
+		List list=SelectJoinExe.get(this.getJdbcTemplate(), objects, roomInfo_Position, join);		
         map.put("rows", list);
 		
-		Map map3=SelectJoinExe.getCount(this.getJdbcTemplate(), objects, "[GUID]");
+		Map map3=SelectJoinExe.getCount(this.getJdbcTemplate(), objects, join);
 		map.put("total", map3.get(""));
 		
 		return map;

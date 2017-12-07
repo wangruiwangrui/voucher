@@ -14,6 +14,7 @@ import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.daoModel.Assets.Hidden;
 import com.voucher.manage.daoModel.Assets.Hidden_Data;
 import com.voucher.manage.daoModel.Assets.Hidden_Level;
+import com.voucher.manage.daoModel.Assets.Hidden_Type;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Jion;
 import com.voucher.manage.daoSQL.DeleteExe;
 import com.voucher.manage.daoSQL.InsertExe;
@@ -185,27 +186,63 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		hidden_Level.setOrder(order);
 		hidden_Level.setNotIn("GUID");
 		
+		Hidden_Type hidden_Type=new Hidden_Type();
+		
+		hidden_Type.setLimit(limit);
+		hidden_Type.setOffset(offset);
+		hidden_Type.setSort(sort);
+		hidden_Type.setOrder(order);
+		hidden_Type.setNotIn("GUID");
+		
 		if(!search.isEmpty()){
 		    String[] where=TransMapToString.get(search);
 		    hidden.setWhere(where);
 		    hidden_Level.setWhere(where);
+		    hidden_Type.setWhere(where);
 		}
 		
-		Object[] objects={hidden,hidden_Level};
+		Object[] objects={hidden,hidden_Level,hidden_Type};
 		
 		Map map=new HashMap<String, Object>();
 		
 		Hidden_Jion hidden_Jion=new Hidden_Jion();
 		
-		List list=SelectJoinExe.get(this.getJdbcTemplate(), objects,hidden_Jion,"hidden_level");
+		String[] join={"hidden_level","type"};
+		
+		List list=SelectJoinExe.get(this.getJdbcTemplate(), objects,hidden_Jion,join);
 		MyTestUtil.print(list);
 		map.put("rows", list);
 		
-		Map countMap=SelectJoinExe.getCount(this.getJdbcTemplate(),objects,"hidden_level");
+		Map countMap=SelectJoinExe.getCount(this.getJdbcTemplate(),objects,join);
 		
 		map.put("total", countMap.get(""));
 		
 		return map;
+	}
+
+
+	@Override
+	public List<Hidden_Type> selectAllHiddenType() {
+		// TODO Auto-generated method stub
+		Hidden_Type hidden_Type=new Hidden_Type();
+		hidden_Type.setOffset(0);
+		hidden_Type.setLimit(1000);
+		hidden_Type.setNotIn("id");
+		return SelectExe.get(this.getJdbcTemplate(), hidden_Type);
+	}
+
+
+	@Override
+	public Integer insertHiddenType(Hidden_Type hidden_Type) {
+		// TODO Auto-generated method stub
+		return InsertExe.get(this.getJdbcTemplate(), hidden_Type);
+	}
+
+
+	@Override
+	public Integer deleteHiddenType(Hidden_Type hidden_Type) {
+		// TODO Auto-generated method stub
+		return DeleteExe.get(this.getJdbcTemplate(), hidden_Type);
 	}
 
 

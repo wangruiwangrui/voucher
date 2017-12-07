@@ -12,6 +12,7 @@ import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Assets.Hidden;
 import com.voucher.manage.daoModel.Assets.Hidden_Level;
+import com.voucher.manage.daoModel.Assets.Hidden_Type;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.file.DocFileFactory;
 import com.voucher.manage.file.ImageFileFactory;
@@ -27,6 +28,8 @@ public class AssetsImpl implements Assets{
 	 * 连接池
 	 */
 	ApplicationContext applicationContext=new Connect().get();
+	
+	HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
 	
 	@Override
 	public Map<String, Object> getRoomInfo(Integer limit,Integer offset,String sort,String order,
@@ -93,10 +96,7 @@ public class AssetsImpl implements Assets{
 
 	@Override
 	public Integer insertIntoHidden(Hidden hidden) {
-		// TODO Auto-generated method stub
-		
-		HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
-		
+		// TODO Auto-generated method stub		
 		return hiddenDAO.insertIntoHidden(hidden);
 	}
 
@@ -104,15 +104,12 @@ public class AssetsImpl implements Assets{
 	public Integer updateHidden(Hidden hidden) {
 		// TODO Auto-generated method stub
 		
-		HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
-		
 		return hiddenDAO.updateHidden(hidden);
 	}
 
 	@Override
 	public Integer deleteHidden(Hidden hidden) {
 		// TODO Auto-generated method stub
-		HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
 		
 		return hiddenDAO.deleteHidden(hidden);
 	}
@@ -153,9 +150,7 @@ public class AssetsImpl implements Assets{
 
 	@Override
 	public List<Hidden_Level> setctAllHiddenLevel() {		
-		// TODO Auto-generated method stub
-		HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
-		
+		// TODO Auto-generated method stub		
 		return hiddenDAO.setctAllHiddenLevel();
 	}
 
@@ -163,7 +158,6 @@ public class AssetsImpl implements Assets{
 	@Override
 	public Integer insertHiddenLevel(Hidden_Level hidden_level) {
 		// TODO Auto-generated method stub
-		HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
 		
 		return hiddenDAO.insertHiddenLevel(hidden_level);
 	}
@@ -172,7 +166,6 @@ public class AssetsImpl implements Assets{
 	@Override
 	public Integer deleteHiddenLevel(Hidden_Level hidden_level) {
 		// TODO Auto-generated method stub
-		HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
 		
 		return hiddenDAO.deleteHiddenLevel(hidden_level);
 	}
@@ -182,7 +175,6 @@ public class AssetsImpl implements Assets{
 	public Map<String, Object> selectAllHidden_Jion(Integer limit, Integer offset, String sort, String order,
 			Map<String, String> search) {
 		// TODO Auto-generated method stub
-		HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
 		
 		return hiddenDAO.selectAllHidden_Jion(limit, offset, sort, order, search);
 	}
@@ -191,9 +183,31 @@ public class AssetsImpl implements Assets{
 	@Override
 	public Map<String, Object> selectAllHiddenDate(String GUID) {
 		// TODO Auto-generated method stub
-		HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
 		
 		return hiddenDAO.selectAllHiddenDate(GUID);
+	}
+
+
+	@Override
+	public List<Hidden_Type> selectAllHiddenType() {
+		// TODO Auto-generated method stub
+		
+		return hiddenDAO.selectAllHiddenType();
+	}
+
+
+	@Override
+	public Integer insertHiddenType(Hidden_Type hidden_Type) {
+		// TODO Auto-generated method stub
+		
+		return hiddenDAO.insertHiddenType(hidden_Type);
+	}
+
+
+	@Override
+	public Integer deleteHiddenType(Hidden_Type hidden_Type) {
+		// TODO Auto-generated method stub
+		return hiddenDAO.deleteHiddenType(hidden_Type);
 	}
 
 	
