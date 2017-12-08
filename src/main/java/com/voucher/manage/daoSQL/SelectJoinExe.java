@@ -32,7 +32,7 @@ public class SelectJoinExe {
 			
 			sql=(String) map.get("sql");
 			List params=(List) map.get("params");
-			
+			System.out.println("params="+params);
 			List list=getJdbcTemplate.query(sql,params.toArray(), new RowMappersJoin(classeNames,object.getClass()));
 	        return list;
 	}

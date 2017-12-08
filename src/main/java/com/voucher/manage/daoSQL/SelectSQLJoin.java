@@ -251,12 +251,15 @@ public class SelectSQLJoin {
        //   System.out.println("select="+select);
           i=1;
           int length=objects.length;
+          if(length>2){
+        	  length=2;
+          }
           iterator=wheres.iterator();
           System.out.println("wheres1="+wheres);
           int k;
           while (iterator.hasNext()) {
         	columnWhere=iterator.next();
-        	System.out.println("");
+        	System.out.println("length="+length);
             for(k=1;k<length;k++){
              for(String whereterm:columnWhere){
         	   if(i%2==0){
@@ -278,6 +281,7 @@ public class SelectSQLJoin {
           System.out.println("wheres2="+wheres);
           while (iterator.hasNext()) {
           columnWhere=iterator.next();
+          System.out.println("length="+length);
           for(k=1;k<length;k++){
             for(String whereterm:columnWhere){
         	  if(i%2==0){

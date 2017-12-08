@@ -13,6 +13,7 @@ import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Assets.Hidden;
 import com.voucher.manage.daoModel.Assets.Hidden_Level;
 import com.voucher.manage.daoModel.Assets.Hidden_Type;
+import com.voucher.manage.daoModel.Assets.Hidden_User;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.file.DocFileFactory;
 import com.voucher.manage.file.ImageFileFactory;
@@ -208,6 +209,27 @@ public class AssetsImpl implements Assets{
 	public Integer deleteHiddenType(Hidden_Type hidden_Type) {
 		// TODO Auto-generated method stub
 		return hiddenDAO.deleteHiddenType(hidden_Type);
+	}
+
+
+	@Override
+	public List<Hidden_User> selectAllHiddenUser() {
+		// TODO Auto-generated method stub
+		return hiddenDAO.selectAllHiddenUser();
+	}
+
+
+	@Override
+	public Integer insertHiddenUser(Hidden_User hidden_User) {
+		// TODO Auto-generated method stub
+		return hiddenDAO.insertHiddenUser(hidden_User);
+	}
+
+
+	@Override
+	public Integer deleteHiddenUser(Hidden_User hidden_User) {
+		// TODO Auto-generated method stub
+		return hiddenDAO.deleteHiddenUser(hidden_User);
 	}
 
 	

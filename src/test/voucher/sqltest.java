@@ -124,7 +124,8 @@ public class sqltest {
 	//	System.out.println(sqlcount);
 		Object[] objects={roomChangeHireLog,roomChartLog};
 		Class<?>[] classs={roomChangeHireLog.getClass(),roomChangeHireLog.getClass()};
-		Map map2=new SelectSQLJoin().get(objects,"[Charter]");
+		String[] join={"[Charter]"};
+		Map map2=new SelectSQLJoin().get(objects,join);
 	//	Map map2=new SelectSQLJoin().getCount(objects,"[Charter]");
 	//	Map map2=new SelectSQL().get(roomInfo);
         MyTestUtil.print(map2);

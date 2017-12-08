@@ -6,6 +6,7 @@ import java.util.Map;
 import com.voucher.manage.daoModel.Assets.Hidden;
 import com.voucher.manage.daoModel.Assets.Hidden_Level;
 import com.voucher.manage.daoModel.Assets.Hidden_Type;
+import com.voucher.manage.daoModel.Assets.Hidden_User;
 
 public interface HiddenDAO {
 
@@ -36,4 +37,11 @@ public interface HiddenDAO {
 	
 	public Map<String, Object> selectAllHidden_Jion(Integer limit, Integer offset, String sort,
 			String order,Map<String, String> search);
+	
+	public List<Hidden_User> selectAllHiddenUser();
+	
+	public Integer insertHiddenUser(Hidden_User hidden_User);
+	
+	public Integer deleteHiddenUser(Hidden_User hidden_User);
+	
 }

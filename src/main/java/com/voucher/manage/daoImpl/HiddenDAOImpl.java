@@ -15,6 +15,7 @@ import com.voucher.manage.daoModel.Assets.Hidden;
 import com.voucher.manage.daoModel.Assets.Hidden_Data;
 import com.voucher.manage.daoModel.Assets.Hidden_Level;
 import com.voucher.manage.daoModel.Assets.Hidden_Type;
+import com.voucher.manage.daoModel.Assets.Hidden_User;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Jion;
 import com.voucher.manage.daoSQL.DeleteExe;
 import com.voucher.manage.daoSQL.InsertExe;
@@ -194,20 +195,29 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		hidden_Type.setOrder(order);
 		hidden_Type.setNotIn("GUID");
 		
+		Hidden_User hidden_User=new Hidden_User();
+		
+		hidden_User.setLimit(limit);
+		hidden_User.setOffset(offset);
+		hidden_User.setSort(sort);
+		hidden_User.setOrder(order);
+		hidden_User.setNotIn("GUID");
+		
 		if(!search.isEmpty()){
 		    String[] where=TransMapToString.get(search);
 		    hidden.setWhere(where);
 		    hidden_Level.setWhere(where);
 		    hidden_Type.setWhere(where);
+		    hidden_User.setWhere(where);
 		}
 		
-		Object[] objects={hidden,hidden_Level,hidden_Type};
+		Object[] objects={hidden,hidden_Level,hidden_Type,hidden_User};
 		
 		Map map=new HashMap<String, Object>();
 		
 		Hidden_Jion hidden_Jion=new Hidden_Jion();
 		
-		String[] join={"hidden_level","type"};
+		String[] join={"hidden_level","type","principal"};
 		
 		List list=SelectJoinExe.get(this.getJdbcTemplate(), objects,hidden_Jion,join);
 		MyTestUtil.print(list);
@@ -243,6 +253,31 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	public Integer deleteHiddenType(Hidden_Type hidden_Type) {
 		// TODO Auto-generated method stub
 		return DeleteExe.get(this.getJdbcTemplate(), hidden_Type);
+	}
+
+
+	@Override
+	public List<Hidden_User> selectAllHiddenUser() {
+		// TODO Auto-generated method stub
+		Hidden_User hidden_User=new Hidden_User();
+		hidden_User.setOffset(0);
+		hidden_User.setLimit(1000);
+		hidden_User.setNotIn("id");
+		return SelectExe.get(this.getJdbcTemplate(), hidden_User);
+	}
+
+
+	@Override
+	public Integer insertHiddenUser(Hidden_User hidden_User) {
+		// TODO Auto-generated method stub
+		return InsertExe.get(this.getJdbcTemplate(), hidden_User);
+	}
+
+
+	@Override
+	public Integer deleteHiddenUser(Hidden_User hidden_User) {
+		// TODO Auto-generated method stub
+		return DeleteExe.get(this.getJdbcTemplate(), hidden_User);
 	}
 
 
