@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.voucher.manage.daoModel.Assets.Hidden;
+import com.voucher.manage.daoModel.Assets.Hidden_Check;
 import com.voucher.manage.daoModel.Assets.Hidden_Level;
+import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
 import com.voucher.manage.daoModel.Assets.Hidden_Type;
 import com.voucher.manage.daoModel.Assets.Hidden_User;
 
@@ -43,5 +45,19 @@ public interface HiddenDAO {
 	public Integer insertHiddenUser(Hidden_User hidden_User);
 	
 	public Integer deleteHiddenUser(Hidden_User hidden_User);
+	
+	public Map<String, Object> selectAllHiddenCheck(Integer limit, Integer offset, String sort,
+			String order,Map<String, String> search);
+	
+	public Integer insertHiddenCheck(Hidden_Check hidden_Check);
+	
+	public Integer deleteHiddenCheck(Hidden_Check hidden_Check);
+	
+	public Map<String, Object> selectAllHiddenNeaten(Integer limit, Integer offset, String sort,
+			String order,Map<String, String> search);
+	
+	public Integer insertHiddenNeaten(Hidden_Neaten hidden_Neaten);
+	
+	public Integer deleteHiddenNeaten(Hidden_Neaten hidden_Neaten);
 	
 }

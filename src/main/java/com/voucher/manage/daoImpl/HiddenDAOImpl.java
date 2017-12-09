@@ -12,11 +12,15 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.daoModel.Assets.Hidden;
+import com.voucher.manage.daoModel.Assets.Hidden_Check;
 import com.voucher.manage.daoModel.Assets.Hidden_Data;
 import com.voucher.manage.daoModel.Assets.Hidden_Level;
+import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
 import com.voucher.manage.daoModel.Assets.Hidden_Type;
 import com.voucher.manage.daoModel.Assets.Hidden_User;
-import com.voucher.manage.daoModelJoin.Assets.Hidden_Jion;
+import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
+import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
+import com.voucher.manage.daoModelJoin.Assets.Hidden_Neaten_Join;
 import com.voucher.manage.daoSQL.DeleteExe;
 import com.voucher.manage.daoSQL.InsertExe;
 import com.voucher.manage.daoSQL.SelectExe;
@@ -215,7 +219,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		
 		Map map=new HashMap<String, Object>();
 		
-		Hidden_Jion hidden_Jion=new Hidden_Jion();
+		Hidden_Join hidden_Jion=new Hidden_Join();
 		
 		String[] join={"hidden_level","type","principal"};
 		
@@ -279,6 +283,123 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		// TODO Auto-generated method stub
 		return DeleteExe.get(this.getJdbcTemplate(), hidden_User);
 	}
+
+
+	@Override
+	public Map<String, Object> selectAllHiddenCheck(Integer limit, Integer offset, String sort,
+			String order,Map<String, String> search) {
+		// TODO Auto-generated method stub
+		Hidden_Check hidden_Check=new Hidden_Check();
+		
+		hidden_Check.setOffset(offset);
+		hidden_Check.setLimit(limit);
+		hidden_Check.setSort(sort);
+		hidden_Check.setOrder(order);
+		hidden_Check.setNotIn("id");
+		
+        Hidden hidden=new Hidden();
+		
+		hidden.setLimit(limit);
+		hidden.setOffset(offset);
+		hidden.setSort(sort);
+		hidden.setOrder(order);
+		hidden.setNotIn("id");
+		
+		if(!search.isEmpty()){
+		    String[] where=TransMapToString.get(search);
+		    hidden_Check.setWhere(where);
+		    hidden.setWhere(where);
+		}
+		
+		Map map=new HashMap<String, Object>();
+		
+		Object[] objects={hidden_Check,hidden};
+		
+		String[] join={"GUID","GUID"};
+		
+		Hidden_Check_Join hidden_Check_Join=new Hidden_Check_Join();
+		
+		List<Hidden_Check> list=SelectJoinExe.get(this.getJdbcTemplate(), objects, hidden_Check_Join, join);
+		
+		map.put("rows", list);
+		
+        Map countMap=SelectJoinExe.getCount(this.getJdbcTemplate(), objects, join);
+		
+		map.put("total", countMap.get(""));
+		
+		return map;
+	}
+
+
+	@Override
+	public Integer insertHiddenCheck(Hidden_Check hidden_Check) {
+		// TODO Auto-generated method stub
+		return InsertExe.get(this.getJdbcTemplate(), hidden_Check);
+	}
+
+
+	@Override
+	public Integer deleteHiddenCheck(Hidden_Check hidden_Check) {
+		// TODO Auto-generated method stub
+		return DeleteExe.get(this.getJdbcTemplate(), hidden_Check);
+	}
+
+
+	@Override
+	public Map<String, Object> selectAllHiddenNeaten(Integer limit, Integer offset, String sort,
+			String order,Map<String, String> search) {
+		// TODO Auto-generated method stub
+		Hidden_Neaten hidden_Neaten=new Hidden_Neaten();
+		
+		hidden_Neaten.setOffset(offset);
+		hidden_Neaten.setLimit(limit);
+		hidden_Neaten.setSort(sort);
+		hidden_Neaten.setOrder(order);
+		hidden_Neaten.setNotIn("GUID");
+		
+        Hidden hidden=new Hidden();
+		
+		hidden.setLimit(limit);
+		hidden.setOffset(offset);
+		hidden.setSort(sort);
+		hidden.setOrder(order);
+		hidden.setNotIn("GUID");
+		
+		Map map=new HashMap<String, Object>();
+		
+		Object[] objects={hidden_Neaten,hidden};
+		
+		Hidden_Neaten_Join hidden_Neaten_Join=new Hidden_Neaten_Join();
+		
+		String[] join={"GUID","GUID"};
+		
+		List<Hidden_Neaten> list=SelectJoinExe.get(this.getJdbcTemplate(), objects, hidden_Neaten_Join, join);
+		
+		map.put("rows", list);
+		
+		Map countMap=SelectJoinExe.getCount(this.getJdbcTemplate(), objects, join);
+			
+		map.put("total", countMap.get(""));
+			
+		return map;
+	}
+
+
+	@Override
+	public Integer insertHiddenNeaten(Hidden_Neaten hidden_Neaten) {
+		// TODO Auto-generated method stub
+		return InsertExe.get(this.getJdbcTemplate(), hidden_Neaten);
+	}
+
+
+	@Override
+	public Integer deleteHiddenNeaten(Hidden_Neaten hidden_Neaten) {
+		// TODO Auto-generated method stub
+		return DeleteExe.get(this.getJdbcTemplate(), hidden_Neaten);
+	}
+
+
+
 
 
 }
