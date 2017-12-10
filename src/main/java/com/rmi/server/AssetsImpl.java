@@ -17,6 +17,7 @@ import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
 import com.voucher.manage.daoModel.Assets.Hidden_Type;
 import com.voucher.manage.daoModel.Assets.Hidden_User;
 import com.voucher.manage.daoModel.Assets.Position;
+import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.file.DocFileFactory;
 import com.voucher.manage.file.ImageFileFactory;
 import com.voucher.manage.file.PdfFileFactory;
@@ -64,26 +65,26 @@ public class AssetsImpl implements Assets{
 
 
 	@Override
-	public Integer uploadImageFile(String GUID,List<String> names, List<byte[]> files) {
-	     return new ImageFileFactory().upload(GUID, names, files);
+	public Integer uploadImageFile(Object object,String GUID,List<String> names, List<byte[]> files) {
+	     return new ImageFileFactory().upload(object,GUID, names, files);
     }
 
 	@Override
-	public Integer uploadPdfFile(String GUID,List<String> names, List<byte[]> files) {
+	public Integer uploadPdfFile(Object object,String GUID,List<String> names, List<byte[]> files) {
 		// TODO Auto-generated method stub
-		return new PdfFileFactory().upload(GUID, names, files);
+		return new PdfFileFactory().upload(object,GUID, names, files);
 	}
 
 	@Override
-	public Integer uploadDocFile(String GUID,List<String> names, List<byte[]> files) {
+	public Integer uploadDocFile(Object object,String GUID,List<String> names, List<byte[]> files) {
 		// TODO Auto-generated method stub
-		return new DocFileFactory().upload(GUID, names, files);
+		return new DocFileFactory().upload(object,GUID, names, files);
 	}
 
 	@Override
-	public Integer uploadXlsFile(String GUID,List<String> names, List<byte[]> files) {
+	public Integer uploadXlsFile(Object object,String GUID,List<String> names, List<byte[]> files) {
 		// TODO Auto-generated method stub
-		return new XlsFileFactory().upload(GUID, names, files);
+		return new XlsFileFactory().upload(object,GUID, names, files);
 	}
 
 	@Override
@@ -192,6 +193,19 @@ public class AssetsImpl implements Assets{
 
 
 	@Override
+	public Map<String, Object> selectAllHiddenCheckDate(String check_id) {
+		// TODO Auto-generated method stub
+		return hiddenDAO.selectAllHiddenCheckDate(check_id);
+	}
+
+
+	@Override
+	public Map<String, Object> selectAllHiddenNeatenDate(String neaten_id) {
+		// TODO Auto-generated method stub
+		return hiddenDAO.selectAllHiddenNeatenDate(neaten_id);
+	}
+	
+	@Override
 	public List<Hidden_Type> selectAllHiddenType() {
 		// TODO Auto-generated method stub
 		
@@ -278,6 +292,27 @@ public class AssetsImpl implements Assets{
 		return hiddenDAO.deleteHiddenNeaten(hidden_Neaten);
 	}
 
-	
+
+	@Override
+	public Integer updateHiddenCheck(Hidden_Check hidden_Check) {
+		// TODO Auto-generated method stub
+		return hiddenDAO.updateHiddenCheck(hidden_Check);
+	}
+
+
+	@Override
+	public Integer updateHiddenNeaten(Hidden_Neaten hidden_Neaten) {
+		// TODO Auto-generated method stub
+		return hiddenDAO.updateHiddenNeaten(hidden_Neaten);
+	}
+
+
+	@Override
+	public List<Hidden_Join> selectHiddenOfMap(Map<String, String> search) {
+		// TODO Auto-generated method stub
+		return hiddenDAO.selectHiddenOfMap(search);
+	}
+
+
 	
 }

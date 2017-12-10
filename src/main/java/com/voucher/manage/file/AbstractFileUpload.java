@@ -12,6 +12,10 @@ import java.util.UUID;
 import org.springframework.context.ApplicationContext;
 
 import com.voucher.manage.dao.HiddenDAO;
+import com.voucher.manage.daoModel.Assets.Hidden;
+import com.voucher.manage.daoModel.Assets.Hidden_Check_Date;
+import com.voucher.manage.daoModel.Assets.Hidden_Data;
+import com.voucher.manage.daoModel.Assets.Hidden_Neaten_Date;
 import com.voucher.manage.tools.FileTypeTest;
 import com.voucher.manage.tools.Md5;
 import com.voucher.sqlserver.context.Connect;
@@ -29,7 +33,7 @@ public abstract class AbstractFileUpload {
 		
 	}
 	
-	public Integer uploadFile(String GUID,List<String> names, List<byte[]> files) {
+	public Integer uploadFile(Object object,String ID,List<String> names, List<byte[]> files) {
         String pathRoot = System.getProperty("user.home");
                
         BufferedOutputStream os=null;
@@ -71,12 +75,12 @@ public abstract class AbstractFileUpload {
                      break;
                  }
               }
-          
-            if(mimeType.equals("")){
-            	String s=name;
-          		mimeType=s.substring(s.lastIndexOf('.')+1); //获取后缀名
-             }
-             
+          System.out.println("mimeType="+mimeType);
+
+            String s=name;
+          	mimeType=s.substring(s.lastIndexOf('.')+1); //获取后缀名
+       
+            System.out.println("mimeType="+mimeType); 
      		UUID uuid=UUID.randomUUID();		
      		Date date=new Date();
      		
@@ -88,7 +92,17 @@ public abstract class AbstractFileUpload {
             System.out.println("newFile2="+newFile2.getName());
             String uri=fileName+"."+mimeType;
             System.out.println("uri="+savePath+"\\"+fileName+"."+mimeType);
-            hiddenDAO.InsertIntoHiddenData(GUID,name,mimeType, uri);
+            System.out.println("ID="+ID);
+            if(object==Hidden_Data.class){
+              hiddenDAO.InsertIntoHiddenData(ID,name,mimeType, uri);
+            }
+            if(object==Hidden_Check_Date.class){          	
+              hiddenDAO.InsertIntoHiddenCheckData(ID, name, mimeType, uri);
+            }
+            if(object==Hidden_Neaten_Date.class){
+              hiddenDAO.InsertIntoHiddenNeatenData(ID, name, mimeType, uri);
+            }
+            
             i++;
           }  
           return 1;
@@ -100,5 +114,5 @@ public abstract class AbstractFileUpload {
 
 	}
 	
-	protected abstract Integer upload(String GUID,List<String> names, List<byte[]> files);
+	protected abstract Integer upload(Object object,String GUID,List<String> names, List<byte[]> files);
 }

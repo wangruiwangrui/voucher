@@ -9,12 +9,21 @@ import com.voucher.manage.daoModel.Assets.Hidden_Level;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
 import com.voucher.manage.daoModel.Assets.Hidden_Type;
 import com.voucher.manage.daoModel.Assets.Hidden_User;
+import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 
 public interface HiddenDAO {
 
 	public Integer InsertIntoHiddenData(String GUID,String NAME,String TYPE,String uri);
 	
+	public Integer InsertIntoHiddenCheckData(String Check_id,String NAME,String TYPE,String uri);
+	
+	public Integer InsertIntoHiddenNeatenData(String Neaten_id,String NAME,String TYPE,String uri);
+	
 	public Map<String,Object> selectAllHiddenDate(String GUID);
+	
+	public Map<String,Object> selectAllHiddenCheckDate(String check_id);
+	
+	public Map<String,Object> selectAllHiddenNeatenDate(String neaten_id);
 	
 	public Map<String, Object> selectAllHidden(Integer limit, Integer offset, String sort,
 			String order,Map<String, String> search);
@@ -51,6 +60,8 @@ public interface HiddenDAO {
 	
 	public Integer insertHiddenCheck(Hidden_Check hidden_Check);
 	
+	public Integer updateHiddenCheck(Hidden_Check hidden_Check);
+	
 	public Integer deleteHiddenCheck(Hidden_Check hidden_Check);
 	
 	public Map<String, Object> selectAllHiddenNeaten(Integer limit, Integer offset, String sort,
@@ -58,6 +69,9 @@ public interface HiddenDAO {
 	
 	public Integer insertHiddenNeaten(Hidden_Neaten hidden_Neaten);
 	
+	public Integer updateHiddenNeaten(Hidden_Neaten hidden_Neaten);
+	
 	public Integer deleteHiddenNeaten(Hidden_Neaten hidden_Neaten);
 	
+	public List<Hidden_Join> selectHiddenOfMap(Map<String, String> search);
 }

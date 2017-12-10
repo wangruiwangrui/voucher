@@ -13,11 +13,14 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.daoModel.Assets.Hidden;
 import com.voucher.manage.daoModel.Assets.Hidden_Check;
+import com.voucher.manage.daoModel.Assets.Hidden_Check_Date;
 import com.voucher.manage.daoModel.Assets.Hidden_Data;
 import com.voucher.manage.daoModel.Assets.Hidden_Level;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
+import com.voucher.manage.daoModel.Assets.Hidden_Neaten_Date;
 import com.voucher.manage.daoModel.Assets.Hidden_Type;
 import com.voucher.manage.daoModel.Assets.Hidden_User;
+import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Neaten_Join;
@@ -48,6 +51,37 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		return InsertExe.get(this.getJdbcTemplate(), hidden_Data);
 	}
 	
+	
+	@Override
+	public Integer InsertIntoHiddenCheckData(String Check_id, String NAME, String TYPE, String uri) {
+		// TODO Auto-generated method stub
+		Hidden_Check_Date hidden_Check_Date=new Hidden_Check_Date();
+		Date date=new Date();
+		
+		hidden_Check_Date.setCheck_id(Check_id);
+		hidden_Check_Date.setNAME(NAME);
+		hidden_Check_Date.setTYPE(TYPE);
+		hidden_Check_Date.setURI(uri);
+		hidden_Check_Date.setDate(date);
+		
+		return InsertExe.get(this.getJdbcTemplate(), hidden_Check_Date);
+	}
+
+
+	@Override
+	public Integer InsertIntoHiddenNeatenData(String Neaten_id, String NAME, String TYPE, String uri) {
+		// TODO Auto-generated method stub
+		Hidden_Neaten_Date hidden_Neaten_Date=new Hidden_Neaten_Date();
+		Date date=new Date();
+		
+		hidden_Neaten_Date.setNeaten_id(Neaten_id);
+		hidden_Neaten_Date.setNAME(NAME);
+		hidden_Neaten_Date.setTYPE(TYPE);
+		hidden_Neaten_Date.setURI(uri);
+		hidden_Neaten_Date.setDate(date);
+		
+		return InsertExe.get(this.getJdbcTemplate(), hidden_Neaten_Date);
+	}
 	
 	@Override
 	public Map<String, Object> selectAllHiddenDate(String GUID) {
@@ -83,6 +117,102 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 			
 			names.add(hidden_Data2.getNAME());
 			types.add(hidden_Data2.getTYPE());
+			fileBytes.add(fileByte);
+			
+		}
+		
+		Map<String, Object> map=new HashMap<>();
+		
+		map.put("names", names);
+		map.put("types", types);
+		map.put("fileBytes", fileBytes);
+		
+		return map;
+	}
+	
+	
+	@Override
+	public Map<String, Object> selectAllHiddenCheckDate(String check_id) {
+		// TODO Auto-generated method stub
+        String pathRoot = System.getProperty("user.home");
+		
+		String filePath=pathRoot+AbstractFileUpload.filePath;
+		
+		List<String> names=new ArrayList<String>();
+		List<String> types=new ArrayList<String>();
+		List<byte[]> fileBytes=new ArrayList<byte[]>();
+		
+		// TODO Auto-generated method stub
+		Hidden_Check_Date hidden_Check_Date=new Hidden_Check_Date();
+		hidden_Check_Date.setLimit(1000);
+		hidden_Check_Date.setOffset(0);
+		hidden_Check_Date.setNotIn("id");
+		String[] where={"check_id =",check_id};
+		
+		hidden_Check_Date.setWhere(where);
+		
+		List<Hidden_Check_Date> hidden_Check_Dates=SelectExe.get(this.getJdbcTemplate(), hidden_Check_Date);
+		
+		Iterator<Hidden_Check_Date> iterator=hidden_Check_Dates.iterator();
+		
+		while(iterator.hasNext()){
+			
+			Hidden_Check_Date hidden_Check_Date2=iterator.next();
+			
+			File file=new File(filePath+"\\"+hidden_Check_Date2.getURI());
+			
+			byte[] fileByte=FileConvect.fileToByte(file);
+			
+			names.add(hidden_Check_Date2.getNAME());
+			types.add(hidden_Check_Date2.getTYPE());
+			fileBytes.add(fileByte);
+			
+		}
+		
+		Map<String, Object> map=new HashMap<>();
+		
+		map.put("names", names);
+		map.put("types", types);
+		map.put("fileBytes", fileBytes);
+		
+		return map;
+	}
+
+
+	@Override
+	public Map<String, Object> selectAllHiddenNeatenDate(String neaten_id) {
+		// TODO Auto-generated method stub
+        String pathRoot = System.getProperty("user.home");
+		
+		String filePath=pathRoot+AbstractFileUpload.filePath;
+		
+		List<String> names=new ArrayList<String>();
+		List<String> types=new ArrayList<String>();
+		List<byte[]> fileBytes=new ArrayList<byte[]>();
+		
+		// TODO Auto-generated method stub
+		Hidden_Neaten_Date hidden_Neaten_Date=new Hidden_Neaten_Date();
+		hidden_Neaten_Date.setLimit(1000);
+		hidden_Neaten_Date.setOffset(0);
+		hidden_Neaten_Date.setNotIn("id");
+		String[] where={"neaten_id =",neaten_id};
+		
+		hidden_Neaten_Date.setWhere(where);
+		
+		List<Hidden_Neaten_Date> hidden_Neaten_Dates=SelectExe.get(this.getJdbcTemplate(), hidden_Neaten_Date);
+		
+		Iterator<Hidden_Neaten_Date> iterator=hidden_Neaten_Dates.iterator();
+		
+		while(iterator.hasNext()){
+			
+			Hidden_Neaten_Date hidden_Neaten_Date2=iterator.next();
+			
+			File file=new File(filePath+"\\"+hidden_Neaten_Date2.getURI());
+			
+			byte[] fileByte=FileConvect.fileToByte(file);
+			
+			names.add(hidden_Neaten_Date2.getNAME());
+			types.add(hidden_Neaten_Date2.getTYPE());
 			fileBytes.add(fileByte);
 			
 		}
@@ -365,6 +495,12 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		hidden.setOrder(order);
 		hidden.setNotIn("GUID");
 		
+		if(!search.isEmpty()){
+		    String[] where=TransMapToString.get(search);
+		    hidden_Neaten.setWhere(where);
+		    hidden.setWhere(where);
+		}
+		
 		Map map=new HashMap<String, Object>();
 		
 		Object[] objects={hidden_Neaten,hidden};
@@ -399,6 +535,55 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	}
 
 
+	@Override
+	public Integer updateHiddenCheck(Hidden_Check hidden_Check) {
+		// TODO Auto-generated method stub
+		return UpdateExe.get(this.getJdbcTemplate(), hidden_Check);
+	}
+
+
+	@Override
+	public Integer updateHiddenNeaten(Hidden_Neaten hidden_Neaten) {
+		// TODO Auto-generated method stub
+		return UpdateExe.get(this.getJdbcTemplate(), hidden_Neaten);
+	}
+
+
+	@Override
+	public List<Hidden_Join> selectHiddenOfMap(Map<String, String> search) {
+		// TODO Auto-generated method stub
+		 Hidden hidden=new Hidden();
+		 
+			hidden.setLimit(10);
+			hidden.setOffset(0);
+			hidden.setSort(null);
+			hidden.setOrder(null);
+			hidden.setNotIn("GUID");
+			
+			Position position=new Position();
+			position.setLimit(10);
+			position.setOffset(0);
+			position.setSort(null);
+			position.setOrder(null);
+			position.setNotIn("GUID");
+			
+		 String[] where=TransMapToString.get(search);
+		 hidden.setWhere(where);
+		 position.setWhere(where);
+
+			 
+		Map map=new HashMap<String, Object>();
+				
+		Object[] objects={hidden,position};
+				
+		String[] join={"GUID","GUID"};
+			
+		Hidden_Join hidden_Join=new Hidden_Join();
+		
+		List hidden_joins=SelectJoinExe.get(this.getJdbcTemplate(), objects, hidden_Join, join);		
+			 
+		return hidden_joins;
+	}
 
 
 

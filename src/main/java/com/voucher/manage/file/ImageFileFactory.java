@@ -5,9 +5,9 @@ import java.util.List;
 public class ImageFileFactory extends AbstractFileUpload{
 
 	@Override
-	public Integer upload(String GUID, List<String> names, List<byte[]> files) {
+	public Integer upload(Object object,String GUID, List<String> names, List<byte[]> files) {
 		// TODO Auto-generated method stub
-		return uploadFile(GUID, names, files);
+		return uploadFile(object,GUID, names, files);
 	}
 	
 
