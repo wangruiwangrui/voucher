@@ -11,6 +11,7 @@ import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Assets.Hidden;
+import com.voucher.manage.daoModel.Assets.Hidden_Assets;
 import com.voucher.manage.daoModel.Assets.Hidden_Check;
 import com.voucher.manage.daoModel.Assets.Hidden_Level;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
@@ -34,6 +35,8 @@ public class AssetsImpl implements Assets{
 	ApplicationContext applicationContext=new Connect().get();
 	
 	HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
+	
+	AssetsDAO assetsDAO=(AssetsDAO) applicationContext.getBean("assetsdao");
 	
 	@Override
 	public Map<String, Object> getRoomInfo(Integer limit,Integer offset,String sort,String order,
@@ -311,6 +314,20 @@ public class AssetsImpl implements Assets{
 	public List<Hidden_Join> selectHiddenOfMap(Map<String, String> search) {
 		// TODO Auto-generated method stub
 		return hiddenDAO.selectHiddenOfMap(search);
+	}
+
+
+	@Override
+	public Integer insertIntoHidden_Assets(Hidden_Assets hidden_Assets) {
+		// TODO Auto-generated method stub
+		return  assetsDAO.insertIntoHidden_Assets(hidden_Assets);
+	}
+
+
+	@Override
+	public Map findAssetByHideen(Integer limit, Integer offset, String sort, String order, Map<String, String> search) {
+		// TODO Auto-generated method stub
+		return assetsDAO.findAssetByHideen(limit, offset, sort, order, search);
 	}
 
 
