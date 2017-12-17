@@ -18,6 +18,7 @@ import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
 import com.voucher.manage.daoModel.Assets.Hidden_Type;
 import com.voucher.manage.daoModel.Assets.Hidden_User;
 import com.voucher.manage.daoModel.Assets.Position;
+import com.voucher.manage.daoModelJoin.Assets.Hidden_Data_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.file.DocFileFactory;
 import com.voucher.manage.file.ImageFileFactory;
@@ -328,6 +329,48 @@ public class AssetsImpl implements Assets{
 	public Map findAssetByHideen(Integer limit, Integer offset, String sort, String order, Map<String, String> search) {
 		// TODO Auto-generated method stub
 		return assetsDAO.findAssetByHideen(limit, offset, sort, order, search);
+	}
+
+
+	@Override
+	public Integer deleteHidden_Assets(Hidden_Assets hidden_Assets) {
+		// TODO Auto-generated method stub
+		return assetsDAO.deleteHidden_Assets(hidden_Assets);
+	}
+
+
+	@Override
+	public Integer findNotHidden() {
+		// TODO Auto-generated method stub
+		return assetsDAO.findNotHidden();
+	}
+
+
+	@Override
+	public Integer findInHidden() {
+		// TODO Auto-generated method stub
+		return assetsDAO.findInHidden();
+	}
+
+
+	@Override
+	public String findLastHidden() {
+		// TODO Auto-generated method stub
+		return assetsDAO.findLastHidden();
+	}
+
+
+	@Override
+	public String findIgnoreHidden() {
+		// TODO Auto-generated method stub
+		return assetsDAO.findIgnoreHidden();
+	}
+
+
+	@Override
+	public List<Hidden_Data_Join> hiddenQuery(Integer hiddenLevel) {
+		// TODO Auto-generated method stub
+		return assetsDAO.hiddenQuery(hiddenLevel);
 	}
 
 

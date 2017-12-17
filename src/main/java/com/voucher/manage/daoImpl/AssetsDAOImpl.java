@@ -1,21 +1,31 @@
 package com.voucher.manage.daoImpl;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.daoModel.RoomInfo;
+import com.voucher.manage.daoModel.Users;
 import com.voucher.manage.daoModel.Assets.Hidden;
 import com.voucher.manage.daoModel.Assets.Hidden_Assets;
+import com.voucher.manage.daoModel.Assets.Hidden_Data;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Assets_Join;
+import com.voucher.manage.daoModelJoin.Assets.Hidden_Data_Join;
 import com.voucher.manage.daoRowMapper.RowMappersJoin;
+import com.voucher.manage.daoSQL.DeleteExe;
 import com.voucher.manage.daoSQL.InsertExe;
 import com.voucher.manage.daoSQL.SelectExe;
 import com.voucher.manage.daoSQL.SelectJoinExe;
@@ -287,6 +297,129 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		
 		return map;
 
+	}
+
+	@Override
+	public Integer deleteHidden_Assets(Hidden_Assets hidden_Assets) {
+		// TODO Auto-generated method stub
+		return DeleteExe.get(this.getJdbcTemplate(), hidden_Assets);
+	}
+
+	@Override
+	public Integer findNotHidden() {
+		// TODO Auto-generated method stub
+		Hidden hidden=new Hidden();
+		
+		String[] where={"[Assets].[dbo].[Hidden].progress =","0"};
+		//hidden.setWhere(where);
+		
+		int i=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden).get("");
+		
+		System.out.println("i="+i);
+		
+		return i;
+	}
+
+	@Override
+	public Integer findInHidden() {
+		// TODO Auto-generated method stub
+		Hidden hidden=new Hidden();
+		
+		String[] where={"[Assets].[dbo].[Hidden].progress >","0"
+				," [Assets].[dbo].[Hidden].progress <","1"};
+		hidden.setWhere(where);
+		
+		int i=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden).get("");
+		
+		return i;
+	}
+
+	@Override
+	public String findLastHidden() {
+		// TODO Auto-generated method stub
+		
+		Hidden hidden=new Hidden();
+		
+		String sql="SELECT MAX([happen_time]) FROM [Assets].[dbo].[Hidden]";
+		
+		List list=this.getJdbcTemplate().query(sql,new hiddenRowMapper());
+		
+		hidden=(Hidden) list.get(0);
+		
+		String s=String.valueOf(hidden.getHappen_time());
+		
+		return s;
+	}
+
+	class hiddenRowMapper implements RowMapper<Hidden> {
+        //rs为返回结果集，以每行为单位封装着
+        public Hidden mapRow(ResultSet rs, int rowNum) throws SQLException {    
+            Hidden hidden=new Hidden();
+        	Date date=rs.getDate("");
+        	hidden.setHappen_time(date);
+            return hidden;
+        }
+    }
+	
+	@Override
+	public String findIgnoreHidden() {
+		// TODO Auto-generated method stub
+		Hidden hidden=new Hidden();
+		
+		String sql="SELECT MAX([happen_time]) FROM [Assets].[dbo].[Hidden]";
+		
+		List list=this.getJdbcTemplate().query(sql,new hiddenRowMapper());
+		
+		hidden=(Hidden) list.get(0);
+		
+		String s=String.valueOf(hidden.getHappen_time());
+		
+		SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd");
+		
+		Date begin=new Date();
+		
+		int between=0;
+		
+		try {
+			Date endDate=df.parse(s);
+			between=(int) ((begin.getTime()-endDate.getTime())/(1000*3600*24));
+			System.out.println("time=  "+begin.getTime()+"          "+endDate.getTime());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return String.valueOf(between);
+	}
+
+	@Override
+	public List<Hidden_Data_Join> hiddenQuery(Integer hiddenLevel) {
+		// TODO Auto-generated method stub
+		
+		String[] where={"[Assets].[dbo].[Hidden].hidden_level =",String.valueOf(hiddenLevel),
+				"[Assets].[dbo].[Hidden_Data].TYPE =","png"};
+		
+		Hidden hidden=new Hidden();
+		hidden.setLimit(5);
+		hidden.setOffset(0);
+		hidden.setNotIn("id");
+		hidden.setWhere(where);
+		
+		Hidden_Data hidden_Data=new Hidden_Data();
+		hidden_Data.setLimit(1);
+		hidden_Data.setOffset(0);
+		hidden_Data.setNotIn("id");
+		hidden_Data.setWhere(where);
+
+		Hidden_Data_Join hidden_Data_Join=new Hidden_Data_Join();
+		
+		Object[] objects={hidden_Data,hidden};
+		
+		String[] join={"GUID"};
+		
+		List list=SelectJoinExe.get(this.getJdbcTemplate(), objects, hidden_Data_Join, join);
+		
+		return list;
 	}
 
 }
