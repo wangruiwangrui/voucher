@@ -1,5 +1,6 @@
 package com.voucher.manage.daoImpl;
 
+import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -30,6 +31,8 @@ import com.voucher.manage.daoSQL.InsertExe;
 import com.voucher.manage.daoSQL.SelectExe;
 import com.voucher.manage.daoSQL.SelectJoinExe;
 import com.voucher.manage.daoSQL.UpdateExe;
+import com.voucher.manage.file.AbstractFileUpload;
+import com.voucher.manage.tools.FileConvect;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.manage.tools.TransMapToString;
 
@@ -393,33 +396,75 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	}
 
 	@Override
-	public List<Hidden_Data_Join> hiddenQuery(Integer hiddenLevel) {
+	public Map<String, Object> hiddenQuery(Integer hiddenLevel) {
 		// TODO Auto-generated method stub
+				
+		String sql="SELECT top 5 "+    
+					"[Assets].[dbo].[Hidden_Data].GUID, "+
+				    "[Assets].[dbo].[Hidden_Data].URI, "+
+					"[Assets].[dbo].[Hidden_Data].date, "+
+				    "[Assets].[dbo].[Hidden].name, "+
+					"[Assets].[dbo].[Hidden].detail "+
+					"FROM "+
+					"[Assets].[dbo].[Hidden_Data] left join [Assets].[dbo].[Hidden] on [Assets].[dbo].[Hidden_Data].GUID=[Assets].[dbo].[Hidden].GUID "+  
+					"where  [Assets].[dbo].[Hidden].hidden_level = "+hiddenLevel+" "+
+					"OR [Assets].[dbo].[Hidden_Data].TYPE ='png ' "+
+					"OR [Assets].[dbo].[Hidden_Data].TYPE ='jpg ' "+
+					"OR [Assets].[dbo].[Hidden_Data].TYPE ='jpeg ' "+
+					"OR [Assets].[dbo].[Hidden_Data].TYPE ='gif ' "+
+					"group by [Assets].[dbo].[Hidden_Data].GUID,[Assets].[dbo].[Hidden_Data].URI,[Assets].[dbo].[Hidden_Data].date, "+
+					"[Assets].[dbo].[Hidden].name,[Assets].[dbo].[Hidden].detail "+
+					"order by [Assets].[dbo].[Hidden_Data].date desc";
 		
-		String[] where={"[Assets].[dbo].[Hidden].hidden_level =",String.valueOf(hiddenLevel),
-				"[Assets].[dbo].[Hidden_Data].TYPE =","png"};
+		List hidden_Data_Joins=this.getJdbcTemplate().query(sql,new hiddenQueryRowMapper());
 		
-		Hidden hidden=new Hidden();
-		hidden.setLimit(5);
-		hidden.setOffset(0);
-		hidden.setNotIn("id");
-		hidden.setWhere(where);
+        String pathRoot = System.getProperty("user.home");
 		
-		Hidden_Data hidden_Data=new Hidden_Data();
-		hidden_Data.setLimit(1);
-		hidden_Data.setOffset(0);
-		hidden_Data.setNotIn("id");
-		hidden_Data.setWhere(where);
-
-		Hidden_Data_Join hidden_Data_Join=new Hidden_Data_Join();
+		String filePath=pathRoot+AbstractFileUpload.filePath;
 		
-		Object[] objects={hidden_Data,hidden};
+		List<String> names=new ArrayList<String>();
+		List<String> details=new ArrayList<String>();
+		List<Date> dates=new ArrayList<Date>();
+		List<byte[]> fileBytes=new ArrayList<byte[]>();
+				
+		Iterator<Hidden_Data_Join> iterator=hidden_Data_Joins.iterator();
 		
-		String[] join={"GUID"};
+		while(iterator.hasNext()){
+			
+			Hidden_Data_Join hidden_Data_Join=iterator.next();
+			
+			File file=new File(filePath+"\\"+hidden_Data_Join.getURI());
+			
+			byte[] fileByte=FileConvect.fileToByte(file);
+			
+			names.add(hidden_Data_Join.getNAME());
+			details.add(hidden_Data_Join.getDetail());
+			dates.add(hidden_Data_Join.getDate());
+			fileBytes.add(fileByte);
+			
+		}
 		
-		List list=SelectJoinExe.get(this.getJdbcTemplate(), objects, hidden_Data_Join, join);
+		Map<String, Object> map=new HashMap<>();
 		
-		return list;
+		map.put("names", names);
+		map.put("details", details);
+		map.put("dates", dates);
+		map.put("fileBytes", fileBytes);
+		
+		return map;
 	}
 
+	class hiddenQueryRowMapper implements RowMapper<Hidden_Data_Join> {
+        //rs为返回结果集，以每行为单位封装着
+        public Hidden_Data_Join mapRow(ResultSet rs, int rowNum) throws SQLException {    
+            Hidden_Data_Join hidden_Data_Join=new Hidden_Data_Join();
+        	hidden_Data_Join.setGUID(rs.getString("GUID"));
+        	hidden_Data_Join.setURI(rs.getString("URI"));
+        	hidden_Data_Join.setName(rs.getString("name"));
+        	hidden_Data_Join.setDetail(rs.getString("detail"));
+        	hidden_Data_Join.setDate(rs.getDate("date"));
+            return hidden_Data_Join;
+        }
+    }
+	
 }

@@ -33,5 +33,5 @@ public interface AssetsDAO {
 	
 	public String  findIgnoreHidden();
 	
-	public List<Hidden_Data_Join> hiddenQuery(Integer hiddenLevel);
+	public Map<String, Object> hiddenQuery(Integer hiddenLevel);
 }

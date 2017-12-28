@@ -368,7 +368,7 @@ public class AssetsImpl implements Assets{
 
 
 	@Override
-	public List<Hidden_Data_Join> hiddenQuery(Integer hiddenLevel) {
+	public Map<String, Object> hiddenQuery(Integer hiddenLevel) {
 		// TODO Auto-generated method stub
 		return assetsDAO.hiddenQuery(hiddenLevel);
 	}
