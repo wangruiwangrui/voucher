@@ -404,17 +404,19 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 				    "[Assets].[dbo].[Hidden_Data].URI, "+
 					"[Assets].[dbo].[Hidden_Data].date, "+
 				    "[Assets].[dbo].[Hidden].name, "+
-					"[Assets].[dbo].[Hidden].detail "+
+					"[Assets].[dbo].[Hidden].detail, "+
+				    "[Assets].[dbo].[Hidden].hidden_level, "+
+					"[Assets].[dbo].[Hidden].progress "+
 					"FROM "+
 					"[Assets].[dbo].[Hidden_Data] left join [Assets].[dbo].[Hidden] on [Assets].[dbo].[Hidden_Data].GUID=[Assets].[dbo].[Hidden].GUID "+  
 					"where  [Assets].[dbo].[Hidden].hidden_level = "+hiddenLevel+" "+
-					"OR [Assets].[dbo].[Hidden_Data].TYPE ='png ' "+
+					"AND ([Assets].[dbo].[Hidden_Data].TYPE ='png ' "+
 					"OR [Assets].[dbo].[Hidden_Data].TYPE ='jpg ' "+
 					"OR [Assets].[dbo].[Hidden_Data].TYPE ='jpeg ' "+
-					"OR [Assets].[dbo].[Hidden_Data].TYPE ='gif ' "+
+					"OR [Assets].[dbo].[Hidden_Data].TYPE ='gif ' )"+
 					"group by [Assets].[dbo].[Hidden_Data].GUID,[Assets].[dbo].[Hidden_Data].URI,[Assets].[dbo].[Hidden_Data].date, "+
-					"[Assets].[dbo].[Hidden].name,[Assets].[dbo].[Hidden].detail "+
-					"order by [Assets].[dbo].[Hidden_Data].date desc";
+					"[Assets].[dbo].[Hidden].name,[Assets].[dbo].[Hidden].detail,[Assets].[dbo].[Hidden].hidden_level,[Assets].[dbo].[Hidden].progress "+
+					"order by [Assets].[dbo].[Hidden_Data].date desc ";
 		
 		List hidden_Data_Joins=this.getJdbcTemplate().query(sql,new hiddenQueryRowMapper());
 		
@@ -422,8 +424,10 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		
 		String filePath=pathRoot+AbstractFileUpload.filePath;
 		
+		List<String> GUIDs=new ArrayList<String>();
 		List<String> names=new ArrayList<String>();
 		List<String> details=new ArrayList<String>();
+		List<Double> progress=new ArrayList<Double>();
 		List<Date> dates=new ArrayList<Date>();
 		List<byte[]> fileBytes=new ArrayList<byte[]>();
 				
@@ -437,18 +441,22 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 			
 			byte[] fileByte=FileConvect.fileToByte(file);
 			
-			names.add(hidden_Data_Join.getNAME());
+			GUIDs.add(hidden_Data_Join.getGUID());
+			names.add(hidden_Data_Join.getName());
 			details.add(hidden_Data_Join.getDetail());
 			dates.add(hidden_Data_Join.getDate());
+			progress.add(hidden_Data_Join.getProgress());
 			fileBytes.add(fileByte);
 			
 		}
 		
 		Map<String, Object> map=new HashMap<>();
 		
+		map.put("GUIDs", GUIDs);
 		map.put("names", names);
 		map.put("details", details);
 		map.put("dates", dates);
+		map.put("progress", progress);
 		map.put("fileBytes", fileBytes);
 		
 		return map;
@@ -462,6 +470,8 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
         	hidden_Data_Join.setURI(rs.getString("URI"));
         	hidden_Data_Join.setName(rs.getString("name"));
         	hidden_Data_Join.setDetail(rs.getString("detail"));
+        	hidden_Data_Join.setHidden_level(rs.getInt("hidden_level"));
+        	hidden_Data_Join.setProgress(rs.getDouble("progress"));
         	hidden_Data_Join.setDate(rs.getDate("date"));
             return hidden_Data_Join;
         }
