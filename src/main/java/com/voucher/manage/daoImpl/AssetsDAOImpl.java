@@ -61,9 +61,22 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	@Override
 	public Integer updatePosition(Position position) {
 		// TODO Auto-generated method stub
-		return InsertExe.get(this.getJdbcTemplate(), position);
+		int i;
+		String[] where={"[Assets].[dbo].[Position].GUID=",position.getGUID()};
+		position.setWhere(where);
+		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), position).get("");
+		if(count==1){
+			i=UpdateExe.get(this.getJdbcTemplate(), position);
+		}else{
+			i=InsertExe.get(this.getJdbcTemplate(), position);
+		}
+		return i;
 	}
 
+	public Integer deletePosition(Position position){
+		return DeleteExe.get(this.getJdbcTemplate(), position);
+	}
+	
 	@Override
 	public Map findAllPosition() {
 		// TODO Auto-generated method stub
@@ -398,7 +411,8 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	@Override
 	public Map<String, Object> hiddenQuery(Integer hiddenLevel) {
 		// TODO Auto-generated method stub
-				
+		
+		/*
 		String sql="SELECT top 5 "+    
 					"[Assets].[dbo].[Hidden_Data].GUID, "+
 				    "[Assets].[dbo].[Hidden_Data].URI, "+
@@ -417,8 +431,15 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 					"group by [Assets].[dbo].[Hidden_Data].GUID,[Assets].[dbo].[Hidden_Data].URI,[Assets].[dbo].[Hidden_Data].date, "+
 					"[Assets].[dbo].[Hidden].name,[Assets].[dbo].[Hidden].detail,[Assets].[dbo].[Hidden].hidden_level,[Assets].[dbo].[Hidden].progress "+
 					"order by [Assets].[dbo].[Hidden_Data].date desc ";
+		*/
 		
-		List hidden_Data_Joins=this.getJdbcTemplate().query(sql,new hiddenQueryRowMapper());
+		String sql1="SELECT top 5 [Assets].[dbo].[Hidden_Data].GUID "+
+				 	"FROM [Assets].[dbo].[Hidden_Data] left join [Assets].[dbo].[Hidden] on [Assets].[dbo].[Hidden_Data].GUID=[Assets].[dbo].[Hidden].GUID "+
+				 	"where  [Assets].[dbo].[Hidden].hidden_level = "+hiddenLevel+" "+
+				 	"AND ([Assets].[dbo].[Hidden_Data].TYPE ='png ' OR [Assets].[dbo].[Hidden_Data].TYPE ='jpg ' OR [Assets].[dbo].[Hidden_Data].TYPE ='jpeg ' OR [Assets].[dbo].[Hidden_Data].TYPE ='gif ' ) "+
+				 	"group by [Assets].[dbo].[Hidden_Data].GUID ";
+		
+		List hidden_Data_Joins=this.getJdbcTemplate().query(sql1,new hiddenQueryRowMapper1());
 		
         String pathRoot = System.getProperty("user.home");
 		
@@ -433,21 +454,45 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 				
 		Iterator<Hidden_Data_Join> iterator=hidden_Data_Joins.iterator();
 		
-		while(iterator.hasNext()){
+		while(iterator.hasNext()){			
 			
-			Hidden_Data_Join hidden_Data_Join=iterator.next();
+			Hidden_Data_Join hidden_Data_Join1=iterator.next();
 			
-			File file=new File(filePath+"\\"+hidden_Data_Join.getURI());
+			String GUID=hidden_Data_Join1.getGUID();
+			
+			String sql2="SELECT top 1 "+    
+					"[Assets].[dbo].[Hidden_Data].GUID, "+
+				    "[Assets].[dbo].[Hidden_Data].URI, "+
+					"[Assets].[dbo].[Hidden_Data].date, "+
+				    "[Assets].[dbo].[Hidden].name, "+
+					"[Assets].[dbo].[Hidden].detail, "+
+				    "[Assets].[dbo].[Hidden].hidden_level, "+
+					"[Assets].[dbo].[Hidden].progress "+
+					"FROM "+
+					"[Assets].[dbo].[Hidden_Data] left join [Assets].[dbo].[Hidden] on [Assets].[dbo].[Hidden_Data].GUID=[Assets].[dbo].[Hidden].GUID "+  
+					"where [Assets].[dbo].[Hidden_Data].GUID='"+GUID+"'  "+
+					"AND ([Assets].[dbo].[Hidden_Data].TYPE ='png ' OR [Assets].[dbo].[Hidden_Data].TYPE ='jpg ' OR [Assets].[dbo].[Hidden_Data].TYPE ='jpeg ' OR [Assets].[dbo].[Hidden_Data].TYPE ='gif ' ) "+
+					"order by [Assets].[dbo].[Hidden_Data].date desc ";
+			
+			List hidden_Data_Joins2=this.getJdbcTemplate().query(sql2,new hiddenQueryRowMapper2());
+			
+			try{
+			Hidden_Data_Join hidden_Data_Join2=(Hidden_Data_Join) hidden_Data_Joins2.get(0);
+			
+			File file=new File(filePath+"\\"+hidden_Data_Join2.getURI());
 			
 			byte[] fileByte=FileConvect.fileToByte(file);
 			
-			GUIDs.add(hidden_Data_Join.getGUID());
-			names.add(hidden_Data_Join.getName());
-			details.add(hidden_Data_Join.getDetail());
-			dates.add(hidden_Data_Join.getDate());
-			progress.add(hidden_Data_Join.getProgress());
+			GUIDs.add(hidden_Data_Join2.getGUID());
+			names.add(hidden_Data_Join2.getName());
+			details.add(hidden_Data_Join2.getDetail());
+			dates.add(hidden_Data_Join2.getDate());
+			progress.add(hidden_Data_Join2.getProgress());
 			fileBytes.add(fileByte);
-			
+			}catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
 		}
 		
 		Map<String, Object> map=new HashMap<>();
@@ -458,11 +503,20 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		map.put("dates", dates);
 		map.put("progress", progress);
 		map.put("fileBytes", fileBytes);
-		
+		MyTestUtil.print(map);
 		return map;
 	}
 
-	class hiddenQueryRowMapper implements RowMapper<Hidden_Data_Join> {
+	class hiddenQueryRowMapper1 implements RowMapper<Hidden_Data_Join> {
+        //rs为返回结果集，以每行为单位封装着
+        public Hidden_Data_Join mapRow(ResultSet rs, int rowNum) throws SQLException {    
+            Hidden_Data_Join hidden_Data_Join=new Hidden_Data_Join();
+        	hidden_Data_Join.setGUID(rs.getString("GUID"));
+            return hidden_Data_Join;
+        }
+    }
+	
+	class hiddenQueryRowMapper2 implements RowMapper<Hidden_Data_Join> {
         //rs为返回结果集，以每行为单位封装着
         public Hidden_Data_Join mapRow(ResultSet rs, int rowNum) throws SQLException {    
             Hidden_Data_Join hidden_Data_Join=new Hidden_Data_Join();

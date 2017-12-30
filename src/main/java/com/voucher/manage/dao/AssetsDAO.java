@@ -16,6 +16,8 @@ public interface AssetsDAO {
 	
 	public Integer updatePosition(Position position);
 	
+	public Integer deletePosition(Position position);
+	
 	public Map findAllPosition();
 	
 	public Integer insertIntoHidden_Assets(Hidden_Assets hidden_Assets);

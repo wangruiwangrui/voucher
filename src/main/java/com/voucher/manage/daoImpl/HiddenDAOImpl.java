@@ -307,6 +307,8 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		// TODO Auto-generated method stub
         Hidden hidden=new Hidden();
 		
+        System.out.println("order="+order+"      sort="+sort);
+        
 		hidden.setLimit(limit);
 		hidden.setOffset(offset);
 		hidden.setSort(sort);
@@ -317,24 +319,18 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		
 		hidden_Level.setLimit(limit);
 		hidden_Level.setOffset(offset);
-		hidden_Level.setSort(sort);
-		hidden_Level.setOrder(order);
 		hidden_Level.setNotIn("GUID");
 		
 		Hidden_Type hidden_Type=new Hidden_Type();
 		
 		hidden_Type.setLimit(limit);
 		hidden_Type.setOffset(offset);
-		hidden_Type.setSort(sort);
-		hidden_Type.setOrder(order);
 		hidden_Type.setNotIn("GUID");
 		
 		Hidden_User hidden_User=new Hidden_User();
 		
 		hidden_User.setLimit(limit);
 		hidden_User.setOffset(offset);
-		hidden_User.setSort(sort);
-		hidden_User.setOrder(order);
 		hidden_User.setNotIn("GUID");
 		
 		if(!search.isEmpty()){
