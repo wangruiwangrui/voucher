@@ -254,9 +254,9 @@ public class AssetsImpl implements Assets{
 
 
 	@Override
-	public List<Hidden_User> selectAllHiddenUser() {
-		// TODO Auto-generated method stub
-		return hiddenDAO.selectAllHiddenUser();
+	public Map<String, Object> selectAllHiddenUser(Integer limit, Integer offset, String sort,
+			String order,Map<String, String> search){
+		 return hiddenDAO.selectAllHiddenUser(limit, offset, sort, order, search);
 	}
 
 
@@ -392,6 +392,27 @@ public class AssetsImpl implements Assets{
 	public Map<String, Object> hiddenQuery(Integer hiddenLevel) {
 		// TODO Auto-generated method stub
 		return assetsDAO.hiddenQuery(hiddenLevel);
+	}
+
+
+	@Override
+	public Integer updateHiddenLevel(Hidden_Level hidden_Level) {
+		// TODO Auto-generated method stub
+		return hiddenDAO.updateHiddenLevel(hidden_Level);
+	}
+
+
+	@Override
+	public Integer updateHiddenType(Hidden_Type hidden_Type) {
+		// TODO Auto-generated method stub
+		return hiddenDAO.updateHiddenType(hidden_Type);
+	}
+
+
+	@Override
+	public Integer updateHiddenUser(Hidden_User hidden_User) {
+		// TODO Auto-generated method stub
+		return hiddenDAO.updateHiddenUser(hidden_User);
 	}
 
 

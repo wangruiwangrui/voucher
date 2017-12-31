@@ -302,6 +302,13 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	}
 
 	@Override
+	public Integer updateHiddenLevel(Hidden_Level hidden_Level) {
+		// TODO Auto-generated method stub
+		return UpdateExe.get(this.getJdbcTemplate(), hidden_Level);
+	}
+
+
+	@Override
 	public Map<String, Object> selectAllHidden_Jion(Integer limit, Integer offset, String sort, String order,
 			Map<String, String> search) {
 		// TODO Auto-generated method stub
@@ -387,13 +394,45 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 
 
 	@Override
-	public List<Hidden_User> selectAllHiddenUser() {
+	public Integer updateHiddenType(Hidden_Type hidden_Type) {
+		// TODO Auto-generated method stub
+		return UpdateExe.get(this.getJdbcTemplate(), hidden_Type);
+	}
+
+
+	@Override
+	public Map<String, Object> selectAllHiddenUser(Integer limit, Integer offset, String sort,
+			String order,Map<String, String> search) {
 		// TODO Auto-generated method stub
 		Hidden_User hidden_User=new Hidden_User();
-		hidden_User.setOffset(0);
-		hidden_User.setLimit(1000);
+		hidden_User.setOffset(offset);
+		hidden_User.setLimit(limit);
 		hidden_User.setNotIn("id");
-		return SelectExe.get(this.getJdbcTemplate(), hidden_User);
+		
+		try{
+			if(!search.isEmpty()){
+				String[] where=TransMapToString.get(search);
+				hidden_User.setWhere(where);
+			}
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		Map<String, Object> map=new HashMap<>();
+		
+		List list=SelectExe.get(this.getJdbcTemplate(), hidden_User);
+		
+		MyTestUtil.print(list);
+		
+		map.put("rows", list);
+		
+		Map countMap=SelectExe.getCount(this.getJdbcTemplate(), hidden_User);
+		
+		map.put("total", countMap.get(""));
+		
+		return map;
+		
 	}
 
 
@@ -411,6 +450,12 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	}
 
 
+	@Override
+	public Integer updateHiddenUser(Hidden_User hidden_User) {
+		// TODO Auto-generated method stub
+		return UpdateExe.get(this.getJdbcTemplate(), hidden_User);
+	}
+	
 	@Override
 	public Map<String, Object> selectAllHiddenCheck(Integer limit, Integer offset, String sort,
 			String order,Map<String, String> search) {
