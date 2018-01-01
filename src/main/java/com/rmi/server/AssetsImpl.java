@@ -416,5 +416,19 @@ public class AssetsImpl implements Assets{
 	}
 
 
+	@Override
+	public Map<String, Object> selectHiddenUser(String campusAdmin) {
+		// TODO Auto-generated method stub
+		return hiddenDAO.selectHiddenUser(campusAdmin);
+	}
+
+
+	@Override
+	public Integer updateUserPassword(Hidden_User hidden_User,String OldPw) {
+		// TODO Auto-generated method stub
+		return hiddenDAO.updateUserPassword(hidden_User,OldPw);
+	}
+
+
 	
 }

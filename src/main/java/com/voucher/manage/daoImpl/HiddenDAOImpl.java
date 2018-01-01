@@ -401,6 +401,34 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 
 
 	@Override
+	public Map<String, Object> selectHiddenUser(String campusAdmin) {
+		// TODO Auto-generated method stub
+		Hidden_User hidden_User=new Hidden_User();
+		hidden_User.setOffset(0);
+		hidden_User.setLimit(10);
+		hidden_User.setNotIn("id");
+		
+		String[] where={"[Assets].[dbo].[Hidden_User].campusAdmin =",campusAdmin};
+		hidden_User.setWhere(where);
+		
+		List list=SelectExe.get(this.getJdbcTemplate(), hidden_User);
+		
+		Map map=new HashMap<>();
+		
+		try{
+		  Hidden_User hidden_User2=(Hidden_User) list.get(0);
+		  map.put("state", 1);
+		  map.put("row", hidden_User2);
+		  return map;
+		}catch (Exception e) {
+			// TODO: handle exception
+		  e.printStackTrace();	
+		  map.put("state", 0);
+		  return map;
+		}
+	}
+	
+	@Override
 	public Map<String, Object> selectAllHiddenUser(Integer limit, Integer offset, String sort,
 			String order,Map<String, String> search) {
 		// TODO Auto-generated method stub
@@ -411,7 +439,11 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		
 		try{
 			if(!search.isEmpty()){
+				search.put("[Assets].[dbo].[Hidden_User].purview !=", "0");
 				String[] where=TransMapToString.get(search);
+				hidden_User.setWhere(where);
+			}else{
+				String[] where={"[Assets].[dbo].[Hidden_User].purview !=", "0"};
 				hidden_User.setWhere(where);
 			}
 		}catch (Exception e) {
@@ -439,7 +471,30 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	@Override
 	public Integer insertHiddenUser(Hidden_User hidden_User) {
 		// TODO Auto-generated method stub
-		return InsertExe.get(this.getJdbcTemplate(), hidden_User);
+		
+		Hidden_User hidden_User2=new Hidden_User();
+		
+		String[] where={"[Assets].[dbo].[Hidden_User].campusAdmin=",hidden_User.getCampusAdmin()};
+		
+		hidden_User2.setWhere(where);
+		
+		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden_User2).get("");
+
+		Hidden_User hidden_User3=new Hidden_User();
+		
+		String[] where2={"[Assets].[dbo].[Hidden_User].id=",String.valueOf(hidden_User.getId())};
+		
+		hidden_User3.setWhere(where2);
+		
+		int count2=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden_User3).get("");
+		
+		if(count!=0){
+			return 2;
+		}else if(count2!=0){
+			return 3;
+		}else{
+		   return InsertExe.get(this.getJdbcTemplate(), hidden_User);
+		}
 	}
 
 
@@ -454,6 +509,33 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	public Integer updateHiddenUser(Hidden_User hidden_User) {
 		// TODO Auto-generated method stub
 		return UpdateExe.get(this.getJdbcTemplate(), hidden_User);
+	}
+	
+	@Override
+	public Integer updateUserPassword(Hidden_User hidden_User,String OldPw) {
+		// TODO Auto-generated method stub
+		hidden_User.setNotIn("id");
+		hidden_User.setLimit(10);
+		hidden_User.setOffset(0);
+		
+		String[] where={"[Assets].[dbo].[Hidden_User].campusAdmin=",hidden_User.getCampusAdmin()};
+		hidden_User.setWhere(where);
+		List list=SelectExe.get(this.getJdbcTemplate(), hidden_User);
+		
+		try{
+			Hidden_User hidden_User2=(Hidden_User) list.get(0);
+			if(!OldPw.equals(hidden_User2.getPassword())){
+				System.out.println("npw="+hidden_User.getPassword());
+				System.out.println("opw="+hidden_User2.getPassword());
+				return 3;
+			}else{
+				return UpdateExe.get(this.getJdbcTemplate(), hidden_User);
+			}
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return 2;
+		}
 	}
 	
 	@Override

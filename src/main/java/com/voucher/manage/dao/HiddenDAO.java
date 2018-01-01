@@ -53,6 +53,8 @@ public interface HiddenDAO {
 	public Map<String, Object> selectAllHidden_Jion(Integer limit, Integer offset, String sort,
 			String order,Map<String, String> search);
 	
+	public Map<String , Object> selectHiddenUser(String campusAdmin);
+	
 	public Map<String, Object> selectAllHiddenUser(Integer limit, Integer offset, String sort,
 			String order,Map<String, String> search);
 	
@@ -61,6 +63,8 @@ public interface HiddenDAO {
 	public Integer deleteHiddenUser(Hidden_User hidden_User);
 	
 	public Integer updateHiddenUser(Hidden_User hidden_User);
+	
+	public Integer updateUserPassword(Hidden_User hidden_User,String OldPw);
 	
 	public Map<String, Object> selectAllHiddenCheck(Integer limit, Integer offset, String sort,
 			String order,Map<String, String> search);

@@ -1,5 +1,7 @@
 package com.voucher.manage.daoModel.Assets;
 
+import java.util.Date;
+
 import java.io.Serializable;
 
 import com.voucher.manage.daoSQL.annotations.*;
@@ -27,8 +29,20 @@ public class Hidden_User implements Serializable{
     @SQLString(name="phone")
 	private String phone;
 
+    @SQLInteger(name="purview")
+	private Integer purview;
+
     @SQLString(name="business")
 	private String business;
+
+    @SQLDateTime(name="enter_time")
+	private Date enter_time;
+
+    @SQLDateTime(name="register_time")
+	private Date register_time;
+
+    @SQLDateTime(name="rework_time")
+	private Date rework_time;
 
 	public void setId(Integer id){
 		this.id = id;
@@ -78,12 +92,44 @@ public class Hidden_User implements Serializable{
 		return phone;
 	}
 
+	public void setPurview(Integer purview){
+		this.purview = purview;
+	}
+
+	public Integer getPurview(){
+		return purview;
+	}
+
 	public void setBusiness(String business){
 		this.business = business;
 	}
 
 	public String getBusiness(){
 		return business;
+	}
+
+	public void setEnter_time(Date enter_time){
+		this.enter_time = enter_time;
+	}
+
+	public Date getEnter_time(){
+		return enter_time;
+	}
+
+	public void setRegister_time(Date register_time){
+		this.register_time = register_time;
+	}
+
+	public Date getRegister_time(){
+		return register_time;
+	}
+
+	public void setRework_time(Date rework_time){
+		this.rework_time = rework_time;
+	}
+
+	public Date getRework_time(){
+		return rework_time;
 	}
 
 
