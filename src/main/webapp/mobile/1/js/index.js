@@ -76,11 +76,11 @@ $.get("/voucher/oauth/test.do", {
 		      	      */ 
 			    	 wx.ready(function () {
 			    		 document.querySelector('#hiddentrouble').onclick =function(){
-			    			 location.href="../../guidance/a.html";
+			    			 location.href="hidden/hiddenSearch.html";
 			    		 }
 			    		 
 			    		 document.querySelector('#report').onclick =function(){
-			    			 location.href="../../safety/a.html";
+			    			 location.href="safety/a.html";
 			    		 }
 			    		 
 			    		 document.querySelector('#userSetting').onclick =function(){
@@ -252,11 +252,11 @@ $.get("/voucher/oauth/test.do", {
  			    	 wx.ready(function () {
  			  
  			    		document.querySelector('#hiddentrouble').onclick =function(){
-			    			 location.href="../../guidance/a.html";
+			    			 location.href="hidden/hiddenSearch.html";
 			    		 }
  			    		 
  			    		document.querySelector('#report').onclick =function(){
-			    			 location.href="../../safety/a.html";
+			    			 location.href="safety/a.html";
 			    		 }
  			    		 
  			    		 
