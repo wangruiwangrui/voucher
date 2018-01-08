@@ -26,7 +26,7 @@ public abstract class AbstractFileUpload {
 	
 	HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
 	
-	public final static String filePath="\\Desktop\\bb\\photo";
+	public final static String filePath="\\Desktop\\pasoft\\photo";
 	
 	public AbstractFileUpload() {
 		// TODO Auto-generated constructor stub

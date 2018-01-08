@@ -97,7 +97,7 @@ $.get("/voucher/oauth/test.do", {
 			    			 wx.chooseImage({
 				        	      success: function (res) {
 				        	        images.localId = res.localIds;
-				        	        alert('已选择 ' + res.localIds.length + ' 张图片');
+				        	        console.log('已选择 ' + res.localIds.length + ' 张图片');
 				        	        
 				        	        var i = 0, length = images.localId.length;
 					        	    images.serverId = [];
@@ -107,7 +107,7 @@ $.get("/voucher/oauth/test.do", {
 					        	        isShowProgressTips: images.localId[i].toString(),
 					        	        success: function (res) {
 					        	          i++;
-					        	          alert('已上传：' + i + '/' + length);
+					        	          console.log('已上传：' + i + '/' + length);
 					        	        //返回图片的服务器端ID res.serverId,然后调用wxImgCallback函数进行下载图片操作
 			                                wxImgCallback(res.serverId);
 					        	       //   images.serverId.push(res.serverId);
@@ -116,7 +116,7 @@ $.get("/voucher/oauth/test.do", {
 					        	          }
 					        	        },
 					        	        fail: function (res) {
-					        	          alert(JSON.stringify(res));
+					        	        	console.log(res);
 					        	        }
 					        	      });
 					        	    }
@@ -274,7 +274,7 @@ $.get("/voucher/oauth/test.do", {
 			    			 wx.chooseImage({
 				        	      success: function (res) {
 				        	        images.localId = res.localIds;
-				        	        alert('已选择 ' + res.localIds.length + ' 张图片');
+				        	        console.log('已选择 ' + res.localIds.length + ' 张图片');
 				        	        
 				        	        var i = 0, length = images.localId.length;
 					        	    images.serverId = [];
@@ -284,7 +284,7 @@ $.get("/voucher/oauth/test.do", {
 					        	        isShowProgressTips: images.localId[i].toString(),
 					        	        success: function (res) {
 					        	          i++;
-					        	          alert('已上传：' + i + '/' + length);
+					        	          console.log('已上传：' + i + '/' + length);
 					        	        //返回图片的服务器端ID res.serverId,然后调用wxImgCallback函数进行下载图片操作
 			                                wxImgCallback(res.serverId);
 					        	       //   images.serverId.push(res.serverId);
@@ -293,7 +293,7 @@ $.get("/voucher/oauth/test.do", {
 					        	          }
 					        	        },
 					        	        fail: function (res) {
-					        	          alert(JSON.stringify(res));
+					        	        	console.log(res);
 					        	        }
 					        	      });
 					        	    }
@@ -309,9 +309,9 @@ $.get("/voucher/oauth/test.do", {
 			        		    	campusId:campusId,
 			        		    	serverId:serverId
 			        		    }, function(data){
-			        		    	alert(data);
+			        		    	console.log(data);
 			        		        if (data.code == 0) {
-			        		            alert(data.msg);
+			        		        	console.log(data.msg);
 			        		        } else if (data.code == 1) {
 			        		            //存储到服务器成功后的处理
 			        		            //
@@ -336,7 +336,7 @@ $.get("/voucher/oauth/test.do", {
                                location.href="map.html?latitude="+latitude+"&longitude="+longitude;
                            },
                            cancel : function(res) {
-                               alert('用户拒绝授权获取地理位置');
+                        	   console.log('用户拒绝授权获取地理位置');
                            }
                        });
 			    	 } 

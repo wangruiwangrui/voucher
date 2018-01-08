@@ -206,7 +206,7 @@ public class UserRegisterController {
 	   try {		
                 Users users=new Users();
                 users.setOpenId(openId);
-                if(phone!=null)
+                if(!phone.equals(""))
                 users.setPhone(phone);
                 if(!name.equals(""))
                 users.setName(name);
