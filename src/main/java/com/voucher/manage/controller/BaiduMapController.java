@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.voucher.manage.dao.AssetsDAO;
+import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
 
@@ -36,10 +37,10 @@ public class BaiduMapController {
 
 	ApplicationContext applicationContext=new Connect().get();
 	
+	AssetsDAO assetsDAO=(AssetsDAO) applicationContext.getBean("assetsdao");
+	
 	@RequestMapping("/get")
-	public @ResponseBody List test() {
-		
-		AssetsDAO assetsDAO=(AssetsDAO) applicationContext.getBean("assetsdao");
+	public @ResponseBody List test() {		
 		
 		Map map=assetsDAO.findAllPosition();
 		
@@ -48,6 +49,29 @@ public class BaiduMapController {
 		List list=(List) map.get("row");
 		
 		return list;
+	}
+	
+	@RequestMapping("/getPosition")
+	public @ResponseBody JSONObject getPosition() {
+		JSONObject jsonObject=new JSONObject();
+		Position position=new Position();
+		position.setLimit(10);
+		position.setOffset(0);		
+		position.setSort("date");
+		position.setOrder("desc");
+		position.setNotIn("id");
+        		
+		try{
+			position=(Position) assetsDAO.findPosition(position).get(0);
+			jsonObject.put("lat", position.getLat());
+			jsonObject.put("lng", position.getLng());
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		return jsonObject;
+		
 	}
 	
 	@RequestMapping("/location")
@@ -76,6 +100,18 @@ public class BaiduMapController {
   		
 		return jsonObject;
 		
+	}
+	
+	@RequestMapping("/getByDistance")
+	public @ResponseBody List getByDistance(){
+		
+		Map map=assetsDAO.findHiddenByDistance(0.0, 0.0);
+		
+		MyTestUtil.print(map);
+		
+		List list=(List) map.get("row");
+		
+		return list;
 	}
 	
 }

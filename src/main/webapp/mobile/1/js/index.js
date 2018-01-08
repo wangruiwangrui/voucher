@@ -76,7 +76,23 @@ $.get("/voucher/oauth/test.do", {
 		      	      */ 
 			    	 wx.ready(function () {
 			    		 document.querySelector('#hiddentrouble').onclick =function(){
-			    			 location.href="hidden/hiddenSearch.html";
+			    			 wx.getLocation({
+			    	               success : function(res) {
+			    	                    // alert(JSON.stringify(res));
+			    	                    var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+			    	                    // $("#latitude").val(latitude);
+			    	                    var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+			    	                    // $("#longitude").val(longitude);
+			    	                    var speed = res.speed; // 速度，以米/每秒计
+			    	                    // $("#speed").val(speed);
+			    	                    var accuracy = res.accuracy; // 位置精度
+			    	                    // $("#accuracy").val(accuracy);
+			    	                    location.href="hidden/hiddenSearch.html?latitude="+latitude+"&longitude="+longitude;
+			    	                },
+			    	                cancel : function(res) {
+			    	                    alert('用户拒绝授权获取地理位置');
+			    	                }
+			    	            });
 			    		 }
 			    		 
 			    		 document.querySelector('#report').onclick =function(){
@@ -252,7 +268,24 @@ $.get("/voucher/oauth/test.do", {
  			    	 wx.ready(function () {
  			  
  			    		document.querySelector('#hiddentrouble').onclick =function(){
-			    			 location.href="hidden/hiddenSearch.html";
+ 			    			 // 2. 分享接口
+		    	            wx.getLocation({
+		    	               success : function(res) {
+		    	                    // alert(JSON.stringify(res));
+		    	                    var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+		    	                    // $("#latitude").val(latitude);
+		    	                    var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+		    	                    // $("#longitude").val(longitude);
+		    	                    var speed = res.speed; // 速度，以米/每秒计
+		    	                    // $("#speed").val(speed);
+		    	                    var accuracy = res.accuracy; // 位置精度
+		    	                    // $("#accuracy").val(accuracy);
+		    	                    location.href="hidden/hiddenSearch.html?latitude="+latitude+"&longitude="+longitude;
+		    	                },
+		    	                cancel : function(res) {
+		    	                    alert('用户拒绝授权获取地理位置');
+		    	                }
+		    	            });
 			    		 }
  			    		 
  			    		document.querySelector('#report').onclick =function(){

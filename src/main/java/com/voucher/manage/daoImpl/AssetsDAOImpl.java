@@ -21,15 +21,20 @@ import com.voucher.manage.daoModel.Users;
 import com.voucher.manage.daoModel.Assets.Hidden;
 import com.voucher.manage.daoModel.Assets.Hidden_Assets;
 import com.voucher.manage.daoModel.Assets.Hidden_Data;
+import com.voucher.manage.daoModel.Assets.Hidden_Level;
+import com.voucher.manage.daoModel.Assets.Hidden_Type;
+import com.voucher.manage.daoModel.Assets.Hidden_User;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Assets_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Data_Join;
+import com.voucher.manage.daoModelJoin.Assets.Position_Hidden_Join;
 import com.voucher.manage.daoRowMapper.RowMappersJoin;
 import com.voucher.manage.daoSQL.DeleteExe;
 import com.voucher.manage.daoSQL.InsertExe;
 import com.voucher.manage.daoSQL.SelectExe;
 import com.voucher.manage.daoSQL.SelectJoinExe;
+import com.voucher.manage.daoSQL.SelectSqlJoinExe;
 import com.voucher.manage.daoSQL.UpdateExe;
 import com.voucher.manage.file.AbstractFileUpload;
 import com.voucher.manage.tools.FileConvect;
@@ -80,12 +85,26 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	@Override
 	public Map findAllPosition() {
 		// TODO Auto-generated method stub
-		Position position=new Position();
+		int limit=1000;
+		int offset=0;
 		
-		position.setOffset(0);
-		position.setLimit(100);
+		Position_Hidden_Join position_Hidden_Join=new Position_Hidden_Join();
 		
-		List list=SelectExe.get(this.getJdbcTemplate(), position);
+		Position position=new Position();		
+		position.setOffset(offset);
+		position.setLimit(limit);
+		position.setNotIn("id");
+		
+		Hidden hidden=new Hidden();
+		hidden.setOffset(offset);
+		hidden.setLimit(limit);
+		hidden.setNotIn("id");
+		
+		Object[] objects={position,hidden};
+		
+		String[] join={"GUID","GUID"};
+		
+		List list=SelectJoinExe.get(this.getJdbcTemplate(), objects,position_Hidden_Join,join);
 		
 		Map map=new HashMap<>();
 		
@@ -94,6 +113,69 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		return map;
 	}
 
+	
+	@Override
+	public List findPosition(Position position) {
+		// TODO Auto-generated method stub
+		return SelectExe.get(this.getJdbcTemplate(), position);
+	}
+	
+	@Override
+	public Map findHiddenByDistance(Double lng, Double lat) {
+		// TODO Auto-generated method stub
+		
+		String sql="SELECT TOP 5"+
+		            "[Assets].[dbo].[Position].GUID,"+
+					"[Assets].[dbo].[Position].province,"+
+					"[Assets].[dbo].[Position].city,"+
+					"[Assets].[dbo].[Position].district,"+
+					"[Assets].[dbo].[Position].street,"+
+					"[Assets].[dbo].[Position].street_number,"+
+					"[Assets].[dbo].[Position].lng,"+
+					"[Assets].[dbo].[Position].lat,"+
+					"[Assets].[dbo].[Position].date,"+
+					"[Assets].[dbo].[Hidden].name,"+
+					"[Assets].[dbo].[Hidden].hidden_level,"+
+					"[Assets].[dbo].[Hidden].detail,"+
+					"[Assets].[dbo].[Hidden].progress,"+
+					"[Assets].[dbo].[Hidden].happen_time,"+
+					"[Assets].[dbo].[Hidden].principal,"+
+					"[Assets].[dbo].[Hidden].type,"+
+					"[Assets].[dbo].[Hidden].state,"+
+					"[Assets].[dbo].[Hidden].remark,"+
+					"[Assets].[dbo].[Hidden].update_time,"+
+					"[Assets].[dbo].[Hidden].date "+
+					"FROM [Assets].[dbo].[Position] left join [Assets].[dbo].[Hidden] "+
+					"on [Assets].[dbo].[Position].GUID = [Assets].[dbo].[Hidden].GUID "+
+					"WHERE "+  
+					"[Assets].[dbo].[Position].id not in( select top 6 [Assets].[dbo].[Position].id from [Assets].[dbo].[Position] left join [Assets].[dbo].[Hidden] "+
+					"on [Assets].[dbo].[Position].GUID = [Assets].[dbo].[Hidden].GUID "+ 
+					"ORDER BY   SQRT((105.4955-lng)*(105.4955-lng)+(28.91866-lat)*(28.91866-lat))) "+
+					"AND "+
+					"geography::STGeomFromText('POINT(' + cast([lng] as varchar(20)) + ' '"+  
+					"+ cast([lat] as varchar(20)) +')', 4326).STDistance(  "+
+					"geography::STGeomFromText('POINT(105.4955 28.91866)', 4326))<10000 "+
+					"ORDER BY   "+
+					"SQRT((105.4955-lng)*(105.4955-lng)+(28.91866-lat)*(28.91866-lat))  ";
+		
+		Position_Hidden_Join position_Hidden_Join=new Position_Hidden_Join();
+		
+		Position position=new Position();		
+		
+		Hidden hidden=new Hidden();
+		
+		Object[] objects={position,hidden};
+		
+		List list=SelectSqlJoinExe.get(this.getJdbcTemplate(), sql, objects,position_Hidden_Join);
+		
+		Map map=new HashMap<>();
+		
+		map.put("row", list);
+		
+		return map;
+	}
+	
+	
 	@Override
 	public Integer insertIntoHidden_Assets(Hidden_Assets hidden_Assets) {
 		// TODO Auto-generated method stub
@@ -530,5 +612,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
             return hidden_Data_Join;
         }
     }
+
+	
 	
 }

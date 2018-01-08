@@ -20,6 +20,10 @@ public interface AssetsDAO {
 	
 	public Map findAllPosition();
 	
+	public List findPosition(Position position);
+	
+	public Map findHiddenByDistance(Double lng , Double lat);
+	
 	public Integer insertIntoHidden_Assets(Hidden_Assets hidden_Assets);
 	
 	public Integer deleteHidden_Assets(Hidden_Assets hidden_Assets);

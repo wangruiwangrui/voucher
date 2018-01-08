@@ -72,8 +72,19 @@ public class Hidden_Join implements Serializable{
     @SQLString(name="principal_name")
    	private String principal_name;
 
-       @SQLString(name="business")
+    @SQLString(name="business")
    	private String business;
+    
+    /*
+     * Position
+     */   
+    @SQLDouble(name="lng")
+	private Double lng;
+
+    @SQLDouble(name="lat")
+	private Double lat;
+    
+    
     
     public void setId(Integer id){
 		this.id = id;
@@ -212,5 +223,22 @@ public class Hidden_Join implements Serializable{
 	public String getBusiness(){
 		return business;
 	}
+	
+	public void setLng(Double lng){
+		this.lng = lng;
+	}
+
+	public Double getLng(){
+		return lng;
+	}
+
+	public void setLat(Double lat){
+		this.lat = lat;
+	}
+
+	public Double getLat(){
+		return lat;
+	}
+	
 	
 }

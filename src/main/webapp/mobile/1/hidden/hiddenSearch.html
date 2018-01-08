@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="../css/weui.css"/>
     <link rel="stylesheet" href="../css/example.css"/>
     <link rel="stylesheet" href="../css/jquery-weui.css">
+    <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=pQFgFpS0VnMXwCRN6cTc1jDOcBVi3XoD"></script>
 </head>
 <body>
 
@@ -46,14 +47,24 @@
 		<div id="gotop">
 		<div class="arrow"></div>
 		<div class="stick"></div>
-         </div> 
-          <div class="weui-cells__title" >已无更多数据</div>
+        </div> 
+        <div class="weui-cells__title" >已无更多数据</div>
           
         <!--<input type="file" style="/* visibility: hidden */" capture="camera" accept="image/*,video/*" name="" value="" >-->
 </body>
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
 <script src="../../../js/jquery-weui.js"></script>
 <script>
+  function getQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]); return null;
+   }
+
+  var longitude=getQueryString("longitude");
+  var latitude=getQueryString("latitude");
+  var map = new BMap.Map("allmap");
+  
     var limit = 5;
     var offset = 0;
     var search = "";
@@ -133,9 +144,15 @@
                     	   if(imgContent!=null){
                     		  img="data:image/jpg;base64,"+imgContent;
                     	   }
-                    	   console.log(img);
+                    	   
                     	   var time="时间:"+actionTime(obj.date);
-                    	   var li_1=addDiv(img,obj.name,obj.detail,time,obj.level_text);
+                    	   var distance=null;
+                    	   console.log(obj.name+"   "+obj.detail+"  "+obj.lng+"   "+obj.lat);
+                    	   if(obj.lng!=""&&obj.lat!=""){
+                    	   	  distance=getDistance(obj.lng,obj.lat);
+                    	   	console.log(obj.name+"   "+obj.detail+"  "+obj.lng+"   "+obj.lat);
+                    	   }
+                    	   var li_1=addDiv(img,obj.name,obj.detail,time,distance);
                            li_1.setAttribute("guid",guid);
                     	   li_1.setAttribute("onclick","clickEvent(this);");
                     	   $("#ul").append(li_1);
@@ -178,11 +195,11 @@
               div_2_1_2.setAttribute("class","right_text");
                addSpan(div_2_1_2,content);
               var div_2_1_3=document.createElement("div");
-               addSpan(div_2_1_3,interval);
+               addSpan(div_2_1_3,time);
                div_2_1_3.setAttribute("class","weui-cells__title");
                div_2_1_3.setAttribute("style","margin:2px 0px 2px 0px");
               var div_2_1_4=document.createElement("div");
-               addSpan(div_2_1_4,time);
+               addSpan(div_2_1_4,interval);
                div_2_1_4.setAttribute("class","weui-cells__title");
                div_2_1_4.setAttribute("style","margin:2px 0px 2px 0px");
                div_2_1.appendChild(div_2_1_1);
@@ -238,11 +255,17 @@
 
         	    });
 
+        	    
+        	    function getDistance(lng,lat){
+        	    	var pointA = new BMap.Point(longitude,latitude);  // 创建点坐标A--大渡口区
+        	    	var pointB = new BMap.Point(lng,lat);  // 创建点坐标B--江北区
+        	    	return map.getDistance(pointA,pointB).toFixed(2)/1000+' 米。';  //获取两点距离,保留小数点后两位
+        	    }
+        	    
         	    $("#gotop").on("click",function(){ //当点击标签的时候,使用animate在200毫秒的时间内,滚到顶部
         	        $("html,body").animate({scrollTop:"0px"},200);
 
         	    }); 
-
 
 
           

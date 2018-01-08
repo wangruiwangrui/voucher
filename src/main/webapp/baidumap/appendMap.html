@@ -31,17 +31,36 @@
     map.addControl(top_left_control);        
 	map.addControl(top_left_navigation); 
     
+	var xhm=new XMLHttpRequest();
+    xhm.open("GET","../baiduMap/getPosition.do",false);
+    xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    xhm.send();
+    var json=JSON.parse(xhm.responseText);
+    var point = new BMap.Point(json.lng, json.lat);
+    map.centerAndZoom(point, 15);
+	
     var xhm=new XMLHttpRequest();
     xhm.open("GET","../baiduMap/location.do",false);
     xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
     xhm.send();
     var ticket=JSON.parse(xhm.responseText);
     var point = new BMap.Point(ticket.content.point.x, ticket.content.point.y);
-    map.centerAndZoom(point, 15);
-    
+    var str = "我的位置";
+	var opts = {
+			   position : point,    // 指定文本标注所在的地理位置
+			   offset   : new BMap.Size(-getByteLen(str)*3, 5)    //设置文本偏移量
+			}	
+	var label = new BMap.Label(str, opts);  // 创建文本标注对象
+	label.setStyle({
+					 fontSize : "12px",
+					 height : "20px",
+					 lineHeight : "20px",
+					 fontFamily:"微软雅黑"
+				  });
+    map.addOverlay(label);   
     map.enableScrollWheelZoom(true);
+   
     var geoc = new BMap.Geocoder();  
-    
     map.addEventListener("click", function(e){    
     	 var pt = e.point;
          geoc.getLocation(pt, function(rs){
@@ -59,5 +78,55 @@
          });        
     }
     );
-       
+    
+    
+    var xhm=new XMLHttpRequest();
+    xhm.open("GET","../baiduMap/get.do",false);
+    xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    xhm.send();
+    var ticket=JSON.parse(xhm.responseText);
+   // console.log(ticket);
+    var json_data = new Array();
+    
+    for(var i=0;i<ticket.length;i++){
+    	json_data[i]=[ticket[i].lng,ticket[i].lat,
+    	              ticket[i].name];
+    }
+    
+	var pointArray = new Array();
+	for(var i=0;i<json_data.length;i++){
+		var point=new BMap.Point(json_data[i][0], json_data[i][1]);
+		var marker = new BMap.Marker(point); // 创建点
+		map.addOverlay(marker);    //增加点
+		var str = "隐患 :"+json_data[i][2];
+		var opts = {
+				   position : point,    // 指定文本标注所在的地理位置
+				   offset   : new BMap.Size(-getByteLen(str)*3, 5)    //设置文本偏移量
+				}	
+		console.log(getByteLen(str));
+		var label = new BMap.Label(str, opts);  // 创建文本标注对象
+		label.setStyle({
+						 color : "red",
+						 fontSize : "12px",
+						 height : "20px",
+						 lineHeight : "20px",
+						 fontFamily:"微软雅黑"
+					  });
+	    map.addOverlay(label);   
+	}
+	//让所有点在视野范围内
+	map.setViewport(pointArray);
+    
+	
+	function getByteLen(val) {    //传入一个字符串
+        var len = 0;
+        for (var i = 0; i < val.length; i++) {
+            if (val[i].match(/[^\x00-\xff]/ig) != null) //全角 
+                len += 2; //如果是全角，占用两个字节  如果mysql中某字段是text, 如果设置编码为utf-8,那么一个中文是占3个字节, gbk是两个字节
+            else
+                len += 1; //半角占用一个字节
+        }
+        return len;
+     }       
+	
 </script>
