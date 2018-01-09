@@ -38,6 +38,8 @@
     var ticket=JSON.parse(xhm.responseText);
     var point = new BMap.Point(ticket.content.point.x, ticket.content.point.y);
     map.centerAndZoom(point, 15);
+    var marker = new BMap.Marker(point); // 创建点
+	map.addOverlay(marker);    //增加点
 	var str = "我的位置";
 	var opts = {
 			   position : point,    // 指定文本标注所在的地理位置

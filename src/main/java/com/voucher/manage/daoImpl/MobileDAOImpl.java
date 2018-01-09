@@ -10,6 +10,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
@@ -18,19 +20,21 @@ import com.voucher.manage.daoModelJoin.Assets.Hidden_Data_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.file.AbstractFileUpload;
 import com.voucher.manage.tools.Base64Test;
+import com.voucher.manage.tools.CopyFile;
 import com.voucher.manage.tools.MyTestUtil;
 
 public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 
 	@Override
-	public Map<String, Object> hiddenImageQuery(List guidLits) {
+	public Map<String, Object> hiddenImageQuery(HttpServletRequest request,List guidLits) {
 		// TODO Auto-generated method stub
-
 	
 		String pathRoot = System.getProperty("user.home");
 	
 		String filePath=pathRoot+AbstractFileUpload.filePath;
-	
+        
+		String imgPath=request.getSession().getServletContext().getRealPath(AbstractFileUpload.filePath);
+		
 		//List<byte[]> fileBytes=new ArrayList<byte[]>();
 		
 		Map fileBytes=new HashMap<>();
@@ -58,15 +62,14 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 		
 			try{
 				Hidden_Data_Join hidden_Data_Join=(Hidden_Data_Join) hidden_Data_Joins.get(0);
-		   /*
-				File file=new File(filePath+"\\"+hidden_Data_Join.getURI());
-				byte[] fileByte=FileConvect.fileToByte(file);
-				GUIDs.add(hidden_Data_Join.getGUID());
-			*/	
 							
-				String fileByte=Base64Test.getImageStr(filePath+"\\"+hidden_Data_Join.getURI());
+				//String fileByte=Base64Test.getImageStr(filePath+"\\"+hidden_Data_Join.getURI());
 				
-				fileBytes.put(GUID, fileByte);
+				String oldFile=filePath+"\\"+hidden_Data_Join.getURI();
+				
+				CopyFile.set(imgPath, oldFile, hidden_Data_Join.getURI());
+				
+				fileBytes.put(GUID, AbstractFileUpload.filePath+"\\"+hidden_Data_Join.getURI());
 		
 			}catch (Exception e) {
 			// TODO: handle exception

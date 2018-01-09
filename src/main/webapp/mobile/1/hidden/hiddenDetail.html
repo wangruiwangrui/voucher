@@ -14,96 +14,221 @@
 <style type="text/css">
     body, html,#allmap {width: 100%;height: 70%;margin:0;font-family:"微软雅黑";}
 </style>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=cR98TwX2FnKTpANIOYhMYMot9a4ioxjc"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=cR98TwX2FnKTpANIOYhMYMot9a4ioxjc"></script>
 </head>
 
 <body>
-    <form action="" novalidate>
+  <form action="" novalidate>
     <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">隐患地点</label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" type="number" pattern="[0-9]*" placeholder="江阳南路23号附1号"/>
+                <div class="weui-cell__hd"><label class="weui-label">隐患名称</label></div>
+                <div id="name" class="weui-cell__bd">
                 </div>
             </div>
     </div>
     <div class="weui-cells weui-cells_form">
         <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">危房等级</label></div>
-                <div class="weui-cell__bd">
-                        <select class="weui-select" name="select1">
-                          <option value="1">A级</option>
-                          <option value="2">B级</option>
-                          <option value="3">C级</option>
-                          <option value="4">D级</option>
-                        </select>
+                <div class="weui-cell__hd"><label class="weui-label">隐患等级</label></div>
+                <div id="level" class="weui-cell__bd">
                 </div>
-                <div class="weui-cell__hd"><label class="weui-label">整治状态</label></div>
-                <div class="weui-cell__bd">
-                        <select class="weui-select" name="select1">
-                          <option value="1">整改中</option>
-                          <option value="2">未整改</option>
-                        </select>
-                </div>
-            <div class="weui-cell weui-cell_warn">
-                    <i class="weui-icon-warn"></i>
-            </div>
+               
         </div>
     </div>
+    
+    
+     <div class="weui-cells weui-cells_form">
+      <div class="weui-cell">
+             <div class="weui-cell__hd"><label class="weui-label">整改状态</label></div>
+                <div id="progress" class="weui-cell__bd">
+                </div>
+            <div id="progress_img" class="weui-cell weui-cell_warn">                  
+            </div>
+         </div>
+    </div>
+    
     <div class="weui-cells weui-cells_form">
         <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">管理单位</label></div>
-                <div class="weui-cell__bd">
-                        <select class="weui-select" name="select1">
-                          <option value="1">泸州公房公司</option>
-                        </select>
+                <div class="weui-cell__hd"><label class="weui-label">录入时间</label></div>
+                <div id="insertTime" class="weui-cell__bd">
                 </div>
         </div>
     </div>
-    <div class="weui-cells weui-cells_form">
-            <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">房屋结构</label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" type="number" pattern="[0-9]*" placeholder="砖木"/>
-                </div>
-                <div class="weui-cell__hd"><label class="weui-label">面积</label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" type="number" pattern="[0-9]*" placeholder="201.2"/>
-                </div>
-            </div>
-    </div>
+   
      <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">状态</label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" type="number" pattern="[0-9]*" placeholder="空置"/>
+                <div class="weui-cell__hd"><label class="weui-label">备注</label></div>
+                <div id="remark" class="weui-cell__bd">
                 </div>
             </div>
     </div>
     
-    <div class="weui-cells__title">简要说明</div>
+    <div class="weui-cells__title">隐患详情</div>
         <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
-                <div class="weui-cell__bd">
-                    <textarea class="weui-textarea" placeholder="请输入文本" rows="3"></textarea>
-                    <div class="weui-textarea-counter"><span>0</span>/200</div>
+                <div id="detail" class="weui-cell__bd">
                 </div>
             </div>
         </div>
-</form>
-    <div id="allmap"></div>
-    <img src="./images/pic_article.png" alt="">
-    <img src="./images/pic_article.png" alt="">
-    <a href="javascript:;" class="weui-btn weui-btn_plain-default weui-btn_plain-disabled">编辑</a>
-    <a href="javascript:;" class="weui-btn weui-btn_plain-primary">保存</a>
+  
+  </form>
+  
+    <div id="allmap"></div>   
+        
+    <div id="img"></div>
+        
 </body>
 </html>
 <script type="text/javascript">
+  function getQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]); return null;
+   }
+
+  var guid=getQueryString("guid");
 
     // 百度地图API功能
     var map = new BMap.Map("allmap");    // 创建Map实例
-    map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);  // 初始化地图,设置中心点坐标和地图级别
-   // map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
-    map.setCurrentCity("四川");          // 设置地图显示的城市 此项是必须设置的
-   // map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+
+	$.ajax({
+        type: "POST",
+        url: "/voucher/mobile/hidden/selectHiddenByGuid.do",
+        data: { "guid":guid},
+        dataType: "json",
+        error: function (request){
+     	   console.log(request);
+        },
+        success: function (text) {              	   
+     	   var obj=text.hidden;
+     	   var imgs=text.fileBytes;
+  
+             	   var guid=obj.guid;
+  
+             	   var distance=null;
+             	   console.log(obj.name+"   "+obj.detail+"  "+obj.lng+"   "+obj.lat);
+             	   if(obj.lng!=""&&obj.lat!=""){
+             	   	  distance=getDistance(obj.lng,obj.lat);
+             	   	var point = new BMap.Point(obj.lng,obj.lat);
+             	    map.centerAndZoom(point, 12);
+             	    var marker = new BMap.Marker(point); // 创建点
+             		map.addOverlay(marker);    //增加点
+             	   }
+             	   
+             	  var name=document.createElement("span");
+                  name.innerHTML=obj.name;
+                  $("#name").append(name);
+                  
+                  var level=document.createElement("span");
+                  level.innerHTML=obj.level_text;
+                  $("#level").append(level);
+                  
+                  var progre=obj.progress;
+                  var type;
+                  var progress_img=document.createElement("i");
+                  
+                  if(progre==0){
+                	  type="未整改";
+                	  progress_img.setAttribute("class","weui-icon-warn");
+                  }else if(progre>0&&progre<1){
+                	  type="整改中";
+                	  progress_img.setAttribute("class","weui-icon-info-circle");  
+                  }else if(progre==1){
+                	  type="已整改";
+                	  progress_img.setAttribute("class","weui-icon-success");
+                  }
+                  $("#progress_img").append(progress_img);
+                  var progress=document.createElement("span");
+                  progress.innerHTML=type;
+                  $("#progress").append(progress);
+
+                  
+                  var time=actionTime(obj.date);
+                  var insertTime=document.createElement("span");
+                  insertTime.innerHTML=time;
+                  $("#insertTime").append(insertTime);
+                  
+                  var remark=document.createElement("span");
+                  remark.innerHTML=obj.remark;
+                  $("#remark").append(remark);
+                  
+                  var detail=document.createElement("textarea");
+                  detail.setAttribute("class","weui-textarea");
+                  detail.innerHTML=obj.detail;
+                  $("#detail").append(detail);
+                  
+                  console.log(imgs);
+            	   if(imgs!=null){
+            		   var i = 0;console.log(imgs[guid].length);
+  
+                    	   
+                    	   src="/voucher/"+imgs[guid];
+                    	   var img=document.createElement("img");
+                            img.setAttribute("src",src);
+                            img.setAttribute("class","img");
+                            
+                    	   $("#img").append(img);
+                       
+            		   
+            	   }
+        }
+    });
+    
+    
+	
+	
+	function actionTime(value){
+  	    var date = new Date(value); 
+  	    Y = date.getFullYear() + '-';
+  	    M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+  	    D = date.getDate() + ' ';
+  	    h = date.getHours() + ':';
+  	    m = date.getMinutes() + ':';
+  	    s = date.getSeconds(); 
+  		return Y+M+D+h+m+s;
+  	}
+	
+	
+	
+    var xhm=new XMLHttpRequest();
+    xhm.open("GET","../../../baiduMap/location.do",false);
+    xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    xhm.send();
+    var ticket=JSON.parse(xhm.responseText);
+    var longitude=ticket.content.point.x;
+    var latitude=ticket.content.point.y;
+    var point = new BMap.Point(longitude, latitude);
+
+	var str = "我的位置";
+	var opts = {
+			   position : point,    // 指定文本标注所在的地理位置
+			   offset   : new BMap.Size(-getByteLen(str)*3, 5)    //设置文本偏移量
+			}	
+	var label = new BMap.Label(str, opts);  // 创建文本标注对象
+	label.setStyle({
+					 fontSize : "12px",
+					 height : "20px",
+					 lineHeight : "20px",
+					 fontFamily:"微软雅黑"
+				  });
+    map.addOverlay(label);   
+    
+    
+    function getByteLen(val) {    //传入一个字符串
+        var len = 0;
+        for (var i = 0; i < val.length; i++) {
+            if (val[i].match(/[^\x00-\xff]/ig) != null) //全角 
+                len += 2; //如果是全角，占用两个字节  如果mysql中某字段是text, 如果设置编码为utf-8,那么一个中文是占3个字节, gbk是两个字节
+            else
+                len += 1; //半角占用一个字节
+        }
+        return len;
+     }  
+    
+    function getDistance(lng,lat){
+    	var pointA = new BMap.Point(longitude,latitude);  // 创建点坐标A--大渡口区
+    	var pointB = new BMap.Point(lng,lat);  // 创建点坐标B--江北区
+    	var d=map.getDistance(pointA,pointB)/1000;
+    	return d.toFixed(2)+' KM';  //获取两点距离,保留小数点后两位
+    }
+    
 </script>
