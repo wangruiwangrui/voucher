@@ -65,11 +65,11 @@ public class HiddenController {
 		
 		List list=(List) map.get("rows");
 		
-		Map fileBytes=mobileDao.hiddenImageQuery(request,list);
-		
 		Map result=new HashMap<>();
 		
 		Hidden_Join hidden_Join=(Hidden_Join) list.get(0);
+		
+		List fileBytes=mobileDao.allHiddenImageByGUID(request, hidden_Join);
 		
 		result.put("hidden", hidden_Join);
 		result.put("fileBytes", fileBytes);

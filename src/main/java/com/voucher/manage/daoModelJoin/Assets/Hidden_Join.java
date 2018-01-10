@@ -18,6 +18,9 @@ public class Hidden_Join implements Serializable{
     @SQLString(name="GUID")
 	private String GUID;
 
+    @SQLInteger(name="exist")
+	private Integer exist;
+    
     @SQLString(name="name")
 	private String name;
 
@@ -51,6 +54,11 @@ public class Hidden_Join implements Serializable{
     @SQLDateTime(name="date")
 	private Date date;
     
+    @SQLString(name="campusAdmin")
+	private String campusAdmin;
+
+    @SQLString(name="terminal")
+	private String terminal;
     
     /*
      * Hidden_Level
@@ -102,6 +110,14 @@ public class Hidden_Join implements Serializable{
 		return GUID;
 	}
 
+	public void setExist(Integer exist){
+		this.exist = exist;
+	}
+
+	public Integer getExist(){
+		return exist;
+	}
+	
 	public void setName(String name){
 		this.name = name;
 	}
@@ -190,6 +206,25 @@ public class Hidden_Join implements Serializable{
 		return date;
 	}
     
+	public void setCampusAdmin(String campusAdmin){
+		this.campusAdmin = campusAdmin;
+	}
+
+	public String getCampusAdmin(){
+		return campusAdmin;
+	}
+
+	public void setTerminal(String terminal){
+		this.terminal = terminal;
+	}
+
+	public String getTerminal(){
+		return terminal;
+	}
+	
+	/*
+     * Hidden_Level
+     */
 	
 	public void setLevel_text(String level_text){
 		this.level_text = level_text;

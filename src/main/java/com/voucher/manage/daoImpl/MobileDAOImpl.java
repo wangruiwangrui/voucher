@@ -85,6 +85,55 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 	}
 
 	
+	@Override
+	public List allHiddenImageByGUID(HttpServletRequest request,Hidden_Join hidden_Join) {
+		// TODO Auto-generated method stub
+	
+		String pathRoot = System.getProperty("user.home");
+	
+		String filePath=pathRoot+AbstractFileUpload.filePath;
+        
+		String imgPath=request.getSession().getServletContext().getRealPath(AbstractFileUpload.filePath);
+		
+		String GUID=hidden_Join.getGUID();
+		
+		String sql="SELECT "+    
+				"[Assets].[dbo].[Hidden_Data].GUID, "+
+			    "[Assets].[dbo].[Hidden_Data].URI, "+
+				"[Assets].[dbo].[Hidden_Data].date, "+
+			    "[Assets].[dbo].[Hidden_Data].NAME "+
+				"FROM "+
+				"[Assets].[dbo].[Hidden_Data] left join [Assets].[dbo].[Hidden] on [Assets].[dbo].[Hidden_Data].GUID=[Assets].[dbo].[Hidden].GUID "+  
+				"where [Assets].[dbo].[Hidden_Data].GUID='"+GUID+"'  "+
+				"AND ([Assets].[dbo].[Hidden_Data].TYPE ='png ' OR [Assets].[dbo].[Hidden_Data].TYPE ='jpg ' OR [Assets].[dbo].[Hidden_Data].TYPE ='jpeg ' OR [Assets].[dbo].[Hidden_Data].TYPE ='gif ' ) "+
+				"order by [Assets].[dbo].[Hidden_Data].date desc ";
+		
+		List hidden_Data_Joins=this.getJdbcTemplate().query(sql,new hiddenImageQueryRowMapper());
+		
+		List fileBytes=new ArrayList<>();
+		
+		Iterator<Hidden_Data_Join> iterator=hidden_Data_Joins.iterator();
+		
+		while (iterator.hasNext()) {
+			
+			Hidden_Data_Join hidden_Data_Join=iterator.next();
+			
+			try{			
+				String oldFile=filePath+"\\"+hidden_Data_Join.getURI();
+			
+				CopyFile.set(imgPath, oldFile, hidden_Data_Join.getURI());
+			
+				fileBytes.add(AbstractFileUpload.filePath+"\\"+hidden_Data_Join.getURI());
+			}catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+		}
+		
+		return fileBytes;
+	
+	}
+	
 	class hiddenImageQueryRowMapper implements RowMapper<Hidden_Data_Join> {
         //rs为返回结果集，以每行为单位封装着
         public Hidden_Data_Join mapRow(ResultSet rs, int rowNum) throws SQLException {    
