@@ -567,7 +567,8 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	public Integer deleteHiddenUser(Hidden_User hidden_User) {
 		// TODO Auto-generated method stub
 		Hidden hidden=new Hidden();
-		String[] where={"[Assets].[dbo].[Hidden].principal=",String.valueOf(hidden_User.getPrincipal())};
+		String[] where={"[Assets].[dbo].[Hidden].principal=",String.valueOf(hidden_User.getPrincipal()),
+				"[Assets].[dbo].[Hidden].exist=","1"};
 		hidden.setWhere(where);
 		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden).get("");
 		

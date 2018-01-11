@@ -37,7 +37,7 @@
     xhm.send();
     var json=JSON.parse(xhm.responseText);
     var point = new BMap.Point(json.lng, json.lat);
-    map.centerAndZoom(point, 15);
+    map.centerAndZoom(point, 13);
 	
     var xhm=new XMLHttpRequest();
     xhm.open("GET","../baiduMap/location.do",false);

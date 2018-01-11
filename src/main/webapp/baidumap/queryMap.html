@@ -37,7 +37,7 @@
     xhm.send();
     var ticket=JSON.parse(xhm.responseText);
     var point = new BMap.Point(ticket.content.point.x, ticket.content.point.y);
-    map.centerAndZoom(point, 15);
+    map.centerAndZoom(point, 13);
     var marker = new BMap.Marker(point); // 创建点
 	map.addOverlay(marker);    //增加点
 	var str = "我的位置";
