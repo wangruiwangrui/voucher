@@ -86,6 +86,12 @@
 		  this.defaultOffset = new BMap.Size(400, 20);
 		}
 
+	 var xhm=new XMLHttpRequest();
+	 xhm.open("GET","../baiduMap/getManageRegion.do",false);
+	 xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	 xhm.send();
+	 var roomInfos=JSON.parse(xhm.responseText);
+	
 	// 通过JavaScript的prototype属性继承于BMap.Control
 	menuControl.prototype = new BMap.Control();
 	
@@ -94,13 +100,19 @@
 		  var div = document.createElement("div");
 		  var span = document.createElement("span");
 		  span.innerHTML="选择分区";
-        div.appendChild(span);
+          div.appendChild(span);
 		  // 创建一个DOM元素
 		  var select = document.createElement("select");
-		  for(var i=0;i<5;i++){
-			  var option = document.createElement("option");
-			  option.innerHTML=i;
-			  select.appendChild(option);
+		  select.setAttribute("id","select");
+		  select.setAttribute("onchange","gradeChange()");
+		  console.log(roomInfos.length);
+		  for(var i=0;i<roomInfos.length;i++){
+			  if(roomInfos[i].manageRegion!=""){
+			  	var option = document.createElement("option");
+			  	option.innerHTML=roomInfos[i].manageRegion;
+			  	option.setAttribute("value",roomInfos[i].manageRegion);
+			  	select.appendChild(option);
+			  }
 		  }
 		  div.appendChild(select);
 		  
@@ -108,6 +120,16 @@
 		  // 将DOM元素返回
 		  return div;
 	}
+	
+	
+	 function gradeChange(){ 
+	        var objS = document.getElementById("select"); 
+	        var grade = objS.options[objS.selectedIndex].value; 
+	        //console.log(objS.options[objS.selectedIndex]);
+	        //alert(grade); 
+	        map.clearOverlays();
+	      //  addDeck(ticket);
+	       } 
 	
 	// 创建控件
 	var menuCtrl = new menuControl();
@@ -123,12 +145,12 @@
     map.centerAndZoom(point, 13);
 	
     var xhm=new XMLHttpRequest();
-    xhm.open("GET","../baiduMap/location.do",false);
-    xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-    xhm.send();
-    var ticket=JSON.parse(xhm.responseText);
-    var point = new BMap.Point(ticket.content.point.x, ticket.content.point.y);
-    var str = "我的位置";
+  	 xhm.open("GET","../baiduMap/location.do",false);
+  	 xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+  	 xhm.send();
+  	 var ticket=JSON.parse(xhm.responseText);
+   var point = new BMap.Point(ticket.content.point.x, ticket.content.point.y);
+   var str = "我的位置";
 	var opts = {
 			   position : point,    // 指定文本标注所在的地理位置
 			   offset   : new BMap.Size(-getByteLen(str)*3, 5)    //设置文本偏移量
@@ -140,34 +162,38 @@
 					 lineHeight : "20px",
 					 fontFamily:"微软雅黑"
 				  });
-    map.addOverlay(label);   
-    map.enableScrollWheelZoom(true);
+   map.addOverlay(label);   
+   map.enableScrollWheelZoom(true);
+  
+   var geoc = new BMap.Geocoder();  
+   map.addEventListener("click", function(e){    
+   	 var pt = e.point;
+        geoc.getLocation(pt, function(rs){
+        var addComp = rs.addressComponents;
+        var value=new Object();
+        value.province=addComp.province;
+        value.city=addComp.city;
+        value.district=addComp.district;
+        value.street=addComp.street;
+        value.streetNumber=addComp.streetNumber;
+        value.lng=pt.lng;
+        value.lat=pt.lat;
+        var json = JSON.stringify(value); 
+        alert(json);
+        });        
+   }
+   ); 
+ 
+   var xhm=new XMLHttpRequest();
+   xhm.open("GET","../baiduMap/get.do",false);
+   xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+   xhm.send();
+   var ticket=JSON.parse(xhm.responseText);
    
-    var geoc = new BMap.Geocoder();  
-    map.addEventListener("click", function(e){    
-    	 var pt = e.point;
-         geoc.getLocation(pt, function(rs){
-         var addComp = rs.addressComponents;
-         var value=new Object();
-         value.province=addComp.province;
-         value.city=addComp.city;
-         value.district=addComp.district;
-         value.street=addComp.street;
-         value.streetNumber=addComp.streetNumber;
-         value.lng=pt.lng;
-         value.lat=pt.lat;
-         var json = JSON.stringify(value); 
-         alert(json);
-         });        
-    }
-    );
+	addDeck(ticket);
     
-    
-    var xhm=new XMLHttpRequest();
-    xhm.open("GET","../baiduMap/get.do",false);
-    xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-    xhm.send();
-    var ticket=JSON.parse(xhm.responseText);
+    function addDeck(ticket){
+    	
    // console.log(ticket);
     var json_data = new Array();
     
@@ -200,6 +226,7 @@
 	//让所有点在视野范围内
 	map.setViewport(pointArray);
     
+    }
 	
 	function getByteLen(val) {    //传入一个字符串
         var len = 0;

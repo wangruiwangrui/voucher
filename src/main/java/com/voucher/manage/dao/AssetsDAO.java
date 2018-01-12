@@ -18,7 +18,7 @@ public interface AssetsDAO {
 	
 	public Integer deletePosition(Position position);
 	
-	public Map findAllPosition();
+	public Map findAllPosition(String manageRegion);
 	
 	public List findPosition(Position position);
 	
@@ -40,4 +40,6 @@ public interface AssetsDAO {
 	public String  findIgnoreHidden();
 	
 	public Map<String, Object> hiddenQuery(Integer hiddenLevel);
+	
+	public List selectManageRegion();
 }

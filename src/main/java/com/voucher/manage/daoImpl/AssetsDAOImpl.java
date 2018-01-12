@@ -67,7 +67,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	public Integer updatePosition(Position position) {
 		// TODO Auto-generated method stub
 		int i;
-		String[] where={"[Assets].[dbo].[Position].GUID=",position.getGUID()};
+		String[] where={"[Position].GUID=",position.getGUID()};
 		position.setWhere(where);
 		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), position).get("");
 		if(count==1){
@@ -83,7 +83,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	}
 	
 	@Override
-	public Map findAllPosition() {
+	public Map findAllPosition(String manageRegion) {
 		// TODO Auto-generated method stub
 		int limit=1000;
 		int offset=0;
@@ -99,6 +99,12 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		hidden.setOffset(offset);
 		hidden.setLimit(limit);
 		hidden.setNotIn("id");
+		
+		if(manageRegion!=null){
+			String[] where = {"Hidden.ManageRegion = ", manageRegion};
+			position.setWhere(where);
+			hidden.setWhere(where);
+		}
 		
 		Object[] objects={position,hidden};
 		
@@ -125,31 +131,31 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		// TODO Auto-generated method stub
 		
 		String sql="SELECT TOP 5"+
-		            "[Assets].[dbo].[Position].GUID,"+
-					"[Assets].[dbo].[Position].province,"+
-					"[Assets].[dbo].[Position].city,"+
-					"[Assets].[dbo].[Position].district,"+
-					"[Assets].[dbo].[Position].street,"+
-					"[Assets].[dbo].[Position].street_number,"+
-					"[Assets].[dbo].[Position].lng,"+
-					"[Assets].[dbo].[Position].lat,"+
-					"[Assets].[dbo].[Position].date,"+
-					"[Assets].[dbo].[Hidden].name,"+
-					"[Assets].[dbo].[Hidden].hidden_level,"+
-					"[Assets].[dbo].[Hidden].detail,"+
-					"[Assets].[dbo].[Hidden].progress,"+
-					"[Assets].[dbo].[Hidden].happen_time,"+
-					"[Assets].[dbo].[Hidden].principal,"+
-					"[Assets].[dbo].[Hidden].type,"+
-					"[Assets].[dbo].[Hidden].state,"+
-					"[Assets].[dbo].[Hidden].remark,"+
-					"[Assets].[dbo].[Hidden].update_time,"+
-					"[Assets].[dbo].[Hidden].date "+
-					"FROM [Assets].[dbo].[Position] left join [Assets].[dbo].[Hidden] "+
-					"on [Assets].[dbo].[Position].GUID = [Assets].[dbo].[Hidden].GUID "+
+		            "[Position].GUID,"+
+					"[Position].province,"+
+					"[Position].city,"+
+					"[Position].district,"+
+					"[Position].street,"+
+					"[Position].street_number,"+
+					"[Position].lng,"+
+					"[Position].lat,"+
+					"[Position].date,"+
+					"[Hidden].name,"+
+					"[Hidden].hidden_level,"+
+					"[Hidden].detail,"+
+					"[Hidden].progress,"+
+					"[Hidden].happen_time,"+
+					"[Hidden].principal,"+
+					"[Hidden].type,"+
+					"[Hidden].state,"+
+					"[Hidden].remark,"+
+					"[Hidden].update_time,"+
+					"[Hidden].date "+
+					"FROM [Position] left join [Hidden] "+
+					"on [Position].GUID = [Hidden].GUID "+
 					"WHERE "+  
-					"[Assets].[dbo].[Position].id not in( select top 6 [Assets].[dbo].[Position].id from [Assets].[dbo].[Position] left join [Assets].[dbo].[Hidden] "+
-					"on [Assets].[dbo].[Position].GUID = [Assets].[dbo].[Hidden].GUID "+ 
+					"[Position].id not in( select top 6 [Position].id from [Position] left join [Hidden] "+
+					"on [Position].GUID = [Hidden].GUID "+ 
 					"ORDER BY   SQRT((105.4955-lng)*(105.4955-lng)+(28.91866-lat)*(28.91866-lat))) "+
 					"AND "+
 					"geography::STGeomFromText('POINT(' + cast([lng] as varchar(20)) + ' '"+  
@@ -211,9 +217,9 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		
 
   String sql="SELECT top "+limit+
-    "[Assets].[dbo].[Hidden_Assets].id,"+
-    "[Assets].[dbo].[Hidden_Assets].asset_GUID,"+
-    "[Assets].[dbo].[Hidden_Assets].hidden_GUID,"+
+    "[Hidden_Assets].id,"+
+    "[Hidden_Assets].asset_GUID,"+
+    "[Hidden_Assets].hidden_GUID,"+
     "[TTT].[dbo].[RoomInfo].GUID,"+
     "[TTT].[dbo].[RoomInfo].Num,"+
     "[TTT].[dbo].[RoomInfo].OriginalNum,"+
@@ -286,10 +292,10 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
     "[TTT].[dbo].[RoomInfo].LandArea,"+
     "[TTT].[dbo].[RoomInfo].UseYears "+
     "FROM "+
-    "[Assets].[dbo].[Hidden_Assets] left join [TTT].[dbo].[RoomInfo] on [Assets].[dbo].[Hidden_Assets].[asset_GUID]=[TTT].[dbo].[RoomInfo].[GUID]"+
+    "[Hidden_Assets] left join [TTT].[dbo].[RoomInfo] on [Hidden_Assets].[asset_GUID]=[TTT].[dbo].[RoomInfo].[GUID]"+
     ""; 
   
-  //  String sqlWhere="AND [Assets].[dbo].[Hidden_Assets].[asset_GUID] not in( select top "+offset+" [Assets].[dbo].[Hidden_Assets].[asset_GUID] FROM [Assets].[dbo].[Hidden_Assets] left join [TTT].[dbo].[RoomInfo] on [Assets].[dbo].[Hidden_Assets].[asset_GUID]=[TTT].[dbo].[RoomInfo].[GUID] ORDER BY [Assets].[dbo].[Hidden_Assets].[asset_GUID]) ORDER BY [Assets].[dbo].[Hidden_Assets].[asset_GUID]";
+  //  String sqlWhere="AND [Hidden_Assets].[asset_GUID] not in( select top "+offset+" [Hidden_Assets].[asset_GUID] FROM [Hidden_Assets] left join [TTT].[dbo].[RoomInfo] on [Hidden_Assets].[asset_GUID]=[TTT].[dbo].[RoomInfo].[GUID] ORDER BY [Hidden_Assets].[asset_GUID]) ORDER BY [Hidden_Assets].[asset_GUID]";
 	
   		StringBuilder whereCommand = new StringBuilder(); 
        
@@ -370,8 +376,8 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
     	if(!search.isEmpty()){
     		   sql=sql+   //sqlserver分页需要在top也加上where条件
     	         		 "\n  where "+whereCommand+
-    	                  " [Assets].[dbo].[Hidden_Assets].asset_GUID not in("+
-    	                  " select top "+offset+" [Assets].[dbo].[Hidden_Assets].asset_GUID  FROM [Assets].[dbo].[Hidden_Assets] where "+
+    	                  " [Hidden_Assets].asset_GUID not in("+
+    	                  " select top "+offset+" [Hidden_Assets].asset_GUID  FROM [Hidden_Assets] where "+
     	                   whereCommand.substring(0,whereCommand.length()-7)+")";
     	}
     	
@@ -381,7 +387,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		MyTestUtil.print(list);
 		
 		String countSql="select count(*) FROM "+
-			    "[Assets].[dbo].[Hidden_Assets] left join [TTT].[dbo].[RoomInfo] on [Assets].[dbo].[Hidden_Assets].[asset_GUID]=[TTT].[dbo].[RoomInfo].[GUID]";
+			    "[Hidden_Assets] left join [TTT].[dbo].[RoomInfo] on [Hidden_Assets].[asset_GUID]=[TTT].[dbo].[RoomInfo].[GUID]";
 		
 		if(!search.isEmpty()){
 			countSql=countSql+   //sqlserver分页需要在top也加上where条件
@@ -408,7 +414,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		// TODO Auto-generated method stub
 		Hidden hidden=new Hidden();
 		
-		String[] where={"[Assets].[dbo].[Hidden].progress =","0"};
+		String[] where={"[Hidden].progress =","0"};
 		//hidden.setWhere(where);
 		
 		int i=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden).get("");
@@ -423,8 +429,8 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		// TODO Auto-generated method stub
 		Hidden hidden=new Hidden();
 		
-		String[] where={"[Assets].[dbo].[Hidden].progress >","0"
-				," [Assets].[dbo].[Hidden].progress <","1"};
+		String[] where={"[Hidden].progress >","0"
+				," [Hidden].progress <","1"};
 		hidden.setWhere(where);
 		
 		int i=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden).get("");
@@ -438,7 +444,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		
 		Hidden hidden=new Hidden();
 		
-		String sql="SELECT MAX([happen_time]) FROM [Assets].[dbo].[Hidden]";
+		String sql="SELECT MAX([happen_time]) FROM [Hidden]";
 		
 		List list=this.getJdbcTemplate().query(sql,new hiddenRowMapper());
 		
@@ -464,7 +470,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		// TODO Auto-generated method stub
 		Hidden hidden=new Hidden();
 		
-		String sql="SELECT MAX([happen_time]) FROM [Assets].[dbo].[Hidden]";
+		String sql="SELECT MAX([happen_time]) FROM [Hidden]";
 		
 		List list=this.getJdbcTemplate().query(sql,new hiddenRowMapper());
 		
@@ -496,30 +502,30 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		
 		/*
 		String sql="SELECT top 5 "+    
-					"[Assets].[dbo].[Hidden_Data].GUID, "+
-				    "[Assets].[dbo].[Hidden_Data].URI, "+
-					"[Assets].[dbo].[Hidden_Data].date, "+
-				    "[Assets].[dbo].[Hidden].name, "+
-					"[Assets].[dbo].[Hidden].detail, "+
-				    "[Assets].[dbo].[Hidden].hidden_level, "+
-					"[Assets].[dbo].[Hidden].progress "+
+					"[Hidden_Data].GUID, "+
+				    "[Hidden_Data].URI, "+
+					"[Hidden_Data].date, "+
+				    "[Hidden].name, "+
+					"[Hidden].detail, "+
+				    "[Hidden].hidden_level, "+
+					"[Hidden].progress "+
 					"FROM "+
-					"[Assets].[dbo].[Hidden_Data] left join [Assets].[dbo].[Hidden] on [Assets].[dbo].[Hidden_Data].GUID=[Assets].[dbo].[Hidden].GUID "+  
-					"where  [Assets].[dbo].[Hidden].hidden_level = "+hiddenLevel+" "+
-					"AND ([Assets].[dbo].[Hidden_Data].TYPE ='png ' "+
-					"OR [Assets].[dbo].[Hidden_Data].TYPE ='jpg ' "+
-					"OR [Assets].[dbo].[Hidden_Data].TYPE ='jpeg ' "+
-					"OR [Assets].[dbo].[Hidden_Data].TYPE ='gif ' )"+
-					"group by [Assets].[dbo].[Hidden_Data].GUID,[Assets].[dbo].[Hidden_Data].URI,[Assets].[dbo].[Hidden_Data].date, "+
-					"[Assets].[dbo].[Hidden].name,[Assets].[dbo].[Hidden].detail,[Assets].[dbo].[Hidden].hidden_level,[Assets].[dbo].[Hidden].progress "+
-					"order by [Assets].[dbo].[Hidden_Data].date desc ";
+					"[Hidden_Data] left join [Hidden] on [Hidden_Data].GUID=[Hidden].GUID "+  
+					"where  [Hidden].hidden_level = "+hiddenLevel+" "+
+					"AND ([Hidden_Data].TYPE ='png ' "+
+					"OR [Hidden_Data].TYPE ='jpg ' "+
+					"OR [Hidden_Data].TYPE ='jpeg ' "+
+					"OR [Hidden_Data].TYPE ='gif ' )"+
+					"group by [Hidden_Data].GUID,[Hidden_Data].URI,[Hidden_Data].date, "+
+					"[Hidden].name,[Hidden].detail,[Hidden].hidden_level,[Hidden].progress "+
+					"order by [Hidden_Data].date desc ";
 		*/
 		
-		String sql1="SELECT top 5 [Assets].[dbo].[Hidden_Data].GUID "+
-				 	"FROM [Assets].[dbo].[Hidden_Data] left join [Assets].[dbo].[Hidden] on [Assets].[dbo].[Hidden_Data].GUID=[Assets].[dbo].[Hidden].GUID "+
-				 	"where  [Assets].[dbo].[Hidden].hidden_level = "+hiddenLevel+" "+
-				 	"AND ([Assets].[dbo].[Hidden_Data].TYPE ='png ' OR [Assets].[dbo].[Hidden_Data].TYPE ='jpg ' OR [Assets].[dbo].[Hidden_Data].TYPE ='jpeg ' OR [Assets].[dbo].[Hidden_Data].TYPE ='gif ' ) "+
-				 	"group by [Assets].[dbo].[Hidden_Data].GUID ";
+		String sql1="SELECT top 5 [Hidden_Data].GUID "+
+				 	"FROM [Hidden_Data] left join [Hidden] on [Hidden_Data].GUID=[Hidden].GUID "+
+				 	"where  [Hidden].hidden_level = "+hiddenLevel+" "+
+				 	"AND ([Hidden_Data].TYPE ='png ' OR [Hidden_Data].TYPE ='jpg ' OR [Hidden_Data].TYPE ='jpeg ' OR [Hidden_Data].TYPE ='gif ' ) "+
+				 	"group by [Hidden_Data].GUID ";
 		
 		List hidden_Data_Joins=this.getJdbcTemplate().query(sql1,new hiddenQueryRowMapper1());
 		
@@ -543,18 +549,18 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 			String GUID=hidden_Data_Join1.getGUID();
 			
 			String sql2="SELECT top 1 "+    
-					"[Assets].[dbo].[Hidden_Data].GUID, "+
-				    "[Assets].[dbo].[Hidden_Data].URI, "+
-					"[Assets].[dbo].[Hidden_Data].date, "+
-				    "[Assets].[dbo].[Hidden].name, "+
-					"[Assets].[dbo].[Hidden].detail, "+
-				    "[Assets].[dbo].[Hidden].hidden_level, "+
-					"[Assets].[dbo].[Hidden].progress "+
+					"[Hidden_Data].GUID, "+
+				    "[Hidden_Data].URI, "+
+					"[Hidden_Data].date, "+
+				    "[Hidden].name, "+
+					"[Hidden].detail, "+
+				    "[Hidden].hidden_level, "+
+					"[Hidden].progress "+
 					"FROM "+
-					"[Assets].[dbo].[Hidden_Data] left join [Assets].[dbo].[Hidden] on [Assets].[dbo].[Hidden_Data].GUID=[Assets].[dbo].[Hidden].GUID "+  
-					"where [Assets].[dbo].[Hidden_Data].GUID='"+GUID+"'  "+
-					"AND ([Assets].[dbo].[Hidden_Data].TYPE ='png ' OR [Assets].[dbo].[Hidden_Data].TYPE ='jpg ' OR [Assets].[dbo].[Hidden_Data].TYPE ='jpeg ' OR [Assets].[dbo].[Hidden_Data].TYPE ='gif ' ) "+
-					"order by [Assets].[dbo].[Hidden_Data].date desc ";
+					"[Hidden_Data] left join [Hidden] on [Hidden_Data].GUID=[Hidden].GUID "+  
+					"where [Hidden_Data].GUID='"+GUID+"'  "+
+					"AND ([Hidden_Data].TYPE ='png ' OR [Hidden_Data].TYPE ='jpg ' OR [Hidden_Data].TYPE ='jpeg ' OR [Hidden_Data].TYPE ='gif ' ) "+
+					"order by [Hidden_Data].date desc ";
 			
 			List hidden_Data_Joins2=this.getJdbcTemplate().query(sql2,new hiddenQueryRowMapper2());
 			
@@ -613,6 +619,25 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
         }
     }
 
-	
+	@Override
+	public List selectManageRegion() {
+		// TODO Auto-generated method stub
+		
+		String sql="SELECT [ManageRegion] "+
+                    "FROM [TTT].[dbo].[RoomInfo] group by [ManageRegion]";
+		
+		List list=this.getJdbcTemplate().query(sql, new roomInfoRowMapper());
+		
+		return list;
+	}
+
+	class roomInfoRowMapper implements RowMapper<RoomInfo> {
+        //rs为返回结果集，以每行为单位封装着
+        public RoomInfo mapRow(ResultSet rs, int rowNum) throws SQLException {    
+        	RoomInfo roomInfo=new RoomInfo();
+        	roomInfo.setManageRegion(rs.getString("ManageRegion"));        	
+            return roomInfo;
+        }
+    }
 	
 }

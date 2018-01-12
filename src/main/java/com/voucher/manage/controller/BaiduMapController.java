@@ -40,9 +40,9 @@ public class BaiduMapController {
 	AssetsDAO assetsDAO=(AssetsDAO) applicationContext.getBean("assetsdao");
 	
 	@RequestMapping("/get")
-	public @ResponseBody List test() {		
+	public @ResponseBody List test(String manageRegion) {		
 		
-		Map map=assetsDAO.findAllPosition();
+		Map map=assetsDAO.findAllPosition(manageRegion);
 		
 		MyTestUtil.print(map);
 		
@@ -112,6 +112,13 @@ public class BaiduMapController {
 		List list=(List) map.get("row");
 		
 		return list;
+	}
+	
+	@RequestMapping("getManageRegion")
+	public @ResponseBody List getManageRegion(){
+		
+		return assetsDAO.selectManageRegion();
+		
 	}
 	
 }
