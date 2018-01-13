@@ -20,6 +20,7 @@ import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 import com.voucher.manage.daoRowMapper.RowMappers;
 import com.voucher.manage.daoRowMapper.RowMappersJoin;
 import com.voucher.manage.daoSQL.DeleteExe;
+import com.voucher.manage.daoSQL.SelectExe;
 import com.voucher.manage.daoSQL.SelectJoinExe;
 import com.voucher.manage.daoSQL.SelectSQL;
 import com.voucher.manage.daoSQL.SelectSQLJoin;
@@ -78,7 +79,7 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		if(order!=null)
 			roomInfo.setOrder(order);
 		
-
+       /*
         String sql="";
         Map<String,Object> map=new HashMap<>();
 		try {
@@ -93,8 +94,12 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		
 		//return this.getJdbcTemplate().query(sql, new RoomInfoRowMapper());
 		List list= this.getJdbcTemplate().query(sql,params.toArray(),new RowMappers(RoomInfo.class));
-		MyTestUtil.print(map);
+		*/
+		
+		List list=SelectExe.get(this.getJdbcTemplate(), roomInfo);
+	
 		MyTestUtil.print(list);
+	
 		return list;
 	}
 
@@ -317,7 +322,7 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		
 		List list=SelectJoinExe.get(this.getJdbcTemplate(), objects, roomInfo_Position, join);		
         map.put("rows", list);
-		
+		MyTestUtil.print(list);
 		Map map3=SelectJoinExe.getCount(this.getJdbcTemplate(), objects, join);
 		map.put("total", map3.get(""));
 		

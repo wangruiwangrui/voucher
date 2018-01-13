@@ -83,7 +83,7 @@
 	function menuControl(){
 		  // 默认停靠位置和偏移量
 		  this.defaultAnchor = BMAP_ANCHOR_TOP_LEFT;
-		  this.defaultOffset = new BMap.Size(400, 20);
+		  this.defaultOffset = new BMap.Size(400, 25);
 		}
 
 	 var xhm=new XMLHttpRequest();
@@ -99,13 +99,17 @@
 		 // 创建一个DOM元素
 		  var div = document.createElement("div");
 		  var span = document.createElement("span");
-		  span.innerHTML="选择分区";
+		  span.innerHTML="选择分区 : ";
           div.appendChild(span);
 		  // 创建一个DOM元素
 		  var select = document.createElement("select");
 		  select.setAttribute("id","select");
 		  select.setAttribute("onchange","gradeChange()");
 		  console.log(roomInfos.length);
+		  var option = document.createElement("option");
+		  option.innerHTML="全部";
+		  option.setAttribute("value","");
+		  select.appendChild(option);
 		  for(var i=0;i<roomInfos.length;i++){
 			  if(roomInfos[i].manageRegion!=""){
 			  	var option = document.createElement("option");
@@ -128,7 +132,20 @@
 	        //console.log(objS.options[objS.selectedIndex]);
 	        //alert(grade); 
 	        map.clearOverlays();
-	      //  addDeck(ticket);
+	        if(grade!=null){
+	        	var xhm=new XMLHttpRequest();
+	   	    	xhm.open("GET","../baiduMap/get.do?manageRegion="+grade,false);
+	   	    	xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	   	    	xhm.send();
+	   	    	var ticket=JSON.parse(xhm.responseText);
+	        }else{
+	        	var xhm=new XMLHttpRequest();
+	   	    	xhm.open("GET","../baiduMap/get.do?",false);
+	   	    	xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	   	    	xhm.send();
+	   	    	var ticket=JSON.parse(xhm.responseText);
+	        }
+	        addDeck(ticket);
 	       } 
 	
 	// 创建控件
@@ -228,6 +245,17 @@
     
     }
 	
+    
+    function script(){
+    	map.clearOverlays();
+    	var xhm=new XMLHttpRequest();
+	    xhm.open("GET","../baiduMap/get.do?",false);
+	    xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	    xhm.send();
+	    var ticket=JSON.parse(xhm.responseText);
+        addDeck(ticket);
+    }
+    
 	function getByteLen(val) {    //传入一个字符串
         var len = 0;
         for (var i = 0; i < val.length; i++) {

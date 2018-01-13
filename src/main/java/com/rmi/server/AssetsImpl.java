@@ -430,5 +430,12 @@ public class AssetsImpl implements Assets{
 	}
 
 
+	@Override
+	public List selectManageRegion() {
+		// TODO Auto-generated method stub
+		return assetsDAO.selectManageRegion();
+	}
+
+
 	
 }

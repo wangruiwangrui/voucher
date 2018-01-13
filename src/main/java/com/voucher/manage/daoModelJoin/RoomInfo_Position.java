@@ -3,33 +3,55 @@ package com.voucher.manage.daoModelJoin;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.voucher.manage.daoSQL.annotations.DBTable;
+import com.voucher.manage.daoSQL.annotations.SQLDateTime;
 import com.voucher.manage.daoSQL.annotations.SQLDouble;
 import com.voucher.manage.daoSQL.annotations.SQLString;
 
 public class RoomInfo_Position implements Serializable{
-	private static final long serialVersionUID = 1L; 
-
+	private static final long serialVersionUID = 1L;
+	
+	@SQLString(name="GUID")
 	private String GUID;
-	private String Num;
+	
+	@SQLString(name="Address")
 	private String Address;
+	
+	@SQLString(name="Num")
+	private String Num;
+	
+	@SQLString(name="Region")
 	private String Region;
+	
+	@SQLDateTime(name="InDate")
 	private Date InDate;
 	
+	@SQLString(name="province")
 	private String province;
 
+	@SQLString(name="city")
 	private String city;
 
+	@SQLString(name="district")
 	private String district;
 
+	@SQLString(name="street")
 	private String street;
 
+	@SQLString(name="street_number")
 	private String street_number;
 
+	@SQLDouble(name="lng")
 	private Double lng;
 
+	@SQLDouble(name="lat")
 	private Double lat;
 
+	@SQLDateTime(name="date")
+	private Date date;
+	
+	@SQLString(name="ManageRegion")
+    private String ManageRegion;
+	
 	public String getGUID() {
 		return GUID;
 	}
@@ -118,6 +140,14 @@ public class RoomInfo_Position implements Serializable{
 		this.lat = lat;
 	}
 
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
 	public String getNum() {
 		return Num;
 	}
@@ -125,4 +155,13 @@ public class RoomInfo_Position implements Serializable{
 	public void setNum(String num) {
 		Num = num;
 	}
+	
+	public void setManageRegion(String ManageRegion){
+		this.ManageRegion = ManageRegion;
+	}
+
+	public String getManageRegion(){
+		return ManageRegion;
+	}
+	
 }

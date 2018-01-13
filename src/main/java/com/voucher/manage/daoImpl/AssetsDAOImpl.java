@@ -100,7 +100,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		hidden.setLimit(limit);
 		hidden.setNotIn("id");
 		
-		if(manageRegion!=null){
+		if(!manageRegion.equals("")){
 			String[] where = {"Hidden.ManageRegion = ", manageRegion};
 			position.setWhere(where);
 			hidden.setWhere(where);
@@ -415,11 +415,9 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		Hidden hidden=new Hidden();
 		
 		String[] where={"[Hidden].progress =","0"};
-		//hidden.setWhere(where);
+		hidden.setWhere(where);
 		
 		int i=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden).get("");
-		
-		System.out.println("i="+i);
 		
 		return i;
 	}
@@ -444,7 +442,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		
 		Hidden hidden=new Hidden();
 		
-		String sql="SELECT MAX([happen_time]) FROM [Hidden]";
+		String sql="SELECT MAX([date]) FROM [Hidden_Check]";
 		
 		List list=this.getJdbcTemplate().query(sql,new hiddenRowMapper());
 		
@@ -491,6 +489,10 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		
+		if(between<0){
+			between=0;
 		}
 		
 		return String.valueOf(between);

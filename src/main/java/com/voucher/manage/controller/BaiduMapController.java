@@ -42,7 +42,12 @@ public class BaiduMapController {
 	@RequestMapping("/get")
 	public @ResponseBody List test(String manageRegion) {		
 		
-		Map map=assetsDAO.findAllPosition(manageRegion);
+		Map map;
+		if(manageRegion!=null){
+		   map=assetsDAO.findAllPosition(manageRegion);
+		}else{
+		   map=assetsDAO.findAllPosition("");
+		}
 		
 		MyTestUtil.print(map);
 		
