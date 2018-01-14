@@ -95,8 +95,20 @@ $.get("/voucher/oauth/test.do", {
 			    	            });
 			    		 }
 			    		 
+			    		 document.querySelector('#hiddenCheck').onclick =function(){
+			    			 location.href="guidance/hiddenCheckList.html";
+			    		 }
+ 			    		
+ 			    		document.querySelector('#hiddenNeaten').onclick =function(){
+			    			 location.href="guidance/hiddenNeatenList.html";
+			    		 }
+			    		 
+ 			    		document.querySelector('#voice').onclick =function(){
+			    			 location.href="safety/voice.html";
+			    		 }
+ 			    		
 			    		 document.querySelector('#report').onclick =function(){
-			    			 location.href="safety/a.html";
+			    			 location.href="safety/emergency.html";
 			    		 }
 			    		 
 			    		 document.querySelector('#userSetting').onclick =function(){
@@ -287,9 +299,21 @@ $.get("/voucher/oauth/test.do", {
 		    	                }
 		    	            });
 			    		 }
- 			    		 
+ 			    		
+ 			    		document.querySelector('#hiddenCheck').onclick =function(){
+			    			 location.href="guidance/hiddenCheckList.html";
+			    		 }
+ 			    		
+ 			    		document.querySelector('#hiddenNeaten').onclick =function(){
+			    			 location.href="guidance/hiddenNeatenList.html";
+			    		 }
+ 			    		
+ 			    		document.querySelector('#voice').onclick =function(){
+			    			 location.href="safety/voice.html";
+			    		 }
+ 			    		
  			    		document.querySelector('#report').onclick =function(){
-			    			 location.href="safety/a.html";
+			    			 location.href="safety/emergency.html";
 			    		 }
  			    		 
  			    		 

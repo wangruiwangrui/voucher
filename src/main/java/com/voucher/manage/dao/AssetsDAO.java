@@ -16,13 +16,21 @@ public interface AssetsDAO {
 	
 	public Integer updatePosition(Position position);
 	
+	public Integer updateCheckPosition(Position position); 
+	
+	public Integer updateNeatenPosition(Position position);
+	
 	public Integer deletePosition(Position position);
 	
 	public Map findAllPosition(String manageRegion);
 	
+	public Map findAllCheckPosition();
+	
+	public Map findAllNeatenPosition();
+	
 	public List findPosition(Position position);
 	
-	public Map findHiddenByDistance(Double lng , Double lat);
+	public Map findHiddenByDistance(int limit,int offset,Double lng, Double lat,Double distance);
 	
 	public Integer insertIntoHidden_Assets(Hidden_Assets hidden_Assets);
 	

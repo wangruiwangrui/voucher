@@ -33,6 +33,7 @@ public class MobileIsLoginFilter implements Filter{
 	    @Override  
 	    public void doFilter(ServletRequest request, ServletResponse response,   
 	            FilterChain chain) throws IOException, ServletException {   
+	    	System.out.println("dofilter");
 	    	  HttpServletRequest hrequest = (HttpServletRequest)request;
 		        HttpServletResponseWrapper wrapper = new HttpServletResponseWrapper((HttpServletResponse) response);
 		        
@@ -67,6 +68,7 @@ public class MobileIsLoginFilter implements Filter{
 		        if (openId==null) {
 		        //	HttpSession session = hrequest.getSession();
 		        //	  session.invalidate();       
+		        	System.out.println("mobileIsLoginFilter openid= null");
 		        	wrapper.sendRedirect(redirectPath);
 		            return;
 		        }else {

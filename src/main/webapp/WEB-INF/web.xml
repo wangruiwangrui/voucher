@@ -110,7 +110,7 @@
 		<filter-class>com.voucher.manage.filter.MobileIsLoginFilter</filter-class>
 		<init-param>
 			<param-name>loginStrings</param-name><!-- 对页面不进行过滤 -->
-			<param-value>/mobile;/oauth;/getCampusId;/beg;/claim;/guidance</param-value>
+			<param-value>/oauth;/getCampusId;/beg;/claim;/guidance</param-value>
 		</init-param>
 		<init-param>
 			<param-name>includeStrings</param-name>
@@ -124,7 +124,7 @@
 	
 	<filter-mapping>
 		<filter-name>MobileSessionFilter</filter-name>
-		<url-pattern>/safety/*</url-pattern>
+		<url-pattern>/mobile/1/safety/*</url-pattern>
 	</filter-mapping>
 
 	<!-- 对普通员工和安全人员栏截 -->
@@ -147,7 +147,7 @@
 	
 	<filter-mapping>
 		<filter-name>MobileAdminSessionFilter</filter-name>
-		<url-pattern>/guidance/*</url-pattern>
+		<url-pattern>/mobile/1/guidance/*</url-pattern>
 	</filter-mapping>
 
 	  <mime-mapping>

@@ -108,9 +108,9 @@ public class BaiduMapController {
 	}
 	
 	@RequestMapping("/getByDistance")
-	public @ResponseBody List getByDistance(){
+	public @ResponseBody List getByDistance(Integer limit,Integer offset,Double lng,Double lat,Double distance){
 		
-		Map map=assetsDAO.findHiddenByDistance(0.0, 0.0);
+		Map map=assetsDAO.findHiddenByDistance(limit, offset, lng, lat, distance);
 		
 		MyTestUtil.print(map);
 		

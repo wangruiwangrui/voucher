@@ -10,69 +10,248 @@
 		#r-result{height:100%;width:20%;float:left;}
 	</style>
 	<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=pQFgFpS0VnMXwCRN6cTc1jDOcBVi3XoD"></script>
-	<title>添加多个标注点</title>
+	<title>查看周围的隐患</title>
 </head>
 <body>
 	<div id="allmap"></div>
 </body>
 </html>
 <script type="text/javascript">
-function getQueryString(name) {
-    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-    var r = window.location.search.substr(1).match(reg);
-    if (r != null) return unescape(r[2]); return null;
-   }
+//百度地图API功能
+var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
+var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
 
- var longitude=getQueryString("longitude");
- var latitude=getQueryString("latitude");
+// var map = new BMap.Map("allmap");
+var map = new BMap.Map("allmap", {enableMapClick:false});//构造底图时，关闭底图可点功能
 
- 
- alert(latitude+"      "+longitude);
-	// 百度地图API功能
-	var map = new BMap.Map("allmap");
-	var point = new BMap.Point(longitude,latitude);
-	
-	 var url ="../map/baiduSwitch.do?longitude="+longitude+"&latitude="+latitude;
-   
-	 $.ajax({
-         url: url,
-         async:false,
-         success: function(data) {
-        	 var json=data.result;
-        	 for(var i=0,l=json.length;i<l;i++){
-  			   for(var key in json[i]){
-  				   if(key=="x"){
-  					 longitude=json[i][key];
-  				   }else if(key="y"){
-  					 latitude=json[i][key];
-  				   }
-  			   }
-  			} 	 
-         },
-         dataType:"json"
-     });
-	
-	 alert(latitude+"      "+longitude);
-     
-	map.centerAndZoom(point, 15);
-	// 编写自定义函数,创建标注
-	function addMarker(point){
-	  var marker = new BMap.Marker(point);
-	  map.addOverlay(marker);
+map.addControl(top_left_control);        
+map.addControl(top_left_navigation); 
+
+//配置搜索
+var local = new BMap.LocalSearch(map,       
+	{renderOptions: {map: map,autoViewport: false},pageCapacity: 1}      
+); 
+
+// 定义一个控件类,即function
+function ZoomControl(){
+  // 默认停靠位置和偏移量
+  this.defaultAnchor = BMAP_ANCHOR_TOP_LEFT;
+  this.defaultOffset = new BMap.Size(200, 20);
+}
+
+// 通过JavaScript的prototype属性继承于BMap.Control
+ZoomControl.prototype = new BMap.Control();
+
+// 自定义控件必须实现自己的initialize方法,并且将控件的DOM元素返回
+// 在本方法中创建个div元素作为控件的容器,并将其添加到地图容器中
+ZoomControl.prototype.initialize = function(map){
+  // 创建一个DOM元素
+  var div = document.createElement("div");
+  // 添加文字说明
+  var input=document.createElement("input");
+  input.setAttribute("id","input");
+  div.appendChild(input);
+  // 设置样式
+  div.style.cursor = "pointer";
+  div.style.border = "1px solid gray";
+  div.style.backgroundColor = "white";
+  // 绑定事件,点击一次放大两级
+  input.onkeydown = keyDown;  
+  // 添加DOM元素到地图中
+  map.getContainer().appendChild(div);
+  // 将DOM元素返回
+  return div;
+}
+// 创建控件
+var myZoomCtrl = new ZoomControl();
+// 添加到地图当中
+map.addControl(myZoomCtrl);
+
+function keyDown(e) {   		  
+　   var keycode = e.which;   //取得对应的键值（数字）  	  
+　   var realkey = String.fromCharCode(e.which); //取得代表改键的真正字符  
+   var val = document.getElementById("input").value;
+　   if(keycode==13){
+	   local.search(val);
+　   }
+ }     
+
+function menuControl(){
+	  // 默认停靠位置和偏移量
+	  this.defaultAnchor = BMAP_ANCHOR_TOP_LEFT;
+	  this.defaultOffset = new BMap.Size(200, 20);
 	}
-	var point = new BMap.Point(longitude,latitude);
-	addMarker(point);
-	
-	// 百度地图API功能
-	var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
-	var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
-	var top_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT, type: BMAP_NAVIGATION_CONTROL_SMALL}); //右上角，仅包含平移和缩放按钮
-	/*缩放控件type有四种类型:
-	BMAP_NAVIGATION_CONTROL_SMALL：仅包含平移和缩放按钮；BMAP_NAVIGATION_CONTROL_PAN:仅包含平移按钮；BMAP_NAVIGATION_CONTROL_ZOOM：仅包含缩放按钮*/
-	
-	//添加控件和比例尺
 
-		map.addControl(top_left_control);        
-		map.addControl(top_left_navigation);     
-		map.addControl(top_right_navigation); 
+ var xhm=new XMLHttpRequest();
+ xhm.open("GET","../../baiduMap/getManageRegion.do",false);
+ xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+ xhm.send();
+ var roomInfos=JSON.parse(xhm.responseText);
+
+// 通过JavaScript的prototype属性继承于BMap.Control
+menuControl.prototype = new BMap.Control();
+
+menuControl.prototype.initialize = function(map){
+	 // 创建一个DOM元素
+	  var div = document.createElement("div");
+	  var span = document.createElement("span");
+	  span.innerHTML="选择分区 : ";
+      div.appendChild(span);
+	  // 创建一个DOM元素
+	  var select = document.createElement("select");
+	  select.setAttribute("id","select");
+	  select.setAttribute("onchange","gradeChange()");
+	  console.log(roomInfos.length);
+	  var option = document.createElement("option");
+	  option.innerHTML="全部";
+	  option.setAttribute("value","");
+	  select.appendChild(option);
+	  for(var i=0;i<roomInfos.length;i++){
+		  if(roomInfos[i].manageRegion!=""){
+		  	var option = document.createElement("option");
+		  	option.innerHTML=roomInfos[i].manageRegion;
+		  	option.setAttribute("value",roomInfos[i].manageRegion);
+		  	select.appendChild(option);
+		  }
+	  }
+	  div.appendChild(select);
+	  
+	//  map.getContainer().appendChild(div);
+	  // 将DOM元素返回
+	  return div;
+}
+
+
+ function gradeChange(){ 
+        var objS = document.getElementById("select"); 
+        var grade = objS.options[objS.selectedIndex].value; 
+        //console.log(objS.options[objS.selectedIndex]);
+        //alert(grade); 
+        map.clearOverlays();
+        console.log(grade);
+        if(grade!=null){
+        	var xhm=new XMLHttpRequest();
+   	    	xhm.open("GET","../../baiduMap/get.do?manageRegion="+grade,false);
+   	    	xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+   	    	xhm.send();
+   	    	var ticket=JSON.parse(xhm.responseText);
+        }else{
+        	var xhm=new XMLHttpRequest();
+   	    	xhm.open("GET","../../baiduMap/get.do?",false);
+   	    	xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+   	    	xhm.send();
+   	    	var ticket=JSON.parse(xhm.responseText);
+        }
+        console.log(ticket);
+        addDeck(ticket);
+       } 
+
+// 创建控件
+var menuCtrl = new menuControl();
+// 添加到地图当中
+map.addControl(menuCtrl);
+
+
+ var xhm=new XMLHttpRequest();
+ xhm.open("GET","../../baiduMap/location.do",false);
+ xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+ xhm.send();
+ var ticket=JSON.parse(xhm.responseText);
+ var lng=ticket.content.point.x;
+ var lat=ticket.content.point.y;
+ var point = new BMap.Point(ticket.content.point.x, ticket.content.point.y);
+    map.centerAndZoom(point, 12);
+    var marker = new BMap.Marker(point); // 创建点
+	map.addOverlay(marker);    //增加点
+	var str = "我的位置";
+	var opts = {
+			   position : point,    // 指定文本标注所在的地理位置
+			   offset   : new BMap.Size(-getByteLen(str)*3, 5)    //设置文本偏移量
+			}	
+	var label = new BMap.Label(str, opts);  // 创建文本标注对象
+	label.setStyle({
+					 fontSize : "12px",
+					 height : "20px",
+					 lineHeight : "20px",
+					 fontFamily:"微软雅黑"
+				  });
+    map.addOverlay(label);   
+    
+    map.enableScrollWheelZoom(true);
+    var geoc = new BMap.Geocoder();  
+
+    //获取标注位置信息    
+    function getAttr(){
+		var p = marker.getPosition();       //获取marker的位置
+		alert("marker的位置是" + p.lng + "," + p.lat);   
+	}
+ 
+    
+    var xhm=new XMLHttpRequest();
+    xhm.open("GET","../../baiduMap/getByDistance.do?limit=100&offset=0&lng="+lng+"&lat="+lat+"&distance=10000",false);
+    xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    xhm.send();
+    var ticket=JSON.parse(xhm.responseText);
+    console.log(ticket);
+    addDeck(ticket);
+ 
+function addDeck(ticket){	
+
+// console.log(ticket);
+var json_data = new Array();
+
+for(var i=0;i<ticket.length;i++){
+	json_data[i]=[ticket[i].lng,ticket[i].lat,
+	              ticket[i].name];
+}
+
+var pointArray = new Array();
+for(var i=0;i<json_data.length;i++){
+	var point=new BMap.Point(json_data[i][0], json_data[i][1]);
+	var marker = new BMap.Marker(point); // 创建点
+	map.addOverlay(marker);    //增加点
+	var str = "隐患 :"+json_data[i][2];
+	var opts = {
+			   position : point,    // 指定文本标注所在的地理位置
+			   offset   : new BMap.Size(-getByteLen(str)*3, 5)    //设置文本偏移量
+			}	
+	console.log(getByteLen(str));
+	var label = new BMap.Label(str, opts);  // 创建文本标注对象
+	label.setStyle({
+					 color : "red",
+					 fontSize : "12px",
+					 height : "20px",
+					 lineHeight : "20px",
+					 fontFamily:"微软雅黑"
+				  });
+    map.addOverlay(label);   
+	marker.addEventListener("click",attribute);
+}
+//让所有点在视野范围内
+map.setViewport(pointArray);
+
+}
+
+//获取覆盖物位置
+function attribute(e){
+	var p = e.target;
+	var value=new Object();
+    value.lng=p.getPosition().lng;
+    value.lat=p.getPosition().lat;
+    var json = JSON.stringify(value); 
+    alert(json);  
+}	
+
+
+function getByteLen(val) {    //传入一个字符串
+    var len = 0;
+    for (var i = 0; i < val.length; i++) {
+        if (val[i].match(/[^\x00-\xff]/ig) != null) //全角 
+            len += 2; //如果是全角，占用两个字节  如果mysql中某字段是text, 如果设置编码为utf-8,那么一个中文是占3个字节, gbk是两个字节
+        else
+            len += 1; //半角占用一个字节
+    }
+    return len;
+ }       
+
 </script>

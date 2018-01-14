@@ -634,17 +634,26 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		hidden.setOrder(order);
 		hidden.setNotIn("id");
 		
+		Position position=new Position();
+		
+		position.setLimit(limit);
+		position.setOffset(offset);
+		position.setSort(sort);
+		position.setOrder(order);
+		position.setNotIn("id");
+		
 		if(!search.isEmpty()){
 		    String[] where=TransMapToString.get(search);
 		    hidden_Check.setWhere(where);
 		    hidden.setWhere(where);
+		    position.setWhere(where);
 		}
 		
 		Map map=new HashMap<String, Object>();
 		
-		Object[] objects={hidden_Check,hidden};
+		Object[] objects={hidden_Check,hidden,position};
 		
-		String[] join={"GUID","GUID"};
+		String[] join={"GUID","check_id"};
 		
 		Hidden_Check_Join hidden_Check_Join=new Hidden_Check_Join();
 		
@@ -690,7 +699,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		hidden_Neaten.setLimit(limit);
 		hidden_Neaten.setSort(sort);
 		hidden_Neaten.setOrder(order);
-		hidden_Neaten.setNotIn("GUID");
+		hidden_Neaten.setNotIn("id");
 		
         Hidden hidden=new Hidden();
 		
@@ -698,21 +707,30 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		hidden.setOffset(offset);
 		hidden.setSort(sort);
 		hidden.setOrder(order);
-		hidden.setNotIn("GUID");
+		hidden.setNotIn("id");
+		
+		Position position=new Position();
+		
+		position.setLimit(limit);
+		position.setOffset(offset);
+		position.setSort(sort);
+		position.setOrder(order);
+		position.setNotIn("id");
 		
 		if(!search.isEmpty()){
 		    String[] where=TransMapToString.get(search);
 		    hidden_Neaten.setWhere(where);
 		    hidden.setWhere(where);
+		    position.setWhere(where);
 		}
 		
 		Map map=new HashMap<String, Object>();
 		
-		Object[] objects={hidden_Neaten,hidden};
+		Object[] objects={hidden_Neaten,hidden,position};
 		
 		Hidden_Neaten_Join hidden_Neaten_Join=new Hidden_Neaten_Join();
 		
-		String[] join={"GUID","GUID"};
+		String[] join={"GUID","neaten_id"};
 		
 		List<Hidden_Neaten> list=SelectJoinExe.get(this.getJdbcTemplate(), objects, hidden_Neaten_Join, join);
 		

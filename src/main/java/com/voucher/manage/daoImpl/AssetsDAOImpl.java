@@ -20,15 +20,19 @@ import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Users;
 import com.voucher.manage.daoModel.Assets.Hidden;
 import com.voucher.manage.daoModel.Assets.Hidden_Assets;
+import com.voucher.manage.daoModel.Assets.Hidden_Check;
 import com.voucher.manage.daoModel.Assets.Hidden_Data;
 import com.voucher.manage.daoModel.Assets.Hidden_Level;
+import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
 import com.voucher.manage.daoModel.Assets.Hidden_Type;
 import com.voucher.manage.daoModel.Assets.Hidden_User;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Assets_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Data_Join;
+import com.voucher.manage.daoModelJoin.Assets.Position_Check_Join;
 import com.voucher.manage.daoModelJoin.Assets.Position_Hidden_Join;
+import com.voucher.manage.daoModelJoin.Assets.Position_Neaten_Join;
 import com.voucher.manage.daoRowMapper.RowMappersJoin;
 import com.voucher.manage.daoSQL.DeleteExe;
 import com.voucher.manage.daoSQL.InsertExe;
@@ -78,6 +82,37 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		return i;
 	}
 
+	@Override
+	public Integer updateCheckPosition(Position position) {
+		// TODO Auto-generated method stub
+		int i;
+		String[] where={"[Position].check_id=",position.getCheck_id()};
+		position.setWhere(where);
+		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), position).get("");
+		if(count==1){
+			i=UpdateExe.get(this.getJdbcTemplate(), position);
+		}else{
+			i=InsertExe.get(this.getJdbcTemplate(), position);
+		}
+		return i;
+	}
+	
+	@Override
+	public Integer updateNeatenPosition(Position position) {
+		// TODO Auto-generated method stub
+		int i;
+		String[] where={"[Position].neaten_id=",position.getNeaten_id()};
+		position.setWhere(where);
+		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), position).get("");
+		if(count==1){
+			i=UpdateExe.get(this.getJdbcTemplate(), position);
+		}else{
+			i=InsertExe.get(this.getJdbcTemplate(), position);
+		}
+		return i;
+	}
+	
+	
 	public Integer deletePosition(Position position){
 		return DeleteExe.get(this.getJdbcTemplate(), position);
 	}
@@ -101,14 +136,19 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		hidden.setNotIn("id");
 		
 		if(!manageRegion.equals("")){
-			String[] where = {"Hidden.ManageRegion = ", manageRegion};
+			String[] where = {"[Position].GUID !=","''",
+					"Hidden.ManageRegion = ", manageRegion};
+			position.setWhere(where);
+			hidden.setWhere(where);
+		}else{
+			String[] where = {"[Position].GUID !=","''"};
 			position.setWhere(where);
 			hidden.setWhere(where);
 		}
 		
 		Object[] objects={position,hidden};
 		
-		String[] join={"GUID","GUID"};
+		String[] join={"GUID"};
 		
 		List list=SelectJoinExe.get(this.getJdbcTemplate(), objects,position_Hidden_Join,join);
 		
@@ -119,6 +159,76 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		return map;
 	}
 
+	@Override
+	public Map findAllCheckPosition() {
+		// TODO Auto-generated method stub
+		int limit=1000;
+		int offset=0;
+		
+		Position_Check_Join position_Check_Join=new Position_Check_Join();
+		
+		Position position=new Position();		
+		position.setOffset(offset);
+		position.setLimit(limit);
+		position.setNotIn("id");
+		
+		Hidden_Check hidden_Check=new Hidden_Check();
+		hidden_Check.setOffset(offset);
+		hidden_Check.setLimit(limit);
+		hidden_Check.setNotIn("id");
+		
+		String[] where = {"[Position].check_id !=","''"};
+		position.setWhere(where);
+		hidden_Check.setWhere(where);
+		
+		Object[] objects={position,hidden_Check};
+		
+		String[] join={"check_id"};
+		
+		List list=SelectJoinExe.get(this.getJdbcTemplate(), objects,position_Check_Join,join);
+		
+		Map map=new HashMap<>();
+		
+		map.put("row", list);
+		
+		return map;
+	}
+	
+	@Override
+	public Map findAllNeatenPosition() {
+		// TODO Auto-generated method stub
+		int limit=1000;
+		int offset=0;
+		
+		Position_Neaten_Join position_Neaten_Join=new Position_Neaten_Join();
+		
+		Position position=new Position();		
+		position.setOffset(offset);
+		position.setLimit(limit);
+		position.setNotIn("id");
+		
+		Hidden_Neaten hidden_Neaten=new Hidden_Neaten();
+		hidden_Neaten.setOffset(offset);
+		hidden_Neaten.setLimit(limit);
+		hidden_Neaten.setNotIn("id");
+		
+		String[] where = {"[Position].neaten_id !=","''"};
+		position.setWhere(where);
+		hidden_Neaten.setWhere(where);
+		
+		
+		Object[] objects={position,hidden_Neaten};
+		
+		String[] join={"neaten_id"};
+		
+		List list=SelectJoinExe.get(this.getJdbcTemplate(), objects,position_Neaten_Join,join);
+		
+		Map map=new HashMap<>();
+		
+		map.put("row", list);
+		
+		return map;
+	}
 	
 	@Override
 	public List findPosition(Position position) {
@@ -127,10 +237,10 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	}
 	
 	@Override
-	public Map findHiddenByDistance(Double lng, Double lat) {
+	public Map findHiddenByDistance(int limit,int offset,Double lng, Double lat,Double distance) {
 		// TODO Auto-generated method stub
 		
-		String sql="SELECT TOP 5"+
+		String sql="SELECT TOP "+limit+" "+
 		            "[Position].GUID,"+
 					"[Position].province,"+
 					"[Position].city,"+
@@ -154,15 +264,15 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 					"FROM [Position] left join [Hidden] "+
 					"on [Position].GUID = [Hidden].GUID "+
 					"WHERE "+  
-					"[Position].id not in( select top 6 [Position].id from [Position] left join [Hidden] "+
+					"[Position].id not in( select top "+offset+" [Position].id from [Position] left join [Hidden] "+
 					"on [Position].GUID = [Hidden].GUID "+ 
-					"ORDER BY   SQRT((105.4955-lng)*(105.4955-lng)+(28.91866-lat)*(28.91866-lat))) "+
+					"ORDER BY   SQRT(("+lng+"-lng)*("+lng+"-lng)+("+lat+"-lat)*("+lat+"-lat))) "+
 					"AND "+
 					"geography::STGeomFromText('POINT(' + cast([lng] as varchar(20)) + ' '"+  
 					"+ cast([lat] as varchar(20)) +')', 4326).STDistance(  "+
-					"geography::STGeomFromText('POINT(105.4955 28.91866)', 4326))<10000 "+
+					"geography::STGeomFromText('POINT(105.4955 28.91866)', 4326))<"+distance+" "+
 					"ORDER BY   "+
-					"SQRT((105.4955-lng)*(105.4955-lng)+(28.91866-lat)*(28.91866-lat))  ";
+					"SQRT(("+lng+"-lng)*("+lng+"-lng)+("+lat+"-lat)*("+lat+"-lat))  ";
 		
 		Position_Hidden_Join position_Hidden_Join=new Position_Hidden_Join();
 		
