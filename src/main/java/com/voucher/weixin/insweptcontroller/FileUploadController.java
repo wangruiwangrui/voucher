@@ -7,8 +7,10 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -23,10 +25,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.voucher.manage.daoModel.Assets.Hidden;
+import com.voucher.manage.daoModel.Assets.Hidden_Data;
+import com.voucher.manage.file.ImageFileFactory;
 import com.voucher.manage.model.Photo;
 import com.voucher.manage.service.PhotoService;
 import com.voucher.manage.service.UserService;
 import com.voucher.manage.service.WeiXinService;
+import com.voucher.manage.tools.FileConvect;
 import com.voucher.manage.tools.FileTypeTest;
 import com.voucher.weixin.base.AutoAccessToken;  
    
@@ -50,9 +56,9 @@ public class FileUploadController {
 	}
 	
     @RequestMapping(value="/upload",method=RequestMethod.GET)  
-    public @ResponseBody String fildUpload(HttpServletRequest request,ServletResponse response, 
+    public @ResponseBody Integer fildUpload(HttpServletRequest request,ServletResponse response, 
     		@RequestParam String serverId,  
-    		@RequestParam Integer campusId)throws Exception{  
+    		@RequestParam Integer campusId,@RequestParam String guid)throws Exception{  
     	HttpServletRequest hrequest = (HttpServletRequest)request;
     	String accessToken;
     	
@@ -96,6 +102,8 @@ public class FileUploadController {
              iputstream.close();  
              oputstream.close();  
          
+            
+             
              file = new File(savePath+"//"+uname); 
              
          //mime type 检测图片文件类型
@@ -115,6 +123,15 @@ public class FileUploadController {
         File file2 = new File(savePath+"//"+uname+"."+mimeType); 
         file.renameTo(file2);
         
+        List<String> names=new ArrayList<>();
+        names.add("0."+mimeType);
+        
+        List<byte[]> files=new ArrayList<>();
+        byte[] fileByte=FileConvect.fileToByte(file2);
+        files.add(fileByte);
+        
+        new ImageFileFactory().upload(Hidden_Data.class,guid, names, files);
+        
         String imageUrl="/voucher/mobile/photo/"+uname+"."+mimeType;
         String openId=( String ) hrequest.getSession().getAttribute("openId");
         Date date=new Date();       
@@ -128,11 +145,11 @@ public class FileUploadController {
         
         photoService.insertPhtoByOpenId(photo);
         
-        return savePath+"//"+uname+"."+mimeType;  
+        return 1;  
       }catch (Exception e) {
 		// TODO: handle exception
     	  e.printStackTrace();
-    	  return e.toString();
+    	  return 0;
 	 }  
     }
 }  

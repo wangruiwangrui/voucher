@@ -237,10 +237,10 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	}
 	
 	@Override
-	public Map findHiddenByDistance(int limit,int offset,Double lng, Double lat,Double distance) {
+	public Map findHiddenByDistance(int limit,int offset,Double lng, Double lat,Double distance,String search) {
 		// TODO Auto-generated method stub
 		
-		String sql="SELECT TOP "+limit+" "+
+		String sql0="SELECT TOP "+limit+" "+
 		            "[Position].GUID,"+
 					"[Position].province,"+
 					"[Position].city,"+
@@ -265,14 +265,23 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 					"on [Position].GUID = [Hidden].GUID "+
 					"WHERE "+  
 					"[Position].id not in( select top "+offset+" [Position].id from [Position] left join [Hidden] "+
-					"on [Position].GUID = [Hidden].GUID "+ 
-					"ORDER BY   SQRT(("+lng+"-lng)*("+lng+"-lng)+("+lat+"-lat)*("+lat+"-lat))) "+
-					"AND "+
+					"on [Position].GUID = [Hidden].GUID "+
+					"ORDER BY   SQRT(("+lng+"-lng)*("+lng+"-lng)+("+lat+"-lat)*("+lat+"-lat))) ";
+					
+		String sql1="AND "+
 					"geography::STGeomFromText('POINT(' + cast([lng] as varchar(20)) + ' '"+  
 					"+ cast([lat] as varchar(20)) +')', 4326).STDistance(  "+
 					"geography::STGeomFromText('POINT(105.4955 28.91866)', 4326))<"+distance+" "+
 					"ORDER BY   "+
 					"SQRT(("+lng+"-lng)*("+lng+"-lng)+("+lat+"-lat)*("+lat+"-lat))  ";
+		
+		String sql;
+		
+		if(search.equals("")){
+			sql=sql0+sql1;
+		}else{
+			sql=sql0+"AND [Hidden].name like '%"+search+"%' "+sql1;
+		}
 		
 		Position_Hidden_Join position_Hidden_Join=new Position_Hidden_Join();
 		

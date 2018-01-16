@@ -30,7 +30,7 @@ public interface AssetsDAO {
 	
 	public List findPosition(Position position);
 	
-	public Map findHiddenByDistance(int limit,int offset,Double lng, Double lat,Double distance);
+	public Map findHiddenByDistance(int limit,int offset,Double lng, Double lat,Double distance,String search);
 	
 	public Integer insertIntoHidden_Assets(Hidden_Assets hidden_Assets);
 	

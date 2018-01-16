@@ -18,6 +18,7 @@ import com.voucher.manage.daoModel.Assets.Hidden_Data;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten_Date;
 import com.voucher.manage.tools.FileTypeTest;
 import com.voucher.manage.tools.Md5;
+import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
 
 public abstract class AbstractFileUpload {
@@ -93,6 +94,9 @@ public abstract class AbstractFileUpload {
             String uri=fileName+"."+mimeType;
             System.out.println("uri="+savePath+"\\"+fileName+"."+mimeType);
             System.out.println("ID="+ID);
+            System.out.println(name);
+            System.out.println(mimeType);
+            System.out.println(uri);
             if(object==Hidden_Data.class){
               hiddenDAO.InsertIntoHiddenData(ID,name,mimeType, uri);
             }

@@ -75,6 +75,7 @@ $.get("/voucher/oauth/test.do", {
 		      	      * 此处需要两次执行相同的函数，否则回调后不能执行以下函数
 		      	      */ 
 			    	 wx.ready(function () {
+			    		 
 			    		 document.querySelector('#hiddentrouble').onclick =function(){
 			    			 wx.getLocation({
 			    	               success : function(res) {
@@ -121,6 +122,27 @@ $.get("/voucher/oauth/test.do", {
 			        	    localId: [],
 			        	    serverId: []
 			        	  };
+			        	  
+			        	  document.querySelector('#photo').onclick = function () {
+			        		  wx.getLocation({
+			    	               success : function(res) {
+			    	                    // alert(JSON.stringify(res));
+			    	                    var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+			    	                    // $("#latitude").val(latitude);
+			    	                    var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+			    	                    // $("#longitude").val(longitude);
+			    	                    var speed = res.speed; // 速度，以米/每秒计
+			    	                    // $("#speed").val(speed);
+			    	                    var accuracy = res.accuracy; // 位置精度
+			    	                    // $("#accuracy").val(accuracy);
+			    	                    location.href="safety/photo.html?latitude="+latitude+"&longitude="+longitude;
+			    	                },
+			    	                cancel : function(res) {
+			    	                    alert('用户拒绝授权获取地理位置');
+			    	                }
+			    	            });
+			        	  }
+			        	 /* 
 			    		 document.querySelector('#photo').onclick = function () {
 			    			 wx.chooseImage({
 				        	      success: function (res) {
@@ -169,6 +191,8 @@ $.get("/voucher/oauth/test.do", {
 			        		        }
 			        		    });
 			        		}
+			    		 
+			    		 */
 			    		 
 			    		 document.querySelector('#map').onclick = function () {
 	
@@ -321,9 +345,30 @@ $.get("/voucher/oauth/test.do", {
 			    			 location.href="userSetting.html";
 			    		 }
  			    		
+ 			    		
+ 			    		 document.querySelector('#photo').onclick = function () {
+			        		  wx.getLocation({
+			    	               success : function(res) {
+			    	                    // alert(JSON.stringify(res));
+			    	                    var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+			    	                    // $("#latitude").val(latitude);
+			    	                    var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+			    	                    // $("#longitude").val(longitude);
+			    	                    var speed = res.speed; // 速度，以米/每秒计
+			    	                    // $("#speed").val(speed);
+			    	                    var accuracy = res.accuracy; // 位置精度
+			    	                    // $("#accuracy").val(accuracy);
+			    	                    location.href="safety/photo.html?latitude="+latitude+"&longitude="+longitude;
+			    	                },
+			    	                cancel : function(res) {
+			    	                    alert('用户拒绝授权获取地理位置');
+			    	                }
+			    	            });
+			        	  }
+ 			    		
  			    	// 5 图片接口
 			        	  // 5.1 拍照、本地选图
-			        	  var images = {
+			        	/*  var images = {
 			        	    localId: [],
 			        	    serverId: []
 			        	  };
@@ -375,7 +420,7 @@ $.get("/voucher/oauth/test.do", {
 			        		        }
 			        		    });
 			        		}	
- 			    		
+ 			    		*/
  			    		
                    document.querySelector('#map').onclick = function () {
                        // 2. 分享接口

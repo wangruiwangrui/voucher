@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>安全隐患列表</title>
+<title>上传安全隐患图片</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -24,6 +24,10 @@
        </div>
 
         <div class="weui-cells weui-cells_form">
+               <a href="javascript:;" id="new" class="weui-btn weui-btn_primary">新建隐患</a>
+        </div>
+
+        <div class="weui-cells weui-cells_form">
               <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">隐患查询:</label></div>
                 <div class="weui-cell__bd weui_cell_primary name">
@@ -33,10 +37,13 @@
                </div>
         </div>
         
+       
+        
 		<div class="weui-cells">
          <div id="ul" >
             
          </div>
+   
 		</div>
           <div class="weui-loadmore" style="padding-bottom:30px;height:20px">
               <i class="weui-loading"></i>
@@ -49,9 +56,12 @@
 		<div class="stick"></div>
         </div> 
         <div class="weui-cells__title" >已无更多数据</div>
+      
+
           
         <!--<input type="file" style="/* visibility: hidden */" capture="camera" accept="image/*,video/*" name="" value="" >-->
 </body>
+
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
 <script src="../../../js/jquery-weui.js"></script>
 <script>
@@ -66,7 +76,7 @@
   var map = new BMap.Map("allmap");
   
     var limit = 5;
-    var offset = 0;
+    var offset = 1;  //距离搜索算法分页从1开始,否则有重复
     var search = "";
     var sort = "date";
     var order = "desc";
@@ -84,6 +94,10 @@
         loading = false;
   	  loadlist();
     });
+    
+    $("#new").on("click",function(){
+    	location.href="addHiddenDetail.html?latitude="+latitude+"&longitude="+longitude;
+    })
     
     loadlist();
     
@@ -117,12 +131,13 @@
            var html = "";
            $.ajax({
                type: "POST",
-               url: "/voucher/mobile/hidden/selectAllHidden.do",
+               url: "/voucher/baiduMap/getByDistanceImg.do?",
                data: { "limit" : limit, 
                        "offset" : offset,
                        "search" : search,
-                       "sort" : sort,
-                       "order" : order
+                       "lng" : longitude,
+                       "lat" : latitude,
+                       "distance":100000
                        },
                dataType: "json",
                error: function (request){

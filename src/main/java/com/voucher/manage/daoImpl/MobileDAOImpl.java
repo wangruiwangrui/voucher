@@ -22,6 +22,7 @@ import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Data_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Neaten_Join;
+import com.voucher.manage.daoModelJoin.Assets.Position_Hidden_Join;
 import com.voucher.manage.file.AbstractFileUpload;
 import com.voucher.manage.tools.Base64Test;
 import com.voucher.manage.tools.CopyFile;
@@ -88,6 +89,66 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 		return fileBytes;
 	}
 
+	
+	@Override
+	public Map<String, Object> positionHiddenImageQuery(HttpServletRequest request,List guidLits) {
+		// TODO Auto-generated method stub
+	
+		String pathRoot = System.getProperty("user.home");
+	
+		String filePath=pathRoot+AbstractFileUpload.filePath;
+        
+		String imgPath=request.getSession().getServletContext().getRealPath(AbstractFileUpload.filePath);
+		
+		//List<byte[]> fileBytes=new ArrayList<byte[]>();
+		
+		Map fileBytes=new HashMap<>();
+		
+		Iterator<Position_Hidden_Join> iterator=guidLits.iterator();
+	
+		while(iterator.hasNext()){			
+		
+			Position_Hidden_Join position_Hidden_Join = iterator.next();
+		
+			String GUID=position_Hidden_Join.getGUID();
+		
+			String sql="SELECT top 1 "+    
+				"[Hidden_Data].GUID, "+
+			    "[Hidden_Data].URI, "+
+				"[Hidden_Data].date, "+
+			    "[Hidden_Data].NAME "+
+				"FROM "+
+				"[Hidden_Data] left join [Hidden] on [Hidden_Data].GUID=[Hidden].GUID "+  
+				"where [Hidden_Data].GUID='"+GUID+"'  "+
+				"AND ([Hidden_Data].TYPE ='png ' OR [Hidden_Data].TYPE ='jpg ' OR [Hidden_Data].TYPE ='jpeg ' OR [Hidden_Data].TYPE ='gif ' ) "+
+				"order by [Hidden_Data].date desc ";
+		
+			List hidden_Data_Joins=this.getJdbcTemplate().query(sql,new hiddenImageQueryRowMapper());
+		
+			try{
+				Hidden_Data_Join hidden_Data_Join=(Hidden_Data_Join) hidden_Data_Joins.get(0);
+							
+				//String fileByte=Base64Test.getImageStr(filePath+"\\"+hidden_Data_Join.getURI());
+				
+				String oldFile=filePath+"\\"+hidden_Data_Join.getURI();
+				
+				CopyFile.set(imgPath, oldFile, hidden_Data_Join.getURI());
+				
+				fileBytes.put(GUID, AbstractFileUpload.filePath+"\\"+hidden_Data_Join.getURI());
+		
+			}catch (Exception e) {
+			// TODO: handle exception
+				e.printStackTrace();
+			}
+		
+		}
+	
+
+		MyTestUtil.print(fileBytes);
+		
+		return fileBytes;
+	}
+	
 	
 	@Override
 	public List allHiddenImageByGUID(HttpServletRequest request,Hidden_Join hidden_Join) {

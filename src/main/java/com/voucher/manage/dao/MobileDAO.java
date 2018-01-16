@@ -13,6 +13,8 @@ public interface MobileDAO {
 	
 	public Map<String, Object> hiddenImageQuery(HttpServletRequest request,List guidLits);
 	
+	public Map<String, Object> positionHiddenImageQuery(HttpServletRequest request,List guidLits);
+	
 	public List allHiddenImageByGUID(HttpServletRequest request,Hidden_Join hidden_Join);
 
 	public Map<String, Object> checkImageQuery(HttpServletRequest request,List guidLits);

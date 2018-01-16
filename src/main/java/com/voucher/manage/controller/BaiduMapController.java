@@ -2,6 +2,7 @@ package com.voucher.manage.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.voucher.manage.dao.AssetsDAO;
+import com.voucher.manage.dao.HiddenDAO;
+import com.voucher.manage.dao.MobileDAO;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
@@ -37,7 +40,11 @@ public class BaiduMapController {
 
 	ApplicationContext applicationContext=new Connect().get();
 	
+	HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
+	
 	AssetsDAO assetsDAO=(AssetsDAO) applicationContext.getBean("assetsdao");
+	
+	MobileDAO mobileDao=(MobileDAO) applicationContext.getBean("mobileDao");
 	
 	@RequestMapping("/get")
 	public @ResponseBody List test(String manageRegion) {		
@@ -108,15 +115,39 @@ public class BaiduMapController {
 	}
 	
 	@RequestMapping("/getByDistance")
-	public @ResponseBody List getByDistance(Integer limit,Integer offset,Double lng,Double lat,Double distance){
+	public @ResponseBody List getByDistance(Integer limit,Integer offset,Double lng,Double lat,
+			Double distance,HttpServletRequest request){
 		
-		Map map=assetsDAO.findHiddenByDistance(limit, offset, lng, lat, distance);
+		Map map=assetsDAO.findHiddenByDistance(limit, offset, lng, lat, distance,"");
 		
 		MyTestUtil.print(map);
 		
 		List list=(List) map.get("row");
 		
 		return list;
+	}
+	
+	@RequestMapping("/getByDistanceImg")
+	public @ResponseBody Map getByDistanceImg(Integer limit,Integer offset,Double lng,Double lat,
+			Double distance,String search,HttpServletRequest request){
+		System.out.println("search="+search);
+		if(search==null)
+			search="";
+		
+		Map map=assetsDAO.findHiddenByDistance(limit, offset, lng, lat, distance,search);
+		
+		MyTestUtil.print(map);
+		
+		List list=(List) map.get("row");
+		
+		Map fileBytes=mobileDao.positionHiddenImageQuery(request, list);
+		
+		Map result=new HashMap<>();
+		
+		result.put("hidden", list);
+		result.put("fileBytes", fileBytes);
+		
+		return result;
 	}
 	
 	@RequestMapping("getManageRegion")
