@@ -533,7 +533,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		// TODO Auto-generated method stub
 		Hidden hidden=new Hidden();
 		
-		String[] where={"[Hidden].progress =","0"};
+		String[] where={"[Hidden].exist !="," 0 ","[Hidden].progress ="," 0 "};
 		hidden.setWhere(where);
 		
 		int i=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden).get("");
@@ -546,7 +546,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		// TODO Auto-generated method stub
 		Hidden hidden=new Hidden();
 		
-		String[] where={"[Hidden].progress >","0"
+		String[] where={"[Hidden].exist !="," 0 ","[Hidden].progress >","0"
 				," [Hidden].progress <","1"};
 		hidden.setWhere(where);
 		
@@ -561,7 +561,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		
 		Hidden hidden=new Hidden();
 		
-		String sql="SELECT MAX([date]) FROM [Hidden_Check]";
+		String sql="SELECT MAX([date]) FROM [Hidden_Check] where [Hidden_Check].exist !=0";
 		
 		List list=this.getJdbcTemplate().query(sql,new hiddenRowMapper());
 		
@@ -587,7 +587,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		// TODO Auto-generated method stub
 		Hidden hidden=new Hidden();
 		
-		String sql="SELECT MAX([happen_time]) FROM [Hidden]";
+		String sql="SELECT MAX([happen_time]) FROM [Hidden] where [Hidden].exist !=0";
 		
 		List list=this.getJdbcTemplate().query(sql,new hiddenRowMapper());
 		
@@ -645,6 +645,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		String sql1="SELECT top 5 [Hidden_Data].GUID "+
 				 	"FROM [Hidden_Data] left join [Hidden] on [Hidden_Data].GUID=[Hidden].GUID "+
 				 	"where  [Hidden].hidden_level = "+hiddenLevel+" "+
+				 	"AND [Hidden].exist!=0 "+
 				 	"AND ([Hidden_Data].TYPE ='png ' OR [Hidden_Data].TYPE ='jpg ' OR [Hidden_Data].TYPE ='jpeg ' OR [Hidden_Data].TYPE ='gif ' ) "+
 				 	"group by [Hidden_Data].GUID ";
 		

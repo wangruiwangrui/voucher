@@ -284,7 +284,14 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		Hidden hidden2=new Hidden();
 		hidden2.setExist(0);
 		hidden2.setWhere(hidden.getWhere());
-		return UpdateExe.get(this.getJdbcTemplate(), hidden2);
+		int i=UpdateExe.get(this.getJdbcTemplate(), hidden2);
+		if(i==1){
+			String[] where2={"[Hidden_Data].GUID=",hidden.getGUID()};
+			Hidden_Data hidden_Data=new Hidden_Data();
+			hidden_Data.setWhere(hidden.getWhere());
+			DeleteExe.get(this.getJdbcTemplate(), hidden_Data);
+		}
+		return i;
 	}
 
 	@Override
@@ -684,7 +691,16 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		hidden_Check2.setWhere(hidden_Check.getWhere());
 		//return DeleteExe.get(this.getJdbcTemplate(), hidden_Check);
 		
-		return UpdateExe.get(this.getJdbcTemplate(), hidden_Check2);
+		int i=UpdateExe.get(this.getJdbcTemplate(), hidden_Check2);
+		
+		if(i==1){
+			String[] where2={"[Hidden_Check].check_id=",hidden_Check.getCheck_id()};
+			Hidden_Check_Date hidden_Check_Date=new Hidden_Check_Date();
+			hidden_Check_Date.setWhere(where2);
+			DeleteExe.get(this.getJdbcTemplate(), hidden_Check_Date);
+		}
+		
+		return i;
 	}
 
 
@@ -759,7 +775,16 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		hidden_Neaten2.setWhere(hidden_Neaten.getWhere());
 		//return DeleteExe.get(this.getJdbcTemplate(), hidden_Neaten);
 		
-		return UpdateExe.get(this.getJdbcTemplate(), hidden_Neaten2);
+		int i=UpdateExe.get(this.getJdbcTemplate(), hidden_Neaten2);
+		
+		if(i==1){
+			String[] where2={"[Hidden_Neaten_Date].neaten_id=",hidden_Neaten.getNeaten_id()};
+			Hidden_Neaten_Date hidden_Neaten_Date=new Hidden_Neaten_Date();
+			hidden_Neaten_Date.setWhere(where2);
+			DeleteExe.get(this.getJdbcTemplate(), hidden_Neaten_Date);		
+		}
+		
+		return i;
 	}
 
 
