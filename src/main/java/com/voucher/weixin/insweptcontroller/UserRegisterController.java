@@ -83,7 +83,7 @@ public class UserRegisterController {
 			return map;
 	    }
 	    
-		if(repeat==1){
+		if(repeat>=1){
 			map.put("data", "该用户名已被注册，请使用其他用户名注册");
 			return map;
 		}else{

@@ -119,24 +119,24 @@ public class AssetsImpl implements Assets{
 	public Integer deleteHidden(Hidden hidden) {
 		// TODO Auto-generated method stub
 		Hidden_Assets hidden_Assets=new Hidden_Assets();
-		String[] where0={"[Assets].[dbo].[Hidden_Assets].hidden_GUID =",hidden.getGUID()};
+		String[] where0={"[Hidden_Assets].hidden_GUID =",hidden.getGUID()};
 		hidden_Assets.setWhere(where0);
 		assetsDAO.deleteHidden_Assets(hidden_Assets);
 		
 		Hidden_Check hidden_Check=new Hidden_Check();
-		String[] where1={"[Assets].[dbo].[Hidden_Check].GUID =",hidden.getGUID()};
+		String[] where1={"[Hidden_Check].GUID =",hidden.getGUID()};
 		hidden_Check.setWhere(where1);
 		hiddenDAO.deleteHiddenCheck(hidden_Check);
 		
 		Hidden_Neaten hidden_Neaten=new Hidden_Neaten();
-		String[] where2={"[Assets].[dbo].[Hidden_Neaten].GUID =",hidden.getGUID()};
+		String[] where2={"[Hidden_Neaten].GUID =",hidden.getGUID()};
 		hidden_Neaten.setWhere(where2);
 		hiddenDAO.deleteHiddenNeaten(hidden_Neaten);
 		
 		System.out.println("hidden guid="+hidden.getGUID());
 		
 		Position position=new Position();
-		String[] where3={"[Assets].[dbo].[Position].GUID =",hidden.getGUID()};
+		String[] where3={"[Position].GUID =",hidden.getGUID()};
 		position.setWhere(where3);
 		assetsDAO.deletePosition(position);
 		

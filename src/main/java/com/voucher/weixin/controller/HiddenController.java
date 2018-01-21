@@ -1,8 +1,13 @@
 package com.voucher.weixin.controller;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.dao.MobileDAO;
+import com.voucher.manage.daoModel.Assets.Hidden;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Neaten_Join;
@@ -175,5 +181,91 @@ public class HiddenController {
 		return result;
 	}
 	
+	
+	@RequestMapping("/selectHiddenLevel")
+	public @ResponseBody List selectHiddenLevel(){
+		return hiddenDAO.setctAllHiddenLevel();
+	}
+	
+	@RequestMapping("/updateHidden")
+	public @ResponseBody Integer updateHidden(@RequestParam String guid,
+			@RequestParam String name,@RequestParam Integer level,
+			@RequestParam String happenTime,@RequestParam String remark,
+			@RequestParam String detail){
+		
+		Hidden hidden=new Hidden();
+
+		String[] where={"[Hidden].GUID=",guid};
+		hidden.setWhere(where);
+		
+		hidden.setName(name);
+		if(level!=null)
+		 hidden.setHidden_level(level);
+		if(happenTime!=null&&!happenTime.equals("")){
+			try {
+				DateFormat fmt =new SimpleDateFormat("yyyy-MM-dd");
+				Date date;		
+				date = fmt.parse(happenTime);	
+				hidden.setHappen_time(date);
+				System.out.println("thisdate="+date);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		hidden.setRemark(remark);
+		hidden.setDetail(detail);
+		
+		Date date2=new Date();
+		hidden.setUpdate_time(date2);
+		
+		return hiddenDAO.updateHidden(hidden);
+		 
+	}
+	
+	
+	@RequestMapping("/insertHidden")
+	public @ResponseBody Map insertHidden(
+			@RequestParam String name,@RequestParam Integer level,
+			@RequestParam String happenTime,@RequestParam String remark,
+			@RequestParam String detail){
+		
+		Hidden hidden=new Hidden();
+
+        UUID uuid=UUID.randomUUID();
+        
+        hidden.setGUID(uuid.toString());
+		
+		hidden.setName(name);
+		if(level!=null)
+		 hidden.setHidden_level(level);
+		if(happenTime!=null&&!happenTime.equals("")){
+			try {
+				DateFormat fmt =new SimpleDateFormat("yyyy-MM-dd");
+				Date date;		
+				date = fmt.parse(happenTime);	
+				hidden.setHappen_time(date);
+				System.out.println("thisdate="+date);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		hidden.setRemark(remark);
+		hidden.setDetail(detail);
+		
+		Date date2=new Date();
+		hidden.setUpdate_time(date2);
+		hidden.setDate(date2);
+		int i=hiddenDAO.insertIntoHidden(hidden);
+		
+		Map map=new HashMap<>();
+		
+		map.put("status", i);
+		map.put("guid", uuid.toString());
+		
+		return map;
+		
+	}
 	
 }

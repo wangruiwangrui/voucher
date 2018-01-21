@@ -78,7 +78,7 @@ public class sqltest4 {
 		
 		String sql="SELECT top 10 id,HiddenLevel,ChangeSpeed,HiddenInstance,"+
     "doubletest,floattest,longtest,time"+
-    " FROM  [Assets].[dbo].[Hidden]";
+    " FROM  [Hidden]";
 		
 	}
 }

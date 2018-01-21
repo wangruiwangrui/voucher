@@ -103,10 +103,6 @@ $.get("/voucher/oauth/test.do", {
  			    		document.querySelector('#hiddenNeaten').onclick =function(){
 			    			 location.href="guidance/hiddenNeatenList.html";
 			    		 }
-			    		 
- 			    		document.querySelector('#voice').onclick =function(){
-			    			 location.href="safety/voice.html";
-			    		 }
  			    		
 			    		 document.querySelector('#report').onclick =function(){
 			    			 location.href="safety/emergency.html";
@@ -332,9 +328,6 @@ $.get("/voucher/oauth/test.do", {
 			    			 location.href="guidance/hiddenNeatenList.html";
 			    		 }
  			    		
- 			    		document.querySelector('#voice').onclick =function(){
-			    			 location.href="safety/voice.html";
-			    		 }
  			    		
  			    		document.querySelector('#report').onclick =function(){
 			    			 location.href="safety/emergency.html";

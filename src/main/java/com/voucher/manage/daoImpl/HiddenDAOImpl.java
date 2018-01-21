@@ -238,11 +238,11 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		hidden.setNotIn("id");
 		
 		if(!search.isEmpty()){
-			search.put("[Assets].[dbo].[Hidden].exist =", "1");
+			search.put("[Hidden].exist =", "1");
 		    String[] where=TransMapToString.get(search);
 		    hidden.setWhere(where);
 		}else{
-			String[] where={"[Assets].[dbo].[Hidden].exist =", "1"};
+			String[] where={"[Hidden].exist =", "1"};
 			hidden.setWhere(where);
 		}
 		
@@ -307,7 +307,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	@Override
 	public Integer insertHiddenLevel(Hidden_Level hidden_level) {
 		// TODO Auto-generated method stub
-		String[] where={"[Assets].[dbo].[Hidden_Level].hidden_level=",String.valueOf(hidden_level.getHidden_level())};
+		String[] where={"[Hidden_Level].hidden_level=",String.valueOf(hidden_level.getHidden_level())};
 		Hidden_Level hidden_Level2=new Hidden_Level();
 		hidden_Level2.setWhere(where);
 		
@@ -323,8 +323,8 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	public Integer deleteHiddenLevel(Hidden_Level hidden_level) {
 		// TODO Auto-generated method stub
 		Hidden hidden=new Hidden();
-		String[] where={"[Assets].[dbo].[Hidden].hidden_level=",String.valueOf(hidden_level.getHidden_level()),
-				"[Assets].[dbo].[Hidden].exist=","1"};
+		String[] where={"[Hidden].hidden_level=",String.valueOf(hidden_level.getHidden_level()),
+				"[Hidden].exist=","1"};
 		hidden.setWhere(where);
 		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden).get("");
 		
@@ -339,8 +339,8 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	public Integer updateHiddenLevel(Hidden_Level hidden_Level) {
 		// TODO Auto-generated method stub
 		Hidden hidden=new Hidden();
-		String[] where={"[Assets].[dbo].[Hidden].hidden_level=",String.valueOf(hidden_Level.getHidden_level()),
-				"[Assets].[dbo].[Hidden].exist=","1"};
+		String[] where={"[Hidden].hidden_level=",String.valueOf(hidden_Level.getHidden_level()),
+				"[Hidden].exist=","1"};
 		hidden.setWhere(where);
 		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden).get("");
 		
@@ -357,7 +357,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 			Map<String, String> search) {
 		// TODO Auto-generated method stub
         Hidden hidden=new Hidden();
-        search.put("[Assets].[dbo].[Hidden].exist =", "1");
+        search.put("[Hidden].exist =", "1");
         
         System.out.println("order="+order+"      sort="+sort);
         
@@ -442,8 +442,8 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	public Integer deleteHiddenType(Hidden_Type hidden_Type) {
 		// TODO Auto-generated method stub
 		Hidden hidden=new Hidden();
-		String[] where={"[Assets].[dbo].[Hidden].type=",String.valueOf(hidden_Type.getType()),
-				"[Assets].[dbo].[Hidden].exist=","1"};
+		String[] where={"[Hidden].type=",String.valueOf(hidden_Type.getType()),
+				"[Hidden].exist=","1"};
 		hidden.setWhere(where);
 		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden).get("");
 		
@@ -459,8 +459,8 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	public Integer updateHiddenType(Hidden_Type hidden_Type) {
 		// TODO Auto-generated method stub
 		Hidden hidden=new Hidden();
-		String[] where={"[Assets].[dbo].[Hidden].type=",String.valueOf(hidden_Type.getType()),
-				"[Assets].[dbo].[Hidden].exist=","1"};
+		String[] where={"[Hidden].type=",String.valueOf(hidden_Type.getType()),
+				"[Hidden].exist=","1"};
 		hidden.setWhere(where);
 		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden).get("");
 		
@@ -480,7 +480,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		hidden_User.setLimit(10);
 		hidden_User.setNotIn("id");
 		
-		String[] where={"[Assets].[dbo].[Hidden_User].campusAdmin =",campusAdmin};
+		String[] where={"[Hidden_User].campusAdmin =",campusAdmin};
 		hidden_User.setWhere(where);
 		
 		List list=SelectExe.get(this.getJdbcTemplate(), hidden_User);
@@ -511,11 +511,11 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		
 		try{
 			if(!search.isEmpty()){
-				search.put("[Assets].[dbo].[Hidden_User].purview !=", "0");
+				search.put("[Hidden_User].purview !=", "0");
 				String[] where=TransMapToString.get(search);
 				hidden_User.setWhere(where);
 			}else{
-				String[] where={"[Assets].[dbo].[Hidden_User].purview !=", "0"};
+				String[] where={"[Hidden_User].purview !=", "0"};
 				hidden_User.setWhere(where);
 			}
 		}catch (Exception e) {
@@ -546,7 +546,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		
 		Hidden_User hidden_User2=new Hidden_User();
 		
-		String[] where={"[Assets].[dbo].[Hidden_User].campusAdmin=",hidden_User.getCampusAdmin()};
+		String[] where={"[Hidden_User].campusAdmin=",hidden_User.getCampusAdmin()};
 		
 		hidden_User2.setWhere(where);
 		
@@ -554,7 +554,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 
 		Hidden_User hidden_User3=new Hidden_User();
 		
-		String[] where2={"[Assets].[dbo].[Hidden_User].id=",String.valueOf(hidden_User.getId())};
+		String[] where2={"[Hidden_User].id=",String.valueOf(hidden_User.getId())};
 		
 		hidden_User3.setWhere(where2);
 		
@@ -574,8 +574,8 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	public Integer deleteHiddenUser(Hidden_User hidden_User) {
 		// TODO Auto-generated method stub
 		Hidden hidden=new Hidden();
-		String[] where={"[Assets].[dbo].[Hidden].principal=",String.valueOf(hidden_User.getPrincipal()),
-				"[Assets].[dbo].[Hidden].exist=","1"};
+		String[] where={"[Hidden].principal=",String.valueOf(hidden_User.getPrincipal()),
+				"[Hidden].exist=","1"};
 		hidden.setWhere(where);
 		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden).get("");
 		
@@ -600,7 +600,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		hidden_User.setLimit(10);
 		hidden_User.setOffset(0);
 		
-		String[] where={"[Assets].[dbo].[Hidden_User].campusAdmin=",hidden_User.getCampusAdmin()};
+		String[] where={"[Hidden_User].campusAdmin=",hidden_User.getCampusAdmin()};
 		hidden_User.setWhere(where);
 		List list=SelectExe.get(this.getJdbcTemplate(), hidden_User);
 		
@@ -625,7 +625,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 			String order,Map<String, String> search) {
 		// TODO Auto-generated method stub
 		Hidden_Check hidden_Check=new Hidden_Check();
-		search.put("[Assets].[dbo].[Hidden_Check].exist =", "1");
+		search.put("[Hidden_Check].exist =", "1");
 		
 		hidden_Check.setOffset(offset);
 		hidden_Check.setLimit(limit);
@@ -709,7 +709,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 			String order,Map<String, String> search) {
 		// TODO Auto-generated method stub
 		Hidden_Neaten hidden_Neaten=new Hidden_Neaten();
-		search.put("[Assets].[dbo].[Hidden_Neaten].exist =", "1");
+		search.put("[Hidden_Neaten].exist =", "1");
 		
 		hidden_Neaten.setOffset(offset);
 		hidden_Neaten.setLimit(limit);
@@ -806,7 +806,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	public List<Hidden_Join> selectHiddenOfMap(Map<String, String> search) {
 		// TODO Auto-generated method stub
 		 Hidden hidden=new Hidden();
-		 search.put("[Assets].[dbo].[Hidden].exist =", "1");
+		 search.put("[Hidden].exist =", "1");
 		 
 			hidden.setLimit(10);
 			hidden.setOffset(0);

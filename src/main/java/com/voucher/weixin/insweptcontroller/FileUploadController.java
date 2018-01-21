@@ -57,7 +57,7 @@ public class FileUploadController {
 	
     @RequestMapping(value="/upload",method=RequestMethod.GET)  
     public @ResponseBody Integer fildUpload(HttpServletRequest request,ServletResponse response, 
-    		@RequestParam String serverId,  
+    		@RequestParam String imagename,@RequestParam String serverId,  
     		@RequestParam Integer campusId,@RequestParam String guid)throws Exception{  
     	HttpServletRequest hrequest = (HttpServletRequest)request;
     	String accessToken;
@@ -124,7 +124,7 @@ public class FileUploadController {
         file.renameTo(file2);
         
         List<String> names=new ArrayList<>();
-        names.add("0."+mimeType);
+        names.add(imagename+"."+mimeType);
         
         List<byte[]> files=new ArrayList<>();
         byte[] fileByte=FileConvect.fileToByte(file2);

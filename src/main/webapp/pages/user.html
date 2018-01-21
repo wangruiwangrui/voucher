@@ -95,10 +95,12 @@
 	
    function statusFormatter(value, row, index) {
 	if (value == "0")
+		return "未认证";
+	else if (value == "1")
 		return "普通员工";
-	else if (value == "1") {
+	else if (value == "2") {
 		return "安全人员";
-	}else if (value == "2") {
+	}else if (value == "3") {
 		return "领导";
 	}
   }
@@ -114,7 +116,10 @@
 					'</a>',
 					'<a class="common ml8 fa fa-user-circle" href="javascript:void(0)" title="设置普通员工">',
 					'&nbsp;&nbsp;',
-					'</a>' ].join('');
+					'</a>',
+					'<a class="com ml8 fa fa-pause" href="javascript:void(0)" title="未认证">',
+					'&nbsp;&nbsp;',
+					'</a>'].join('');
 
 	}
    
@@ -123,7 +128,7 @@
 				//alert("admin");
 				$.post("../../voucher/user/upAtionFormatter.do", {
 					openId : row.openId,
-					place:2,
+					place:3,
                    campusId:campusId,
 				}, function(text) {
 					
@@ -146,7 +151,7 @@
 				//alert("common");
 				$.post("../../voucher/user/upAtionFormatter.do", {
 					openId : row.openId,
-					place:1,
+					place:2,
 					campusId:campusId,
 				}, function(text) {
 					if (text == -1 || text == 0) {
@@ -168,7 +173,7 @@
 				//alert("superAdmin");
 				$.post("../../voucher/user/upAtionFormatter.do", {
 					openId : row.openId,
-					place:0,
+					place:1,
 					campusId:campusId,
 				}, function(text) {
 					if (text == -1 || text == 0) {
@@ -179,6 +184,28 @@
 							index : index,
 							row : {
 								type : 0
+							}
+						});
+						$('#table').bootstrapTable('refresh', {silent: true});
+					}
+
+				});
+			},
+			'click .com' : function(e, value, row, index) {
+				//alert("common");
+				$.post("../../voucher/user/upAtionFormatter.do", {
+					openId : row.openId,
+					place:0,
+					campusId:campusId,
+				}, function(text) {
+					if (text == -1 || text == 0) {
+						setSuccess("设置为未认证人员失败。");
+					} else {
+						setSuccess("设置为未认证人员成功。");
+						$('#table').bootstrapTable('updateRow', {
+							index : index,
+							row : {
+								type : 1
 							}
 						});
 						$('#table').bootstrapTable('refresh', {silent: true});
