@@ -134,7 +134,7 @@
 		<filter-class>com.voucher.manage.filter.MobileAdminIsLoginFilter</filter-class>
 		<init-param>
 			<param-name>loginStrings</param-name>
-			<param-value>/login.html;.js;.css;restrict.html;index.html</param-value>
+			<param-value>/login.html;.js;.css;restrict.html;index.html;/test</param-value>
 		</init-param>
 		<init-param>
 			<param-name>includeStrings</param-name>
@@ -151,6 +151,33 @@
 		<url-pattern>/mobile/1/*</url-pattern>
 	</filter-mapping>
 
+     <!-- 资产交租页面的栏截 -->
+    <filter>
+		<filter-name>MobileAssetIsLoginFilter</filter-name>
+		<filter-class>com.voucher.manage.filter.MobileAssetIsLoginFilter</filter-class>
+		<init-param>
+			<param-name>loginStrings</param-name>
+			<param-value>/login.html;.js;.css;restrict.html;index.html;/test</param-value>
+		</init-param>
+		<init-param>
+			<param-name>includeStrings</param-name>
+			<param-value>.html;.jsp;.do</param-value>
+		</init-param>
+		<init-param>
+			<param-name>settingPath</param-name>
+			<param-value>/mobile/asset/usersetting.html</param-value>
+		</init-param>
+		<init-param>
+			<param-name>redirectPath</param-name>
+			<param-value>/mobile/asset/restrict.html</param-value>
+		</init-param>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>MobileAdminSessionFilter</filter-name>
+		<url-pattern>/mobile/asset/*</url-pattern>
+	</filter-mapping>
+      
 	  <mime-mapping>
 		<extension>air</extension>
 		<mime-type>application/air</mime-type>

@@ -61,11 +61,15 @@
 		subscribe_time,
 		usersinfo.name,users.place,	
 		usersinfo.headship,usersinfo.email,	
-		address ,phone
+		address ,phone,
+		Charter, IDNo
 		from users
 		left join usersinfo
 		on
 		users.open_id = usersinfo.open_id
+		left join user_asset
+		on
+		users.open_id = user_asset.open_id
 		<where>
 			users.open_id=#{openId,jdbcType=VARCHAR}
 	    </where>

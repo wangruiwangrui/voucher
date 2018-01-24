@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.voucher.manage.mapper.User_AssetMapper">
+  <resultMap id="BaseResultMap" type="com.voucher.manage.model.User_Asset">
+    <result column="open_id" jdbcType="VARCHAR" property="openId" />
+    <result column="Charter" jdbcType="VARCHAR" property="charter" />
+    <result column="IDNo" jdbcType="VARCHAR" property="idno" />
+  </resultMap>
+  <insert id="insert" parameterType="com.voucher.manage.model.User_Asset">
+    insert into User_Asset (open_id, Charter, IDNo
+      )
+    values (#{openId,jdbcType=VARCHAR}, #{charter,jdbcType=VARCHAR}, #{idno,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.voucher.manage.model.User_Asset">
+    insert into User_Asset
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="openId != null">
+        open_id,
+      </if>
+      <if test="charter != null">
+        Charter,
+      </if>
+      <if test="idno != null">
+        IDNo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="openId != null">
+        #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="charter != null">
+        #{charter,jdbcType=VARCHAR},
+      </if>
+      <if test="idno != null">
+        #{idno,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+</mapper>

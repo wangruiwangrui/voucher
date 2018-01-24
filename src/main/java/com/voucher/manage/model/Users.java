@@ -51,6 +51,10 @@ public class Users {
     private String rank;
     
     private Date upTime;
+
+    private String charter;
+
+    private String idno;
     
     public Integer getCampusId() {
 		return campusId;
@@ -255,6 +259,22 @@ public class Users {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	public String getCharter() {
+		return charter;
+	}
+
+	public void setCharter(String charter) {
+		this.charter = charter;
+	}
+
+	public String getIdno() {
+		return idno;
+	}
+
+	public void setIdno(String idno) {
+		this.idno = idno;
 	}
 
 }

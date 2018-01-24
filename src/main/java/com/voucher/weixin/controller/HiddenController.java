@@ -21,6 +21,7 @@ import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.dao.MobileDAO;
 import com.voucher.manage.daoModel.Assets.Hidden;
+import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Neaten_Join;
@@ -191,7 +192,8 @@ public class HiddenController {
 	public @ResponseBody Integer updateHidden(@RequestParam String guid,
 			@RequestParam String name,@RequestParam Integer level,
 			@RequestParam String happenTime,@RequestParam String remark,
-			@RequestParam String detail){
+			@RequestParam String detail,@RequestParam Double lng,
+			@RequestParam Double lat){
 		
 		Hidden hidden=new Hidden();
 
@@ -219,8 +221,21 @@ public class HiddenController {
 		Date date2=new Date();
 		hidden.setUpdate_time(date2);
 		
-		return hiddenDAO.updateHidden(hidden);
-		 
+		int i=hiddenDAO.updateHidden(hidden);
+		
+		Position position=new Position();
+		
+	    position.setGUID(guid);
+		position.setLat(lat);
+		position.setLng(lng);
+		
+		int count=assetsDAO.countPositionByGUID(position);
+		
+		if(count==0){
+			assetsDAO.updatePosition(position);
+		}
+		
+		return i;
 	}
 	
 	
@@ -228,7 +243,8 @@ public class HiddenController {
 	public @ResponseBody Map insertHidden(
 			@RequestParam String name,@RequestParam Integer level,
 			@RequestParam String happenTime,@RequestParam String remark,
-			@RequestParam String detail){
+			@RequestParam String detail,@RequestParam Double lng,
+			@RequestParam Double lat){
 		
 		Hidden hidden=new Hidden();
 
@@ -258,6 +274,14 @@ public class HiddenController {
 		hidden.setUpdate_time(date2);
 		hidden.setDate(date2);
 		int i=hiddenDAO.insertIntoHidden(hidden);
+		
+		Position position=new Position();
+		
+		position.setGUID(uuid.toString());
+		position.setLat(lat);
+		position.setLng(lng);
+		
+		assetsDAO.updatePosition(position);
 		
 		Map map=new HashMap<>();
 		

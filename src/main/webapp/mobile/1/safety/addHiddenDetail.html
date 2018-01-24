@@ -210,7 +210,9 @@
 		    	level:level,
 		    	happenTime:happenTime,
 		    	remark:remark,
-		    	detail:detail
+		    	detail:detail,
+		    	lng:longitude,
+		    	lat:latitude
 		    }, function(data){
 	        	var obj = $.parseJSON(data);
 		    	if (obj.status == 0) {
@@ -321,7 +323,8 @@
 		    	campusId:1,
 		    	imagename:imagename,
 		    	serverId:serverId,
-		    	guid:guid
+		    	id:guid,
+		    	classType:"hidden"
 		    }, function(data){
 		    	console.log(data);
 		        if (data == 0) {

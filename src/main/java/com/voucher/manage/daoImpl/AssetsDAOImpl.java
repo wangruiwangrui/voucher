@@ -82,6 +82,12 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		return i;
 	}
 
+	public Integer countPositionByGUID(Position position){
+		String[] where={"[Position].GUID=",position.getGUID()};
+		position.setWhere(where);
+		return (int) SelectExe.getCount(this.getJdbcTemplate(), position).get("");
+	}
+	
 	@Override
 	public Integer updateCheckPosition(Position position) {
 		// TODO Auto-generated method stub

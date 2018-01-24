@@ -339,9 +339,7 @@
     	var happenTime=$("#happenTime").val();
     	var remark=$("#remark").val();
     	var detail=$("#detail").val();
-    	
-    	alert(happenTime);
-    	
+
     	 $.post("/voucher/mobile/hidden/updateHidden.do",
     		  {
 		    	guid:guid,
@@ -349,7 +347,9 @@
 		    	level:level,
 		    	happenTime:happenTime,
 		    	remark:remark,
-		    	detail:detail
+		    	detail:detail,
+		    	lng:longitude,
+		    	lat:latitude
 		    }, function(data){
 		    	if (data == 0) {
 		        	alert("更新隐患"+name+"失败!");
@@ -459,7 +459,8 @@
 		    	campusId:1,
 		    	imagename:imagename,
 		    	serverId:serverId,
-		    	guid:guid
+		    	id:guid,
+		    	classType:"hidden"
 		    }, function(data){
 		    	console.log(data);
 		        if (data == 0) {

@@ -230,6 +230,14 @@
      <version>3.1</version>
    </dependency>
    
+   <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+<dependency>
+    <groupId>org.apache.httpcomponents</groupId>
+    <artifactId>httpclient</artifactId>
+    <version>4.5.4</version>
+</dependency>
+   
+   
    <!-- https://mvnrepository.com/artifact/org.mybatis.generator/mybatis-generator-core -->
    <!-- mybatis自动生成sql工具 -->
    <dependency>

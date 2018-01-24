@@ -25,8 +25,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.druid.sql.ast.statement.SQLIfStatement.Else;
 import com.voucher.manage.daoModel.Assets.Hidden;
+import com.voucher.manage.daoModel.Assets.Hidden_Check_Date;
 import com.voucher.manage.daoModel.Assets.Hidden_Data;
+import com.voucher.manage.daoModel.Assets.Hidden_Neaten_Date;
 import com.voucher.manage.file.ImageFileFactory;
 import com.voucher.manage.model.Photo;
 import com.voucher.manage.service.PhotoService;
@@ -58,7 +61,8 @@ public class FileUploadController {
     @RequestMapping(value="/upload",method=RequestMethod.GET)  
     public @ResponseBody Integer fildUpload(HttpServletRequest request,ServletResponse response, 
     		@RequestParam String imagename,@RequestParam String serverId,  
-    		@RequestParam Integer campusId,@RequestParam String guid)throws Exception{  
+    		@RequestParam Integer campusId,@RequestParam String id,
+    		@RequestParam String classType)throws Exception{  
     	HttpServletRequest hrequest = (HttpServletRequest)request;
     	String accessToken;
     	
@@ -66,6 +70,8 @@ public class FileUploadController {
         String pathRoot = request.getSession().getServletContext().getRealPath("");  
         String path="/mobile/photo/";  
         String filePath=pathRoot+path;  
+        
+        Object objectClass = null;
         
          File savePath = new File(filePath);//创建新文件  
          System.out.println("filePath="+filePath);
@@ -130,7 +136,15 @@ public class FileUploadController {
         byte[] fileByte=FileConvect.fileToByte(file2);
         files.add(fileByte);
         
-        new ImageFileFactory().upload(Hidden_Data.class,guid, names, files);
+        if(classType.equals("hidden")){
+        	objectClass=Hidden_Data.class;
+        }else if(classType.equals("check")){
+        	objectClass=Hidden_Check_Date.class;
+        }else if(classType.equals("neaten")){
+        	objectClass=Hidden_Neaten_Date.class;
+        }
+        
+        new ImageFileFactory().upload(objectClass,id, names, files);
         
         String imageUrl="/voucher/mobile/photo/"+uname+"."+mimeType;
         String openId=( String ) hrequest.getSession().getAttribute("openId");

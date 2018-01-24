@@ -16,6 +16,8 @@ public interface AssetsDAO {
 	
 	public Integer updatePosition(Position position);
 	
+	public Integer countPositionByGUID(Position position);
+	
 	public Integer updateCheckPosition(Position position); 
 	
 	public Integer updateNeatenPosition(Position position);
