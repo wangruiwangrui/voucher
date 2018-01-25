@@ -3,13 +3,13 @@ package com.voucher.manage.mapper;
 import com.voucher.manage.model.User_Asset;
 
 public interface User_AssetMapper {
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(String openId);
 
     int insert(User_Asset record);
 
     int insertSelective(User_Asset record);
 
-    User_Asset selectByPrimaryKey(Integer id);
+    User_Asset selectByPrimaryKey(String openId);
 
     int updateByPrimaryKeySelective(User_Asset record);
 

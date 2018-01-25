@@ -56,7 +56,7 @@
 
   <select id="getUserByOnlyOpenId" resultMap="BaseResultMap" useCache="false">
 		select
-		id,users.open_id,total_amount,
+		users.id,users.open_id,total_amount,
 		campus_id,subscribe,nickname, headimg_url,
 		language,province,groupid,country,
 		city,sex,remark,
@@ -64,7 +64,7 @@
 		usersinfo.name,users.place,	
 		usersinfo.headship,usersinfo.email,	
 		address ,phone,
-		Charter, IDNo
+		user_asset.Charter, user_asset.IDNo
 		from users
 		left join usersinfo
 		on

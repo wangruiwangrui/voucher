@@ -104,7 +104,7 @@ public class AssetUserRegisterController {
 		Map<String, Object> map=new HashMap<>();
 		
 		if(IDNo.equals("")){
-			map.put("data", "用户名不能空");
+			map.put("data", "身份证号码不能空");
 			return map;
 		}
 		
@@ -191,19 +191,18 @@ public class AssetUserRegisterController {
                user_asset.setOpenId(openId);
                user_asset.setCharter(Charter);
                user_asset.setIdno(IDNo);
-				/*
-				int testRepeat=
+				
+				int testRepeat=userService.getCountUser_AssetByOpenId(openId);
 				
 				int type;
 				
 				if(testRepeat==1){
-					type=userService.updateUsersInfo(users);
+					type=userService.updateUser_AssetByOpenId(user_asset);
 				}else{
-					type=userService.insertUsersInfo(users);
+					type=userService.insertIntoUser_AssetByOpenId(user_asset);
 				}
 				
-				return type;*/
-               return 0;
+				return type;
 			
 			}
 		    catch (Exception e) {
@@ -213,9 +212,9 @@ public class AssetUserRegisterController {
 		    }
    }
    
-   @RequestMapping("/userinfoByopenId")
-   public @ResponseBody Users 
-   userinfoByopenId(HttpServletRequest request,@RequestParam Integer campusId){
+   @RequestMapping("/userAssetByopenId")
+   public @ResponseBody User_Asset 
+   userAssetByopenId(HttpServletRequest request,@RequestParam Integer campusId){
 	   HttpSession session = request.getSession();
        String openId=null;
        try{
@@ -225,6 +224,6 @@ public class AssetUserRegisterController {
           	 e.printStackTrace();
   		  }
        
-       return userService.getUserInfoById(campusId, openId);
+       return userService.selectUser_AssetByOpenId(openId);
    }
 }

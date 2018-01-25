@@ -157,7 +157,7 @@
 		<filter-class>com.voucher.manage.filter.MobileAssetIsLoginFilter</filter-class>
 		<init-param>
 			<param-name>loginStrings</param-name>
-			<param-value>/login.html;.js;.css;restrict.html;index.html;/test</param-value>
+			<param-value>/login.html;.js;.css;restrict.html;index.html;userassetset.html;/test</param-value>
 		</init-param>
 		<init-param>
 			<param-name>includeStrings</param-name>
@@ -174,7 +174,7 @@
 	</filter>
 	
 	<filter-mapping>
-		<filter-name>MobileAdminSessionFilter</filter-name>
+		<filter-name>MobileAssetIsLoginFilter</filter-name>
 		<url-pattern>/mobile/asset/*</url-pattern>
 	</filter-mapping>
       

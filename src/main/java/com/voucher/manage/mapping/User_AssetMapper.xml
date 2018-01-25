@@ -12,37 +12,34 @@
     id, open_id, charter, IDNo
   </sql>
   
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from user_asset
-    where id = #{id,jdbcType=INTEGER}
+    where open_id = #{openId,jdbcType=VARCHAR}
   </select>
   
-  <select id="getCountUser_AssetByOpenId" parameterType="java.lang.Integer" >
+  <select id="getCountUser_AssetByOpenId" parameterType="java.lang.String" >
     select  count()
     from user_asset
     where open_id = #{openId,jdbcType=VARCHAR}
   </select>
   
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from user_asset
-    where id = #{id,jdbcType=INTEGER}
+    where open_id = #{openId,jdbcType=VARCHAR}
   </delete>
   
   <insert id="insert" parameterType="com.voucher.manage.model.User_Asset">
-    insert into user_asset (id, open_id, charter, 
+    insert into user_asset (open_id, charter, 
       IDNo)
-    values (#{id,jdbcType=INTEGER}, #{openId,jdbcType=VARCHAR}, #{charter,jdbcType=VARCHAR}, 
+    values (#{openId,jdbcType=VARCHAR}, #{charter,jdbcType=VARCHAR}, 
       #{idno,jdbcType=VARCHAR})
   </insert>
   
   <insert id="insertSelective" parameterType="com.voucher.manage.model.User_Asset">
     insert into user_asset
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="openId != null">
         open_id,
       </if>
@@ -54,9 +51,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="openId != null">
         #{openId,jdbcType=VARCHAR},
       </if>
@@ -90,7 +84,7 @@
     set open_id = #{openId,jdbcType=VARCHAR},
       charter = #{charter,jdbcType=VARCHAR},
       IDNo = #{idno,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
+    where open_id = #{openId,jdbcType=VARCHAR}
   </update>
 
 </mapper>

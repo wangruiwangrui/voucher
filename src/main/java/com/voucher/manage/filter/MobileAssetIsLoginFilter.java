@@ -24,6 +24,7 @@ import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.mapper.UsersMapper;
 import com.voucher.manage.model.Users;
 import com.voucher.manage.service.UserService;
+import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
 
 public class MobileAssetIsLoginFilter implements Filter{
@@ -77,6 +78,7 @@ public class MobileAssetIsLoginFilter implements Filter{
 				usersMapper=wac.getBean(UsersMapper.class);
 				
 		        if (openId==null) {       
+		        	MyTestUtil.print(hrequest.getSession());
 		        	System.out.println("MobileAssetIsLoginFilter openid= null");
 		        	wrapper.sendRedirect(redirectPath);
 		            return;

@@ -112,6 +112,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public User_Asset selectUser_AssetByOpenId(String openId) {
+		// TODO Auto-generated method stub
+		return user_AssetMapper.selectByPrimaryKey(openId);
+	}
+	
+	@Override
 	public int insertIntoUser_AssetByOpenId(User_Asset user_Asset) {
 		// TODO Auto-generated method stub
 		return user_AssetMapper.insert(user_Asset);
@@ -121,6 +127,12 @@ public class UserServiceImpl implements UserService {
 	public int updateUser_AssetByOpenId(User_Asset user_Asset) {
 		// TODO Auto-generated method stub
 		return user_AssetMapper.updateByPrimaryKeySelective(user_Asset);
+	}
+
+	@Override
+	public int getCountUser_AssetByOpenId(String openId) {
+		// TODO Auto-generated method stub
+		return user_AssetMapper.getCountUser_AssetByOpenId(openId);
 	}
 
 }

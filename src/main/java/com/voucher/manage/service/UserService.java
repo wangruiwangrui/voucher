@@ -11,7 +11,6 @@ import com.voucher.weixin.base.SNSUserInfo;
 
 
 public interface UserService {
-
 	
 	List<Users> getAllFullUser(Integer campusId,Integer limit, Integer offset, String sort,String order,String search);
 	
@@ -41,8 +40,12 @@ public interface UserService {
     
     Users getUserByOnlyOpenId(String openId);
     
+    User_Asset selectUser_AssetByOpenId(String openId);
+    
     int insertIntoUser_AssetByOpenId(User_Asset user_Asset);
     
     int updateUser_AssetByOpenId(User_Asset user_Asset);
 
+    int getCountUser_AssetByOpenId(String openId);
+    
 }
