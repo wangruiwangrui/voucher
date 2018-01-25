@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.voucher.manage.model.User_Asset;
 import com.voucher.manage.model.Users;
 import com.voucher.weixin.base.SNSUserInfo;
 
@@ -39,5 +40,9 @@ public interface UserService {
     int updateUsersInfo(Users users);
     
     Users getUserByOnlyOpenId(String openId);
+    
+    int insertIntoUser_AssetByOpenId(User_Asset user_Asset);
+    
+    int updateUser_AssetByOpenId(User_Asset user_Asset);
 
 }

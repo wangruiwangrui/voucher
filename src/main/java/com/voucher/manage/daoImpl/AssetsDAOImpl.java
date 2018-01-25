@@ -27,6 +27,7 @@ import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
 import com.voucher.manage.daoModel.Assets.Hidden_Type;
 import com.voucher.manage.daoModel.Assets.Hidden_User;
 import com.voucher.manage.daoModel.Assets.Position;
+import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Assets_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Data_Join;
@@ -449,10 +450,10 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	        	  int k=1;
 	        	  for(String whereterm:columnWhere){
 	            	  if(k%2==0){
-	            		//  System.out.println("偶数");
+	            		//  System.out.println("鍋舵暟");
 	            		//  whereCommand.append(whereterm+"\n  AND ");
 	            	   }else{
-	            		//  System.out.println("奇数");
+	            		//  System.out.println("濂囨暟");
 	            		//  whereCommand.append("\n   "+whereterm);
 	            		   whereCommand.append(whereterm+"? \n  AND ");
 	            	   }
@@ -467,10 +468,10 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	        	  int k=1;
 	        	  for(String whereterm:columnWhere){
 	            	  if(k%2==0){
-	            		//  System.out.println("偶数");
+	            		//  System.out.println("鍋舵暟");
 	            		  params.add(whereterm);
 	            	   }else{
-	            		//  System.out.println("奇数");
+	            		//  System.out.println("濂囨暟");
 	            		//  whereCommand.append("\n   "+whereterm);
 	            	   }
 	               k++;
@@ -483,11 +484,11 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		        	  int k=1;
 		        	  for(String whereterm:columnWhere){
 		            	  if(k%2==0){
-		            		//  System.out.println("偶数");
+		            		//  System.out.println("鍋舵暟");
 		            		  params.add(whereterm);
 		            		  paramsCount.add(whereterm);
 		            	   }else{
-		            		//  System.out.println("奇数");
+		            		//  System.out.println("濂囨暟");
 		            		//  whereCommand.append("\n   "+whereterm);
 		            	   }
 		               k++;
@@ -499,7 +500,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
     	System.out.println("params="+params);
     	
     	if(!search.isEmpty()){
-    		   sql=sql+   //sqlserver分页需要在top也加上where条件
+    		   sql=sql+   //sqlserver鍒嗛〉闇�瑕佸湪top涔熷姞涓妛here鏉′欢
     	         		 "\n  where "+whereCommand+
     	                  " [Hidden_Assets].asset_GUID not in("+
     	                  " select top "+offset+" [Hidden_Assets].asset_GUID  FROM [Hidden_Assets] where "+
@@ -515,7 +516,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 			    "[Hidden_Assets] left join [TTT].[dbo].[RoomInfo] on [Hidden_Assets].[asset_GUID]=[TTT].[dbo].[RoomInfo].[GUID]";
 		
 		if(!search.isEmpty()){
-			countSql=countSql+   //sqlserver分页需要在top也加上where条件
+			countSql=countSql+   //sqlserver鍒嗛〉闇�瑕佸湪top涔熷姞涓妛here鏉′欢
 	          		 "\n  where "+
 	                    whereCommand.substring(0,whereCommand.length()-7);
     	}
@@ -579,7 +580,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	}
 
 	class hiddenRowMapper implements RowMapper<Hidden> {
-        //rs为返回结果集，以每行为单位封装着
+        //rs涓鸿繑鍥炵粨鏋滈泦锛屼互姣忚涓哄崟浣嶅皝瑁呯潃
         public Hidden mapRow(ResultSet rs, int rowNum) throws SQLException {    
             Hidden hidden=new Hidden();
         	Date date=rs.getDate("");
@@ -724,7 +725,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	}
 
 	class hiddenQueryRowMapper1 implements RowMapper<Hidden_Data_Join> {
-        //rs为返回结果集，以每行为单位封装着
+        //rs涓鸿繑鍥炵粨鏋滈泦锛屼互姣忚涓哄崟浣嶅皝瑁呯潃
         public Hidden_Data_Join mapRow(ResultSet rs, int rowNum) throws SQLException {    
             Hidden_Data_Join hidden_Data_Join=new Hidden_Data_Join();
         	hidden_Data_Join.setGUID(rs.getString("GUID"));
@@ -733,7 +734,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
     }
 	
 	class hiddenQueryRowMapper2 implements RowMapper<Hidden_Data_Join> {
-        //rs为返回结果集，以每行为单位封装着
+        //rs涓鸿繑鍥炵粨鏋滈泦锛屼互姣忚涓哄崟浣嶅皝瑁呯潃
         public Hidden_Data_Join mapRow(ResultSet rs, int rowNum) throws SQLException {    
             Hidden_Data_Join hidden_Data_Join=new Hidden_Data_Join();
         	hidden_Data_Join.setGUID(rs.getString("GUID"));
@@ -760,12 +761,45 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	}
 
 	class roomInfoRowMapper implements RowMapper<RoomInfo> {
-        //rs为返回结果集，以每行为单位封装着
+        //rs涓鸿繑鍥炵粨鏋滈泦锛屼互姣忚涓哄崟浣嶅皝瑁呯潃
         public RoomInfo mapRow(ResultSet rs, int rowNum) throws SQLException {    
         	RoomInfo roomInfo=new RoomInfo();
         	roomInfo.setManageRegion(rs.getString("ManageRegion"));        	
             return roomInfo;
         }
     }
+
+	@Override
+	public ChartInfo getChartInfoByIDNo(String IDNo) {
+		// TODO Auto-generated method stub
+		ChartInfo chartInfo=new ChartInfo();
+		String[] where = {"[TTT].[dbo].[ChartInfo].IDNo=",IDNo};
+		chartInfo.setWhere(where);
+		
+		List list=SelectExe.get(this.getJdbcTemplate(), chartInfo);
+		
+		ChartInfo chartInfo2 = null;
+		
+		try {
+		 chartInfo2=(ChartInfo) list.get(0);
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		return chartInfo2;
+	}
+
+	@Override
+	public Map findChartInfo_HireListByIDNo(String IDNo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map findHireListByGUID(String GUID) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

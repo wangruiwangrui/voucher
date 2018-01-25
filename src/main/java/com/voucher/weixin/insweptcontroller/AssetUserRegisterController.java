@@ -11,12 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.model.Sellers;
 import com.voucher.manage.model.User_Asset;
 import com.voucher.manage.model.Users;
@@ -24,9 +26,11 @@ import com.voucher.manage.model.Users;
 import com.voucher.manage.service.SellerService;
 import com.voucher.manage.service.UserService;
 import com.voucher.manage.tools.Constants;
+import com.voucher.manage.tools.IdcardUtil;
 import com.voucher.manage.tools.Md5;
 import com.voucher.manage.tools.verifycode.Captcha;
 import com.voucher.manage.tools.verifycode.SpecCaptcha;
+import com.voucher.sqlserver.context.Connect;
 
 @Controller
 @RequestMapping("/mobile/assetRegister")
@@ -40,6 +44,10 @@ public class AssetUserRegisterController {
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
+	
+	ApplicationContext applicationContext=new Connect().get();
+	
+	AssetsDAO assetsDAO=(AssetsDAO) applicationContext.getBean("assetsdao");
 	
 	/*
 	 * 生成验证码类
@@ -90,6 +98,26 @@ public class AssetUserRegisterController {
 		
 	}
 	
+	@RequestMapping("testIDNo")
+	public @ResponseBody Map<String, Object>
+	testIDNo(@RequestParam String IDNo){
+		Map<String, Object> map=new HashMap<>();
+		
+		if(IDNo.equals("")){
+			map.put("data", "用户名不能空");
+			return map;
+		}
+		
+		
+		if(IdcardUtil.isIdcard(IDNo)) {	    
+			map.put("data", "succeed");
+			return map;
+		}else {
+			map.put("data", "false");
+			return map;
+		}
+		
+	}
 
 	/**
      * 电话号码验证
@@ -164,7 +192,7 @@ public class AssetUserRegisterController {
                user_asset.setCharter(Charter);
                user_asset.setIdno(IDNo);
 				/*
-				int testRepeat=userService.selectRepeatUserByOpenId(openId);
+				int testRepeat=
 				
 				int type;
 				

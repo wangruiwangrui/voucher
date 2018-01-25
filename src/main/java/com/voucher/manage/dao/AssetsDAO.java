@@ -7,6 +7,7 @@ import com.voucher.manage.daoModel.Assets.Hidden;
 import com.voucher.manage.daoModel.Assets.Hidden_Assets;
 import com.voucher.manage.daoModel.Assets.Hidden_Data;
 import com.voucher.manage.daoModel.Assets.Position;
+import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Data_Join;
 
 public interface AssetsDAO {
@@ -52,4 +53,10 @@ public interface AssetsDAO {
 	public Map<String, Object> hiddenQuery(Integer hiddenLevel);
 	
 	public List selectManageRegion();
+	
+	public ChartInfo getChartInfoByIDNo(String IDNo);           //根据身份证查找承租户
+	
+	public Map findChartInfo_HireListByIDNo(String IDNo);
+	
+	public Map findHireListByGUID(String GUID);
 }

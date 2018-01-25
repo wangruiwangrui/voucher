@@ -14,16 +14,26 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import com.voucher.manage.dao.AssetsDAO;
+import com.voucher.manage.dao.HiddenDAO;
+import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.mapper.UsersMapper;
 import com.voucher.manage.model.Users;
 import com.voucher.manage.service.UserService;
+import com.voucher.sqlserver.context.Connect;
 
 public class MobileAssetIsLoginFilter implements Filter{
-	private UsersMapper usersMapper;
 	
+	ApplicationContext applicationContext=new Connect().get();
+	
+	AssetsDAO assetsDAO=(AssetsDAO) applicationContext.getBean("assetsdao");
+	
+	private UsersMapper usersMapper;
+		
 	 public FilterConfig configAsset=null;
 	    @Override  
 	    public void destroy() {   
@@ -60,7 +70,7 @@ public class MobileAssetIsLoginFilter implements Filter{
 		        String openId=( String ) hrequest.getSession().getAttribute("openId");
 		        
 		        HttpServletRequest httpRequest = (HttpServletRequest) request;
-				WebApplicationContext wac = WebApplicationContextUtils    //controller以外的包初始化类
+				WebApplicationContext wac = WebApplicationContextUtils    //controller浠ュ鐨勫寘鍒濆鍖栫被
 						.getRequiredWebApplicationContext(httpRequest.getSession()
 								.getServletContext());
 		        
@@ -73,11 +83,23 @@ public class MobileAssetIsLoginFilter implements Filter{
 		        }else {
 		        	Users users=usersMapper.getUserByOnlyOpenId(openId);
 		        	System.out.println("MobileAssetIsLoginFilter openId ="+openId);
-		           if(users.getPlace()>1){  //通过place判断用户的访问权限，数字越大权限越高
-		             chain.doFilter(request, response);
-		            }else{
-		        	 wrapper.sendRedirect(redirectPath);
-		        	}
+		        	
+		        	String Charter=users.getCharter();
+		        	String IDNo=users.getIdno();
+		        	
+		        	if(IDNo==null||IDNo.equals("")||Charter.equals("")) {
+		        		wrapper.sendRedirect(settingPath);
+			            return;
+		        	}else {
+		        		ChartInfo chartInfo=assetsDAO.getChartInfoByIDNo(IDNo);
+						if(Charter.equals(chartInfo.getCharter())&&IDNo.equals(chartInfo.getIDNo())){
+							chain.doFilter(request, response);
+						}else {
+							wrapper.sendRedirect(redirectPath);
+				            return;
+						}
+					}
+	
 		            return;
 		        }   
 	    }   

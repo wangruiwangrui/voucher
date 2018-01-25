@@ -28,6 +28,8 @@
 		<result column="headship" property="headship" jdbcType="VARCHAR" />	
 		<result column="email" property="email" jdbcType="VARCHAR" />
 		<result column="up_time" property="upTime" jdbcType="TIMESTAMP" />
+		<result column="Charter" property="Charter" jdbcType="VARCHAR" />
+		<result column="IDNo" property="IDNo" jdbcType="VARCHAR" />
 	</resultMap>
    
    <select id="getUserByOpenId" resultMap="BaseResultMap" useCache="false">

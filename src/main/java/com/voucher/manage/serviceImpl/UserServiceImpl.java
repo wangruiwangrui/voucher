@@ -6,7 +6,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.voucher.manage.mapper.User_AssetMapper;
 import com.voucher.manage.mapper.UsersMapper;
+import com.voucher.manage.model.User_Asset;
 import com.voucher.manage.model.Users;
 import com.voucher.manage.service.UserService;
 import com.voucher.weixin.base.SNSUserInfo;
@@ -16,11 +18,18 @@ import com.voucher.weixin.base.SNSUserInfo;
 public class UserServiceImpl implements UserService {
 	private UsersMapper usersMapper;         //操作用户信息
 
+	private User_AssetMapper user_AssetMapper;
+	
 	@Autowired
 	public void setUsersMapper(UsersMapper usersMapper) {
 		this.usersMapper = usersMapper;
 	}
 
+	@Autowired
+	public void setUser_AssetMapper(User_AssetMapper user_AssetMapper) {
+		this.user_AssetMapper = user_AssetMapper;
+	}
+	
 	public List<Users> getAllFullUser(Integer campusId,Integer limit, Integer offset, String sort,
 			String order,String search) {
 		return usersMapper.getAllFullUser(campusId,limit,offset,sort,order,search);
@@ -100,6 +109,18 @@ public class UserServiceImpl implements UserService {
 	public Users getUserByOnlyOpenId(String openId) {
 		// TODO Auto-generated method stub
 		return usersMapper.getUserByOnlyOpenId(openId);
+	}
+
+	@Override
+	public int insertIntoUser_AssetByOpenId(User_Asset user_Asset) {
+		// TODO Auto-generated method stub
+		return user_AssetMapper.insert(user_Asset);
+	}
+
+	@Override
+	public int updateUser_AssetByOpenId(User_Asset user_Asset) {
+		// TODO Auto-generated method stub
+		return user_AssetMapper.updateByPrimaryKeySelective(user_Asset);
 	}
 
 }

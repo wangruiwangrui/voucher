@@ -122,7 +122,7 @@ var state=getQueryString("state");
   wx.ready(function () {
 	 
 		document.querySelector('#new').onclick =function(){
-
+			location.href="a.html";
 		 }
 		
 	 }); //wx.ready
