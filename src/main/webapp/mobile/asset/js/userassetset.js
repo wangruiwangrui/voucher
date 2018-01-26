@@ -196,7 +196,7 @@ $.get("/voucher/oauth/test.do", {
 	    		valid3=true;
 	     	}else{
 	     		$("#dialog2").attr("style","display:block"); 
-	 			$(".weui_dialog_title").html(data);
+	 			$(".weui_dialog_title").html("身份证格式错误");
 	 			$('#w3').attr("class","weui_cell weui_cell_warn");
 	 			valid3=false;
 	   	   }
@@ -210,11 +210,11 @@ $.get("/voucher/oauth/test.do", {
 	       },function(data){
 	    	   var obj = $.parseJSON(data);
 	    	   console.log(obj.charter);
-	    	   if(obj.name!=null)
+	    	   if(obj.charter!=null)
 	    	   $("#name").attr("placeholder",obj.charter);
-	    	   if(obj.phone!=null)
+	    	   if(obj.hirePhone!=null)
 	    	   $("#phone").attr("placeholder",obj.hirePhone);
-	    	   if(obj.IDNo!=null)
+	    	   if(obj.idno!=null)
 	    	   $("#IDNo").attr("placeholder",obj.idno);
 	       });
 	 

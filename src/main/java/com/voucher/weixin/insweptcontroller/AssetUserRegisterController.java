@@ -109,7 +109,8 @@ public class AssetUserRegisterController {
 		}
 		
 		
-		if(IdcardUtil.isIdcard(IDNo)) {	    
+		//if(IdcardUtil.isIdcard(IDNo)) {	 
+		if(true){
 			map.put("data", "succeed");
 			return map;
 		}else {
@@ -178,6 +179,10 @@ public class AssetUserRegisterController {
 		   return 2;
 	   }
 	   
+	   regtlx=regtlx.toLowerCase();
+	   
+	   System.out.println("regtlx="+regtlx+"      verifyCode="+verifyCode);
+	   
 	   if(!regtlx.equals(verifyCode)){
 		   verifyCode=null;
 		   return 2;
@@ -189,8 +194,11 @@ public class AssetUserRegisterController {
                User_Asset user_asset=new User_Asset();
                
                user_asset.setOpenId(openId);
+               if(!name.equals(""))
                user_asset.setCharter(name);
+               if(!IDNo.equals(""))
                user_asset.setIdno(IDNo);
+               if(!phone.equals(""))
 			   user_asset.setHirePhone(phone);
                
 				int testRepeat=userService.getCountUser_AssetByOpenId(openId);

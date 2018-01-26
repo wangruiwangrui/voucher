@@ -94,8 +94,16 @@ public class MobileAssetIsLoginFilter implements Filter{
 			            return;
 		        	}else {
 		        		ChartInfo chartInfo=assetsDAO.getChartInfoByIDNo(IDNo);
+		        		/*
+		        		MyTestUtil.print(chartInfo);
+		        		System.out.println("Charter="+Charter+"   chartInfo.getCharter()="+
+		        				chartInfo.getCharter()+"   "+Charter.trim().equals(chartInfo.getCharter().trim()));
+		        		System.out.println("IDNo="+IDNo+"   chartInfo.getIDNo()="+
+		        				chartInfo.getIDNo()+"   "+IDNo.equals(chartInfo.getIDNo()));
+		        		*/
 		        		try {
-		        			if(Charter.equals(chartInfo.getCharter())&&IDNo.equals(chartInfo.getIDNo())){
+		        			if(Charter.trim().equals(chartInfo.getCharter().trim())&&
+		        					IDNo.trim().equals(chartInfo.getIDNo().trim())){
 		        				chain.doFilter(request, response);
 		        			}else {
 		        				wrapper.sendRedirect(redirectPath);

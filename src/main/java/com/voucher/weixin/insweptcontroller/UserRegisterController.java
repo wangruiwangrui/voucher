@@ -196,6 +196,8 @@ public class UserRegisterController {
 		   return 2;
 	   }
 	   
+	   regtlx=regtlx.toLowerCase();
+	   
 	   if(!regtlx.equals(verifyCode)){
 		   verifyCode=null;
 		   return 2;
