@@ -773,6 +773,9 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	public ChartInfo getChartInfoByIDNo(String IDNo) {
 		// TODO Auto-generated method stub
 		ChartInfo chartInfo=new ChartInfo();
+		chartInfo.setLimit(10);
+		chartInfo.setOffset(0);
+		chartInfo.setNotIn("GUID");
 		String[] where = {"[TTT].[dbo].[ChartInfo].IDNo=",IDNo};
 		chartInfo.setWhere(where);
 		

@@ -125,4 +125,7 @@ var state=getQueryString("state");
 			location.href="a.html";
 		 }
 		
+		document.querySelector('#user').onclick =function(){
+			location.href="userassetset.html";
+		 }
 	 }); //wx.ready

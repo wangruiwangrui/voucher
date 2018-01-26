@@ -28,8 +28,9 @@
 		<result column="headship" property="headship" jdbcType="VARCHAR" />	
 		<result column="email" property="email" jdbcType="VARCHAR" />
 		<result column="up_time" property="upTime" jdbcType="TIMESTAMP" />
-		<result column="Charter" property="Charter" jdbcType="VARCHAR" />
+		<result column="charter" property="Charter" jdbcType="VARCHAR" />
 		<result column="IDNo" property="IDNo" jdbcType="VARCHAR" />
+		<result column="hire_phone" jdbcType="VARCHAR" property="hirePhone" />
 	</resultMap>
    
    <select id="getUserByOpenId" resultMap="BaseResultMap" useCache="false">
@@ -64,7 +65,7 @@
 		usersinfo.name,users.place,	
 		usersinfo.headship,usersinfo.email,	
 		address ,phone,
-		user_asset.Charter, user_asset.IDNo
+		user_asset.charter, user_asset.IDNo,user_asset.hire_phone
 		from users
 		left join usersinfo
 		on

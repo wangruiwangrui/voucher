@@ -87,17 +87,24 @@ public class MobileAssetIsLoginFilter implements Filter{
 		        	System.out.println("MobileAssetIsLoginFilter openId ="+openId);
 		        	
 		        	String Charter=users.getCharter();
-		        	String IDNo=users.getIdno();
+		        	String IDNo=users.getIDNo();
 		        	
 		        	if(IDNo==null||IDNo.equals("")||Charter.equals("")) {
 		        		wrapper.sendRedirect(settingPath);
 			            return;
 		        	}else {
 		        		ChartInfo chartInfo=assetsDAO.getChartInfoByIDNo(IDNo);
-						if(Charter.equals(chartInfo.getCharter())&&IDNo.equals(chartInfo.getIDNo())){
-							chain.doFilter(request, response);
-						}else {
-							wrapper.sendRedirect(redirectPath);
+		        		try {
+		        			if(Charter.equals(chartInfo.getCharter())&&IDNo.equals(chartInfo.getIDNo())){
+		        				chain.doFilter(request, response);
+		        			}else {
+		        				wrapper.sendRedirect(redirectPath);
+		        				return;
+		        			}
+		        		}catch (Exception e) {
+							// TODO: handle exception
+		        			e.printStackTrace();
+		        			wrapper.sendRedirect(redirectPath);
 				            return;
 						}
 					}

@@ -6,10 +6,11 @@
     <result column="open_id" jdbcType="VARCHAR" property="openId" />
     <result column="charter" jdbcType="VARCHAR" property="charter" />
     <result column="IDNo" jdbcType="VARCHAR" property="idno" />
+    <result column="hire_phone" jdbcType="VARCHAR" property="hirePhone" />
   </resultMap>
   
   <sql id="Base_Column_List">
-    id, open_id, charter, IDNo
+    id, open_id, charter, IDNo, hire_phone
   </sql>
   
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -19,8 +20,8 @@
     where open_id = #{openId,jdbcType=VARCHAR}
   </select>
   
-  <select id="getCountUser_AssetByOpenId" parameterType="java.lang.String" >
-    select  count()
+  <select id="getCountUser_AssetByOpenId" parameterType="java.lang.String" resultType="Integer">
+    select  count(*)
     from user_asset
     where open_id = #{openId,jdbcType=VARCHAR}
   </select>
@@ -32,9 +33,9 @@
   
   <insert id="insert" parameterType="com.voucher.manage.model.User_Asset">
     insert into user_asset (open_id, charter, 
-      IDNo)
+      IDNo, hire_phone)
     values (#{openId,jdbcType=VARCHAR}, #{charter,jdbcType=VARCHAR}, 
-      #{idno,jdbcType=VARCHAR})
+      #{idno,jdbcType=VARCHAR}, #{hirePhone,jdbcType=VARCHAR})
   </insert>
   
   <insert id="insertSelective" parameterType="com.voucher.manage.model.User_Asset">
@@ -49,6 +50,9 @@
       <if test="idno != null">
         IDNo,
       </if>
+      <if test="hirePhone != null">
+        hire_phone,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="openId != null">
@@ -60,30 +64,34 @@
       <if test="idno != null">
         #{idno,jdbcType=VARCHAR},
       </if>
+      <if test="hirePhone != null">
+        #{hirePhone,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   
   <update id="updateByPrimaryKeySelective" parameterType="com.voucher.manage.model.User_Asset">
     update user_asset
     <set>
-      <if test="openId != null">
-        open_id = #{openId,jdbcType=VARCHAR},
-      </if>
       <if test="charter != null">
         charter = #{charter,jdbcType=VARCHAR},
       </if>
       <if test="idno != null">
         IDNo = #{idno,jdbcType=VARCHAR},
       </if>
+      <if test="hirePhone != null">
+        hire_phone = #{hirePhone,jdbcType=VARCHAR},
+      </if>
     </set>
     where open_id = #{openId,jdbcType=VARCHAR}
   </update>
   
   <update id="updateByPrimaryKey" parameterType="com.voucher.manage.model.User_Asset">
-    update user_asset
-    set open_id = #{openId,jdbcType=VARCHAR},
-      charter = #{charter,jdbcType=VARCHAR},
-      IDNo = #{idno,jdbcType=VARCHAR}
+     update user_asset
+    set
+       charter = #{charter,jdbcType=VARCHAR},
+      IDNo = #{idno,jdbcType=VARCHAR},
+      hire_phone = #{hirePhone,jdbcType=VARCHAR}
     where open_id = #{openId,jdbcType=VARCHAR}
   </update>
 

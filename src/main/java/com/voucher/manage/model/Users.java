@@ -52,9 +52,11 @@ public class Users {
     
     private Date upTime;
 
-    private String charter;
+    private String Charter;
 
-    private String idno;
+    private String IDNo;
+    
+    private String hirePhone;
     
     public Integer getCampusId() {
 		return campusId;
@@ -262,19 +264,29 @@ public class Users {
 	}
 
 	public String getCharter() {
-		return charter;
+		return Charter;
 	}
 
-	public void setCharter(String charter) {
-		this.charter = charter;
+	public void setCharter(String Charter) {
+		this.Charter = Charter;
 	}
 
-	public String getIdno() {
-		return idno;
+	public String getIDNo() {
+		return IDNo;
 	}
 
-	public void setIdno(String idno) {
-		this.idno = idno;
+	public void setIDNo(String iDNo) {
+		IDNo = iDNo;
 	}
+
+	public String getHirePhone() {
+		return hirePhone;
+	}
+
+	public void setHirePhone(String hirePhone) {
+		this.hirePhone = hirePhone;
+	}
+
+
 
 }

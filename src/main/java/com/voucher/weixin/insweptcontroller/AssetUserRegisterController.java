@@ -161,7 +161,7 @@ public class AssetUserRegisterController {
    @RequestMapping("insert")
    public @ResponseBody Integer
    insert(HttpServletRequest request,@RequestParam String name,
-		   @RequestParam String Charter,@RequestParam String IDNo,
+		   @RequestParam String IDNo,@RequestParam String phone,
 		   @RequestParam String regtlx){
 	   
 	   HttpSession session = request.getSession();
@@ -189,9 +189,10 @@ public class AssetUserRegisterController {
                User_Asset user_asset=new User_Asset();
                
                user_asset.setOpenId(openId);
-               user_asset.setCharter(Charter);
+               user_asset.setCharter(name);
                user_asset.setIdno(IDNo);
-				
+			   user_asset.setHirePhone(phone);
+               
 				int testRepeat=userService.getCountUser_AssetByOpenId(openId);
 				
 				int type;

@@ -9,6 +9,8 @@ public class User_Asset {
 
     private String idno;
 
+    private String hirePhone;
+
     public Integer getId() {
         return id;
     }
@@ -39,5 +41,13 @@ public class User_Asset {
 
     public void setIdno(String idno) {
         this.idno = idno == null ? null : idno.trim();
+    }
+
+    public String getHirePhone() {
+        return hirePhone;
+    }
+
+    public void setHirePhone(String hirePhone) {
+        this.hirePhone = hirePhone == null ? null : hirePhone.trim();
     }
 }

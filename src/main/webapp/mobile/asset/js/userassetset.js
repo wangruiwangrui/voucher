@@ -147,7 +147,7 @@ $.get("/voucher/oauth/test.do", {
 	 });
 	 $('.name input').blur(function(){
 	     var reque=$('.name input')[0].value;
-	   	$.post('/voucher/mobile/register/testName.do',{
+	   	$.post('/voucher/mobile/assetRegister/testName.do',{
 	   	   name:reque
 	   	   },function(text){ 
 	   		var obj=JSON.parse(text);
@@ -167,7 +167,7 @@ $.get("/voucher/oauth/test.do", {
 	 });
 	 $('.phone input').blur(function(){
 	     var reque=$('.phone input')[0].value;
-	   	$.post('/voucher/mobile/register/testPhone.do',{
+	   	$.post('/voucher/mobile/assetRegister/testPhone.do',{
 	   		telephone:reque
 	   	   },function(text){ 
 	   		var obj=JSON.parse(text);
@@ -182,13 +182,13 @@ $.get("/voucher/oauth/test.do", {
 	   	   }
 	     });
 	 });	 
-	 $('.email input').focus(function(){
+	 $('.IDNo input').focus(function(){
 		 $('#w3').attr("class","weui_cell");
 	 });
-	 $('.email input').blur(function(){
-	     var reque=$('.email input')[0].value;
-	   	$.post('/voucher/mobile/register/testEmail.do',{
-	   		email:reque
+	 $('.IDNo input').blur(function(){
+	     var reque=$('.IDNo input')[0].value;
+	   	$.post('/voucher/mobile/assetRegister/testIDNo.do',{
+	   		IDNo:reque
 	   	   },function(text){ 
 	   		var obj=JSON.parse(text);
 			 data=obj.data;
@@ -208,17 +208,14 @@ $.get("/voucher/oauth/test.do", {
 	 $.post('/voucher/mobile/assetRegister/userAssetByopenId.do', {
 			campusId:campusId
 	       },function(data){
-	    	   var obj = data;
+	    	   var obj = $.parseJSON(data);
+	    	   console.log(obj.charter);
 	    	   if(obj.name!=null)
-	    	   $("#name").attr("placeholder",obj.name);
-	    	   if(obj.headship!=null)
-	    	   $("#headship").attr("placeholder",obj.headship);
+	    	   $("#name").attr("placeholder",obj.charter);
 	    	   if(obj.phone!=null)
-	    	   $("#phone").attr("placeholder",obj.phone);
-	    	   if(obj.email!=null)
-	    	   $("#email").attr("placeholder",obj.email);
-	    	   if(obj.address!=null)
-	    	   $("#address").attr("placeholder",obj.address);
+	    	   $("#phone").attr("placeholder",obj.hirePhone);
+	    	   if(obj.IDNo!=null)
+	    	   $("#IDNo").attr("placeholder",obj.idno);
 	       });
 	 
 	document.querySelector('#showTooltips').onclick =function(){
@@ -228,18 +225,14 @@ $.get("/voucher/oauth/test.do", {
 			return;
 		}
 		var name=document.getElementById("name").value;
-		var headship=document.getElementById("headship").value;
 		var phone=document.getElementById("phone").value;
-		var email=document.getElementById("email").value;
-		var address=document.getElementById("address").value;
+		var IDNo=document.getElementById("IDNo").value;
 		var regtlx=document.getElementById("regtlx").value;
 		if(campusId!=null&&typeof(campusId)!="undefined"){
-			$.post('/voucher/mobile/register/insert.do', {
+			$.post('/voucher/mobile/assetRegister/insert.do', {
 				name:name,
-				headship:headship,
 				phone:phone,
-				email:email,
-				address:address,
+				IDNo:IDNo,
 				regtlx:regtlx
 			},function(data){		
               if(data==1){
