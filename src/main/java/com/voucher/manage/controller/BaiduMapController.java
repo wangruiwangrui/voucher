@@ -29,6 +29,7 @@ import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.dao.MobileDAO;
 import com.voucher.manage.daoModel.Assets.Position;
+import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
 
@@ -157,4 +158,27 @@ public class BaiduMapController {
 		
 	}
 	
+	
+	@RequestMapping("getGUIDByPosition")
+	public @ResponseBody Map getGUIDByPosition(@RequestParam Double lng,
+			@RequestParam Double lat){
+		  
+		Map searchMap=new HashMap<>();
+        
+        searchMap.put("[Position].lng=", String.valueOf(lng));
+        searchMap.put("[Position].lat=", String.valueOf(lat));
+        
+        List list=hiddenDAO.selectHiddenOfMap(searchMap);
+        
+        Hidden_Join hidden_Join=(Hidden_Join) list.get(0);
+		
+        String GUID=hidden_Join.getGUID();
+        
+        Map map=new HashMap<>();
+        
+        map.put("guid", GUID);
+        
+        return map;
+        
+	}
 }

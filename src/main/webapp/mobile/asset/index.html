@@ -21,33 +21,104 @@
 
 <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
-
+<script type='text/javascript' src='js/fastclick.js' charset='utf-8'></script>
+<script type='text/javascript' src='js/swiper.js' charset='utf-8'></script>
 <title>兴泸资产管理有限公司</title>
 <link rel="icon" href="../../img/xl.ico" type="image/x-icon">
 <!-- Buttons 库的核心文件 -->
   <link rel="stylesheet" href="css/buttons.css">
  
- <!-- 只有使用字体图标时才需要加载 Font-Awesome -->
- <link href="https://cdn.bootcss.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
   <link rel="stylesheet" href="css/weui.css"/>
-    <link rel="stylesheet" href="css/example.css"/>
     <link rel="stylesheet" href="css/jquery-weui.css">
-  
+  <link rel="stylesheet" href="css/buttons.css">
 </head>
 <body>
 
- <div class="hd">
-    <h2 class="page_title">安全检查助手</h2>
+  <div class="swiper-container swiper-container-horizontal swiper-container-android">
+      <!-- Additional required wrapper -->
+    <div class="swiper-wrapper" style="transform: translate3d(-1800px, 0px, 0px); transition-duration: 0ms;"><div class="swiper-slide swiper-slide-duplicate swiper-slide-next" data-swiper-slide-index="2" style="width: 450px;"></div>
+      <div class="swiper-slide" ><img src="1.jpg" alt=""></div>
+      <div class="swiper-slide"><img src="2.jpg" alt=""></div>
+      <div class="swiper-slide"><img src="3.jpg" alt=""></div>
+    </div>
+  <div class="swiper-pagination swiper-pagination-bullets"><span class="swiper-pagination-bullet"></span><span class="swiper-pagination-bullet"></span><span class="swiper-pagination-bullet swiper-pagination-bullet-active"></span></div>
+  </div>
+
+	<div class="container">
+    <div class="row" >
+    <div class="container">
+     <div class="row" >
+     
+     <!--  
+        <div class="col-xs-4 col-sm-3" 
+        style="text-align:center;">
+          <button id="alreadyHire" class="button button-raised button-caution button-circle button-jumbo"><i class="fa fa-institution"></i></button>
+          <div><span>已出租</span></div>
+        </div>
+      -->
+        
+        <div class="col-xs-4 col-sm-3" 
+        style="text-align:center;">
+          <button id="notHire" class="button button-raised button-highlight button-circle button-jumbo"><i class="fa fa-home"></i></button>
+          <div><span>可出租房屋</span></div>
+        </div>
+        
+        <div class="col-xs-4 col-sm-3" 
+        style="text-align:center;">
+          <button id="hire" class="button button-raised button-action button-circle button-jumbo"><i class="fa fa-rmb "></i></button>
+          <div><span>我要交租</span></div>
+        </div>
+       </div>
+      </div>
+    
+    <div class="container">
+     <div class="row" >
+     
+       <div class="col-xs-4 col-sm-3" 
+        style="text-align:center;">
+          <button id="userSetting" class="button button-raised button-primary button-circle button-jumbo"><i class="fa fa-user-o"></i></button>
+          <div><span>用户设置</span></div>
+        </div>
+       
+     </div>
+    </div>
+    
+    <div class="container">
+     <div class="row" >
+        
+        
+        
+        
+     
+     </div>        
+    </div>
 </div>
-
-	<a href="javascript:;" id="new"  class="weui-btn weui-btn_primary">交租金</a>
-
-   <a href="javascript:;" id="user"  class="weui-btn weui-btn_primary">用户设置</a>
+ 
+     
+      
+    
 </body>
 </html>
 
+<script>
+  $(function() {
+    FastClick.attach(document.body);
+  });
+</script>
+
+<script type='text/javascript' src='../../js/jquery-weui.js' charset='utf-8'></script>
+
+<script>
+      $(".swiper-container").swiper({
+        loop: true,
+        autoplay: 3000
+      });
+    
+</script>
+
 <style type="text/css"> 
+
   .weui-btn{
     margin:0px 10px 50px 10px;
   }
@@ -59,4 +130,9 @@
     font-family:"微软雅黑";
     color:#3eb94e;
   }
+
+.col-xs-4{
+   padding:15px
+}
+
 </style>

@@ -47,10 +47,13 @@ $.get("/voucher/oauth/test.do", {
 
 			    	 /*
 		      	      * 此处需要两次执行相同的函数，否则回调后不能执行以下函数
-		      	      */ 
+		      	      */
 			    	 
+			    	 top.location.href="index2.html";
+			    	 
+			    	 /*
 			    	 wx.config({
-			    		  debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+			    		  debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
 				      		appId: ticket.appId,
 				      		timestamp: ticket.timestamp,
 				      		nonceStr: ticket.nonceStr,
@@ -70,11 +73,11 @@ $.get("/voucher/oauth/test.do", {
 				                            'openProductSpecificView', 'addCard', 'chooseCard',
 				                            'openCard' ]
 				      	});
-			    	 
+			    	 */
 			    	 /*
 		      	      * 此处需要两次执行相同的函数，否则回调后不能执行以下函数
 		      	      */ 
-			    	 wx.ready(function () {
+			    	/* wx.ready(function () {
 			    		
 			    		 document.querySelector('#new').onclick =function(){
 			    			 wx.getLocation({
@@ -95,9 +98,8 @@ $.get("/voucher/oauth/test.do", {
 			    	                }
 			    	            });
 			    		 }
-			    		 
 			       }); //wx.ready
-		        	  
+		        	  */
 			     }
         	});
            
@@ -131,10 +133,12 @@ $.get("/voucher/oauth/test.do", {
  		       	     /*
  		     	      * 此处需要两次执行相同的函数，否则返回ture时不能执行以下函数
  		     	      */  
- 		       	          
+ 		       	      
+ 			    	top.location.href="index2.html";
  			    	 
+ 			    	 /*
  			    	 wx.config({
- 			    		debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+ 			    		debug: flase, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
  			      		appId: ticket.appId,
  			      		timestamp: ticket.timestamp,
  			      		nonceStr: ticket.nonceStr,
@@ -154,11 +158,11 @@ $.get("/voucher/oauth/test.do", {
  			                            'openProductSpecificView', 'addCard', 'chooseCard',
  			                            'openCard' ]
  			      	});
- 			    	 
+ 			    	 */
  			    	/*
 		      	      * 此处需要两次执行相同的函数，否则回调后不能执行以下函数
 		      	      */ 
- 			    	 wx.ready(function () {
+ 			    	/* wx.ready(function () {
  			    		 
  			    		document.querySelector('#new').onclick =function(){
 			    			 wx.getLocation({
@@ -179,8 +183,8 @@ $.get("/voucher/oauth/test.do", {
 			    	                }
 			    	            });
  			    		     }
- 			    		
  			    	 }); //wx.ready
+ 			    	 */
  			     }
  			 });
        });

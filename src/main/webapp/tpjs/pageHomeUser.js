@@ -83,7 +83,7 @@ function getQueryString(name) {
 			console.log("  jsapi_ticket="+ticket.jsapi_ticket);
 			  */
 			          wx.config({
-			      		debug: true,
+			      		debug: false,
 			      		appId: ticket.appId,
 			      		timestamp: ticket.timestamp,
 			      		nonceStr: ticket.nonceStr,
@@ -680,7 +680,7 @@ function getQueryString(name) {
 			console.log("  jsapi_ticket="+ticket.jsapi_ticket);
 			  */
 			          wx.config({
-			      		debug: true,
+			      		debug: false,
 			      		appId: ticket.appId,
 			      		timestamp: ticket.timestamp,
 			      		nonceStr: ticket.nonceStr,

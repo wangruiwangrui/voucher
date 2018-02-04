@@ -22,11 +22,13 @@
     <div class="weui-cell">
         <div class="weui-cell__hd"><label class="weui-label">标题</label></div>
         <div class="weui-cell__bd">
-            <input class="weui-input" type="text" value="" placeholder="输入标题"/>
+            <input id="title" class="weui-input" type="text" value="" placeholder="输入标题"/>
         </div>
+    </div>
+    <div class="weui-cell">
         <div class="weui-cell__hd"><label class="weui-label">报告人</label></div>
         <div class="weui-cell__bd">
-            <input class="weui-input" type="text" value="" placeholder="报告人"/>
+            <input id="reportUser" class="weui-input" type="text" value="" placeholder="报告人"/>
         </div>
     </div>
 </div>
@@ -34,42 +36,52 @@
     <div class="weui-cells__title">报告内容</div>
     <div class="weui-cell">
         <div class="weui-cell__bd">
-            <textarea class="weui-textarea" placeholder="输入报告内容" rows="3"></textarea>
+            <textarea id="reportContext" class="weui-textarea" placeholder="输入报告内容" rows="3"></textarea>
             <div class="weui-textarea-counter"><span>0</span>/200</div>
         </div>
     </div>
 </div>
 <div class="weui-cells">
     <div class="weui-cell">
-        <div class="weui-cell__hd"><label class="weui-label">录入时间</label></div>
+        <div class="weui-cell__hd"><label class="weui-label">位置</label></div>
         <div class="weui-cell__bd">
-            <input class="weui-input" type="date" value=""/>
+            <input id="place" class="weui-input"  value=""/>
+        </div>
+    </div>
+</div>
+<div class="weui-cells">
+    <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">报告时间</label></div>
+        <div class="weui-cell__bd">
+            <input id="time" class="weui-input"  value=""/>
         </div>
     </div>
 </div>
 
 
-<a href="javascript:;" class="weui-btn weui-btn_plain-primary">确定</a>
+<a href="javascript:;" id="report" class="weui-btn weui-btn_plain-primary">确定</a>
 <div class="weui-cell weui-cell_warn">
-    <div class="weui-cell__hd"><span class="weui-cell__hd"><a href="#">紧急呼叫</a></span></div>
+    <div class="weui-cell__hd"><span class="weui-cell__hd"><a class="btn btn_an3" href="tel:119">紧急呼叫</a></span></div>
     <div class="weui-cell__bd">
     </div>
     <div class="weui-cell__ft">
-        <span class="weui-cell__ft"><a href="#">安全通讯录</a></span>
+        <span class="weui-cell__ft"><a href="safeLike.html">安全通讯录</a></span>
     </div>
 </div>
 </body>
 </html>
 <script type="text/javascript">
+function getQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]); return null;
+   }
+
+ var lng=getQueryString("longitude");
+ var lat=getQueryString("latitude");
+
    var map = new BMap.Map("allmap", {enableMapClick:true});//构造底图时，关闭底图可点功能
-   var xhm=new XMLHttpRequest();
-   xhm.open("GET","../../../baiduMap/location.do",false);
-   xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-   xhm.send();
-   var ticket=JSON.parse(xhm.responseText);
-   var lng=ticket.content.point.x;
-   var lat=ticket.content.point.y;
-   var point = new BMap.Point(ticket.content.point.x, ticket.content.point.y);
+   var point = new BMap.Point(lng, lat);
       map.centerAndZoom(point, 13);
       var marker = new BMap.Marker(point); // 创建点
   	map.addOverlay(marker);    //增加点
@@ -106,4 +118,53 @@
     	    }
     	    return len;
     	 }
+      
+      geoc.getLocation(point, function(rs){
+			var addComp = rs.addressComponents;
+			$("#place").val(addComp.city  + addComp.district  + addComp.street  + addComp.streetNumber);
+		});
+      
+      
+   // 获取当前日期
+      var date = new Date();
+      // 获取当前月份
+      var nowMonth = date.getMonth() + 1;
+      // 获取当前是几号
+      var strDate = date.getDate();
+      // 添加分隔符“-”
+      var seperator = "-";
+      // 对月份进行处理，1-9月在前面添加一个“0”
+      if (nowMonth >= 1 && nowMonth <= 9) {
+         nowMonth = "0" + nowMonth;
+      }
+      // 对月份进行处理，1-9号在前面添加一个“0”
+      if (strDate >= 0 && strDate <= 9) {
+         strDate = "0" + strDate;
+      }
+      // 最后拼接字符串，得到一个格式为(yyyy-MM-dd)的日期
+      var nowDate = date.getFullYear() + "年" + nowMonth + "月" + strDate+"日";
+
+      $("#time").val(nowDate);
+      
+      $("#report").click(function(){
+    	  var title=$("#title").val();
+    	  var reportUser=$("#reportUser").val();
+    	  var reportContext=$("#reportContext").val();
+    	  var place=$("#place").val();  		        
+    	  
+    	  var url=window.location.host+"/voucher/mobile/1/safety/safePlace.html?lng="+lng+"&lat="+lat;
+    	  
+    	  $.get("/voucher/mobile/WechatSendMessage/send.do", { 
+    		  openid:"odos2s-S4k3qupgn-pDW42osG1Gg",
+    		  title:title,
+    		  reportUser:reportUser,
+    		  reportContext:reportContext,
+    		  place:place,
+    		  url:url
+    		  }, function(data) {
+    			  alert(data);
+    		  });
+      })
+      
+      
 </script>

@@ -13,9 +13,9 @@ var state=getQueryString("state");
  $.get("/voucher/oauth/test.do", { 
 	 campusId:campusId
   }, function(data) {
-	   alert("data="+data);
+	  // alert("data="+data);
   if(data=="false"){
-	   alert("false");
+	  // alert("false");
      if(code!=null){   	  
           $.get("/voucher/oauth/getUserInfo.do", {
              code:code,
@@ -40,7 +40,7 @@ var state=getQueryString("state");
 			     success : function(data) {
 			    	 var ticket=JSON.parse(data);
 			    	 wx.config({
-			    		  debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+			    		  debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
 				      		appId: ticket.appId,
 				      		timestamp: ticket.timestamp,
 				      		nonceStr: ticket.nonceStr,
@@ -91,7 +91,7 @@ var state=getQueryString("state");
  			     success : function(data) {
  			    	 var ticket=JSON.parse(data);
  			    	 wx.config({
- 			    		debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+ 			    		debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
  			      		appId: ticket.appId,
  			      		timestamp: ticket.timestamp,
  			      		nonceStr: ticket.nonceStr,
@@ -121,11 +121,20 @@ var state=getQueryString("state");
 
   wx.ready(function () {
 	 
-		document.querySelector('#new').onclick =function(){
-			location.href="a.html";
+		document.querySelector('#alreadyHire').onclick =function(){
+			location.href="alreadyHire.html";
 		 }
 		
-		document.querySelector('#user').onclick =function(){
+		document.querySelector('#notHire').onclick =function(){
+			location.href="notHire.html";
+		 }
+		
+		document.querySelector('#hire').onclick =function(){
+			location.href="hire/chart.html";
+		 }
+		
+		document.querySelector('#userSetting').onclick =function(){
 			location.href="userassetset.html";
 		 }
+		 
 	 }); //wx.ready

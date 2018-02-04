@@ -50,7 +50,7 @@ $.get("/voucher/oauth/test.do", {
 		      	      */ 
 			    	 
 			    	 wx.config({
-			    		  debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+			    		  debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
 				      		appId: ticket.appId,
 				      		timestamp: ticket.timestamp,
 				      		nonceStr: ticket.nonceStr,
@@ -104,8 +104,28 @@ $.get("/voucher/oauth/test.do", {
 			    			 location.href="guidance/hiddenNeatenList.html";
 			    		 }
  			    		
-			    		 document.querySelector('#report').onclick =function(){
-			    			 location.href="safety/emergency.html";
+ 			    		document.querySelector('#safeLike').onclick =function(){
+			    			 location.href="safety/safeLike.html";
+			    		 }
+ 			    		
+ 			    		document.querySelector('#report').onclick =function(){
+ 			    			wx.getLocation({
+			    	               success : function(res) {
+			    	                    // alert(JSON.stringify(res));
+			    	                    var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+			    	                    // $("#latitude").val(latitude);
+			    	                    var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+			    	                    // $("#longitude").val(longitude);
+			    	                    var speed = res.speed; // 速度，以米/每秒计
+			    	                    // $("#speed").val(speed);
+			    	                    var accuracy = res.accuracy; // 位置精度
+			    	                    // $("#accuracy").val(accuracy);
+			    	                    location.href="safety/emergency.html?latitude="+latitude+"&longitude="+longitude;
+			    	                },
+			    	                cancel : function(res) {
+			    	                    alert('用户拒绝授权获取地理位置');
+			    	                }
+			    	            });
 			    		 }
 			    		 
 			    		 document.querySelector('#userSetting').onclick =function(){
@@ -273,7 +293,7 @@ $.get("/voucher/oauth/test.do", {
  		       	          
  			    	 
  			    	 wx.config({
- 			    		debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+ 			    		debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
  			      		appId: ticket.appId,
  			      		timestamp: ticket.timestamp,
  			      		nonceStr: ticket.nonceStr,
@@ -328,9 +348,28 @@ $.get("/voucher/oauth/test.do", {
 			    			 location.href="guidance/hiddenNeatenList.html";
 			    		 }
  			    		
+ 			    		document.querySelector('#safeLike').onclick =function(){
+			    			 location.href="safety/safeLike.html";
+			    		 }
  			    		
  			    		document.querySelector('#report').onclick =function(){
-			    			 location.href="safety/emergency.html";
+ 			    			wx.getLocation({
+			    	               success : function(res) {
+			    	                    // alert(JSON.stringify(res));
+			    	                    var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+			    	                    // $("#latitude").val(latitude);
+			    	                    var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+			    	                    // $("#longitude").val(longitude);
+			    	                    var speed = res.speed; // 速度，以米/每秒计
+			    	                    // $("#speed").val(speed);
+			    	                    var accuracy = res.accuracy; // 位置精度
+			    	                    // $("#accuracy").val(accuracy);
+			    	                    location.href="safety/emergency.html?latitude="+latitude+"&longitude="+longitude;
+			    	                },
+			    	                cancel : function(res) {
+			    	                    alert('用户拒绝授权获取地理位置');
+			    	                }
+			    	            });
 			    		 }
  			    		 
  			    		 

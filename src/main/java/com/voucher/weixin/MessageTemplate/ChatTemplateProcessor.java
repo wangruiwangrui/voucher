@@ -26,8 +26,8 @@ public class ChatTemplateProcessor {
 		if (null != jsonObject) {
 			int errorCode = jsonObject.getInteger("errcode");		
 			if (0 == errorCode) {
-				System.out.println("模板消息发送成功");
-				return "模板消息发送成功";
+				System.out.println("消息发送成功");
+				return "消息发送成功";
 			} else  if(errorCode==40001||errorCode==42001){
 				String appId, appSecret;
 		        WeiXin weiXin;
@@ -50,20 +50,20 @@ public class ChatTemplateProcessor {
       			System.out.println("jsonObject="+jsonObject);
       			errorCode = jsonObject.getInteger("errcode");		
     			if (0 == errorCode) {
-    				System.out.println("模板消息发送成功");
-    				return "模板消息发送成功";
+    				System.out.println("消息发送成功");
+    				return "消息发送成功";
     			}else{
     				String errorMsg = jsonObject.getString("errmsg");
-    				System.out.println("模板消息发送失败,错误是 "+errorCode+",错误信息是"+ errorMsg);
-    			    return "模板消息发送失败,错误是 "+errorCode+",错误信息是"+ errorMsg;
+    				System.out.println("消息发送失败,错误是 "+errorCode+",错误信息是"+ errorMsg);
+    			    return "消息发送失败,错误是 "+errorCode+",错误信息是"+ errorMsg;
     			}
        		  }else{
 				String errorMsg = jsonObject.getString("errmsg");
-				System.out.println("模板消息发送失败,错误是 "+errorCode+",错误信息是"+ errorMsg);
-			    return "模板消息发送失败,错误是 "+errorCode+",错误信息是"+ errorMsg;
+				System.out.println("消息发送失败,错误是 "+errorCode+",错误信息是"+ errorMsg);
+			    return "消息发送失败,错误是 "+errorCode+",错误信息是"+ errorMsg;
 			}
 		}else{
-		   return "模板消息发送失败 null json";
+		   return "消息发送失败 null json";
 		}
 	}
 }

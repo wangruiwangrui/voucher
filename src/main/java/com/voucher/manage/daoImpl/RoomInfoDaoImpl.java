@@ -15,6 +15,8 @@ import com.voucher.manage.daoModel.RoomChartLog;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.RoomInfoRowMapper;
 import com.voucher.manage.daoModel.Assets.Position;
+import com.voucher.manage.daoModel.TTT.ChartInfo;
+import com.voucher.manage.daoModel.TTT.HireList;
 import com.voucher.manage.daoModelJoin.RoomChangeHireLog_RoomChartLog;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 import com.voucher.manage.daoRowMapper.RowMappers;
@@ -328,6 +330,79 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		
 		return map;
 	}
+
+	
+	@Override
+	public Map<String, Object> getChartInfoByGUID(Integer limit, Integer offset, String sort, String order,
+			Map search) {
+		// TODO Auto-generated method stub
+		ChartInfo chartInfo=new ChartInfo();
+		
+		if(sort==null){
+			sort="ConcludeDate";
+		}
+		
+		if(order==null){
+			order="desc";
+		}
+		
+		chartInfo.setLimit(limit);
+		chartInfo.setOffset(offset);
+		chartInfo.setSort(sort);
+		chartInfo.setOffset(offset);
+		chartInfo.setNotIn("GUID");
+		
+		if(!search.isEmpty()){
+		    String[] where=TransMapToString.get(search);
+		    chartInfo.setWhere(where);
+		}
+		
+		Map map=new HashMap<String, Object>();
+		
+		List list=SelectExe.get(this.getJdbcTemplate(), chartInfo);
+		map.put("rows", list);
+		int total=(int) SelectExe.getCount(this.getJdbcTemplate(), chartInfo).get("");
+		map.put("total", total);
+		
+		return map;
+	}
+	
+	
+	@Override
+	public Map<String, Object> getHireListByGUID(Integer limit, Integer offset, String sort, String order, Map search) {
+		// TODO Auto-generated method stub
+		HireList hireList=new HireList();
+		
+		hireList.setLimit(limit);
+		hireList.setOffset(offset);
+		hireList.setSort(sort);
+		hireList.setOffset(offset);
+		hireList.setNotIn("GUID");
+		
+		if(sort==null){
+			sort="State";
+		}
+		
+		if(order==null){
+			order="desc";
+		}
+		
+		if(!search.isEmpty()){
+		    String[] where=TransMapToString.get(search);
+		    hireList.setWhere(where);
+		}
+		
+		Map map=new HashMap<String, Object>();
+		
+		List list=SelectExe.get(this.getJdbcTemplate(), hireList);
+		map.put("rows", list);
+		int total=(int) SelectExe.getCount(this.getJdbcTemplate(), hireList).get("");
+		map.put("total", total);
+		
+		return map;
+	}
+
+	
 
 	
 }

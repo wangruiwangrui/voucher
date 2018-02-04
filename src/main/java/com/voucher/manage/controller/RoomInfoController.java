@@ -97,16 +97,13 @@ public class RoomInfoController {
 		if(order!=null&&order.equals("desc")){
 			order="desc";
 		}
-	
-		
-		
 
 		
+
 		if(search!=null&&!search.trim().equals("")){
 			search="%"+search+"%";              
 		}	
-		
-		
+				
 		Map map2=roomInfoDao.findAllChangehire_CharLog(limit, offset, sort, order, search);
 		
 		map.put("rows", map2.get("value"));

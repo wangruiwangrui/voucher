@@ -135,4 +135,16 @@ public class UserServiceImpl implements UserService {
 		return user_AssetMapper.getCountUser_AssetByOpenId(openId);
 	}
 
+	@Override
+	public List<Users> getUserByPhone(Integer limit, Integer offset, String sort, String order) {
+		// TODO Auto-generated method stub
+		return usersMapper.getUserByPhone(limit, offset, sort, order);
+	}
+
+	@Override
+	public List<Users> getUserByGuidance() {
+		// TODO Auto-generated method stub
+		return usersMapper.getUserByGuidance();
+	}
+
 }

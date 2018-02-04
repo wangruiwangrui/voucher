@@ -78,7 +78,7 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 		
 			}catch (Exception e) {
 			// TODO: handle exception
-				e.printStackTrace();
+			//	e.printStackTrace();
 			}
 		
 		}

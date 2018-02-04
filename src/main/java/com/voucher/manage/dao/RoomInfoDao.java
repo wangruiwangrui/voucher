@@ -26,4 +26,11 @@ public interface RoomInfoDao {
 	
 	public Map<String, Object> findAllFloor(Integer limit, Integer offset, String sort,
 			String order,String search);
+	
+	public Map<String, Object> getChartInfoByGUID(Integer limit, Integer offset, String sort,
+			String order,Map search);
+	
+	public Map<String, Object> getHireListByGUID(Integer limit, Integer offset, String sort,
+			String order,Map search);
+	
 }

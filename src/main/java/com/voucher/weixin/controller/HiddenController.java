@@ -67,7 +67,7 @@ public class HiddenController {
 	@RequestMapping("/selectHiddenByGuid")
 	public @ResponseBody Map selectHiddenByGuid(@RequestParam String guid,HttpServletRequest request){
         Map searchMap=new HashMap<>();
-		
+		System.out.println("guid="+guid);
 	    searchMap.put("Hidden.GUID = ", guid);
 		
 		Map map=hiddenDAO.selectAllHidden_Jion(10, 0, null, null, searchMap);
