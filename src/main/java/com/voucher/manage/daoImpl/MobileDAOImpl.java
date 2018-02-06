@@ -16,8 +16,10 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 import com.voucher.manage.dao.MobileDAO;
+import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Assets.Hidden_Check_Date;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten_Date;
+import com.voucher.manage.daoModel.TTT.FileSelfBelong;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Data_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
@@ -266,7 +268,7 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 		
 			}catch (Exception e) {
 			// TODO: handle exception
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 		
 		}
@@ -474,5 +476,142 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
             return hidden_Neaten_Date;
         }
     }
+
+
+	@Override
+	public Map<String, Object> roomInfoImageQuery(HttpServletRequest request, List guidLits) {
+		// TODO Auto-generated method stub
+		String pathRoot = System.getProperty("user.home");
+		
+		String filePath=pathRoot+AbstractFileUpload.filePath;
+        
+		String imgPath=request.getSession().getServletContext().getRealPath(AbstractFileUpload.filePath);
+		
+		Map fileBytes=new HashMap<>();
+		
+		Iterator<RoomInfo> iterator=guidLits.iterator();
+	
+		while(iterator.hasNext()){			
+		
+			RoomInfo roomInfo = iterator.next();
+		
+			String roomGUID=roomInfo.getGUID();
+		
+			String sql="SELECT top 1 "+    
+					"[GUID] "+
+					",[RoomGUID] "+
+					",[UpFileFullName] "+
+					",[FileType] "+
+					",[FileBelong] "+
+					",[FileIndex] "+
+					",[ViewFileName] "+
+				"FROM "+
+				"[TTT].[dbo].[FileSelfBelong] "+  
+				"where RoomGUID='"+roomGUID+"'";
+		
+			List fileSelfBelongs=this.getJdbcTemplate().query(sql,new fileSelfBelongRowMapper());
+		
+			try{
+				FileSelfBelong fileSelfBelong=(FileSelfBelong) fileSelfBelongs.get(0);
+							
+				//String fileByte=Base64Test.getImageStr(filePath+"\\"+hidden_Data_Join.getURI());
+				
+				String oldFile="E:\\GTJTSJ\\"+fileSelfBelong.getUpFileFullName();
+				
+				CopyFile.set(imgPath, oldFile, fileSelfBelong.getUpFileFullName());
+				
+				fileBytes.put(roomGUID, AbstractFileUpload.filePath+"\\"+fileSelfBelong.getUpFileFullName());
+		
+			}catch (Exception e) {
+			// TODO: handle exception
+			//	e.printStackTrace();
+			}
+		
+		}
+	
+
+		MyTestUtil.print(fileBytes);
+		
+		return fileBytes;
+	}
+	
+	
+	@Override
+	public List allRoomInfoImageByGUID(HttpServletRequest request, RoomInfo roomInfo) {
+		// TODO Auto-generated method stub
+		String pathRoot = System.getProperty("user.home");
+		
+		String filePath=pathRoot+AbstractFileUpload.filePath;
+        
+		String imgPath=request.getSession().getServletContext().getRealPath(AbstractFileUpload.filePath);
+		
+		List fileBytes=new ArrayList<>();
+				
+		String roomGUID=roomInfo.getGUID();
+	
+		String sql="SELECT "+    
+				"[GUID] "+
+				",[RoomGUID] "+
+				",[UpFileFullName] "+
+				",[FileType] "+
+				",[FileBelong] "+
+				",[FileIndex] "+
+				",[ViewFileName] "+
+			"FROM "+
+			"[TTT].[dbo].[FileSelfBelong] "+  
+			"where RoomGUID='"+roomGUID+"'";
+		
+		List fileSelfBelongs=this.getJdbcTemplate().query(sql,new fileSelfBelongRowMapper());
+	
+		Iterator<FileSelfBelong> iterator=fileSelfBelongs.iterator();
+		
+		while(iterator.hasNext()){			
+
+			FileSelfBelong fileSelfBelong=iterator.next();
+			
+			try{
+			
+				//String fileByte=Base64Test.getImageStr(filePath+"\\"+hidden_Data_Join.getURI());
+				
+				String oldFile="E:\\GTJTSJ\\"+fileSelfBelong.getUpFileFullName();
+				
+				CopyFile.set(imgPath, oldFile, fileSelfBelong.getUpFileFullName());
+				
+				Map<String,String> map=new HashMap<>();
+				
+				map.put("uri", AbstractFileUpload.filePath+"\\"+fileSelfBelong.getUpFileFullName());
+
+				fileBytes.add(map);
+		
+			}catch (Exception e) {
+			// TODO: handle exception
+			//	e.printStackTrace();
+			}
+		
+		}
+	
+		MyTestUtil.print(fileBytes);
+		
+		return fileBytes;
+	}
+	
+	
+	class fileSelfBelongRowMapper implements RowMapper<FileSelfBelong>{
+
+		@Override
+		public FileSelfBelong mapRow(ResultSet rs, int rowNum) throws SQLException {
+			// TODO Auto-generated method stub
+			FileSelfBelong fileSelfBelong=new FileSelfBelong();
+			fileSelfBelong.setGUID(rs.getString("GUID"));
+			fileSelfBelong.setRoomGUID(rs.getString("RoomGUID"));
+			fileSelfBelong.setUpFileFullName(rs.getString("UpFileFullName"));
+			fileSelfBelong.setFileType(rs.getString("FileType"));
+			fileSelfBelong.setFileBelong(rs.getString("FileBelong"));
+			fileSelfBelong.setFileIndex(rs.getInt("FileIndex"));
+			fileSelfBelong.setViewFileName(rs.getString("ViewFileName"));
+			return fileSelfBelong;
+		}
+		
+	}
 	
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>安全隐患整改详情</title>
+    <title>安全隐患检查详情</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -21,39 +21,44 @@
 <div class="weui-cells">
     <div class="weui-cell">
         <div class="weui-cell__hd"><label class="weui-label">标题</label></div>
-        <div id="neaten_name" class="weui-cell__bd">
+        <div  class="weui-cell__bd">
+          <input id="check_name" class="weui-input" />
         </div>
     </div>
     <div class="weui-cell">
-        <div class="weui-cell__hd"><label class="weui-label">整改人员</label></div>
-        <div id="principal" class="weui-cell__bd">
+        <div class="weui-cell__hd"><label class="weui-label">检查人员</label></div>
+        <div  class="weui-cell__bd">
+         <input id="principal" class="weui-input" />
         </div>
     </div>
 
     <div class="weui-cell">
-        <div class="weui-cell__hd"><label class="weui-label">整改时间</label></div>
-        <div id="date" class="weui-cell__bd">
+        <div class="weui-cell__hd"><label class="weui-label">检查时间</label></div>
+        <div  class="weui-cell__bd">
+         <input id="date" class="weui-input" />
         </div>
     </div>
     
     <div class="weui-cell">
         <div class="weui-cell__hd"><label class="weui-label">备注</label></div>
-        <div id="remark" class="weui-cell__bd">
+        <div  class="weui-cell__bd">
+         <input id="remark" class="weui-input" />
         </div>
     </div>
-    <div class="weui-cells__title">整改内容</div>
+    <div class="weui-cells__title">检查内容</div>
     <div class="weui-cell">
-        <div id="neaten_instance" class="weui-cell__bd">
+        <div  class="weui-cell__bd">
+         <input id="check_circs" class="weui-input" />
         </div>
     </div>
        
 </div>
 
- <div class="weui-cells__title">整改位置</div>
+ <div class="weui-cells__title">检查位置</div>
  <div id="allmap"></div>   
     
     <div class="weui-panel weui-panel_access">
-     <div class="weui-panel__hd">安全整改图片</div>  
+     <div class="weui-panel__hd">安全检查图片</div>  
        <div id="img" class="weui-panel__bd">
        </div>    
    </div>  
@@ -67,7 +72,7 @@
     if (r != null) return unescape(r[2]); return null;
    }
 
-  var neaten_id=getQueryString("neaten_id");
+  var check_id=getQueryString("check_id");
 
     // 百度地图API功能
     var map = new BMap.Map("allmap");    // 创建Map实例
@@ -84,18 +89,18 @@
     
 	$.ajax({
         type: "POST",
-        url: "/voucher/mobile/hidden/selectNeatenByNeatenId.do.do",
-        data: { "neaten_id":neaten_id},
+        url: "/voucher/mobile/hidden/selectCheckByCheckId.do",
+        data: { "check_id":check_id},
         dataType: "json",
         error: function (request){
      	   console.log(request);
         },
         success: function (text) {   
         	console.log(text);
-     	   var obj=text.hidden_Neaten;
+     	   var obj=text.hidden_Check;
      	   var imgs=text.fileBytes;
   
-             	   var neaten_id=obj.neaten_id;
+             	   var check_id=obj.check_id;
   
              	   var distance=null;
              	   console.log(obj.name+"   "+obj.detail+"  "+obj.lng+"   "+obj.lat);
@@ -107,9 +112,9 @@
              		map.addOverlay(marker);    //增加点
              	   }
              	   
-             	  var neaten_name=document.createElement("span");
-             	 neaten_name.innerHTML=obj.neaten_name;
-                  $("#neaten_name").append(neaten_name);
+             	  var check_name=document.createElement("span");
+             	 check_name.innerHTML=obj.check_name;
+                  $("#check_name").append(check_name);
                   
                   var level=document.createElement("span");
                   level.innerHTML=obj.level_text;
@@ -153,10 +158,10 @@
                   principal.innerHTML=obj.principal;
                   $("#principal").append(principal);
                   
-                  var neaten_instance=document.createElement("textarea");
-                  neaten_instance.setAttribute("class","weui-textarea");
-                  neaten_instance.innerHTML=obj.neaten_instance;
-                  $("#neaten_instance").append(neaten_instance);
+                  var check_circs=document.createElement("textarea");
+                  check_circs.setAttribute("class","weui-textarea");
+                  check_circs.innerHTML=obj.check_circs;
+                  $("#check_circs").append(check_circs);
                   
                   console.log(imgs);
                   if(imgs!=null){

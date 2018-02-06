@@ -10,23 +10,28 @@ function getQueryString(name) {
 var code=getQueryString("code");
 var state=getQueryString("state");
 
- $.get("/voucher/oauth/test.do", { 
+$.get("/voucher/oauth/test.do", { 
 	 campusId:campusId
   }, function(data) {
-	  // alert("data="+data);
-  if(data=="false"){
-	  // alert("false");
+	//   alert("data="+data);
+
+ if(data=="false"){
+	//   alert("false");
      if(code!=null){   	  
           $.get("/voucher/oauth/getUserInfo.do", {
              code:code,
              state:state,
               campusId:campusId
            }, function(text) {
-        	  var obj = $.parseJSON(text);          
+
+        	  var obj = $.parseJSON(text);
+           
         	 $("#brand").html(obj.campusName);
         	 $(".headimgUrl").attr("src",obj.headimgUrl);
         	 $(".nickName").html(obj.nickName);
-	 
+        	  
+      	    
+        	 
         	url=document.location.toString();
         	
         	$.ajax({
@@ -39,6 +44,14 @@ var state=getQueryString("state");
 			     type : "GET",
 			     success : function(data) {
 			    	 var ticket=JSON.parse(data);
+
+			    	 /*
+		      	      * 此处需要两次执行相同的函数，否则回调后不能执行以下函数
+		      	      */
+			    	 
+			    	 top.location.href="index2.html";
+			    	 
+			    	 /*
 			    	 wx.config({
 			    		  debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
 				      		appId: ticket.appId,
@@ -59,14 +72,41 @@ var state=getQueryString("state");
 				                            'scanQRCode', 'chooseWXPay',
 				                            'openProductSpecificView', 'addCard', 'chooseCard',
 				                            'openCard' ]
-				      	}); 
+				      	});
+			    	 */
+			    	 /*
+		      	      * 此处需要两次执行相同的函数，否则回调后不能执行以下函数
+		      	      */ 
+			    	/* wx.ready(function () {
+			    		
+			    		 document.querySelector('#new').onclick =function(){
+			    			 wx.getLocation({
+			    	               success : function(res) {
+			    	                    // alert(JSON.stringify(res));
+			    	                    var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+			    	                    // $("#latitude").val(latitude);
+			    	                    var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+			    	                    // $("#longitude").val(longitude);
+			    	                    var speed = res.speed; // 速度，以米/每秒计
+			    	                    // $("#speed").val(speed);
+			    	                    var accuracy = res.accuracy; // 位置精度
+			    	                    // $("#accuracy").val(accuracy);
+			    	                    location.href="safety/photo.html?latitude="+latitude+"&longitude="+longitude;
+			    	                },
+			    	                cancel : function(res) {
+			    	                    alert('用户拒绝授权获取地理位置');
+			    	                }
+			    	            });
+			    		 }
+			       }); //wx.ready
+		        	  */
 			     }
         	});
            
         });
      }else{
   	   location.href=redirectUrl;
-      }
+     }
     }else{
     	$.get("/voucher/oauth/getUserInfoByOpenId.do",{
  		   campusId:campusId
@@ -90,8 +130,15 @@ var state=getQueryString("state");
  			     type : "GET",
  			     success : function(data) {
  			    	 var ticket=JSON.parse(data);
+ 		       	     /*
+ 		     	      * 此处需要两次执行相同的函数，否则返回ture时不能执行以下函数
+ 		     	      */  
+ 		       	      
+ 			    	top.location.href="index2.html";
+ 			    	 
+ 			    	 /*
  			    	 wx.config({
- 			    		debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+ 			    		debug: flase, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
  			      		appId: ticket.appId,
  			      		timestamp: ticket.timestamp,
  			      		nonceStr: ticket.nonceStr,
@@ -111,26 +158,35 @@ var state=getQueryString("state");
  			                            'openProductSpecificView', 'addCard', 'chooseCard',
  			                            'openCard' ]
  			      	});
+ 			    	 */
+ 			    	/*
+		      	      * 此处需要两次执行相同的函数，否则回调后不能执行以下函数
+		      	      */ 
+ 			    	/* wx.ready(function () {
+ 			    		 
+ 			    		document.querySelector('#new').onclick =function(){
+			    			 wx.getLocation({
+			    	               success : function(res) {
+			    	                    // alert(JSON.stringify(res));
+			    	                    var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+			    	                    // $("#latitude").val(latitude);
+			    	                    var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+			    	                    // $("#longitude").val(longitude);
+			    	                    var speed = res.speed; // 速度，以米/每秒计
+			    	                    // $("#speed").val(speed);
+			    	                    var accuracy = res.accuracy; // 位置精度
+			    	                    // $("#accuracy").val(accuracy);
+			    	                    location.href="safety/photo.html?latitude="+latitude+"&longitude="+longitude;
+			    	                },
+			    	                cancel : function(res) {
+			    	                    alert('用户拒绝授权获取地理位置');
+			    	                }
+			    	            });
+ 			    		     }
+ 			    	 }); //wx.ready
+ 			    	 */
  			     }
  			 });
        });
     }
-  });
-
-
-
-  wx.ready(function () {
-	 		
-		document.querySelector('#notHire').onclick =function(){
-			location.href="notHire.html";
-		 }
-		
-		document.querySelector('#hire').onclick =function(){
-			location.href="hire/chart.html";
-		 }
-		
-		document.querySelector('#userSetting').onclick =function(){
-			location.href="userassetset.html";
-		 }
-		 
-	 }); //wx.ready
+});

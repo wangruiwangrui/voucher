@@ -244,11 +244,15 @@ public class HiddenController {
 			@RequestParam String name,@RequestParam Integer level,
 			@RequestParam String happenTime,@RequestParam String remark,
 			@RequestParam String detail,@RequestParam Double lng,
-			@RequestParam Double lat){
+			@RequestParam Double lat,HttpServletRequest request){
 		
 		Hidden hidden=new Hidden();
 
         UUID uuid=UUID.randomUUID();
+        
+        String openId=( String ) request.getSession().getAttribute("openId");
+        
+        hidden.setCampusAdmin(openId);
         
         hidden.setGUID(uuid.toString());
 		

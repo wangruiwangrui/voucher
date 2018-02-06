@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.voucher.manage.dao.AssetsDAO;
+import com.voucher.manage.dao.MobileDAO;
 import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.model.Users;
 import com.voucher.manage.service.UserService;
+import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
 
 @Controller
@@ -37,6 +39,8 @@ public class AssetController {
 	RoomInfoDao roomInfoDao=(RoomInfoDao) applicationContext.getBean("roomInfodao");
 
 	AssetsDAO assetsDAO=(AssetsDAO) applicationContext.getBean("assetsdao");
+	
+	MobileDAO mobileDao=(MobileDAO) applicationContext.getBean("mobileDao");
 	
 	@RequestMapping("/getAll")
 	public @ResponseBody Map<String, Object> RoomInfo(@RequestParam Integer limit,@RequestParam Integer offset,String sort,String order,
@@ -74,10 +78,34 @@ public class AssetController {
 		System.out.println("roominfocontroller sort="+sort+"   order="+order);
 		map.put("rows", roomInfos);
 	
-		Integer total=roomInfoDao.getRoomInfoCount(where);		
-        map.put("total", total);
+		Map fileBytes=mobileDao.roomInfoImageQuery(request, roomInfos);
+		map.put("fileBytes", fileBytes);
+		
+		MyTestUtil.print(fileBytes);
 		
 		return map;
+	}
+	
+	@RequestMapping("/getRoomInfoByGUID")
+	public @ResponseBody Map<String, Object> getRoomInfoByGUID(@RequestParam String guid
+			,HttpServletRequest request){
+		Map searchMap=new HashMap<>();
+		searchMap.put("[RoomInfo].GUID = ", guid);
+		
+		List<RoomInfo> roomInfos=roomInfoDao.findAllRoomInfo(2,0,null,null,searchMap);
+		
+		RoomInfo roomInfo=roomInfos.get(0);
+		
+		Map map=new HashMap<>();
+		
+		map.put("roomInfo", roomInfo);
+		
+		List fileBytes=mobileDao.allRoomInfoImageByGUID(request, roomInfo);
+		
+		map.put("fileBytes", fileBytes);
+		
+		return map;
+		
 	}
 	
 	@RequestMapping("/getChartInfoByGUID")

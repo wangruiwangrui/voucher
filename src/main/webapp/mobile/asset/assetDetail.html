@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>安全隐患详情</title>
+<title>资产详情</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -9,8 +9,8 @@
 <meta name="format-detection" content="telephone=no" />
 <meta charset="utf-8" />
  <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
-    <link rel="stylesheet" href="../css/weui.css"/>
-    <link rel="stylesheet" href="../css/example.css"/>
+    <link rel="stylesheet" href="css/weui.css"/>
+    <link rel="stylesheet" href="css/example.css"/>
 <style type="text/css">
     body, html,#allmap {width: 100%;height: 70%;margin:0;font-family:"微软雅黑";}
 </style>
@@ -22,15 +22,16 @@
   <form action="" novalidate>
     <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">隐患名称</label></div>
-                <div id="name" class="weui-cell__bd">
+                <div class="weui-cell__hd"><label class="weui-label">地址</label></div>
+                <div id="address" class="weui-cell__bd">
                 </div>
             </div>
     </div>
+    
     <div class="weui-cells weui-cells_form">
         <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">隐患等级</label></div>
-                <div id="level" class="weui-cell__bd">
+                <div class="weui-cell__hd"><label class="weui-label">地区</label></div>
+                <div id="region" class="weui-cell__bd">
                 </div>
                
         </div>
@@ -38,56 +39,42 @@
     
     
      <div class="weui-cells weui-cells_form">
-      <div class="weui-cell">
-             <div class="weui-cell__hd"><label class="weui-label">整改状态</label></div>
-                <div id="progress" class="weui-cell__bd">
-                </div>
-            <div id="progress_img" class="weui-cell weui-cell_warn">                  
-            </div>
-         </div>
-    </div>
-    
-    <div class="weui-cells weui-cells_form">
         <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">发生时间</label></div>
-                <div id="happenTime" class="weui-cell__bd">
+                <div class="weui-cell__hd"><label class="weui-label">用途</label></div>
+                <div id="designUseful" class="weui-cell__bd">
                 </div>
+               
         </div>
     </div>
     
     <div class="weui-cells weui-cells_form">
         <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">录入时间</label></div>
-                <div id="insertTime" class="weui-cell__bd">
+                <div class="weui-cell__hd"><label class="weui-label">面积</label></div>
+                <div id="buildArea" class="weui-cell__bd">
                 </div>
         </div>
     </div>
    
      <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">备注</label></div>
-                <div id="remark" class="weui-cell__bd">
+                <div class="weui-cell__hd"><label class="weui-label">状态</label></div>
+                <div id="securityClassification" class="weui-cell__bd">
                 </div>
             </div>
     </div>
     
-    <div class="weui-cells__title">隐患详情</div>
-        <div class="weui-cells weui-cells_form">
-            <div class="weui-cell">
-                <div id="detail" class="weui-cell__bd">
-                </div>
-            </div>
-        </div>
   
   </form>
   
+  <!--  
    <div class="weui-cells__title">隐患位置</div>
     <div id="allmap"></div>   
+    -->
     
-    <div class="weui-panel weui-panel_access">
-     <div class="weui-panel__hd">隐患图片</div>  
+   <div class="weui-panel weui-panel_access">
+     <div class="weui-panel__hd">资产图片</div>  
        <div id="img" class="weui-panel__bd">
-       </div>    
+      </div>    
    </div>  
       
 </body>
@@ -102,7 +89,7 @@
   var guid=getQueryString("guid");
 
     // 百度地图API功能
-    var map = new BMap.Map("allmap");    // 创建Map实例
+  /*  var map = new BMap.Map("allmap");    // 创建Map实例
 
     var longitude=getQueryString("longitude");
 	var latitude=getQueryString("latitude");
@@ -123,6 +110,7 @@
 					 fontFamily:"微软雅黑"
 				  });
     map.addOverlay(label);   
+  	*/
   	
 	function keyDown(e) {   		  
 	　   var keycode = e.which;   //取得对应的键值（数字）  	  
@@ -135,20 +123,21 @@
     
 	$.ajax({
         type: "POST",
-        url: "/voucher/mobile/hidden/selectHiddenByGuid.do",
+        url: "/voucher/mobile/asset/getRoomInfoByGUID.do",
         data: { "guid":guid},
         dataType: "json",
         error: function (request){
      	   console.log(request);
         },
-        success: function (text) {              	   
-     	   var obj=text.hidden;
+        success: function (text) {
+        	console.log(text);
+     	   var obj=text.roomInfo;
      	   var imgs=text.fileBytes;
   
              	   var guid=obj.guid;
   
              	   var distance=null;
-             	   console.log(obj.name+"   "+obj.detail+"  "+obj.lng+"   "+obj.lat);
+             	 /*
              	   if(obj.lng!=""&&obj.lat!=""){
              	   	  distance=getDistance(obj.lng,obj.lat);
              	   	var point = new BMap.Point(obj.lng,obj.lat);
@@ -159,53 +148,32 @@
              	   }
              	  
              	  navigation(pointStart, pointEnd);
-             	   
-             	  var name=document.createElement("span");
-                  name.innerHTML=obj.name;
-                  $("#name").append(name);
+             	  */
+             	  
+             	  
+             	  var address=document.createElement("span");
+             	  address.innerHTML=obj.address;
+                  $("#address").append(address);
                   
-                  var level=document.createElement("span");
-                  level.innerHTML=obj.level_text;
-                  $("#level").append(level);
+                  var region=document.createElement("span");
+                  region.innerHTML=obj.region;
+                  $("#region").append(region);
                   
-                  var progre=obj.progress;
-                  var type;
-                  var progress_img=document.createElement("i");
                   
-                  if(progre==0){
-                	  type="未整改";
-                	  progress_img.setAttribute("class","weui-icon-warn");
-                  }else if(progre>0&&progre<1){
-                	  type="整改中";
-                	  progress_img.setAttribute("class","weui-icon-info-circle");  
-                  }else if(progre==1){
-                	  type="已整改";
-                	  progress_img.setAttribute("class","weui-icon-success");
-                  }
-                  $("#progress_img").append(progress_img);
-                  var progress=document.createElement("span");
-                  progress.innerHTML=type;
-                  $("#progress").append(progress);
+                  var designUseful=document.createElement("span");
+                  designUseful.innerHTML=obj.designUseful;
+                  $("#designUseful").append(designUseful);
 
+
+                  var buildArea=document.createElement("span");
+                  buildArea.innerHTML=obj.buildArea;
+                  $("#buildArea").append(buildArea);
                   
-                  var time=actionTime(obj.happen_time);
-                  var happenTime=document.createElement("span");
-                  happenTime.innerHTML=time;
-                  $("#happenTime").append(happenTime);
+
+                  var securityClassification=document.createElement("span");
+                  securityClassification.innerHTML=obj.securityClassification;
+                  $("#securityClassification").append(securityClassification);
                   
-                  var time=actionTime(obj.date);
-                  var insertTime=document.createElement("span");
-                  insertTime.innerHTML=time;
-                  $("#insertTime").append(insertTime);
-                  
-                  var remark=document.createElement("span");
-                  remark.innerHTML=obj.remark;
-                  $("#remark").append(remark);
-                  
-                  var detail=document.createElement("textarea");
-                  detail.setAttribute("class","weui-textarea");
-                  detail.innerHTML=obj.detail;
-                  $("#detail").append(detail);
                   
                   console.log(imgs);
                   if(imgs!=null){
@@ -213,9 +181,7 @@
                       for(; i < imgs.length; i++){
                    	   
                    	  var data=imgs[i];
-                   	  var name=data.name;
                    	  var uri=data.uri;
-                   	  var date=data.date;
                    	  var panel=document.createElement("div");
                    	  panel.setAttribute("class","weui-panel__bd");
                      	   var a=document.createElement("a");
@@ -237,10 +203,8 @@
                       	  		div2.setAttribute("class","weui-media-box__bd");
                       	 		h4=document.createElement("h4");
                       	 		h4.setAttribute("class","weui-media-box__title");
-                      	 	 	h4.innerHTML=name;
                       	  	 	p=document.createElement("p");
                       	  	 	p.setAttribute("class","weui-media-box__desc");
-                      	  	 	p.innerHTML=date;
                       	     div2.appendChild(h4);
                       	     div2.appendChild(p);
                       	   a.appendChild(div);

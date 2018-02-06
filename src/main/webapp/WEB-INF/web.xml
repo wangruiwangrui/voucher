@@ -149,6 +149,7 @@
 	<filter-mapping>
 		<filter-name>MobileAdminSessionFilter</filter-name>
 		<url-pattern>/mobile/1/*</url-pattern>
+		<url-pattern>/mobile/assetAdmin/*</url-pattern>
 	</filter-mapping>
 
      <!-- 资产交租页面的栏截 -->

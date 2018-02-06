@@ -120,17 +120,13 @@ var state=getQueryString("state");
 
 
   wx.ready(function () {
-	 		
-		document.querySelector('#notHire').onclick =function(){
-			location.href="notHire.html";
-		 }
-		
-		document.querySelector('#hire').onclick =function(){
-			location.href="hire/chart.html";
+	 
+		document.querySelector('#allAsset').onclick =function(){
+			location.href="allAsset.html";
 		 }
 		
 		document.querySelector('#userSetting').onclick =function(){
-			location.href="userassetset.html";
+			location.href="userSetting.html";
 		 }
-		 
+		
 	 }); //wx.ready

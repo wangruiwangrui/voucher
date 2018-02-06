@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Neaten_Join;
@@ -25,5 +26,8 @@ public interface MobileDAO {
 	
 	public List allNeatenImageByGUID(HttpServletRequest request,Hidden_Neaten_Join hidden_Neaten_Join);
 	
+	public Map<String, Object> roomInfoImageQuery(HttpServletRequest request,List guidLits);
+	
+	public List allRoomInfoImageByGUID(HttpServletRequest request, RoomInfo roomInfo);
 	
 }
