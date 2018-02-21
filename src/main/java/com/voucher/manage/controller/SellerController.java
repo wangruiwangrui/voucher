@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,10 +17,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.voucher.manage.dao.HiddenDAO;
+import com.voucher.manage.daoModel.Assets.Hidden_User;
 import com.voucher.manage.model.Sellers;
 import com.voucher.manage.service.SellerService;
 import com.voucher.manage.tools.Constants;
 import com.voucher.manage.tools.Md5;
+import com.voucher.sqlserver.context.Connect;
 
 @Controller
 @RequestMapping("/seller")
@@ -35,10 +39,10 @@ public class SellerController {
 		this.sellerService = sellerService;
 	}
 	
+	ApplicationContext applicationContext=new Connect().get();
 	
-
-	
-	
+	HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
+		
 	/**
 	 * 鍟嗗鐧诲綍
 	 * @param campusAdmin
@@ -52,6 +56,7 @@ public class SellerController {
 		if (campusAdmin != null && password != null
 				&& !campusAdmin.trim().equals("")
 				&& !password.trim().equals("")) {
+			/*
 			Sellers sellers = sellerService.selectByCampusAdmin(campusAdmin);
 			if (sellers != null) {
 				if (sellers.getPassword().equals(Md5.GetMD5Code(password))) {
@@ -59,6 +64,24 @@ public class SellerController {
 					map.put(Constants.MESSAGE, "登陆成功");
 					map.put("type", sellers.getType());
 					HttpSession session = request.getSession();
+					session.setAttribute("type", sellers.getType());
+					session.setAttribute("campusAdmin",
+							sellers.getCampusAdmin());
+					session.setAttribute("cityId", sellers.getCityId());
+					Date date = new Date();
+					sellerService.updateLastLoginTime(date, campusAdmin);
+				}
+				*/
+			Map map2=hiddenDAO.selectHiddenUser(campusAdmin);
+			Hidden_User hidden_User=(Hidden_User) map2.get("row");
+			
+			if (hidden_User != null) {
+			 if (hidden_User.getCampusAdmin().equals("admin")&&hidden_User.getPassword().equals(Md5.GetMD5Code(password))) {
+					map.put(Constants.STATUS, Constants.SUCCESS);
+					map.put(Constants.MESSAGE, "登陆成功");
+					map.put("type", hidden_User.getPurview());
+					HttpSession session = request.getSession();
+					Sellers sellers = sellerService.selectByCampusAdmin(campusAdmin);
 					session.setAttribute("type", sellers.getType());
 					session.setAttribute("campusAdmin",
 							sellers.getCampusAdmin());

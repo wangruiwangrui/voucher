@@ -3,6 +3,7 @@
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -145,6 +146,12 @@ public class UserServiceImpl implements UserService {
 	public List<Users> getUserByGuidance() {
 		// TODO Auto-generated method stub
 		return usersMapper.getUserByGuidance();
+	}
+
+	@Override
+	public List<Users> getWetchatAllUsers(Integer campusId,Integer place,Integer limit,Integer offset, String sort,String order) {
+		// TODO Auto-generated method stub
+		return usersMapper.getWetchatAllUsers(campusId, place,limit,offset,sort,order);
 	}
 
 }

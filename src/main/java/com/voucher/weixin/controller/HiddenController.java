@@ -277,6 +277,7 @@ public class HiddenController {
 		Date date2=new Date();
 		hidden.setUpdate_time(date2);
 		hidden.setDate(date2);
+		hidden.setTerminal("Wechat");
 		int i=hiddenDAO.insertIntoHidden(hidden);
 		
 		Position position=new Position();

@@ -105,7 +105,7 @@
 
     function repayment(temp){
         var hang = $(temp.parentNode).parent().prevAll().length + 1;
-        var hireGUID =document.getElementById("table").rows[hang].cells[6].innerHTML;
+        var hireGUID =encodeURI(document.getElementById("table").rows[hang].cells[6].innerHTML);
         
         window.location.href = "hire.html?hireGUID="+hireGUID;
         

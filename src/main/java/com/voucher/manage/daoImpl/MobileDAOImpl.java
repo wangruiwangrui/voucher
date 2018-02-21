@@ -32,6 +32,8 @@ import com.voucher.manage.tools.MyTestUtil;
 
 public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 
+	private static final String ROOMINFOIMGPATH	="D:\\SYSPICTURE\\";
+	
 	@Override
 	public Map<String, Object> hiddenImageQuery(HttpServletRequest request,List guidLits) {
 		// TODO Auto-generated method stub
@@ -516,7 +518,7 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 							
 				//String fileByte=Base64Test.getImageStr(filePath+"\\"+hidden_Data_Join.getURI());
 				
-				String oldFile="E:\\GTJTSJ\\"+fileSelfBelong.getUpFileFullName();
+				String oldFile=ROOMINFOIMGPATH+fileSelfBelong.getUpFileFullName();
 				
 				CopyFile.set(imgPath, oldFile, fileSelfBelong.getUpFileFullName());
 				
@@ -573,7 +575,7 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 			
 				//String fileByte=Base64Test.getImageStr(filePath+"\\"+hidden_Data_Join.getURI());
 				
-				String oldFile="E:\\GTJTSJ\\"+fileSelfBelong.getUpFileFullName();
+				String oldFile=ROOMINFOIMGPATH+fileSelfBelong.getUpFileFullName();
 				
 				CopyFile.set(imgPath, oldFile, fileSelfBelong.getUpFileFullName());
 				

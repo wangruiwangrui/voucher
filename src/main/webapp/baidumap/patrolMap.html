@@ -209,7 +209,6 @@
     }
     
 	var pointArray = new Array();
-	console.log(json_data);
 	for(var i=0;i<json_data.length;i++){
 		var point=new BMap.Point(json_data[i][0], json_data[i][1]);
 		var marker = new BMap.Marker(point); // 创建点

@@ -125,6 +125,39 @@
 		</if>		
 	</select>
 
+	<select id="getWetchatAllUsers" resultMap="BaseResultMap" useCache="false">
+		select
+		id,users.open_id,
+		campus_id,subscribe,nickname, headimg_url,
+		language,province,groupid,country,
+		city,sex,remark,
+		usersinfo.name,users.place,
+		usersinfo.headship,usersinfo.email,	
+		total_amount,
+		subscribe_time,
+		address,phone
+		from users
+		left join usersinfo
+		on
+		users.open_id = usersinfo.open_id
+		<where>
+			users.campus_id=#{campusId,jdbcType=INTEGER}
+		<if test="place != null ">
+				and users.place &gt; #{place,jdbcType=INTEGER}
+			</if>
+			<if test="sort != null">
+				order by ${sort}
+			</if>
+			<if test="sort != null and order != null">
+				${order}
+			</if>
+		</where>
+		<if test="offset != null and limit != null">
+			limit #{offset,jdbcType=INTEGER} ,
+			#{limit,jdbcType=INTEGER}
+		</if>		
+	</select>
+
 	<select id="getUserByPhone" resultMap="BaseResultMap" useCache="false">
 		select
 		id,users.open_id,

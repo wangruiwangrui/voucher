@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>隐患查询</title>
+<title>隐患添加</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -27,7 +27,7 @@
     
    // var map = new BMap.Map("allmap");
     var map = new BMap.Map("allmap", {enableMapClick:false});//构造底图时，关闭底图可点功能
-
+    
     map.addControl(top_left_control);        
 	map.addControl(top_left_navigation); 
     
@@ -132,21 +132,19 @@
 	        //console.log(objS.options[objS.selectedIndex]);
 	        //alert(grade); 
 	        map.clearOverlays();
-	        console.log(grade);
 	        if(grade!=null){
 	        	var xhm=new XMLHttpRequest();
-	   	    	xhm.open("GET","../baiduMap/get.do?manageRegion="+grade,false);
+	   	    	xhm.open("GET","../baiduMap/getAllAsset.do?manageRegion="+grade,false);
 	   	    	xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
 	   	    	xhm.send();
 	   	    	var ticket=JSON.parse(xhm.responseText);
 	        }else{
 	        	var xhm=new XMLHttpRequest();
-	   	    	xhm.open("GET","../baiduMap/get.do?",false);
+	   	    	xhm.open("GET","../baiduMap/getAllAsset.do?",false);
 	   	    	xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
 	   	    	xhm.send();
 	   	    	var ticket=JSON.parse(xhm.responseText);
 	        }
-	        console.log(ticket);
 	        addDeck(ticket);
 	       } 
 	
@@ -155,66 +153,80 @@
 	// 添加到地图当中
 	map.addControl(menuCtrl);
 	
+	var xhm=new XMLHttpRequest();
+    xhm.open("GET","../baiduMap/getPosition.do",false);
+    xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    xhm.send();
+    var json=JSON.parse(xhm.responseText);
+    var point = new BMap.Point(json.lng, json.lat);
+    map.centerAndZoom(point, 13);
 	
-	 var xhm=new XMLHttpRequest();
-	 xhm.open("GET","../baiduMap/location.do",false);
-	 xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-	 xhm.send();
-	 var ticket=JSON.parse(xhm.responseText);
+    var xhm=new XMLHttpRequest();
+  	 xhm.open("GET","../baiduMap/location.do",false);
+  	 xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+  	 xhm.send();
+  	 var ticket=JSON.parse(xhm.responseText);
+   var point = new BMap.Point(ticket.content.point.x, ticket.content.point.y);
+   var str = "我的位置";
+	var opts = {
+			   position : point,    // 指定文本标注所在的地理位置
+			   offset   : new BMap.Size(-getByteLen(str)*3, 5)    //设置文本偏移量
+			}	
+	var label = new BMap.Label(str, opts);  // 创建文本标注对象
+	label.setStyle({
+					 fontSize : "12px",
+					 height : "20px",
+					 lineHeight : "20px",
+					 fontFamily:"微软雅黑"
+				  });
+   map.addOverlay(label);   
+   map.enableScrollWheelZoom(true);
   
-	 var point = new BMap.Point(ticket.content.point.x, ticket.content.point.y);
-	    map.centerAndZoom(point, 13);
-	    var marker = new BMap.Marker(point); // 创建点
-		map.addOverlay(marker);    //增加点
-		var str = "我的位置";
-		var opts = {
-				   position : point,    // 指定文本标注所在的地理位置
-				   offset   : new BMap.Size(-getByteLen(str)*3, 5)    //设置文本偏移量
-				}	
-		var label = new BMap.Label(str, opts);  // 创建文本标注对象
-		label.setStyle({
-						 fontSize : "12px",
-						 height : "20px",
-						 lineHeight : "20px",
-						 fontFamily:"微软雅黑"
-					  });
-	    map.addOverlay(label);   
-	    
-	    map.enableScrollWheelZoom(true);
-	    var geoc = new BMap.Geocoder();  
-
-	    //获取标注位置信息    
-	    function getAttr(){
-			var p = marker.getPosition();       //获取marker的位置
-			alert("marker的位置是" + p.lng + "," + p.lat);   
-		}
-	 
-	    
-	    var xhm=new XMLHttpRequest();
-	    xhm.open("GET","../baiduMap/get.do",false);
-	    xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-	    xhm.send();
-	    var ticket=JSON.parse(xhm.responseText);
-	    
-	 addDeck(ticket);
-	 
-   function addDeck(ticket){	
+   var geoc = new BMap.Geocoder();  
+   map.addEventListener("click", function(e){    
+   	 var pt = e.point;
+        geoc.getLocation(pt, function(rs){
+        var addComp = rs.addressComponents;
+        var value=new Object();
+        value.province=addComp.province;
+        value.city=addComp.city;
+        value.district=addComp.district;
+        value.street=addComp.street;
+        value.streetNumber=addComp.streetNumber;
+        value.lng=pt.lng;
+        value.lat=pt.lat;
+        var json = JSON.stringify(value); 
+        alert(json);
+        });        
+   }
+   ); 
+ 
+   var xhm=new XMLHttpRequest();
+   xhm.open("GET","../baiduMap/getAllAsset.do",false);
+   xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+   xhm.send();
+   var ticket=JSON.parse(xhm.responseText);
    
+	addDeck(ticket);
+    
+    function addDeck(ticket){
+    	
    // console.log(ticket);
     var json_data = new Array();
     
     for(var i=0;i<ticket.length;i++){
     	json_data[i]=[ticket[i].lng,ticket[i].lat,
-    	              ticket[i].name];
+    	              ticket[i].address];
     }
     
 	var pointArray = new Array();
 	console.log(json_data);
 	for(var i=0;i<json_data.length;i++){
 		var point=new BMap.Point(json_data[i][0], json_data[i][1]);
-		var marker = new BMap.Marker(point); // 创建点
-		map.addOverlay(marker);    //增加点
-		var str = "隐患 :"+json_data[i][2];
+		var myIcon = new BMap.Icon("house.jpg", new BMap.Size(50,80));
+		var marker = new BMap.Marker(point,{icon:myIcon}); // 创建点
+		map.addOverlay(marker);    //增加点		
+		var str = "资产 :"+json_data[i][2];
 		var opts = {
 				   position : point,    // 指定文本标注所在的地理位置
 				   offset   : new BMap.Size(-getByteLen(str)*3, 5)    //设置文本偏移量
@@ -222,30 +234,29 @@
 		console.log(getByteLen(str));
 		var label = new BMap.Label(str, opts);  // 创建文本标注对象
 		label.setStyle({
-						 color : "red",
+						 color : "blue",
 						 fontSize : "12px",
 						 height : "20px",
 						 lineHeight : "20px",
 						 fontFamily:"微软雅黑"
 					  });
 	    map.addOverlay(label);   
-		marker.addEventListener("click",attribute);
 	}
 	//让所有点在视野范围内
 	map.setViewport(pointArray);
+    
+    }
 	
-	}
-	
-	//获取覆盖物位置
-	function attribute(e){
-		var p = e.target;
-		var value=new Object();
-        value.lng=p.getPosition().lng;
-        value.lat=p.getPosition().lat;
-        var json = JSON.stringify(value); 
-        alert(json);  
-	}	
-
+    
+    function script(){
+    	map.clearOverlays();
+    	var xhm=new XMLHttpRequest();
+	    xhm.open("GET","../baiduMap/getAllAsset.do",false);
+	    xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	    xhm.send();
+	    var ticket=JSON.parse(xhm.responseText);
+        addDeck(ticket);
+    }
     
 	function getByteLen(val) {    //传入一个字符串
         var len = 0;
@@ -257,5 +268,5 @@
         }
         return len;
      }       
-   
+	
 </script>

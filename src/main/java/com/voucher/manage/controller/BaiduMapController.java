@@ -28,6 +28,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.dao.MobileDAO;
+import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.tools.MyTestUtil;
@@ -47,6 +48,8 @@ public class BaiduMapController {
 	
 	MobileDAO mobileDao=(MobileDAO) applicationContext.getBean("mobileDao");
 	
+	RoomInfoDao roomInfoDao=(RoomInfoDao) applicationContext.getBean("roomInfodao");
+	
 	@RequestMapping("/get")
 	public @ResponseBody List test(String manageRegion) {		
 		
@@ -57,7 +60,7 @@ public class BaiduMapController {
 		   map=assetsDAO.findAllPosition("");
 		}
 		
-		MyTestUtil.print(map);
+		//MyTestUtil.print(map);
 		
 		List list=(List) map.get("row");
 		
@@ -181,4 +184,26 @@ public class BaiduMapController {
         return map;
         
 	}
+	
+	
+	@RequestMapping("/getAllAsset")
+	public @ResponseBody List getAllAsset(String manageRegion){
+	
+		Map where = new HashMap<>();
+	
+		if(manageRegion!=null&&!manageRegion.equals("")){
+			where.put("[Position].GUID !=","''");
+			where.put("[TTT].[dbo].[RoomInfo].ManageRegion = ", manageRegion);
+		}else{
+			where.put("[Position].GUID !=","''");
+		}
+		
+		Map map=roomInfoDao.findAllRoomInfo_Position(1000, 0, null, null, where);
+	
+		List list=(List) map.get("rows");
+		
+		return list;
+		
+	}
+	
 }

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
 import com.voucher.manage.dao.AssetsDAO;
@@ -24,6 +25,9 @@ import com.voucher.manage.file.DocFileFactory;
 import com.voucher.manage.file.ImageFileFactory;
 import com.voucher.manage.file.PdfFileFactory;
 import com.voucher.manage.file.XlsFileFactory;
+import com.voucher.manage.model.Users;
+import com.voucher.manage.service.UserService;
+import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
 
 public class AssetsImpl implements Assets{
@@ -38,6 +42,13 @@ public class AssetsImpl implements Assets{
 	HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
 	
 	AssetsDAO assetsDAO=(AssetsDAO) applicationContext.getBean("assetsdao");
+	
+	private UserService userService;
+	
+	@Autowired
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
 	
 	@Override
 	public Map<String, Object> getRoomInfo(Integer limit,Integer offset,String sort,String order,
@@ -434,6 +445,23 @@ public class AssetsImpl implements Assets{
 	public List selectManageRegion() {
 		// TODO Auto-generated method stub
 		return assetsDAO.selectManageRegion();
+	}
+
+
+	@Override
+	public Users getWetchatUsers(String openId) {
+		// TODO Auto-generated method stub
+		Users users= userService.getUserByOnlyOpenId(openId);
+		
+		MyTestUtil.print(users);
+		
+		return users;
+	}
+
+	@Override
+	public List<Users> getWetchatAllUsers(Integer place) {
+		// TODO Auto-generated method stub
+		return userService.getWetchatAllUsers(1, place,null,null,null,null);
 	}
 
 

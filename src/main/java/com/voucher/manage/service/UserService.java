@@ -14,6 +14,8 @@ public interface UserService {
 	
 	List<Users> getAllFullUser(Integer campusId,Integer limit, Integer offset, String sort,String order,String search);
 	
+	List<Users> getWetchatAllUsers(Integer campusId,Integer place,Integer limit, Integer offset, String sort,String order);
+	
 	List<Users> getUserByPhone(Integer limit, Integer offset, String sort, String order);
 	
 	List<Users> getUserByGuidance();

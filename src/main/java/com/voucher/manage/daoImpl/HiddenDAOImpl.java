@@ -11,6 +11,7 @@ import java.util.Map;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 import com.voucher.manage.dao.HiddenDAO;
+import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Assets.Hidden;
 import com.voucher.manage.daoModel.Assets.Hidden_Check;
 import com.voucher.manage.daoModel.Assets.Hidden_Check_Date;
@@ -633,13 +634,12 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		hidden_Check.setOrder(order);
 		hidden_Check.setNotIn("id");
 		
-        Hidden hidden=new Hidden();
-		
-		hidden.setLimit(limit);
-		hidden.setOffset(offset);
-		hidden.setSort(sort);
-		hidden.setOrder(order);
-		hidden.setNotIn("id");
+        RoomInfo roomInfo=new RoomInfo();
+        
+        roomInfo.setLimit(limit);
+        roomInfo.setOffset(offset);
+        roomInfo.setSort(sort);
+        roomInfo.setOrder(order);
 		
 		Position position=new Position();
 		
@@ -652,13 +652,13 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		if(!search.isEmpty()){
 		    String[] where=TransMapToString.get(search);
 		    hidden_Check.setWhere(where);
-		    hidden.setWhere(where);
+		    roomInfo.setWhere(where);
 		    position.setWhere(where);
 		}
 		
 		Map map=new HashMap<String, Object>();
 		
-		Object[] objects={hidden_Check,hidden,position};
+		Object[] objects={hidden_Check,roomInfo,position};
 		
 		String[] join={"GUID","check_id"};
 		

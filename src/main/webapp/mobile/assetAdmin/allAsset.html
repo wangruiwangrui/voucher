@@ -23,17 +23,16 @@
         <div class="refresh">正在刷新</div>
        </div>
 	
-	<!--  
+
         <div class="weui-cells weui-cells_form">
               <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">隐患查询:</label></div>
                 <div class="weui-cell__bd weui_cell_primary name">
                     <input id="input" class="weui-input" type="text" placeholder=""/>
                 </div class="weui-cell__bd weui_cell_primary name">
                   <a href="javascript:;" id="search" class="weui-btn weui-btn_mini weui-btn_primary">查询</a>
                </div>
         </div>
-      -->
+
         
 		<div class="weui-cells">
          <div id="ul" >
@@ -121,7 +120,8 @@
                type: "POST",
                url: "/voucher/mobile/asset/getAll.do",
                data: { "limit" : limit, 
-                       "offset" : offset
+                       "offset" : offset,
+                       "search" : search
                        },
                dataType: "json",
                error: function (request){
@@ -219,7 +219,7 @@
           }
           
           function clickEvent(that){
-        	  var guid=$(that).attr("guid");
+        	  var guid=encodeURI($(that).attr("guid"));
         	  location.href="assetDetail.html?guid="+guid+"&latitude="+latitude+"&longitude="+longitude;
           }
           
@@ -295,7 +295,7 @@ li{
 }
 .img{
     display: inline-block;
-    width: auto;
+    width: 130px;
     height: 120px;
     vertical-align: middle;
     transition: all .5s ease-out .1s;

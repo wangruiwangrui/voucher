@@ -38,6 +38,8 @@ public interface UsersMapper {
 
 	List<Users> getAllFullUser(@Param(value="campusId")Integer campusId,@Param(value="limit")Integer limit, @Param(value="offset")Integer offset, @Param(value="sort")String sort, @Param(value="order")String order,@Param(value="search")String search);
 
+	List<Users> getWetchatAllUsers(@Param(value="campusId")Integer campusId,@Param(value="place")Integer place,@Param(value="limit")Integer limit, @Param(value="offset")Integer offset, @Param(value="sort")String sort, @Param(value="order")String order);
+	
 	List<Users> getUserByPhone(@Param(value="limit")Integer limit, @Param(value="offset")Integer offset, @Param(value="sort")String sort, @Param(value="order")String order);
 	
 	List<Users> getUserByGuidance();
