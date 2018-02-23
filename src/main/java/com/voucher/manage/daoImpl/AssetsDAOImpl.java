@@ -16,6 +16,8 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 import com.voucher.manage.dao.AssetsDAO;
+import com.voucher.manage.daoModel.HiddenAssetByMonthAmount;
+import com.voucher.manage.daoModel.HiddenByMonthAmount;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Users;
 import com.voucher.manage.daoModel.Assets.Hidden;
@@ -563,6 +565,68 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	}
 
 	@Override
+	public Integer findAllAssets() {
+		// TODO Auto-generated method stub
+		RoomInfo roomInfo=new RoomInfo();
+		
+		int i=(int) SelectExe.getCount(this.getJdbcTemplate(), roomInfo).get("");
+		
+		String sql="select asset_GUID "+
+				"FROM [Assets].[dbo].[Hidden_Assets]  group by asset_GUID "	;
+		
+		List list=this.getJdbcTemplate().query(sql,new hidden_AssetsRowMapper());
+		
+		int count=list.size();
+		
+		int ii=i-count;
+		
+		return ii;
+	}
+
+	@Override
+	public Integer findAllAssetsHidden() {
+		// TODO Auto-generated method stub
+		
+		String sql="select asset_GUID "+
+				"FROM [Assets].[dbo].[Hidden_Assets]  group by asset_GUID "	;
+		
+		List list=this.getJdbcTemplate().query(sql,new hidden_AssetsRowMapper());
+		
+		int count=list.size();
+		
+		return count;
+	}
+	
+	class hidden_AssetsRowMapper implements RowMapper<Hidden_Assets> {
+
+		@Override
+		public Hidden_Assets mapRow(ResultSet rs, int rowNum) throws SQLException {
+			// TODO Auto-generated method stub
+			
+			Hidden_Assets hidden_Assets=new Hidden_Assets();
+			
+			hidden_Assets.setAsset_GUID(rs.getString("asset_GUID"));
+
+			return hidden_Assets;
+		}
+		
+	}
+	
+	@Override
+	public Integer findSuccessHidden() {
+		// TODO Auto-generated method stub
+		Hidden hidden=new Hidden();
+		
+		String[] where={"[Hidden].exist !="," 0 ","[Hidden].progress >","0"
+				," [Hidden].progress >= ","1"};
+		hidden.setWhere(where);
+		
+		int i=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden).get("");
+		
+		return i;
+	}
+	
+	@Override
 	public String findLastHidden() {
 		// TODO Auto-generated method stub
 		
@@ -804,5 +868,137 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public List findHiddenByYear() {
+		// TODO Auto-generated method stub
+		String sql="SELECT convert(varchar(4),date,120) as year"+
+					" FROM [Assets].[dbo].[Hidden] where date is not null "+
+					" group by convert(varchar(4),date,120) order by year desc";
+		
+		List years=this.getJdbcTemplate().query(sql, new HiddenByYear());
+		
+		return years;
+	}
+	
+	@Override
+	public List findAssetByYear() {
+		// TODO Auto-generated method stub
+		String sql="SELECT convert(varchar(4),InDate,120) as year"+
+				" FROM [TTT].[dbo].[RoomInfo] where InDate is not null "+
+				" group by convert(varchar(4),InDate,120) order by year desc";
+	
+		List years=this.getJdbcTemplate().query(sql, new HiddenByYear());
+	
+		MyTestUtil.print(years);
+	
+		return years;
+	}
+	
+	
+	class HiddenByYear implements RowMapper<String> {
+
+		@Override
+		public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+			// TODO Auto-generated method stub
+			
+			String year=rs.getString("year");
+			
+			return year;
+		}
+		
+	}
+
+	@Override
+	public List findHiddenByMonthOfYear(String year) {
+		// TODO Auto-generated method stub
+		String sql="SELECT convert(varchar(7),date,120) as year ,COUNT(*) as amount "+
+					"FROM [Assets].[dbo].[Hidden] where date is not null "+ 
+					"and convert(varchar(4),date,120)= "+year+" "+ 
+					"group by convert(varchar(7),date,120)";
+		
+		List list=this.getJdbcTemplate().query(sql,new HiddenByMonth());
+		
+		return list;
+	}
+	
+	class HiddenByMonth implements RowMapper<HiddenByMonthAmount> {
+
+		@Override
+		public HiddenByMonthAmount mapRow(ResultSet rs, int rowNum) throws SQLException {
+			// TODO Auto-generated method stub
+			HiddenByMonthAmount hiddenByMonthAmount=new HiddenByMonthAmount();
+			
+			hiddenByMonthAmount.setYear(rs.getString("year"));
+			hiddenByMonthAmount.setAmount(rs.getInt("amount"));
+			
+			return hiddenByMonthAmount;
+		}
+		
+	}
+
+	@Override
+	public List findHiddenAssetsByMonthOfYear(String year) {
+		// TODO Auto-generated method stub
+		
+		String sql="SELECT convert(varchar(7),InDate,120) as year ,COUNT(*) as amount "+
+					"FROM [TTT].[dbo].[RoomInfo] where InDate is not null "+
+					"and convert(varchar(4),InDate,120) = "+year+" group by convert(varchar(7),InDate,120)";
+		
+		List list=this.getJdbcTemplate().query(sql,new HiddenAssetByMonth());
+		
+		String sql2="SELECT convert(varchar(7),InDate,120) as year ,COUNT(*) as amount "+
+					"FROM [TTT].[dbo].[RoomInfo] left join [Assets].[dbo].[Hidden_Assets] on "+
+					"[TTT].[dbo].[RoomInfo].GUID=[Assets].[dbo].[Hidden_Assets].asset_GUID "+
+					"where InDate is not null and [Assets].[dbo].[Hidden_Assets].asset_GUID is not null "+
+					"and convert(varchar(4),InDate,120) = "+year+" group by convert(varchar(7),InDate,120)";
+		
+		List list2=this.getJdbcTemplate().query(sql2,new HiddenAssetByMonth());
+		
+		Iterator<HiddenAssetByMonthAmount> iterator=list.iterator();
+		
+		int i=0;
+		
+		while (iterator.hasNext()) {
+			
+			HiddenAssetByMonthAmount hiddenAssetByMonthAmount=iterator.next();
+			
+			String y=hiddenAssetByMonthAmount.getYear();
+			
+			Iterator<HiddenAssetByMonthAmount> iterator2=list2.iterator();
+			
+			while(iterator2.hasNext()){
+				HiddenAssetByMonthAmount hiddenAssetByMonthAmount2=iterator2.next();
+				
+				if(y.equals(hiddenAssetByMonthAmount2.getYear())){
+					hiddenAssetByMonthAmount.setHiddenAmount(hiddenAssetByMonthAmount2.getAmount());
+					list.set(i, hiddenAssetByMonthAmount);
+				}
+			}
+			
+			i++;
+			
+		}
+		
+		return list;
+	}
+	
+	class HiddenAssetByMonth implements RowMapper<HiddenAssetByMonthAmount>{
+
+		@Override
+		public HiddenAssetByMonthAmount mapRow(ResultSet rs, int rowNum) throws SQLException {
+			// TODO Auto-generated method stub
+			
+			HiddenAssetByMonthAmount hiddenAssetByMonthAmount=
+					new HiddenAssetByMonthAmount();
+			
+			hiddenAssetByMonthAmount.setYear(rs.getString("year"));
+			hiddenAssetByMonthAmount.setAmount(rs.getInt("amount"));
+			
+			return hiddenAssetByMonthAmount;
+		}
+		
+	}
+
 	
 }

@@ -386,6 +386,24 @@ public class AssetsImpl implements Assets{
 
 
 	@Override
+	public Integer findSuccessHidden() {
+		// TODO Auto-generated method stub
+		return assetsDAO.findSuccessHidden();
+	}
+	
+	@Override
+	public Integer findAllAssets() {
+		// TODO Auto-generated method stub
+		return assetsDAO.findAllAssets();
+	}
+
+	@Override
+	public Integer findAllAssetsHidden() {
+		// TODO Auto-generated method stub
+		return assetsDAO.findAllAssetsHidden();
+	}
+	
+	@Override
 	public String findLastHidden() {
 		// TODO Auto-generated method stub
 		return assetsDAO.findLastHidden();
@@ -462,6 +480,31 @@ public class AssetsImpl implements Assets{
 	public List<Users> getWetchatAllUsers(Integer place) {
 		// TODO Auto-generated method stub
 		return userService.getWetchatAllUsers(1, place,null,null,null,null);
+	}
+
+	@Override
+	public List findHiddenByYear() {
+		// TODO Auto-generated method stub
+		return assetsDAO.findHiddenByYear();
+	}
+
+	@Override
+	public List findAssetByYear() {
+		// TODO Auto-generated method stub
+		return assetsDAO.findAssetByYear();
+	}
+
+	
+	@Override
+	public List findHiddenByMonthOfYear(String year) {
+		// TODO Auto-generated method stub
+		return assetsDAO.findHiddenByMonthOfYear(year);
+	}
+
+	@Override
+	public List findHiddenAssetsByMonthOfYear(String year) {
+		// TODO Auto-generated method stub
+		return assetsDAO.findHiddenAssetsByMonthOfYear(year);
 	}
 
 

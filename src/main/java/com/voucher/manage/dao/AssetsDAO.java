@@ -46,6 +46,12 @@ public interface AssetsDAO {
 	
 	public Integer findInHidden();
 	
+	public Integer findSuccessHidden();
+	
+	public Integer findAllAssets();
+	
+	public Integer findAllAssetsHidden();
+	
 	public String findLastHidden();
 	
 	public String  findIgnoreHidden();
@@ -59,4 +65,12 @@ public interface AssetsDAO {
 	public Map findChartInfo_HireListByIDNo(String IDNo);
 	
 	public Map findHireListByGUID(String GUID);
+	
+	public List findHiddenByYear();
+	
+	public List findAssetByYear();
+	
+	public List findHiddenByMonthOfYear(String year);
+	
+	public List findHiddenAssetsByMonthOfYear(String year);
 }
