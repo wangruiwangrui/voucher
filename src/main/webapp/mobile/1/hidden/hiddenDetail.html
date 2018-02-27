@@ -16,6 +16,7 @@
 </style>
 <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=cR98TwX2FnKTpANIOYhMYMot9a4ioxjc"></script>
 <script type="text/javascript" src="https://api.map.baidu.com/library/CurveLine/1.5/src/CurveLine.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 </head>
 
 <body>
@@ -291,4 +292,71 @@
     	return d.toFixed(2)+' KM';  //获取两点距离,保留小数点后两位
     }
     
+</script>
+
+<script src="previewImage.min.js"></script>
+
+<script>
+
+ /*
+ url=document.location.toString();
+ 
+ $.ajax({
+    url : "../../../wechat/sign.do",
+    data : {
+   	 campusId:1,
+   	 url:url
+    },
+    async: false,
+    type : "GET",
+    success : function(data) {
+   	  var ticket=JSON.parse(data);
+   	 
+   	   wx.config({
+   		 debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+     		appId: ticket.appId,
+     		timestamp: ticket.timestamp,
+     		nonceStr: ticket.nonceStr,
+     		signature: ticket.signature,
+     		jsApiList : [ 'checkJsApi', 'onMenuShareTimeline',
+                           'onMenuShareAppMessage', 'onMenuShareQQ',
+                           'onMenuShareWeibo', 'hideMenuItems',
+                           'showMenuItems', 'hideAllNonBaseMenuItem',
+                           'showAllNonBaseMenuItem', 'translateVoice',
+                           'startRecord', 'stopRecord', 'onRecordEnd',
+                           'playVoice', 'pauseVoice', 'stopVoice',
+                           'uploadVoice', 'downloadVoice', 'chooseImage',
+                           'previewImage', 'uploadImage', 'downloadImage',
+                           'getNetworkType', 'openLocation', 'getLocation',
+                           'hideOptionMenu', 'showOptionMenu', 'closeWindow',
+                           'scanQRCode', 'chooseWXPay',
+                           'openProductSpecificView', 'addCard', 'chooseCard',
+                           'openCard' ]
+     	 });
+  	    
+
+  	     
+      }
+  });
+	
+ */
+ 
+ $("#img").on('click',function(event) {
+	 var imgArray=[];
+     var curImageSrc = $(this).attr('src');
+     var oParent = $(this).parent();
+     $('.weui-media-box__thumb').each(function(index, el) {
+             var itemSrc = $(this).attr('src');
+             imgArray.push(itemSrc);
+         });
+     console.log(imgArray);
+
+     var obj = {
+             urls : imgArray,
+             current : imgArray[0]
+         };
+     previewImage.start(obj);
+     
+  });
+ 
 </script>

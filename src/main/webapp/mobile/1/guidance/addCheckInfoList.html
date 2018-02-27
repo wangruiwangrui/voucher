@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>安全检查记录列表</title>
+<title>全部房屋列表</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -22,16 +22,30 @@
         <div class="up">释放刷新</div>
         <div class="refresh">正在刷新</div>
        </div>
+	
+
+    <div class="page__bd" style="height:50px;">
+        <div class="weui-tab">
+            <div class="weui-navbar">
+                <div id="tab1" class="weui-navbar__item weui-bar__item_on">
+                    	选项一
+                </div>
+                <div id="tab2" class="weui-navbar__item">
+                   	 	选项二
+                </div>
+            </div>
+        </div>
+    </div>
 
         <div class="weui-cells weui-cells_form">
               <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">查询条件:</label></div>
                 <div class="weui-cell__bd weui_cell_primary name">
                     <input id="input" class="weui-input" type="text" placeholder=""/>
                 </div class="weui-cell__bd weui_cell_primary name">
                   <a href="javascript:;" id="search" class="weui-btn weui-btn_mini weui-btn_primary">查询</a>
                </div>
         </div>
+
         
 		<div class="weui-cells">
          <div id="ul" >
@@ -54,6 +68,15 @@
 </body>
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
 <script src="../../../js/jquery-weui.js"></script>
+
+<script type="text/javascript" class="navbar js_show">
+    $(function(){
+        $('.weui-navbar__item').on('click', function () {
+            $(this).addClass('weui-bar__item_on').siblings('.weui-bar__item_on').removeClass('weui-bar__item_on');
+        });
+    });
+</script>
+
 <script>
   function getQueryString(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
@@ -65,7 +88,9 @@
   var latitude=getQueryString("latitude");
   var map = new BMap.Map("allmap");
   
-    var limit = 5;
+  var url="/voucher/mobile/asset/getAll.do";
+  
+    var limit = 10;
     var offset = 0;
     var search = "";
     var sort = "date";
@@ -78,17 +103,35 @@
     
     $("#search").on("click",function(){
   	  search = $("#input").val();
-  	  limit = 5;
+  	  limit = 10;
         offset = 0;
         $("#ul").children('li').remove();
         loading = false;
   	  loadlist();
     });
     
+    $("#tab1").on("click",function(){
+    	url="/voucher/mobile/asset/getAll.do";
+    	  limit = 10;
+          offset = 0;
+          $("#ul").children('li').remove();
+          loading = false;
+    	  loadlist();
+      });
+    
+    $("#tab2").on("click",function(){
+    	  url=" ";
+    	  limit = 10;
+          offset = 0;
+          $("#ul").children('li').remove();
+          loading = false;
+    	  loadlist();
+      });
+    
     loadlist();
     
     $(document.body).pullToRefresh().on("pull-to-refresh", function() {
-          limit = 5;
+          limit = 10;
           offset = 0;
           $("#ul").children('li').remove();
           loading = false;
@@ -117,12 +160,10 @@
            var html = "";
            $.ajax({
                type: "POST",
-               url: "/voucher/mobile/hidden/selectAllCheck.do",
+               url: url,
                data: { "limit" : limit, 
                        "offset" : offset,
-                       "search" : search,
-                       "sort" : sort,
-                       "order" : order
+                       "search" : search
                        },
                dataType: "json",
                error: function (request){
@@ -132,27 +173,29 @@
                    $("#ul").append(html);
                },
                success: function (text) {              	   
-            	   var data=text.hidden_Check;
+            	   var data=text.rows;
             	   var imgs=text.fileBytes;
+            	   console.log(imgs);
                    if (data.length > 0) {
                 	   var i = 0;
                        for(; i < data.length; i++){
                     	   var obj = data[i];
-                    	   var check_id=obj.check_id;
+                    	   var guid=obj.guid;
                     	   
                     	   var img=null;
-                    	   if(imgs[check_id]!=null){
-                    		   img="/voucher/"+imgs[check_id];
+                    	   if(imgs[guid]!=null){
+                    		   img="/voucher/"+imgs[guid];
                     	   }
         
                     	   var time="时间:"+actionTime(obj.date);
                     	   var distance=null;
-                    	   console.log(obj.check_name+"   "+obj.detail+"  "+obj.lng+"   "+obj.lat);
+                    	   console.log(obj.name+"   "+obj.detail+"  "+obj.lng+"   "+obj.lat);
                     	   if(obj.lng!=""&&obj.lat!=""){
                     	   	  distance=getDistance(obj.lng,obj.lat);
                     	   }
-                    	   var li_1=addDiv(img,obj.check_name,obj.check_circs,time,"距离:"+distance);
-                           li_1.setAttribute("check_id",check_id);
+                    	   var li_1=addDiv(img,obj.address,obj.roomProperty,"面积:"+obj.buildArea+"平方米"
+                    			   ,obj.region);
+                           li_1.setAttribute("guid",guid);
                     	   li_1.setAttribute("onclick","clickEvent(this);");
                     	   $("#ul").append(li_1);
                        }
@@ -218,8 +261,8 @@
           }
           
           function clickEvent(that){
-        	  var check_id=$(that).attr("check_id");
-        	  location.href="CheckInfoDetail.html?check_id="+check_id;
+        	  var guid=encodeURI($(that).attr("guid"));
+        	  location.href="assetDetail.html?guid="+guid+"&latitude="+latitude+"&longitude="+longitude;
           }
           
           function addSpan(div,text){

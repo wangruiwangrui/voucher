@@ -151,12 +151,27 @@ var state=getQueryString("state");
                  // $("#speed").val(speed);
                  var accuracy = res.accuracy; // 位置精度
                  // $("#accuracy").val(accuracy);
-                 location.href="hidden/hiddenSearch.html?latitude="+latitude+"&longitude="+longitude;
-             },
+                 
+                 $.get("/voucher/mobile/map/baiduSwitch.do",{ //微信地理位置坐标转换成百度地图坐标
+                	 longitude:longitude,
+                	 latitude:latitude               	 
+                 },function(text){
+                	 var obj = $.parseJSON(text);
+                	 var result=obj.result;
+                	 var lat=result[0].y;
+                	 var lng=result[0].x;
+                	 location.href="hidden/hiddenSearch.html?latitude="+lat+"&longitude="+lng;
+                 });
+              
+            },
              cancel : function(res) {
                  alert('用户拒绝授权获取地理位置');
              }
          });
+		 }
+		
+		document.querySelector('#addhiddenCheck').onclick =function(){
+			 location.href="guidance/addCheckInfoList.html";
 		 }
 		
 		document.querySelector('#hiddenCheck').onclick =function(){
@@ -183,8 +198,19 @@ var state=getQueryString("state");
 	                    // $("#speed").val(speed);
 	                    var accuracy = res.accuracy; // 位置精度
 	                    // $("#accuracy").val(accuracy);
-	                    location.href="safety/emergency.html?latitude="+latitude+"&longitude="+longitude;
-	                },
+	                    
+	                    $.get("/voucher/mobile/map/baiduSwitch.do",{ //微信地理位置坐标转换成百度地图坐标
+	                   	 longitude:longitude,
+	                   	 latitude:latitude               	 
+	                    },function(text){
+	                   	 var obj = $.parseJSON(text);
+	                   	 var result=obj.result;
+	                   	 var lat=result[0].y;
+	                   	 var lng=result[0].x;
+	                   	 location.href="safety/emergency.html?latitude="+lat+"&longitude="+lng;
+	                    });
+	                    
+	               },
 	                cancel : function(res) {
 	                    alert('用户拒绝授权获取地理位置');
 	                }
@@ -213,8 +239,19 @@ var state=getQueryString("state");
 	                    // $("#speed").val(speed);
 	                    var accuracy = res.accuracy; // 位置精度
 	                    // $("#accuracy").val(accuracy);
-	                    location.href="safety/photo.html?latitude="+latitude+"&longitude="+longitude;
-	                },
+	                    
+	                    $.get("/voucher/mobile/map/baiduSwitch.do",{ //微信地理位置坐标转换成百度地图坐标
+		                   	 longitude:longitude,
+		                   	 latitude:latitude               	 
+		                    },function(text){
+		                   	 var obj = $.parseJSON(text);
+		                   	 var result=obj.result;
+		                   	 var lat=result[0].y;
+		                   	 var lng=result[0].x;
+		                   	 location.href="safety/photo.html?latitude="+lat+"&longitude="+lng;
+		                 });
+	                    
+	                 },
 	                cancel : function(res) {
 	                    alert('用户拒绝授权获取地理位置');
 	                }
@@ -236,7 +273,18 @@ var state=getQueryString("state");
             // $("#speed").val(speed);
             var accuracy = res.accuracy; // 位置精度
             // $("#accuracy").val(accuracy);
-            location.href="map.html?latitude="+latitude+"&longitude="+longitude;
+            
+            $.get("/voucher/mobile/map/baiduSwitch.do",{ //微信地理位置坐标转换成百度地图坐标
+              	 longitude:longitude,
+              	 latitude:latitude               	 
+               },function(text){
+              	 var obj = $.parseJSON(text);
+              	 var result=obj.result;
+              	 var lat=result[0].y;
+              	 var lng=result[0].x;
+              	 location.href="map.html?latitude="+lat+"&longitude="+lng;
+            });
+            
         },
         cancel : function(res) {
      	   console.log('用户拒绝授权获取地理位置');

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>安全安全巡查详情</title>
+    <title>新建安全巡查记录</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -87,131 +87,8 @@
 	　   }
 	 }     
     
-	$.ajax({
-        type: "POST",
-        url: "/voucher/mobile/hidden/selectCheckByCheckId.do",
-        data: { "check_id":check_id},
-        dataType: "json",
-        error: function (request){
-     	   console.log(request);
-        },
-        success: function (text) {   
-        	console.log(text);
-     	   var obj=text.hidden_Check;
-     	   var imgs=text.fileBytes;
-  
-             	   var check_id=obj.check_id;
-  
-             	   var distance=null;
-             	   console.log(obj.name+"   "+obj.detail+"  "+obj.lng+"   "+obj.lat);
-             	   if(obj.lng!=""&&obj.lat!=""){
-             	   	  distance=getDistance(obj.lng,obj.lat);
-             	   	var point = new BMap.Point(obj.lng,obj.lat);
-             	    map.centerAndZoom(point, 12);
-             	    var marker = new BMap.Marker(point); // 创建点
-             		map.addOverlay(marker);    //增加点
-             	   }
-             	   
-             	  var check_name=document.createElement("span");
-             	 check_name.innerHTML=obj.check_name;
-                  $("#check_name").append(check_name);
-                  
-                  var level=document.createElement("span");
-                  level.innerHTML=obj.level_text;
-                  $("#level").append(level);
-                  
-                  var progre=obj.progress;
-                  var type;
-                  var progress_img=document.createElement("i");
-                  
-                  if(progre==0){
-                	  type="未整改";
-                	  progress_img.setAttribute("class","weui-icon-warn");
-                  }else if(progre>0&&progre<1){
-                	  type="整改中";
-                	  progress_img.setAttribute("class","weui-icon-info-circle");  
-                  }else if(progre==1){
-                	  type="已整改";
-                	  progress_img.setAttribute("class","weui-icon-success");
-                  }
-                  $("#progress_img").append(progress_img);
-                  var progress=document.createElement("span");
-                  progress.innerHTML=type;
-                  $("#progress").append(progress);
 
-                  
-                  var time=actionTime(obj.happen_time);
-                  var happenTime=document.createElement("span");
-                  happenTime.innerHTML=time;
-                  $("#happenTime").append(happenTime);
-                  
-                  var time=actionTime(obj.date);
-                  var date=document.createElement("span");
-                  date.innerHTML=time;
-                  $("#date").append(date);
-                  
-                  var remark=document.createElement("span");
-                  remark.innerHTML=obj.remark;
-                  $("#remark").append(remark);
-                  
-                  var principal=document.createElement("span");
-                  principal.innerHTML=obj.principal;
-                  $("#principal").append(principal);
-                  
-                  var check_circs=document.createElement("textarea");
-                  check_circs.setAttribute("class","weui-textarea");
-                  check_circs.innerHTML=obj.check_circs;
-                  $("#check_circs").append(check_circs);
-                  
-                  console.log(imgs);
-                  if(imgs!=null){
-                  	   var i = 0;
-                         for(; i < imgs.length; i++){
-                      	   
-                      	  var data=imgs[i];
-                      	  var name=data.name;
-                      	  var uri=data.uri;
-                      	  var date=data.date;
-                      	  var panel=document.createElement("div");
-                      	  panel.setAttribute("class","weui-panel__bd");
-                        	   var a=document.createElement("a");
-                       	   a.setAttribute("class","weui_grid");
-                       	   var a=document.createElement("a");
-                       	  a.setAttribute("href","javascript:void(0);");
-                       	   a.setAttribute("class","weui-media-box weui-media-box_appmsg");
-                       	   var div=document.createElement("div");
-                       	  	div.setAttribute("class","weui-media-box__hd");
-                       	  
-                  	   	 	 src="/voucher/"+uri;
-                  	  	  	var img=document.createElement("img");
-                  	  	  	img.setAttribute("class","weui-media-box__thumb");
-                            	img.setAttribute("src",src);
-                          
-                         	  	div.appendChild(img);
-                         	   		
-                         	  	div2=document.createElement("div");
-                         	  		div2.setAttribute("class","weui-media-box__bd");
-                         	 		h4=document.createElement("h4");
-                         	 		h4.setAttribute("class","weui-media-box__title");
-                         	 	 	h4.innerHTML=name;
-                         	  	 	p=document.createElement("p");
-                         	  	 	p.setAttribute("class","weui-media-box__desc");
-                         	  	 	p.innerHTML=date;
-                         	     div2.appendChild(h4);
-                         	     div2.appendChild(p);
-                         	   a.appendChild(div);
-                         	   a.appendChild(div2);
-                         	   panel.appendChild(a);
-                  	      	  $("#img").append(panel);
-                         }
-          		   
-          	   		}
-        }
-    });
-    
-    
-	
-	
+   	
 	function actionTime(value){
   	    var date = new Date(value); 
   	    Y = date.getFullYear() + '年';

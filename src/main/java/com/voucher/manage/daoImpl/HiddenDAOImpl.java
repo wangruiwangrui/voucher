@@ -694,7 +694,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		int i=UpdateExe.get(this.getJdbcTemplate(), hidden_Check2);
 		
 		if(i==1){
-			String[] where2={"[Hidden_Check].check_id=",hidden_Check.getCheck_id()};
+			String[] where2={"check_id=",hidden_Check.getCheck_id()};
 			Hidden_Check_Date hidden_Check_Date=new Hidden_Check_Date();
 			hidden_Check_Date.setWhere(where2);
 			DeleteExe.get(this.getJdbcTemplate(), hidden_Check_Date);
