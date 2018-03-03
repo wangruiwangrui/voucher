@@ -18,6 +18,7 @@ import com.voucher.manage.dao.MobileDAO;
 import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
+import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 import com.voucher.manage.model.Users;
 import com.voucher.manage.service.UserService;
 import com.voucher.manage.tools.MyTestUtil;
@@ -73,12 +74,19 @@ public class AssetController {
 			where.put("[RoomInfo].State= ", search2);
 		}
 		
+		/*
 		List<RoomInfo> roomInfos=roomInfoDao.findAllRoomInfo(limit,offset,sort,
 				order,where);
 		System.out.println("roominfocontroller sort="+sort+"   order="+order);
-		map.put("rows", roomInfos);
-	
-		Map fileBytes=mobileDao.roomInfoImageQuery(request, roomInfos);
+		*/
+		
+		Map roomInfo_Positions=roomInfoDao.findAllRoomInfo_Position(limit, offset, sort, order, where);
+		
+		List roominfos=(List) roomInfo_Positions.get("rows");
+		
+		map.put("rows", roominfos);
+			
+		Map fileBytes=mobileDao.roomInfo_PositionImageQuery(request, roominfos);
 		map.put("fileBytes", fileBytes);
 		
 		MyTestUtil.print(fileBytes);
@@ -92,17 +100,39 @@ public class AssetController {
 		Map searchMap=new HashMap<>();
 		searchMap.put("[RoomInfo].GUID = ", guid);
 		
+		List<RoomInfo_Position> roomInfo_Positions=(List<RoomInfo_Position>) roomInfoDao.findAllRoomInfo_Position(2,0,null,null,searchMap).get("rows");
+		
+		RoomInfo_Position roomInfo_Position=roomInfo_Positions.get(0);
+		
+		Map map=new HashMap<>();
+		
+		map.put("roomInfo", roomInfo_Position);
+		
+		RoomInfo roomInfo=new RoomInfo();
+		
+		roomInfo.setGUID(guid);
+		
+		List fileBytes=mobileDao.allRoomInfoImageByGUID(request, roomInfo);
+		
+		map.put("fileBytes", fileBytes);
+		
+		return map;
+		
+	}
+	
+	@RequestMapping("/getRoomInfoForGUID")
+	public @ResponseBody Map<String, Object> getRoomInfoForGUID(@RequestParam String guid
+			,HttpServletRequest request){
+		Map searchMap=new HashMap<>();
+		searchMap.put("[RoomInfo].GUID = ", guid);
+		
 		List<RoomInfo> roomInfos=roomInfoDao.findAllRoomInfo(2,0,null,null,searchMap);
 		
 		RoomInfo roomInfo=roomInfos.get(0);
 		
 		Map map=new HashMap<>();
 		
-		map.put("roomInfo", roomInfo);
-		
-		List fileBytes=mobileDao.allRoomInfoImageByGUID(request, roomInfo);
-		
-		map.put("fileBytes", fileBytes);
+		map.put("roomInfo", roomInfo);		
 		
 		return map;
 		

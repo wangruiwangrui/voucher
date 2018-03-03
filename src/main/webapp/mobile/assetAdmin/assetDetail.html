@@ -22,8 +22,16 @@
   <form action="" novalidate>
     <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">地址</label></div>
+                <div class="weui-cell__hd"><label class="weui-label">资产名称</label></div>
                 <div id="address" class="weui-cell__bd">
+                </div>
+            </div>
+    </div>
+    
+    <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">管理分区</label></div>
+                <div id="manageRegion" class="weui-cell__bd">
                 </div>
             </div>
     </div>
@@ -65,11 +73,9 @@
     
   
   </form>
-  
-  <!--  
-   <div class="weui-cells__title">隐患位置</div>
+   
+   <div class="weui-cells__title">资产位置</div>
     <div id="allmap"></div>   
-    -->
     
    <div class="weui-panel weui-panel_access">
      <div class="weui-panel__hd">资产图片</div>  
@@ -88,15 +94,15 @@
 
   var guid=getQueryString("guid");
 
-    // 百度地图API功能
-  /*  var map = new BMap.Map("allmap");    // 创建Map实例
+  // 百度地图API功能
+  var map = new BMap.Map("allmap");    // 创建Map实例
 
-    var longitude=getQueryString("longitude");
-	var latitude=getQueryString("latitude");
-    var point = new BMap.Point(longitude, latitude);
+  var longitude=getQueryString("longitude");
+  var latitude=getQueryString("latitude");
+  var point = new BMap.Point(longitude, latitude);
 
-    var pointStart=point;
-    
+  var pointStart=point;
+  
 	var str = "我的位置";
 	var opts = {
 			   position : point,    // 指定文本标注所在的地理位置
@@ -109,8 +115,16 @@
 					 lineHeight : "20px",
 					 fontFamily:"微软雅黑"
 				  });
-    map.addOverlay(label);   
-  	*/
+  map.addOverlay(label);   
+	
+	function keyDown(e) {   		  
+	　   var keycode = e.which;   //取得对应的键值（数字）  	  
+	　   var realkey = String.fromCharCode(e.which); //取得代表改键的真正字符  
+	   var val = document.getElementById("input").value;
+	　   if(keycode==13){
+		   local.search(val);
+	　   }
+	 }     
   	
 	function keyDown(e) {   		  
 	　   var keycode = e.which;   //取得对应的键值（数字）  	  
@@ -136,20 +150,27 @@
   
              	   var guid=obj.guid;
   
-             	   var distance=null;
-             	 /*
-             	   if(obj.lng!=""&&obj.lat!=""){
-             	   	  distance=getDistance(obj.lng,obj.lat);
-             	   	var point = new BMap.Point(obj.lng,obj.lat);
-             	    var pointEnd=point;
-             	    map.centerAndZoom(point, 12);
-             	    var marker = new BMap.Marker(point); // 创建点
-             		map.addOverlay(marker);    //增加点
-             	   }
+             	  var distance=null;
+            	   console.log(obj.name+"   "+obj.detail+"  "+obj.lng+"   "+obj.lat);
+            	   if(obj.lng!=""&&obj.lat!=""){
+            	   	  distance=getDistance(obj.lng,obj.lat);
+            	   	var point = new BMap.Point(obj.lng,obj.lat);
+            	    var pointEnd=point;
+            	    map.centerAndZoom(point, 12);
+            	    var myIcon = new BMap.Icon("../../img/blackPoint.jpg", new BMap.Size(30,38));
+            	    var marker = new BMap.Marker(point,{icon:myIcon}); // 创建点
+            		map.addOverlay(marker);    //增加点
+            	   }
+            	  
+            	  navigation(pointStart, pointEnd);
              	  
-             	  navigation(pointStart, pointEnd);
-             	  */
-             	  
+             	 var address=document.createElement("span");
+               	  address.innerHTML=obj.address;
+                  $("#address").append(address);
+                    
+                 var manageRegion=document.createElement("span");
+                  manageRegion.innerHTML=obj.manageRegion;
+                  $("#manageRegion").append(manageRegion);
              	  
              	  var address=document.createElement("span");
              	  address.innerHTML=obj.address;
@@ -181,6 +202,7 @@
                       for(; i < imgs.length; i++){
                    	   
                    	  var data=imgs[i];
+                   	  var name=data.fileBelong;
                    	  var uri=data.uri;
                    	  var panel=document.createElement("div");
                    	  panel.setAttribute("class","weui-panel__bd");
@@ -202,9 +224,10 @@
                       	  	div2=document.createElement("div");
                       	  		div2.setAttribute("class","weui-media-box__bd");
                       	 		h4=document.createElement("h4");
-                      	 		h4.setAttribute("class","weui-media-box__title");
+                      	 		h4.setAttribute("class","weui-media-box__title");                      	 		
                       	  	 	p=document.createElement("p");
                       	  	 	p.setAttribute("class","weui-media-box__desc");
+                      	  		p.innerHTML=name;
                       	     div2.appendChild(h4);
                       	     div2.appendChild(p);
                       	   a.appendChild(div);
@@ -255,4 +278,79 @@
     	return d.toFixed(2)+' KM';  //获取两点距离,保留小数点后两位
     }
     
+</script>
+
+<script src="../../js/previewImage.min.js"></script>
+
+<script>
+ 
+ var im = {};
+ /**
+  * 得到多个元素
+  * @public
+  */
+ im.all = function(selector, contextElement) {
+     var nodeList,
+         list = [];
+     if (contextElement) {
+         nodeList = contextElement.querySelectorAll(selector);
+     } else {
+         nodeList = document.querySelectorAll(selector);
+     }
+     if (nodeList && nodeList.length > 0) {
+         list = Array.prototype.slice.call(nodeList);
+     }
+     return list;
+ }
+
+ /**
+  * 将事件委托给父元素
+  * @public
+  * @param  array     $el         父元素
+  * @param  string    eventType  事件类型名称
+  * @param  string    selector   目标的选择器
+  * @param  function  fn
+  */
+ im.delegate = function($el, eventType, selector, fn) {
+     if (!$el) { return; }
+     $el.addEventListener(eventType, function(e) {
+         var targets = im.all(selector, $el);
+         if (!targets) {
+             return;
+         }
+         // findTarget:
+         for (var i=0; i<targets.length; i++) {
+             var $node = e.target;
+             while ($node) {
+                 if ($node == targets[i]) {
+                     fn.call($node, e);
+                     break; //findTarget;
+                 }
+                 $node = $node.parentNode;
+                 if ($node == $el) {
+                     break;
+                 }
+             }
+         }
+     }, false);
+ };
+
+
+ im.delegate(document.querySelector('#img'), 'click','img',function(){
+	 
+	 var urls = [];
+	 var imgs = im.all('img',im.all('#img')[0]);
+	 imgs.forEach(function(v,i){
+	     urls.push(v.src);
+	 })
+     
+	 var current = this.src;
+	 console.log(current);
+     var obj = {
+         urls : urls,
+         current : current
+     };
+     previewImage.start(obj);
+ });
+ 
 </script>

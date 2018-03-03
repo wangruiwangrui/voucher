@@ -28,6 +28,8 @@ public interface MobileDAO {
 	
 	public Map<String, Object> roomInfoImageQuery(HttpServletRequest request,List guidLits);
 	
+	public Map<String, Object> roomInfo_PositionImageQuery(HttpServletRequest request,List guidLits);
+		
 	public List allRoomInfoImageByGUID(HttpServletRequest request, RoomInfo roomInfo);
 	
 }

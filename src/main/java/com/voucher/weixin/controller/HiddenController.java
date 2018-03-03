@@ -17,10 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONObject;
 import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.dao.MobileDAO;
 import com.voucher.manage.daoModel.Assets.Hidden;
+import com.voucher.manage.daoModel.Assets.Hidden_Check;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
@@ -243,8 +245,9 @@ public class HiddenController {
 	public @ResponseBody Map insertHidden(
 			@RequestParam String name,@RequestParam Integer level,
 			@RequestParam String happenTime,@RequestParam String remark,
-			@RequestParam String detail,@RequestParam Double lng,
-			@RequestParam Double lat,HttpServletRequest request){
+			@RequestParam String detail,@RequestParam String addComp,
+			@RequestParam Double lng,@RequestParam Double lat,
+			HttpServletRequest request){
 		
 		Hidden hidden=new Hidden();
 
@@ -280,11 +283,27 @@ public class HiddenController {
 		hidden.setTerminal("Wechat");
 		int i=hiddenDAO.insertIntoHidden(hidden);
 		
+		JSONObject jsonObject=JSONObject.parseObject(addComp);
+		
+		String province=jsonObject.getString("province");		
+		String city=jsonObject.getString("city");		
+		String district=jsonObject.getString("district");		
+		String street=jsonObject.getString("street");		
+		String streetNumber=jsonObject.getString("streetNumber");		
+		
 		Position position=new Position();
 		
 		position.setGUID(uuid.toString());
 		position.setLat(lat);
 		position.setLng(lng);
+		
+		position.setProvince(province);
+		position.setCity(city);
+		position.setDistrict(district);
+		position.setStreet(streetNumber);
+		position.setStreet_number(streetNumber);
+		
+		position.setDate(date2);
 		
 		assetsDAO.updatePosition(position);
 		
@@ -296,5 +315,86 @@ public class HiddenController {
 		return map;
 		
 	}
+	
+	
+	@RequestMapping("/insertHiddenCheck")
+	public @ResponseBody Map insertHiddenCheck(
+			@RequestParam String guid,@RequestParam String check_name,
+			@RequestParam String happenTime,@RequestParam String remark,
+			@RequestParam String check_circs,@RequestParam String addComp,
+			@RequestParam Double lng,@RequestParam Double lat,
+			HttpServletRequest request){
+		
+		Hidden_Check hidden_Check=new Hidden_Check();
+
+        UUID uuid=UUID.randomUUID();
+        
+        String openId=( String ) request.getSession().getAttribute("openId");
+        
+        hidden_Check.setCampusAdmin(openId);
+
+        hidden_Check.setCheck_id(uuid.toString());
+        
+        hidden_Check.setGUID(guid);
+		
+        hidden_Check.setCheck_name(check_name);
+        
+        hidden_Check.setCheck_circs(check_circs);
+
+		if(happenTime!=null&&!happenTime.equals("")){
+			try {
+				DateFormat fmt =new SimpleDateFormat("yyyy-MM-dd");
+				Date date;		
+				date = fmt.parse(happenTime);	
+				hidden_Check.setHappen_time(date);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		Date date=new Date();
+		hidden_Check.setUpdate_time(date);
+		hidden_Check.setDate(date);
+		hidden_Check.setTerminal("Wechat");
+		
+		int i=hiddenDAO.insertHiddenCheck(hidden_Check);
+		
+		JSONObject jsonObject=JSONObject.parseObject(addComp);
+		
+		String province=jsonObject.getString("province");		
+		String city=jsonObject.getString("city");		
+		String district=jsonObject.getString("district");		
+		String street=jsonObject.getString("street");		
+		String streetNumber=jsonObject.getString("streetNumber");	
+		
+		Position position=new Position();
+		
+		position.setCheck_id(uuid.toString());
+		position.setLat(lat);
+		position.setLng(lng);
+		
+		position.setProvince(province);
+		position.setCity(city);
+		position.setDistrict(district);
+		position.setStreet(streetNumber);
+		position.setStreet_number(streetNumber);
+		
+		assetsDAO.updatePosition(position);
+		
+		Map map=new HashMap<>();
+		
+		map.put("status", i);
+		map.put("check_id", uuid.toString());
+		
+		position.setCheck_id(null);
+		position.setGUID(guid);
+		
+		assetsDAO.updatePositionByRoomInfo(position); //更新资产位置
+		
+		return map;
+		
+	}
+	
 	
 }

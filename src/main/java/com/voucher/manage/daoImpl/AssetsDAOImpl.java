@@ -77,14 +77,61 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		String[] where={"[Position].GUID=",position.getGUID()};
 		position.setWhere(where);
 		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), position).get("");
-		if(count==1){
-			i=UpdateExe.get(this.getJdbcTemplate(), position);
+		if(count==0){
+			i=InsertExe.get(this.getJdbcTemplate(), position);			
 		}else{
-			i=InsertExe.get(this.getJdbcTemplate(), position);
+			i=UpdateExe.get(this.getJdbcTemplate(), position);
 		}
 		return i;
 	}
 
+	@Override
+	public Integer updatePositionByRoomInfo(Position position) {
+		// TODO Auto-generated method stub
+		int i;
+		String[] where={"[Position].GUID=",position.getGUID()};
+		position.setWhere(where);
+		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), position).get("");
+		if(count==0){
+			i=InsertExe.get(this.getJdbcTemplate(), position);			
+		}else{
+			i=UpdateExe.get(this.getJdbcTemplate(), position);
+		}
+		
+		return i;
+	}
+	
+	@Override
+	public Integer updatePositionByCheck(Position position) {
+		// TODO Auto-generated method stub
+		int i;
+		String[] where={"[Position].check_id=",position.getCheck_id()};
+		position.setWhere(where);
+		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), position).get("");
+		if(count==0){
+			i=InsertExe.get(this.getJdbcTemplate(), position);			
+		}else{
+			i=UpdateExe.get(this.getJdbcTemplate(), position);
+		}
+		
+		return i;
+	}
+
+	@Override
+	public Integer updatePositionByNeaten(Position position) {
+		// TODO Auto-generated method stub
+		int i;
+		String[] where={"[Position].neaten_id=",position.getNeaten_id()};
+		position.setWhere(where);
+		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), position).get("");
+		if(count==0){
+			i=InsertExe.get(this.getJdbcTemplate(), position);			
+		}else{
+			i=UpdateExe.get(this.getJdbcTemplate(), position);
+		}
+		return i;
+	}
+	
 	public Integer countPositionByGUID(Position position){
 		String[] where={"[Position].GUID=",position.getGUID()};
 		position.setWhere(where);

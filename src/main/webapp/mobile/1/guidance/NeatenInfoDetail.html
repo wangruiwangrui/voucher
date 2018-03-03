@@ -263,3 +263,78 @@
     }
     
 </script>
+
+<script src="../../../js/previewImage.min.js"></script>
+
+<script>
+ 
+ var im = {};
+ /**
+  * 得到多个元素
+  * @public
+  */
+ im.all = function(selector, contextElement) {
+     var nodeList,
+         list = [];
+     if (contextElement) {
+         nodeList = contextElement.querySelectorAll(selector);
+     } else {
+         nodeList = document.querySelectorAll(selector);
+     }
+     if (nodeList && nodeList.length > 0) {
+         list = Array.prototype.slice.call(nodeList);
+     }
+     return list;
+ }
+
+ /**
+  * 将事件委托给父元素
+  * @public
+  * @param  array     $el         父元素
+  * @param  string    eventType  事件类型名称
+  * @param  string    selector   目标的选择器
+  * @param  function  fn
+  */
+ im.delegate = function($el, eventType, selector, fn) {
+     if (!$el) { return; }
+     $el.addEventListener(eventType, function(e) {
+         var targets = im.all(selector, $el);
+         if (!targets) {
+             return;
+         }
+         // findTarget:
+         for (var i=0; i<targets.length; i++) {
+             var $node = e.target;
+             while ($node) {
+                 if ($node == targets[i]) {
+                     fn.call($node, e);
+                     break; //findTarget;
+                 }
+                 $node = $node.parentNode;
+                 if ($node == $el) {
+                     break;
+                 }
+             }
+         }
+     }, false);
+ };
+
+
+ im.delegate(document.querySelector('#img'), 'click','img',function(){
+	 
+	 var urls = [];
+	 var imgs = im.all('img',im.all('#img')[0]);
+	 imgs.forEach(function(v,i){
+	     urls.push(v.src);
+	 })
+     
+	 var current = this.src;
+	 console.log(current);
+     var obj = {
+         urls : urls,
+         current : current
+     };
+     previewImage.start(obj);
+ });
+ 
+</script>

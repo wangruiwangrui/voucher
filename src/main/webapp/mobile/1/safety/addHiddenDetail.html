@@ -68,7 +68,7 @@
         </div>
   
   </form>
-
+      
   <div class="weui-cells__title">隐患位置</div>
     <div id="allmap"></div>   
     
@@ -81,16 +81,16 @@
         </div>
    
     <a href="javascript:;" id="save" class="weui-btn weui-btn_plain-primary">保存</a>
-      
+    
 </body>
 </html>
 <script type="text/javascript">
-  function getQueryString(name) {
-    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-    var r = window.location.search.substr(1).match(reg);
-    if (r != null) return unescape(r[2]); return null;
-   }
 
+  function getQueryString(key){
+	    var reg = new RegExp("(^|&)"+key+"=([^&]*)(&|$)");
+	    var result = window.location.search.substr(1).match(reg);
+	    return result?decodeURIComponent(result[2]):null;
+	}
 
     // 百度地图API功能
     var map = new BMap.Map("allmap");    // 创建Map实例
@@ -117,6 +117,8 @@
     map.addOverlay(label);   
     map.enableScrollWheelZoom(true);
   	
+    var geoc = new BMap.Geocoder();
+
 	function keyDown(e) {   		  
 	　   var keycode = e.which;   //取得对应的键值（数字）  	  
 	　   var realkey = String.fromCharCode(e.which); //取得代表改键的真正字符  
@@ -197,78 +199,88 @@
 
 	
     $("#save").on("click",function(){
-    	alert("aaa");
-    	var name=$("#name").val();
-    	var level=hiddenlevel;
-    	var happenTime=$("#happenTime").val();
-    	var remark=$("#remark").val();
-    	var detail=$("#detail").val();
 
-    	 $.post("/voucher/mobile/hidden/insertHidden.do",
-    		  {
-		    	name:name,
-		    	level:level,
-		    	happenTime:happenTime,
-		    	remark:remark,
-		    	detail:detail,
-		    	lng:longitude,
-		    	lat:latitude
-		    }, function(data){
-	        	var obj = $.parseJSON(data);
-		    	if (obj.status == 0) {
-		        	alert("新建隐患"+name+"失败!");
-		        	console.log(obj.status);
-		        } else if (obj.status == 1) {
-		            //存储到服务器成功后的处理
-		            //
-		            var guid=obj.guid;
-		        	alert("新建隐患"+name+"成功!");
-		        	
-		        	var images = {
-		        	   		 localId: [],
-		        	    	serverId: []
-		        	  	   };
-      	     
-	    		 
-	    		 var imagename=prompt("请输入隐患图片的名称 : ","");
-	    		 
-	    		 if(imagename==null){
-	    			 imagename="无标题";
-	    		 }
-	    		 
-	    		 wx.chooseImage({
-	        	      success: function (res) {
-	        	        images.localId = res.localIds;
-	        	        console.log('已选择 ' + res.localIds.length + ' 张图片');
-	        	        
-	        	        var i = 0, length = images.localId.length;
-		        	    images.serverId = [];
-		        	    function upload() {
-		        	      wx.uploadImage({
-		        	        localId: images.localId[i].toString(),
-		        	        isShowProgressTips: images.localId[i].toString(),
-		        	        success: function (res) {
-		        	          i++;
-		        	          console.log('已上传：' + i + '/' + length);
-		        	        //返回图片的服务器端ID res.serverId,然后调用wxImgCallback函数进行下载图片操作
-                              wxImgCallback(guid,imagename,res.serverId);
-		        	       //   images.serverId.push(res.serverId);
-		        	          if (i < length) {
-		        	            upload();
-		        	          }
-		        	        },
-		        	        fail: function (res) {
-		        	        	console.log(res);
-		        	        }
-		        	      });
-		        	    }
-		        	    upload();
-	        	      }
-	        	    });
-		        	
-		        }
-		    });
-    	
+    	geoc.getLocation(point, function(rs){
+    	    	var addComp;
+    	  	  	addComp = rs.addressComponents;
+    	  	  	
+    	  	 //  alert(addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
+
+    	    	var name=$("#name").val();
+    	    	var level=hiddenlevel;
+    	    	var happenTime=$("#happenTime").val();
+    	    	var remark=$("#remark").val();
+    	    	var detail=$("#detail").val();
+				var addComp1=JSON.stringify(addComp);
+				
+    	    	 $.post("/voucher/mobile/hidden/insertHidden.do",
+    	    		  {
+    			    	name:name,
+    			    	level:level,
+    			    	happenTime:happenTime,
+    			    	remark:remark,
+    			    	detail:detail,
+    			    	addComp:addComp1,
+    			    	lng:longitude,
+    			    	lat:latitude
+    			    }, function(data){
+    		        	var obj = $.parseJSON(data);
+    			    	if (obj.status == 0) {
+    			        	alert("新建隐患"+name+"失败!");
+    			        	console.log(obj.status);
+    			        } else if (obj.status == 1) {
+    			            //存储到服务器成功后的处理
+    			            //
+    			            var guid=obj.guid;
+    			        	alert("新建隐患"+name+"成功!");
+    			        	
+    			        	var images = {
+    			        	   		 localId: [],
+    			        	    	serverId: []
+    			        	  	   };
+    	      	     
+    		    		 
+    		    		 var imagename=prompt("请输入隐患图片的名称 : ","");
+    		    		 
+    		    		 if(imagename==null){
+    		    			 imagename="无标题";
+    		    		 }
+    		    		 
+    		    		 wx.chooseImage({
+    		        	      success: function (res) {
+    		        	        images.localId = res.localIds;
+    		        	        console.log('已选择 ' + res.localIds.length + ' 张图片');
+    		        	        
+    		        	        var i = 0, length = images.localId.length;
+    			        	    images.serverId = [];
+    			        	    function upload() {
+    			        	      wx.uploadImage({
+    			        	        localId: images.localId[i].toString(),
+    			        	        isShowProgressTips: images.localId[i].toString(),
+    			        	        success: function (res) {
+    			        	          i++;
+    			        	          console.log('已上传：' + i + '/' + length);
+    			        	        //返回图片的服务器端ID res.serverId,然后调用wxImgCallback函数进行下载图片操作
+    	                              wxImgCallback(guid,imagename,res.serverId);
+    			        	       //   images.serverId.push(res.serverId);
+    			        	          if (i < length) {
+    			        	            upload();
+    			        	          }
+    			        	        },
+    			        	        fail: function (res) {
+    			        	        	console.log(res);
+    			        	        }
+    			        	      });
+    			        	    }
+    			        	    upload();
+    		        	      }
+    		        	    });
+    			        	
+    			        }
+    			    });
+    	  	
+    	});        
+
     });
     
     url=document.location.toString();
