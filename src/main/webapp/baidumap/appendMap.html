@@ -188,6 +188,7 @@
         geoc.getLocation(pt, function(rs){
         var addComp = rs.addressComponents;
         var value=new Object();
+        value.type=e.type;
         value.province=addComp.province;
         value.city=addComp.city;
         value.district=addComp.district;
@@ -216,7 +217,7 @@
     
     for(var i=0;i<ticket.length;i++){
     	json_data[i]=[ticket[i].lng,ticket[i].lat,
-    	              ticket[i].name];
+    	              ticket[i].name,ticket[i].guid];
     }
     
 	var pointArray = new Array();
@@ -225,6 +226,8 @@
 		var marker = new BMap.Marker(point); // 创建点
 		map.addOverlay(marker);    //增加点
 		var str = "隐患 :"+json_data[i][2];
+		var guid=json_data[i][3];
+		console.log(guid);
 		var opts = {
 				   position : point,    // 指定文本标注所在的地理位置
 				   offset   : new BMap.Size(-getByteLen(str)*3, 5)    //设置文本偏移量
@@ -238,8 +241,31 @@
 						 lineHeight : "20px",
 						 fontFamily:"微软雅黑"
 					  });
-	    map.addOverlay(label);   
+	    map.addOverlay(label); 
+	    
+	    marker.enableDragging(); //标注可拖拽	    
+	 // 开启事件监听
+	     marker.addEventListener("dragend", function (e) {
+	    	 console.log(e);
+	    	 var pt = e.point;
+	         geoc.getLocation(pt, function(rs){
+	         var addComp = rs.addressComponents;
+	         var value=new Object();
+	         value.type=e.type;
+	         value.province=addComp.province;
+	         value.city=addComp.city;
+	         value.district=addComp.district;
+	         value.street=addComp.street;
+	         value.streetNumber=addComp.streetNumber;
+	         value.ja=e.target.JA;
+	         value.lng=pt.lng;
+	         value.lat=pt.lat;
+	         var json = JSON.stringify(value); 
+	         alert(json);
+	         }); 
+	     });
 	}
+	
 	//让所有点在视野范围内
 	map.setViewport(pointArray);
     

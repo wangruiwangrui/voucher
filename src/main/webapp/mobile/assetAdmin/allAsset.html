@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>全部房屋列表</title>
+<title>资产列表</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -23,6 +23,19 @@
         <div class="refresh">正在刷新</div>
        </div>
 	
+
+    <div class="page__bd" style="height:50px;">
+        <div class="weui-tab">
+            <div class="weui-navbar">
+                <div id="tab1" class="weui-navbar__item weui-bar__item_on">
+                    	按位置查询
+                </div>
+                <div id="tab2" class="weui-navbar__item">
+                   	 	按名称查询
+                </div>
+            </div>
+        </div>
+    </div>
 
         <div class="weui-cells weui-cells_form">
               <div class="weui-cell">
@@ -55,6 +68,15 @@
 </body>
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
 <script src="../../js/jquery-weui.js"></script>
+
+<script type="text/javascript" class="navbar js_show">
+    $(function(){
+        $('.weui-navbar__item').on('click', function () {
+            $(this).addClass('weui-bar__item_on').siblings('.weui-bar__item_on').removeClass('weui-bar__item_on');
+        });
+    });
+</script>
+
 <script>
   function getQueryString(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
@@ -65,6 +87,8 @@
   var longitude=getQueryString("longitude");
   var latitude=getQueryString("latitude");
   var map = new BMap.Map("allmap");
+  
+  var url="/voucher/baiduMap/getAssetsByDistanceImg.do";
   
     var limit = 10;
     var offset = 0;
@@ -85,6 +109,24 @@
         loading = false;
   	  loadlist();
     });
+    
+    $("#tab1").on("click",function(){
+    	url="/voucher/baiduMap/getAssetsByDistanceImg.do";
+    	  limit = 10;
+          offset = 0;
+          $("#ul").children('li').remove();
+          loading = false;
+    	  loadlist();
+      });
+    
+    $("#tab2").on("click",function(){
+    	  url="/voucher/mobile/asset/getAll.do";
+    	  limit = 10;
+          offset = 0;
+          $("#ul").children('li').remove();
+          loading = false;
+    	  loadlist();
+      });
     
     loadlist();
     
@@ -118,10 +160,13 @@
            var html = "";
            $.ajax({
                type: "POST",
-               url: "/voucher/mobile/asset/getAll.do",
+               url: url,
                data: { "limit" : limit, 
                        "offset" : offset,
-                       "search" : search
+                       "search" : search,
+                       "lng" : longitude,
+                       "lat" : latitude,
+                       "distance":100000
                        },
                dataType: "json",
                error: function (request){
@@ -133,6 +178,7 @@
                success: function (text) {              	   
             	   var data=text.rows;
             	   var imgs=text.fileBytes;
+            	   console.log(data);
             	   console.log(imgs);
                    if (data.length > 0) {
                 	   var i = 0;
@@ -200,7 +246,7 @@
                addSpan(div_2_1_3,time);
                div_2_1_3.setAttribute("class","weui-cells__title");
                div_2_1_3.setAttribute("style","margin:2px 0px 2px 0px");
-               var div_2_1_4=document.createElement("div");
+              var div_2_1_4=document.createElement("div");
                addSpan(div_2_1_4,content);
                div_2_1_4.setAttribute("class","weui-cells__title");
                div_2_1_4.setAttribute("style","margin:2px 0px 2px 0px");
@@ -213,7 +259,9 @@
                div_2_1.appendChild(div_2_1_2);
                div_2_1.appendChild(div_2_1_3);
                div_2_1.appendChild(div_2_1_4);
+               div_2_1.appendChild(div_2_1_5);
                div_2.appendChild(div_2_1);
+               
   
 			 li.appendChild(div_1);
 			 li.appendChild(div_2);

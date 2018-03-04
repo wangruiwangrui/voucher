@@ -241,6 +241,28 @@
 						 fontFamily:"微软雅黑"
 					  });
 	    map.addOverlay(label);   
+	    
+	    marker.enableDragging(); //标注可拖拽	    
+		 // 开启事件监听
+		marker.addEventListener("dragend", function (e) {
+		    	 console.log(e);
+		    	 var pt = e.point;
+		         geoc.getLocation(pt, function(rs){
+		         var addComp = rs.addressComponents;
+		         var value=new Object();
+		         value.type=e.type;
+		         value.province=addComp.province;
+		         value.city=addComp.city;
+		         value.district=addComp.district;
+		         value.street=addComp.street;
+		         value.streetNumber=addComp.streetNumber;
+		         value.ja=e.target.JA;
+		         value.lng=pt.lng;
+		         value.lat=pt.lat;
+		         var json = JSON.stringify(value); 
+		         alert(json);
+		         }); 
+		    });
 	}
 	//让所有点在视野范围内
 	map.setViewport(pointArray);

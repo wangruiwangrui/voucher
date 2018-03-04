@@ -507,6 +507,12 @@ public class AssetsImpl implements Assets{
 		return assetsDAO.findHiddenAssetsByMonthOfYear(year);
 	}
 
+	@Override
+	public String getGUIDByPosition(String lng, String lat) {
+		// TODO Auto-generated method stub
+		return assetsDAO.getGUIDByPosition(lng, lat);
+	}
+
 
 	
 }

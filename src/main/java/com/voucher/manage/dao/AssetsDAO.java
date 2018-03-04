@@ -15,6 +15,8 @@ public interface AssetsDAO {
 	public Map findAllHidden(Integer limit, Integer offset, String sort, String order,
 			Map<String, String> search);
 	
+	public String getGUIDByPosition(String lng,String lat);
+	
 	public Integer updatePosition(Position position);
 	
 	public Integer updatePositionByRoomInfo(Position position);
@@ -40,6 +42,8 @@ public interface AssetsDAO {
 	public List findPosition(Position position);
 	
 	public Map findHiddenByDistance(int limit,int offset,Double lng, Double lat,Double distance,String search);
+	
+	public Map findAssetByDistance(int limit,int offset,Double lng, Double lat,Double distance,String search);
 	
 	public Integer insertIntoHidden_Assets(Hidden_Assets hidden_Assets);
 	

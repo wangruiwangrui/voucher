@@ -154,6 +154,29 @@ public class BaiduMapController {
 		return result;
 	}
 	
+	@RequestMapping("/getAssetsByDistanceImg")
+	public @ResponseBody Map getAssetsByDistanceImg(Integer limit,Integer offset,Double lng,Double lat,
+			Double distance,String search,HttpServletRequest request){
+		System.out.println("search="+search);
+		if(search==null)
+			search="";
+		
+		Map map=assetsDAO.findAssetByDistance(limit, offset, lng, lat, distance,search);
+		
+		MyTestUtil.print(map);
+		
+		List list=(List) map.get("row");
+		
+		Map fileBytes=mobileDao.roomInfo_PositionImageQuery(request, list);
+		
+		Map result=new HashMap<>();
+		
+		result.put("rows", list);
+		result.put("fileBytes", fileBytes);
+		
+		return result;
+	}
+	
 	@RequestMapping("getManageRegion")
 	public @ResponseBody List getManageRegion(){
 		
