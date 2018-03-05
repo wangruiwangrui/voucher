@@ -459,12 +459,15 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		
 		Object[] objects={roomInfo,position};
 		
-		List list=SelectSqlJoinExe.get(this.getJdbcTemplate(), sql, objects,roomInfo_Position);
-		
 		Map map=new HashMap<>();
 		
-		map.put("row", list);
-		
+		try{
+			List list=SelectSqlJoinExe.get(this.getJdbcTemplate(), sql, objects,roomInfo_Position);
+			map.put("row", list);
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+
 		return map;
 	}
 	

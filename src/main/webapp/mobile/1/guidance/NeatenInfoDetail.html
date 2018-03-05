@@ -12,42 +12,83 @@
     <link rel="stylesheet" href="../css/weui.css"/>
     <link rel="stylesheet" href="../css/example.css"/>
     <script src="../../../js/swiper.js"></script>
+    <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+	<script src="../js/fastclick.js"></script>
 <style type="text/css">
     body, html,#allmap {width: 100%;height: 70%;margin:0;font-family:"微软雅黑";}
 </style>
 <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=cR98TwX2FnKTpANIOYhMYMot9a4ioxjc"></script>
 </head>
 <body>
-<div class="weui-cells">
+
+  <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">隐患名称</label></div>
+                <div id="name" class="weui-cell__bd">
+                </div>
+            </div>
+    </div>
+    
+    <div class="weui-cells weui-cells_form">
+    	<div class="weui-cell">
+    		<div class="weui-cell__hd"><label class="weui-label">整改进度</label></div>
+    			<div class="weui-cell__bd">
+       		 		<div class='demos-content-padded'>
+            			<div class="weui-slider-box" id='slider2'>
+               				 <div class="weui-slider">
+                    			<div id="sliderInner" class="weui-slider__inner">
+                        			<div id="sliderTrack" style="width: 75%;" class="weui-slider__track"></div>
+                        			<div id="sliderHandler" style="left: 75%;" class="weui-slider__handler"></div>
+                   				 </div>
+                			</div>
+                		<div id="sliderValue" class="weui-slider-box__value">75</div>
+            		   </div>
+        			</div>
+  	  			</div>
+    	</div>
+    </div>
+
+    
+  <div class="weui-cells weui-cells_form">
     <div class="weui-cell">
         <div class="weui-cell__hd"><label class="weui-label">标题</label></div>
         <div id="neaten_name" class="weui-cell__bd">
         </div>
     </div>
+  </div>
+  
+  <div class="weui-cells weui-cells_form">
     <div class="weui-cell">
         <div class="weui-cell__hd"><label class="weui-label">整改人员</label></div>
         <div id="principal" class="weui-cell__bd">
         </div>
     </div>
+  </div>
 
+  <div class="weui-cells weui-cells_form">
     <div class="weui-cell">
         <div class="weui-cell__hd"><label class="weui-label">整改时间</label></div>
         <div id="date" class="weui-cell__bd">
         </div>
     </div>
-    
+  </div>
+  
+  <div class="weui-cells weui-cells_form">
     <div class="weui-cell">
         <div class="weui-cell__hd"><label class="weui-label">备注</label></div>
         <div id="remark" class="weui-cell__bd">
         </div>
     </div>
+  </div>
+  
     <div class="weui-cells__title">整改内容</div>
-    <div class="weui-cell">
-        <div id="neaten_instance" class="weui-cell__bd">
+    <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                  <textarea id="neaten_instance" class="weui-textarea" rows="3"></textarea>
+                </div>
+            </div>
         </div>
-    </div>
-       
-</div>
 
  <div class="weui-cells__title">整改位置</div>
  <div id="allmap"></div>   
@@ -82,9 +123,17 @@
 	　   }
 	 }     
     
+	$(function() {
+        FastClick.attach(document.body);
+    });
+    
+	$('#slider2').slider(function (per) {
+        console.log(per);
+    });
+	
 	$.ajax({
         type: "POST",
-        url: "/voucher/mobile/hidden/selectNeatenByNeatenId.do.do",
+        url: "/voucher/mobile/hidden/selectNeatenByNeatenId.do",
         data: { "neaten_id":neaten_id},
         dataType: "json",
         error: function (request){
@@ -107,13 +156,13 @@
              		map.addOverlay(marker);    //增加点
              	   }
              	   
+             	  var name=document.createElement("span");
+                  name.innerHTML=obj.name;
+                  $("#name").append(name);                 
+             	   
              	  var neaten_name=document.createElement("span");
-             	 neaten_name.innerHTML=obj.neaten_name;
-                  $("#neaten_name").append(neaten_name);
-                  
-                  var level=document.createElement("span");
-                  level.innerHTML=obj.level_text;
-                  $("#level").append(level);
+             	  neaten_name.innerHTML=obj.neaten_name;
+                  $("#neaten_name").append(neaten_name);                  
                   
                   var progre=obj.progress;
                   var type;

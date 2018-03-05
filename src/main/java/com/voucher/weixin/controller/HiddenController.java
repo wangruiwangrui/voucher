@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,8 @@ import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Neaten_Join;
+import com.voucher.manage.model.Users;
+import com.voucher.manage.service.UserService;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
 
@@ -41,6 +44,13 @@ public class HiddenController {
 	AssetsDAO assetsDAO=(AssetsDAO) applicationContext.getBean("assetsdao");
 	
 	MobileDAO mobileDao=(MobileDAO) applicationContext.getBean("mobileDao");
+	
+	private UserService userService;
+	
+	@Autowired
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
 	
 	@RequestMapping("/selectAllHidden")
 	public @ResponseBody Map selectAllHidden(@RequestParam Integer limit, @RequestParam Integer offset, 
@@ -339,6 +349,8 @@ public class HiddenController {
 		
         hidden_Check.setCheck_name(check_name);
         
+        hidden_Check.setRemark(remark);
+        
         hidden_Check.setCheck_circs(check_circs);
 
 		if(happenTime!=null&&!happenTime.equals("")){
@@ -396,5 +408,91 @@ public class HiddenController {
 		
 	}
 	
+	
+	@RequestMapping("/updateHiddenCheck")
+	public @ResponseBody Map updateHiddenCheck(
+			@RequestParam String check_id,@RequestParam String check_name,
+			@RequestParam String happenTime,@RequestParam String remark,
+			@RequestParam String check_circs,@RequestParam String addComp,
+			@RequestParam Double lng,@RequestParam Double lat,
+			HttpServletRequest request){
+		
+		Hidden_Check hidden_Check=new Hidden_Check();
+       		
+        hidden_Check.setCheck_name(check_name);
+        
+        hidden_Check.setRemark(remark);
+        
+        hidden_Check.setCheck_circs(check_circs);
+
+        String[] where={"[Hidden_Check].check_id=",check_id};
+        
+        hidden_Check.setWhere(where);
+        
+		if(happenTime!=null&&!happenTime.equals("")){
+			try {
+				DateFormat fmt =new SimpleDateFormat("yyyy-MM-dd");
+				Date date;		
+				date = fmt.parse(happenTime);	
+				hidden_Check.setHappen_time(date);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		Date date=new Date();
+		hidden_Check.setUpdate_time(date);
+		hidden_Check.setDate(date);
+		
+		int i=hiddenDAO.updateHiddenCheck(hidden_Check);
+		
+		JSONObject jsonObject=JSONObject.parseObject(addComp);
+		
+		String province=jsonObject.getString("province");		
+		String city=jsonObject.getString("city");		
+		String district=jsonObject.getString("district");		
+		String street=jsonObject.getString("street");		
+		String streetNumber=jsonObject.getString("streetNumber");	
+		
+		Position position=new Position();
+		
+		position.setCheck_id(check_id);
+		position.setLat(lat);
+		position.setLng(lng);
+		
+		position.setProvince(province);
+		position.setCity(city);
+		position.setDistrict(district);
+		position.setStreet(streetNumber);
+		position.setStreet_number(streetNumber);
+		
+		//assetsDAO.updatePosition(position);
+		
+		Map map=new HashMap<>();
+		
+		map.put("status", i);
+		map.put("check_id", check_id);
+		
+		position.setCheck_id(null);
+		
+		//assetsDAO.updatePositionByRoomInfo(position); //更新资产位置
+		
+		return map;
+		
+	}
+	
+	@RequestMapping("/selectNameBycampusAdmin")
+	public @ResponseBody Map selectNameBycampusAdmin(@RequestParam String campusAdmin){
+		
+		Map map=new HashMap<>();
+		
+		Users users=userService.getUserByOnlyOpenId(campusAdmin);
+		
+		map.put("nickname",users.getNickname());
+		
+		return map;
+		
+	}
 	
 }
