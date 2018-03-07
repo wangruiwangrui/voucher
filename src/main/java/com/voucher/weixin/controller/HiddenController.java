@@ -24,6 +24,7 @@ import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.dao.MobileDAO;
 import com.voucher.manage.daoModel.Assets.Hidden;
 import com.voucher.manage.daoModel.Assets.Hidden_Check;
+import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
@@ -491,6 +492,182 @@ public class HiddenController {
 		
 		map.put("nickname",users.getNickname());
 		
+		return map;
+		
+	}
+	
+	@RequestMapping("/insertHiddenNeaten")
+	public @ResponseBody Map insertHiddenNeaten(
+			@RequestParam String guid,
+			@RequestParam String neaten_name,@RequestParam Double progress,
+			@RequestParam String happenTime,@RequestParam String remark,
+			@RequestParam String neaten_instance,@RequestParam String addComp,
+			@RequestParam Double lng,@RequestParam Double lat,
+			HttpServletRequest request){
+		
+		Hidden_Neaten hidden_Neaten=new Hidden_Neaten();
+
+        UUID uuid=UUID.randomUUID();
+        
+        String openId=( String ) request.getSession().getAttribute("openId");
+        
+        hidden_Neaten.setNeaten_id(uuid.toString());
+        
+        hidden_Neaten.setNeaten_name(neaten_name);
+        
+        hidden_Neaten.setRemark(remark);
+        
+        hidden_Neaten.setNeaten_instance(neaten_instance);
+
+        hidden_Neaten.setCampusAdmin(openId);
+        
+		if(happenTime!=null&&!happenTime.equals("")){
+			try {
+				DateFormat fmt =new SimpleDateFormat("yyyy-MM-dd");
+				Date date;		
+				date = fmt.parse(happenTime);	
+				hidden_Neaten.setHappen_time(date);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		Date date=new Date();
+		hidden_Neaten.setUpdate_time(date);
+		hidden_Neaten.setDate(date);
+		hidden_Neaten.setTerminal("Wechat");
+		
+		int i=hiddenDAO.insertHiddenNeaten(hidden_Neaten);
+		
+		Hidden hidden=new Hidden();
+		
+		hidden.setProgress(progress);
+		
+		String[] where={"[Hidden].GUID=",guid};
+		
+		hidden.setWhere(where);
+		
+		i=hiddenDAO.updateHidden(hidden);
+		
+		JSONObject jsonObject=JSONObject.parseObject(addComp);
+		
+		String province=jsonObject.getString("province");		
+		String city=jsonObject.getString("city");		
+		String district=jsonObject.getString("district");		
+		String street=jsonObject.getString("street");		
+		String streetNumber=jsonObject.getString("streetNumber");	
+		
+		Position position=new Position();
+		
+		position.setNeaten_id(uuid.toString());
+		position.setLat(lat);
+		position.setLng(lng);
+		
+		position.setProvince(province);
+		position.setCity(city);
+		position.setDistrict(district);
+		position.setStreet(streetNumber);
+		position.setStreet_number(streetNumber);
+		
+		assetsDAO.updatePositionByNeaten(position);
+		
+		Map map=new HashMap<>();
+		
+		map.put("status", i);
+		map.put("neaten_id", uuid.toString());
+				
+		return map;
+		
+	}
+	
+	
+	@RequestMapping("/updateHiddenNeaten")
+	public @ResponseBody Map updateHiddenNeaten(
+			@RequestParam String guid,@RequestParam String neaten_id,
+			@RequestParam String neaten_name,@RequestParam Double progress,
+			@RequestParam String happenTime,@RequestParam String principal,
+			@RequestParam String remark,
+			@RequestParam String neaten_instance,@RequestParam String addComp,
+			@RequestParam Double lng,@RequestParam Double lat,
+			HttpServletRequest request){
+		
+		Hidden_Neaten hidden_Neaten=new Hidden_Neaten();
+      
+        String openId=( String ) request.getSession().getAttribute("openId");
+        
+        hidden_Neaten.setNeaten_id(neaten_id);
+        
+        hidden_Neaten.setNeaten_name(neaten_name);
+        
+        hidden_Neaten.setPrincipal(principal);
+        
+        hidden_Neaten.setRemark(remark);
+        
+        hidden_Neaten.setNeaten_instance(neaten_instance);
+
+        hidden_Neaten.setCampusAdmin(openId);
+        
+		if(happenTime!=null&&!happenTime.equals("")){
+			try {
+				DateFormat fmt =new SimpleDateFormat("yyyy-MM-dd");
+				Date date;		
+				date = fmt.parse(happenTime);	
+				hidden_Neaten.setHappen_time(date);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		Date date=new Date();
+		hidden_Neaten.setUpdate_time(date);
+		hidden_Neaten.setDate(date);
+		hidden_Neaten.setTerminal("Wechat");
+		
+		String[] where={"[Hidden_Neaten].neaten_id=",neaten_id};
+		
+		hidden_Neaten.setWhere(where);
+		
+		int i=hiddenDAO.updateHiddenNeaten(hidden_Neaten);
+		
+		Hidden hidden=new Hidden();
+		
+		hidden.setProgress(progress);
+		
+		String[] where2={"[Hidden].GUID=",guid};
+		
+		hidden.setWhere(where2);
+		
+		i=hiddenDAO.updateHidden(hidden);
+		
+		JSONObject jsonObject=JSONObject.parseObject(addComp);
+		
+		String province=jsonObject.getString("province");		
+		String city=jsonObject.getString("city");		
+		String district=jsonObject.getString("district");		
+		String street=jsonObject.getString("street");		
+		String streetNumber=jsonObject.getString("streetNumber");	
+		
+		Position position=new Position();
+		
+		position.setNeaten_id(neaten_id);
+		position.setLat(lat);
+		position.setLng(lng);
+		
+		position.setProvince(province);
+		position.setCity(city);
+		position.setDistrict(district);
+		position.setStreet(streetNumber);
+		position.setStreet_number(streetNumber);
+		
+		assetsDAO.updatePositionByNeaten(position);
+		
+		Map map=new HashMap<>();
+		
+		map.put("status", i);
+		map.put("neaten_id", neaten_id);
+				
 		return map;
 		
 	}

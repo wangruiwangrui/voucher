@@ -15,6 +15,7 @@
     body, html,#allmap {width: 100%;height: 70%;margin:0;font-family:"微软雅黑";}
 </style>
 <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=cR98TwX2FnKTpANIOYhMYMot9a4ioxjc"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/library/CurveLine/1.5/src/CurveLine.min.js"></script>
 <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 </head>
 <body>
@@ -113,9 +114,32 @@
 
   var check_id=getQueryString("check_id");
 
+  var longitude=getQueryString("longitude");
+  var latitude=getQueryString("latitude");
+  
     // 百度地图API功能
     var map = new BMap.Map("allmap");    // 创建Map实例
 
+	var point = new BMap.Point(longitude, latitude);
+    
+    var pointStart=point;
+
+	var str = "我的位置";
+	var opts = {
+			   position : point,    // 指定文本标注所在的地理位置
+			   offset   : new BMap.Size(-getByteLen(str)*3, 5)    //设置文本偏移量
+			}	
+	var label = new BMap.Label(str, opts);  // 创建文本标注对象
+	label.setStyle({
+					 fontSize : "12px",
+					 height : "20px",
+					 lineHeight : "20px",
+					 fontFamily:"微软雅黑"
+				  });
+    map.addOverlay(label);
+    map.enableScrollWheelZoom(true);
+    
+    var geoc = new BMap.Geocoder();
   	
 	function keyDown(e) {   		  
 	　   var keycode = e.which;   //取得对应的键值（数字）  	  
@@ -146,11 +170,14 @@
              	   if(obj.lng!=""&&obj.lat!=""){
              	   	  distance=getDistance(obj.lng,obj.lat);
              	   	var point = new BMap.Point(obj.lng,obj.lat);
+             	   	var pointEnd=point;
              	    map.centerAndZoom(point, 12);
              	    var marker = new BMap.Marker(point); // 创建点
              		map.addOverlay(marker);    //增加点
              	   }
              	 
+             	  navigation(pointStart, pointEnd);
+             	   
              	  var terminal=obj.terminal;
              	  if(terminal!=null&&terminal!=""){
              		  if(terminal=="PC"){
@@ -274,34 +301,8 @@
   	    s = date.getSeconds(); 
   		return Y+M+D;
   	}
-	
-	
-	
-    var xhm=new XMLHttpRequest();
-    xhm.open("GET","../../../baiduMap/location.do",false);
-    xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-    xhm.send();
-    var ticket=JSON.parse(xhm.responseText);
-    var longitude=ticket.content.point.x;
-    var latitude=ticket.content.point.y;
-    var point = new BMap.Point(longitude, latitude);
 
-	var str = "我的位置";
-	var opts = {
-			   position : point,    // 指定文本标注所在的地理位置
-			   offset   : new BMap.Size(-getByteLen(str)*3, 5)    //设置文本偏移量
-			}	
-	var label = new BMap.Label(str, opts);  // 创建文本标注对象
-	label.setStyle({
-					 fontSize : "12px",
-					 height : "20px",
-					 lineHeight : "20px",
-					 fontFamily:"微软雅黑"
-				  });
-    map.addOverlay(label);
-    map.enableScrollWheelZoom(true);
     
-    var geoc = new BMap.Geocoder();
     
     function getByteLen(val) {    //传入一个字符串
         var len = 0;
@@ -321,6 +322,12 @@
     	return d.toFixed(2)+' KM';  //获取两点距离,保留小数点后两位
     }
     
+    //线路
+    function navigation(p1, p2) {
+            var points = [p1,p2];
+        	var curve = new BMapLib.CurveLine(points, {strokeColor:"blue", strokeWeight:3, strokeOpacity:0.5});
+        	map.addOverlay(curve);
+    }
     
     $("#save").on("click",function(){
 
@@ -347,57 +354,61 @@
     		    }, function(data){
     	        	var obj = $.parseJSON(data);
     		    	if (obj.status == 0) {
-    		        	alert("新建"+name+"安全巡查记录失败!");
+    		        	alert("更新"+name+"安全巡查记录失败!");
     		        	console.log(obj.status);
     		        } else if (obj.status == 1) {
     		            //存储到服务器成功后的处理
     		            //
     		            var check_id=obj.check_id;
-    		        	alert("新建"+name+"安全巡查记录成功!");
+    		        	alert("更新"+name+"安全巡查记录成功!");
     		        	
+    		        	location.href="CheckInfoDetail.html?check_id="+check_id+"&latitude="+latitude+"&longitude="+longitude;
+    		        	
+    		        	/*
     		        	var images = {
     		        	   		 localId: [],
     		        	    	serverId: []
     		        	  	   };
-          	     
+          	        	    		 
+    	    			 var imagename=prompt("请输入安全巡查图片的名称 : ","");
     	    		 
-    	    		 var imagename=prompt("请输入安全巡查图片的名称 : ","");
+    	    			 if(imagename==null){
+    	    				 imagename="无标题";
+    	    			 }
     	    		 
-    	    		 if(imagename==null){
-    	    			 imagename="无标题";
-    	    		 }
-    	    		 
-    	    		 wx.chooseImage({
-    	        	      success: function (res) {
-    	        	        images.localId = res.localIds;
-    	        	        console.log('已选择 ' + res.localIds.length + ' 张图片');
+    	    			 wx.chooseImage({
+    	        	     	 success: function (res) {
+    	        	       		 images.localId = res.localIds;
+    	        	        	console.log('已选择 ' + res.localIds.length + ' 张图片');
     	        	        
-    	        	        var i = 0, length = images.localId.length;
-    		        	    images.serverId = [];
-    		        	    function upload() {
-    		        	      wx.uploadImage({
-    		        	        localId: images.localId[i].toString(),
-    		        	        isShowProgressTips: images.localId[i].toString(),
-    		        	        success: function (res) {
-    		        	          i++;
-    		        	          console.log('已上传：' + i + '/' + length);
-    		        	        //返回图片的服务器端ID res.serverId,然后调用wxImgCallback函数进行下载图片操作
-                                  wxImgCallback(check_id,imagename,res.serverId);
-    		        	       //   images.serverId.push(res.serverId);
-    		        	          if (i < length) {
-    		        	            upload();
-    		        	          }
-    		        	        },
-    		        	        fail: function (res) {
-    		        	        	console.log(res);
-    		        	        }
-    		        	      });
-    		        	    }
-    		        	    upload();
-    	        	      }
-    	        	    });
-    		        	
-    		        }
+    	        	        	var i = 0, length = images.localId.length;
+    		        	    	images.serverId = [];
+    		        	    	
+    		        	   		 function upload() {
+    		        	     		 wx.uploadImage({
+    		        	       			 localId: images.localId[i].toString(),
+    		        	        		isShowProgressTips: images.localId[i].toString(),
+    		        	       			 success: function (res) {
+    		        	        		  i++;
+    		        	         		 console.log('已上传：' + i + '/' + length);
+    		        	        		//返回图片的服务器端ID res.serverId,然后调用wxImgCallback函数进行下载图片操作
+                                		  wxImgCallback(check_id,imagename,res.serverId);
+    		        	       		//   images.serverId.push(res.serverId);
+    		        	        		  if (i < length) {
+    		        	           			 upload();
+    		        	          				}
+    		        	       				 },
+    		        	       			 fail: function (res) {
+    		        	        			console.log(res);
+    		        	        			}	
+    		        	      			});
+    		        	   			 }
+    		        	   		 
+    		        	    		upload();   	        	     	
+    	        	     		 }
+    	        	   	 	});
+    		        	  */
+    		       	 }
     		    });
     	  
     	   }); 
@@ -438,15 +449,16 @@
 	                            'openProductSpecificView', 'addCard', 'chooseCard',
 	                            'openCard' ]
 	      	});
-       	    
-	    	 var images = {
-		        	   		 localId: [],
-		        	    	serverId: []
-		        	  	   };
+       	    	    	
        	     
 	    	 document.querySelector('#showPicker').onclick = function () {
 	    		 
-	    		 var imagename=prompt("请输入隐患图片的名称 : ","");
+	    		 var images = {
+	        	   		 localId: [],
+	        	    	serverId: []
+	        	  	   };
+	    		 
+	    		 var imagename=prompt("请输入安全巡查图片的名称 : ","");
 	    		 
 	    		 if(imagename==null){
 	    			 imagename="无标题";
@@ -467,7 +479,7 @@
 		        	          i++;
 		        	          console.log('已上传：' + i + '/' + length);
 		        	        //返回图片的服务器端ID res.serverId,然后调用wxImgCallback函数进行下载图片操作
-                               wxImgCallback(imagename,res.serverId);
+                               wxImgCallback(check_id,imagename,res.serverId);
 		        	       //   images.serverId.push(res.serverId);
 		        	          if (i < length) {
 		        	            upload();
@@ -489,6 +501,7 @@
 	 });
 
 	 function wxImgCallback(check_id,imagename,serverId) {
+		 console.log("serverId="+serverId);
 		    //将serverId传给wx_upload.php的upload方法
 		    var url = "../../file/upload.do";
 		    $.get(url,{

@@ -147,11 +147,11 @@
         
                     	   var time="时间:"+actionTime(obj.date);
                     	   var distance=null;
-                    	   console.log(obj.name+"   "+obj.detail+"  "+obj.lng+"   "+obj.lat);
+                    	   console.log(obj.neaten_name+"   "+obj.neaten_instance+"  "+obj.lng+"   "+obj.lat);
                     	   if(obj.lng!=""&&obj.lat!=""){
                     	   	  distance=getDistance(obj.lng,obj.lat);
                     	   }
-                    	   var li_1=addDiv(img,obj.name,obj.detail,time,"距离:"+distance);
+                    	   var li_1=addDiv(img,obj.neaten_name,obj.neaten_instance,time,"距离:"+distance);
                            li_1.setAttribute("neaten_id",neaten_id);
                     	   li_1.setAttribute("onclick","clickEvent(this);");
                     	   $("#ul").append(li_1);
@@ -219,7 +219,7 @@
           
           function clickEvent(that){
         	  var neaten_id=$(that).attr("neaten_id");
-        	  location.href="NeatenInfoDetail.html?neaten_id="+neaten_id;
+        	  location.href="NeatenInfoDetail.html?neaten_id="+neaten_id+"&latitude="+latitude+"&longitude="+longitude;
           }
           
           function addSpan(div,text){

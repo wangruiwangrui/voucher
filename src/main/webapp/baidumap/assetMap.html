@@ -188,6 +188,7 @@
         geoc.getLocation(pt, function(rs){
         var addComp = rs.addressComponents;
         var value=new Object();
+        value.type=e.type;
         value.province=addComp.province;
         value.city=addComp.city;
         value.district=addComp.district;
