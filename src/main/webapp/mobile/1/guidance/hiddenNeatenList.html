@@ -22,6 +22,10 @@
         <div class="up">释放刷新</div>
         <div class="refresh">正在刷新</div>
        </div>
+       
+       <div class="weui-cells weui-cells_form">
+               <a href="javascript:;" id="new" class="weui-btn weui-btn_primary">新建整改记录</a>
+        </div>
 
         <div class="weui-cells weui-cells_form">
               <div class="weui-cell">
@@ -84,6 +88,10 @@
         loading = false;
   	  loadlist();
     });
+    
+    $("#new").on("click",function(){
+    	location.href="addNeatenInfoList.html?latitude="+latitude+"&longitude="+longitude;
+    })
     
     loadlist();
     
@@ -183,6 +191,10 @@
                img.setAttribute("src",src);
                img.setAttribute("class","img");
                div_1_1.appendChild(img);
+              }else{
+            	  img.setAttribute("src","/voucher/img/notImg.jpg");
+                  img.setAttribute("class","img");
+                  div_1_1.appendChild(img); 
               }
                div_1.appendChild(div_1_1);               
               var div_2=document.createElement("div");

@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.daoModel.RoomInfo;
+import com.voucher.manage.daoModel.RoomInfoLittle;
 import com.voucher.manage.daoModel.Assets.Hidden;
 import com.voucher.manage.daoModel.Assets.Hidden_Check;
 import com.voucher.manage.daoModel.Assets.Hidden_Check_Date;
@@ -634,7 +635,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		hidden_Check.setOrder(order);
 		hidden_Check.setNotIn("id");
 		
-        RoomInfo roomInfo=new RoomInfo();
+        RoomInfoLittle roomInfo=new RoomInfoLittle();
         
         roomInfo.setLimit(limit);
         roomInfo.setOffset(offset);

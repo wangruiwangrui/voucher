@@ -398,7 +398,39 @@ var state=getQueryString("state");
      	   console.log('用户拒绝授权获取地理位置');
         }
     });
-	 } 
+  }
+  
+  document.querySelector('#assetMap').onclick = function () {
+	    // 2. 分享接口
+	    wx.getLocation({
+	         success : function(res) {
+	            // alert(JSON.stringify(res));
+	            var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+	            // $("#latitude").val(latitude);
+	            var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+	            // $("#longitude").val(longitude);
+	            var speed = res.speed; // 速度，以米/每秒计
+	            // $("#speed").val(speed);
+	            var accuracy = res.accuracy; // 位置精度
+	            // $("#accuracy").val(accuracy);
+	            
+	            $.get("/voucher/mobile/map/baiduSwitch.do",{ //微信地理位置坐标转换成百度地图坐标
+	              	 longitude:longitude,
+	              	 latitude:latitude               	 
+	               },function(text){
+	              	 var obj = $.parseJSON(text);
+	              	 var result=obj.result;
+	              	 var lat=result[0].y;
+	              	 var lng=result[0].x;
+	              	 location.href="../assetAdmin/assetMap.html?latitude="+lat+"&longitude="+lng;
+	            });
+	            
+	        },
+	        cancel : function(res) {
+	     	   console.log('用户拒绝授权获取地理位置');
+	        }
+	    });
+	  } 
 		 
 	 // 2. 分享接口
 	  // 2.1 监听“分享给朋友”，按钮点击、自定义分享内容及分享结果接口

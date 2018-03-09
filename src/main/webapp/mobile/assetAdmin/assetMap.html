@@ -10,7 +10,7 @@
 		#r-result{height:100%;width:20%;float:left;}
 	</style>
 	<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=pQFgFpS0VnMXwCRN6cTc1jDOcBVi3XoD"></script>
-	<title>查看周围的隐患</title>
+	<title>查看附近的资产</title>
 </head>
 <body>
 	<div id="allmap"></div>
@@ -67,12 +67,12 @@ function getQueryString(name) {
  
     
     var xhm=new XMLHttpRequest();
-    xhm.open("GET","../../baiduMap/getByDistance.do?limit=100&offset=0&lng="+lng+"&lat="+lat+"&distance=10000",false);
+    xhm.open("GET","../../baiduMap/getAssetsByDistance.do?limit=100&offset=0&lng="+lng+"&lat="+lat+"&distance=10000",false);
     xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
     xhm.send();
     var ticket=JSON.parse(xhm.responseText);
     console.log(ticket);
-    addDeck(ticket);
+    addDeck(ticket.rows);
  
 function addDeck(ticket){	
 
@@ -81,23 +81,26 @@ var json_data = new Array();
 
 for(var i=0;i<ticket.length;i++){
 	json_data[i]=[ticket[i].lng,ticket[i].lat,
-	              ticket[i].name];
+	              ticket[i].address];
 }
+
+console.log(json_data);
 
 var pointArray = new Array();
 for(var i=0;i<json_data.length;i++){
 	var point=new BMap.Point(json_data[i][0], json_data[i][1]);
-	var marker = new BMap.Marker(point); // 创建点
+	var myIcon = new BMap.Icon("../../img/blackPoint.jpg", new BMap.Size(30,38));
+	var marker = new BMap.Marker(point,{icon:myIcon}); // 创建点
 	map.addOverlay(marker);    //增加点
 	var str = json_data[i][2];
 	var opts = {
 			   position : point,    // 指定文本标注所在的地理位置
-			   offset   : new BMap.Size(-getByteLen(str)*4, 5)    //设置文本偏移量
+			   offset   : new BMap.Size(-getByteLen(str)*3, 10)    //设置文本偏移量
 			}	
 	console.log(getByteLen(str));
 	var label = new BMap.Label(str, opts);  // 创建文本标注对象
 	label.setStyle({
-					 color : "red",
+					// color : "red",
 					 fontSize : "12px",
 					 height : "20px",
 					 lineHeight : "20px",
@@ -117,12 +120,12 @@ function attribute(e){
     var hidden_lng=p.getPosition().lng;
     var hidden_lat=p.getPosition().lat;
     
-    $.get("../../baiduMap/getGUIDByPosition.do",{
+    $.get("../../baiduMap/getAssetGUIDByPosition.do",{
     	lng:hidden_lng,
     	lat:hidden_lat
     }, function(data){
     	var obj=$.parseJSON(data);
-    	location.href="hidden/hiddenDetail.html?guid="+obj.guid+"&latitude="+lat+"&longitude="+lng;
+    	location.href="assetDetail.html?guid="+obj.guid+"&latitude="+lat+"&longitude="+lng;
     });
     
 }	

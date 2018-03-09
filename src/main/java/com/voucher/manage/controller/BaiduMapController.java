@@ -29,7 +29,9 @@ import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.dao.MobileDAO;
 import com.voucher.manage.dao.RoomInfoDao;
+import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Assets.Position;
+import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
@@ -154,6 +156,21 @@ public class BaiduMapController {
 		return result;
 	}
 	
+	@RequestMapping("/getAssetsByDistance")
+	public @ResponseBody Map getAssetsByDistance(Integer limit,Integer offset,Double lng,Double lat,
+			Double distance,HttpServletRequest request){
+
+		Map map=assetsDAO.findAssetByDistance(limit, offset, lng, lat, distance,"");
+	
+		List list=(List) map.get("row");
+
+		Map result=new HashMap<>();
+		
+		result.put("rows", list);
+		
+		return result;
+	}
+	
 	@RequestMapping("/getAssetsByDistanceImg")
 	public @ResponseBody Map getAssetsByDistanceImg(Integer limit,Integer offset,Double lng,Double lat,
 			Double distance,String search,HttpServletRequest request){
@@ -208,6 +225,28 @@ public class BaiduMapController {
         
 	}
 	
+	@RequestMapping("getAssetGUIDByPosition")
+	public @ResponseBody Map getAssetGUIDByPosition(@RequestParam Double lng,
+			@RequestParam Double lat){
+		  
+		Map searchMap=new HashMap<>();
+        
+        searchMap.put("[Position].lng=", String.valueOf(lng));
+        searchMap.put("[Position].lat=", String.valueOf(lat));
+
+        Map map=roomInfoDao.findAllRoomInfo_Position(2, 0, null, null, searchMap); 
+        
+        List list=(List) map.get("rows"); 
+        
+        RoomInfo_Position roomInfo_Position=(RoomInfo_Position) list.get(0);
+        
+        Map map2=new HashMap<>();
+        
+        map2.put("guid", roomInfo_Position.getGUID());
+        
+        return map2;
+        
+	}
 	
 	@RequestMapping("/getAllAsset")
 	public @ResponseBody List getAllAsset(String manageRegion){

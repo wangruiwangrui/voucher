@@ -500,7 +500,8 @@ public class HiddenController {
 	public @ResponseBody Map insertHiddenNeaten(
 			@RequestParam String guid,
 			@RequestParam String neaten_name,@RequestParam Double progress,
-			@RequestParam String happenTime,@RequestParam String remark,
+			@RequestParam String happenTime,@RequestParam String principal,
+			@RequestParam String remark,
 			@RequestParam String neaten_instance,@RequestParam String addComp,
 			@RequestParam Double lng,@RequestParam Double lat,
 			HttpServletRequest request){
@@ -511,9 +512,13 @@ public class HiddenController {
         
         String openId=( String ) request.getSession().getAttribute("openId");
         
+        hidden_Neaten.setGUID(guid);
+        
         hidden_Neaten.setNeaten_id(uuid.toString());
         
         hidden_Neaten.setNeaten_name(neaten_name);
+        
+        hidden_Neaten.setPrincipal(principal);
         
         hidden_Neaten.setRemark(remark);
         
