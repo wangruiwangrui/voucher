@@ -1,11 +1,16 @@
 package com.voucher.manage.daoImpl;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 import com.voucher.manage.dao.RoomInfoDao;
@@ -33,7 +38,6 @@ import com.voucher.manage.tools.TransMapToString;
 import voucher.UpdateSql;
 
 public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
-
 	
 	@Override
 	public List<RoomInfo> findAllRoomInfo(Integer limit, Integer offset, String sort,
@@ -401,7 +405,161 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		return map;
 	}
 
-	
+	@Override
+	public Double getAllTotalHire() {
+		// TODO Auto-generated method stub
+		String sql="SELECT SUM(TotalHire) as Hire "+
+					"FROM [TTT].[dbo].[ChartInfo] ";
+		
+		Double totalHire=this.getJdbcTemplate().query(sql, new Hire()).get(0);
+		
+		return totalHire;
+	}
 
+	
+	@Override
+	public Double getAlreadyHire() {
+		// TODO Auto-generated method stub
+		String sql="SELECT SUM(Hire) as Hire "+
+					"FROM [TTT].[dbo].[HireList] where State='未交'";
+	
+		Double alreadyHire=this.getJdbcTemplate().query(sql, new Hire()).get(0);
+	
+		return alreadyHire;
+	}
+
+	@Override
+	public Double getNotHire() {
+		// TODO Auto-generated method stub
+		String sql="SELECT SUM(Hire) as Hire "+
+				"FROM [TTT].[dbo].[HireList] where State='已交'";
+	
+		Double notHire=this.getJdbcTemplate().query(sql, new Hire()).get(0);
+	
+		return notHire;
+	}
+
+	
+	class Hire implements RowMapper<Double> {
+
+		@Override
+		public Double mapRow(ResultSet rs, int rowNum) throws SQLException {
+			// TODO Auto-generated method stub
+			
+			Double Hire=rs.getDouble("Hire");
+			
+			return Hire;
+		}
+		
+	}
+
+	class Year implements RowMapper<String> {
+
+		@Override
+		public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+			// TODO Auto-generated method stub
+			
+			String year=rs.getString("year");
+			
+			return year;
+		}
+		
+	}
+
+
+	@Override
+	public List findChartInfoByYear() {
+		// TODO Auto-generated method stub
+
+		String sql="SELECT convert(varchar(4),ConcludeDate,120) as year "+
+				 	"FROM [TTT].[dbo].[ChartInfo] where ConcludeDate is not null "+
+				 	"group by convert(varchar(4),ConcludeDate,120) order by year desc";
+
+		List list=this.getJdbcTemplate().query(sql, new Year());
+		
+		return list;
+	}
+
+
+
+	@Override
+	public List findChartInfoByMonthOfYear(String year) {
+		// TODO Auto-generated method stub
+		String sql="SELECT convert(varchar(7),ConcludeDate,120) as year "+
+					"FROM [TTT].[dbo].[ChartInfo] where ConcludeDate is not null "+
+					"AND convert(varchar(4),ConcludeDate,120) = "+year+" group by convert(varchar(7),ConcludeDate,120)";
+		
+		List list=this.getJdbcTemplate().query(sql, new Year());
+		
+		return list;
+	}
+
+	@Override
+	public Double getTotalHireByMonth(String month) {
+		// TODO Auto-generated method stub
+		String sql="SELECT SUM(TotalHire) as Hire "+
+					"FROM [TTT].[dbo].[ChartInfo] where ConcludeDate is not null "+
+					"AND convert(varchar(7),ConcludeDate,120) = '"+month+"'";
+		
+		Double hireByMonth=this.getJdbcTemplate().query(sql, new Hire()).get(0);
+		
+		return hireByMonth;
+	}
+	
+	@Override
+	public List findHireListByYear() {
+		// TODO Auto-generated method stub
+		SimpleDateFormat sdf =new SimpleDateFormat("yyyy");
+		
+		String currentYear=sdf.format(new Date());
+		
+		String sql="SELECT convert(varchar(4),HireDate,120) as year "+
+				 	"FROM [TTT].[dbo].[HireList] where HireDate is not null "+
+				 	"AND convert(varchar(4),HireDate,120)<= "+currentYear+" "+
+				 	"group by convert(varchar(4),HireDate,120) order by year desc";
+
+		List list=this.getJdbcTemplate().query(sql, new Year());
+		
+		return list;
+	}
+
+	
+	@Override
+	public List findHireListByMonthOfYear(String year) {
+		// TODO Auto-generated method stub
+		String sql="SELECT convert(varchar(7),HireDate,120) as year "+
+					"FROM [TTT].[dbo].[HireList] where HireDate is not null "+ 
+					"AND convert(varchar(4),HireDate,120) = "+year+" group by convert(varchar(7),HireDate,120)";
+		
+		List list=this.getJdbcTemplate().query(sql, new Year());
+		
+		return list;
+	}
+	
+	@Override
+	public Double getAlreadyHireByMonth(String month) {
+		// TODO Auto-generated method stub
+		String sql="SELECT SUM(Hire) as Hire "+
+					"FROM [TTT].[dbo].[HireList] where HireDate is not null "+
+					"AND State='已交' "+
+					"AND convert(varchar(7),HireDate,120) =  '"+month+"'";
+		
+		Double alreadyhireByMonth=this.getJdbcTemplate().query(sql, new Hire()).get(0);
+		
+		return alreadyhireByMonth;
+	}
+
+	@Override
+	public Double getNotHireByMonth(String month) {
+		// TODO Auto-generated method stub
+		String sql="SELECT SUM(Hire) as Hire "+
+				"FROM [TTT].[dbo].[HireList] where HireDate is not null "+
+				"AND State='未交' "+
+				"AND convert(varchar(7),HireDate,120) =  '"+month+"'";
+	
+		Double nothireByMonth=this.getJdbcTemplate().query(sql, new Hire()).get(0);
+	
+		return nothireByMonth;
+	}
 	
 }

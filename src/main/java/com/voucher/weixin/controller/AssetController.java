@@ -1,6 +1,9 @@
 package com.voucher.weixin.controller;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -172,6 +175,110 @@ public class AssetController {
     	
     	return map;
     	
+	}
+	
+	
+	@RequestMapping("/getAllHire")
+	public @ResponseBody Map getAllHire(){
+		
+		Double totalHire=roomInfoDao.getAllTotalHire();
+		
+		Double alreadyHire=roomInfoDao.getAlreadyHire();
+		
+		Double notHire=roomInfoDao.getNotHire();
+		
+		Map map=new HashMap<>();
+		
+		DecimalFormat df = new DecimalFormat("0.00");
+		
+		map.put("totalHire", df.format(totalHire/10000));
+		
+		map.put("alreadyHire", df.format(alreadyHire/10000));
+		
+		map.put("notHire", df.format(notHire/10000));
+		
+		return map;
+		
+	}
+	
+	
+	@RequestMapping("/findChartInfoByYear")
+	public @ResponseBody List findChartInfoByYear(){
+		
+		return roomInfoDao.findChartInfoByYear();
+		
+	}
+	
+	
+	@RequestMapping("/findHireListByYear")
+	public @ResponseBody List findHireListByYear(){
+		
+		return roomInfoDao.findHireListByYear();
+		
+	}
+	
+	
+	@RequestMapping("/getChartInfoByMonthOfYear")
+	public @ResponseBody List getChartInfoByMonthOfYear(@RequestParam String year){
+		
+		List list=roomInfoDao.findChartInfoByMonthOfYear(year);
+		
+		Iterator iterator=list.iterator();
+		
+		List chartByMonth=new ArrayList<>();
+		
+		DecimalFormat df = new DecimalFormat("0.00");
+		
+		while (iterator.hasNext()) {
+			String month=(String) iterator.next();
+			
+			Double monthHire=roomInfoDao.getTotalHireByMonth(month);
+			
+			Map map=new HashMap<>();
+			
+			map.put("month", month);
+			
+			map.put("monthHire", df.format(monthHire/10000));
+			
+			chartByMonth.add(map);
+		}
+		
+		return chartByMonth;
+	}
+	
+	@RequestMapping("/getHireListByMonthOfYear")
+	public @ResponseBody List getHireListByMonthOfYear(@RequestParam String year){
+		System.out.println("year="+year);
+		List list=roomInfoDao.findHireListByMonthOfYear(year);
+		
+		Iterator iterator=list.iterator();
+		
+		List hireByMonth=new ArrayList<>();
+		
+		DecimalFormat df = new DecimalFormat("0.00");
+		
+		while (iterator.hasNext()) {
+			String month=(String) iterator.next();
+			
+			Double nothireMonth=roomInfoDao.getNotHireByMonth(month);
+			
+			Double alreadyhireMonth=roomInfoDao.getAlreadyHireByMonth(month);
+			
+			Map map=new HashMap<>();
+			
+			map.put("month", month);
+			
+			map.put("nothireMonth", df.format(nothireMonth/10000));
+			
+			map.put("alreadyhireMonth", df.format(alreadyhireMonth/10000));
+			
+			hireByMonth.add(map);
+		}
+		
+		System.out.println("hireByMonth");
+		MyTestUtil.print(hireByMonth);
+		
+		return hireByMonth;
 	}
 	
 }

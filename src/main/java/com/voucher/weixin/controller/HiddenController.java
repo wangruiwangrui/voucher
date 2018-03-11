@@ -677,4 +677,51 @@ public class HiddenController {
 		
 	}
 	
+	@RequestMapping("/hiddenStat")
+	public @ResponseBody Map hiddenStat(){
+		
+		int inHidden=assetsDAO.findInHidden();
+		
+		int notHidden=assetsDAO.findNotHidden();
+		
+		int successHidden=assetsDAO.findSuccessHidden();
+		
+		int allAsset=assetsDAO.findAllAssets();
+		
+		int allAssetsHidden=assetsDAO.findAllAssetsHidden();
+		
+		Map map=new HashMap<>();
+		
+		map.put("inHidden", inHidden);
+		
+		map.put("notHidden", notHidden);
+		
+		map.put("successHidden", successHidden);
+		
+		map.put("allAsset", allAsset);
+		
+		map.put("allAssetsHidden", allAssetsHidden);
+		
+		return map;
+		
+	}
+	
+	@RequestMapping("/findHiddenByYear")
+	public @ResponseBody List findHiddenByYear(){
+		
+		List list=assetsDAO.findHiddenByYear();
+		
+		return list;
+		
+	}
+	
+	@RequestMapping("/findHiddenByMonthOfYear")
+	public @ResponseBody List findHiddenByMonthOfYear(@RequestParam String year){
+		
+		List list=assetsDAO.findHiddenByMonthOfYear(year);
+		
+		return list;
+		
+	}
+	
 }

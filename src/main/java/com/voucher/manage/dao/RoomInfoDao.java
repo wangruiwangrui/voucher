@@ -33,4 +33,23 @@ public interface RoomInfoDao {
 	public Map<String, Object> getHireListByGUID(Integer limit, Integer offset, String sort,
 			String order,Map search);
 	
+	public Double getAllTotalHire();
+	
+	public Double getAlreadyHire();
+	
+	public Double getNotHire();
+	
+	public List findChartInfoByYear();
+	
+	public List findHireListByYear();
+	
+	public List findChartInfoByMonthOfYear(String year);
+	
+	public Double getTotalHireByMonth(String month);
+	
+	public List findHireListByMonthOfYear(String year);
+	
+	public Double getAlreadyHireByMonth(String month);
+	
+	public Double getNotHireByMonth(String month);
 }

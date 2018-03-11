@@ -431,7 +431,15 @@ var state=getQueryString("state");
 	        }
 	    });
 	  } 
-		 
+	
+  	document.querySelector('#hiddenStat').onclick = function () {
+  			location.href="statistical/hiddenStat.html";
+  	}
+  	
+  	document.querySelector('#asseStat').onclick = function () {
+			location.href="statistical/asseStat.html";
+	}
+  
 	 // 2. 分享接口
 	  // 2.1 监听“分享给朋友”，按钮点击、自定义分享内容及分享结果接口
 	    wx.onMenuShareAppMessage({
