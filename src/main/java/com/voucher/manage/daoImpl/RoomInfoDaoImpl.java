@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
@@ -21,12 +22,14 @@ import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.RoomInfoRowMapper;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
+import com.voucher.manage.daoModel.TTT.FileSelfBelong;
 import com.voucher.manage.daoModel.TTT.HireList;
 import com.voucher.manage.daoModelJoin.RoomChangeHireLog_RoomChartLog;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 import com.voucher.manage.daoRowMapper.RowMappers;
 import com.voucher.manage.daoRowMapper.RowMappersJoin;
 import com.voucher.manage.daoSQL.DeleteExe;
+import com.voucher.manage.daoSQL.InsertExe;
 import com.voucher.manage.daoSQL.SelectExe;
 import com.voucher.manage.daoSQL.SelectJoinExe;
 import com.voucher.manage.daoSQL.SelectSQL;
@@ -334,6 +337,23 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		return map;
 	}
 
+	
+	@Override
+	public Integer insertIntoFileSelfBelong(String RoomGUID, String UpFileFullName, String FileType,
+			String FileBelong) {
+		// TODO Auto-generated method stub
+		FileSelfBelong fileSelfBelong=new FileSelfBelong();
+		
+		String GUID=UUID.randomUUID().toString();
+		
+		fileSelfBelong.setGUID(GUID);
+		fileSelfBelong.setRoomGUID(RoomGUID);
+		fileSelfBelong.setUpFileFullName(UpFileFullName);
+		fileSelfBelong.setFileType(FileType);
+		fileSelfBelong.setFileBelong(FileBelong);
+		
+		return InsertExe.get(this.getJdbcTemplate(), fileSelfBelong);
+	}
 	
 	@Override
 	public Map<String, Object> getChartInfoByGUID(Integer limit, Integer offset, String sort, String order,

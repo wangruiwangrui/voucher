@@ -33,7 +33,7 @@ import com.voucher.manage.tools.MyTestUtil;
 
 public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 
-	private static final String ROOMINFOIMGPATH	="D:\\SYSPICTURE\\";
+	public static final String ROOMINFOIMGPATH	="D:\\SYSPICTURE\\";
 	
 	@Override
 	public Map<String, Object> hiddenImageQuery(HttpServletRequest request,List guidLits) {

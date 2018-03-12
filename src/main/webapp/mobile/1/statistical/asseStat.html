@@ -185,22 +185,22 @@
     		var z=[];
     		console.log(hireMonth);
     		for(var i=0;i<hireMonth.length;i++){   			
-    			x[i]=hireMonth[i].month+"月  "+(hireMonth[i].nothireMonth+
-    					hireMonth[i].alreadyhireMonth)+"万元";
+    			x[i]=hireMonth[i].month+"月  "+(parseFloat(hireMonth[i].nothireMonth)+
+    					parseFloat(hireMonth[i].alreadyhireMonth))+"万元";
     			y[i]=hireMonth[i].nothireMonth;
     			z[i]=hireMonth[i].alreadyhireMonth;
     		}
 			var trace1 = {
 				  x: x,
-				  y: y,
-				  name: '未交金额',
+				  y: z,
+				  name: '(万)已交金额',
 				  type: 'bar'
 				};
 
 			var trace2 = {
 				  x: x,
-				  y: z,
-				  name: '已交金额',
+				  y: y,
+				  name: '(万)未交金额',
 				  type: 'bar'
 				};
 

@@ -33,6 +33,9 @@ public interface RoomInfoDao {
 	public Map<String, Object> getHireListByGUID(Integer limit, Integer offset, String sort,
 			String order,Map search);
 	
+	public Integer insertIntoFileSelfBelong(String RoomGUID,String UpFileFullName,String FileType,
+			String FileBelong);
+	
 	public Double getAllTotalHire();
 	
 	public Double getAlreadyHire();

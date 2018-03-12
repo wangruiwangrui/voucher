@@ -12,10 +12,14 @@ import java.util.UUID;
 import org.springframework.context.ApplicationContext;
 
 import com.voucher.manage.dao.HiddenDAO;
+import com.voucher.manage.dao.RoomInfoDao;
+import com.voucher.manage.daoImpl.MobileDAOImpl;
 import com.voucher.manage.daoModel.Assets.Hidden;
 import com.voucher.manage.daoModel.Assets.Hidden_Check_Date;
 import com.voucher.manage.daoModel.Assets.Hidden_Data;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten_Date;
+import com.voucher.manage.daoModel.TTT.FileSelfBelong;
+import com.voucher.manage.tools.CopyFile;
 import com.voucher.manage.tools.FileTypeTest;
 import com.voucher.manage.tools.Md5;
 import com.voucher.manage.tools.MyTestUtil;
@@ -26,6 +30,8 @@ public abstract class AbstractFileUpload {
 	ApplicationContext applicationContext=new Connect().get();
 	
 	HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
+	
+	RoomInfoDao roomInfoDao=(RoomInfoDao) applicationContext.getBean("roomInfodao");
 	
 	public final static String filePath="\\Desktop\\pasoft\\photo";
 	
@@ -99,12 +105,14 @@ public abstract class AbstractFileUpload {
             System.out.println(uri);
             if(object==Hidden_Data.class){
               hiddenDAO.InsertIntoHiddenData(ID,name,mimeType, uri);
-            }
-            if(object==Hidden_Check_Date.class){          	
+            }else if(object==Hidden_Check_Date.class){          	
               hiddenDAO.InsertIntoHiddenCheckData(ID, name, mimeType, uri);
-            }
-            if(object==Hidden_Neaten_Date.class){
+            }else if(object==Hidden_Neaten_Date.class){
               hiddenDAO.InsertIntoHiddenNeatenData(ID, name, mimeType, uri);
+            }else if(object==FileSelfBelong.class){
+              String imgPath=MobileDAOImpl.ROOMINFOIMGPATH;
+              CopyFile.set(imgPath, savePath+"\\"+fileName+"."+mimeType, fileName+"."+mimeType);
+              roomInfoDao.insertIntoFileSelfBelong(ID, uri, mimeType, name);
             }
             
             i++;
