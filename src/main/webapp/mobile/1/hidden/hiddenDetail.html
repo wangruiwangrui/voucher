@@ -80,6 +80,14 @@
             </div>
     </div>
     
+    <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">关联资产</label></div>
+                  <div id="asset" class="weui-cell__bd">
+                  </div>
+            </div>
+    </div>
+    
     <div class="weui-cells__title">隐患详情</div>
         <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
@@ -187,6 +195,23 @@
             		  }
             	  }
              	  
+            	  
+            	  var asset=document.createElement("span");
+            	  $.get("/voucher/mobile/hidden/getAllAssetByHidden_GUID.do",{
+  				 		guid:guid
+  			  		},function(text){
+  			  			if(text>0){
+  			  				asset.innerHTML=text+"处";
+                    		$("#asset").append(asset);
+                    		$("#asset").click(function(){
+                    			location.href="hiddenAsset.html?hiddenGuid="+guid+"&latitude="+latitude+"&longitude="+longitude;
+                    		});
+  			  			}else{
+  			  				asset.innerHTML="无";
+                			$("#asset").append(asset);
+  			  			}
+  			  		});
+            	  
              	  var name=document.createElement("span");
                   name.innerHTML=obj.name;
                   $("#name").append(name);

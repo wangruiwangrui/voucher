@@ -20,8 +20,11 @@ import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.MobileDAO;
 import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModel.RoomInfo;
+import com.voucher.manage.daoModel.Assets.Hidden_Assets;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
+import com.voucher.manage.daoModelJoin.Assets.Hidden_Assets_Join;
+import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.model.Users;
 import com.voucher.manage.service.UserService;
 import com.voucher.manage.tools.MyTestUtil;
@@ -279,6 +282,103 @@ public class AssetController {
 		MyTestUtil.print(hireByMonth);
 		
 		return hireByMonth;
+	}
+	
+	@RequestMapping("/getAssetByHidden")
+	public @ResponseBody Map getAssetByHidden(@RequestParam Integer limit,@RequestParam Integer offset,String sort,String order,
+			@RequestParam String hiddenGuid,HttpServletRequest request){
+		
+		Map searchMap=new HashMap<>();
+		
+		searchMap.put("[Hidden_Assets].hidden_GUID=", hiddenGuid);
+		
+		Map map=new HashMap<>();
+		
+		Map hidden_Assets_JoinMap=assetsDAO.findAssetByHideen(limit, offset, sort, order, searchMap);
+		
+		List hidden_Assets_Joins=(List) hidden_Assets_JoinMap.get("rows");
+		
+		map.put("rows", hidden_Assets_Joins);
+		
+		Iterator<Hidden_Assets_Join> iterator=hidden_Assets_Joins.iterator();
+		
+		List roominfos=new ArrayList<>();
+		
+		while (iterator.hasNext()) {
+			Hidden_Assets_Join hidden_Assets_Join=iterator.next();
+			RoomInfo roomInfo=new RoomInfo();
+			
+			roomInfo.setGUID(hidden_Assets_Join.getAsset_GUID());
+			
+			roominfos.add(roomInfo);
+		}
+		
+		Map fileBytes=mobileDao.roomInfoImageQuery(request, roominfos);
+		map.put("fileBytes", fileBytes);
+		
+		return map;
+		
+	}
+	
+	@RequestMapping("/insertHiddenAssets")
+	public @ResponseBody Integer insertHiddenAssets(@RequestParam String guid,
+			@RequestParam String hiddenGuid,HttpServletRequest request){
+		
+		Hidden_Assets hidden_Assets=new Hidden_Assets();
+		
+		hidden_Assets.setAsset_GUID(guid);
+		hidden_Assets.setHidden_GUID(hiddenGuid);
+		
+		return assetsDAO.insertIntoHidden_Assets(hidden_Assets);
+		
+	}
+	
+	@RequestMapping("/delHiddenAssets")
+	public @ResponseBody Integer delHiddenAssets(@RequestParam String guid,
+			@RequestParam String hiddenGuid,HttpServletRequest request){
+		
+		Hidden_Assets hidden_Assets=new Hidden_Assets();
+		
+		String[] where={"asset_GUID=",guid,"hidden_GUID=",hiddenGuid};
+		
+		hidden_Assets.setWhere(where);
+		
+		return assetsDAO.deleteHidden_Assets(hidden_Assets);
+		
+	}
+	
+	@RequestMapping("/getAllAssetByHidden_GUID")
+	public @ResponseBody Integer getAllAssetByHidden_GUID(@RequestParam String guid){
+		
+		int count=assetsDAO.getAllAssetByHidden_GUID(guid);
+		
+		return count;
+		
+	}
+	
+	
+	@RequestMapping("/getHiddenByAsset")
+	public @ResponseBody Map getHiddenByAsset(@RequestParam Integer limit,@RequestParam Integer offset,String sort,String order,
+			@RequestParam String assetGuid,HttpServletRequest request){
+		
+		Map searchMap=new HashMap<>();
+		
+		searchMap.put("[Hidden_Assets].asset_GUID=", assetGuid);
+		
+		Map map=new HashMap<>();
+		
+		Map hidden_Assets_JoinMap=assetsDAO.findHideenByAsset(limit, offset, sort, order, searchMap);
+		
+		List hidden_Joins=(List) hidden_Assets_JoinMap.get("rows");
+		
+		map.put("rows", hidden_Joins);
+		
+
+		Map fileBytes=mobileDao.hiddenImageQuery(request, hidden_Joins);
+		map.put("fileBytes", fileBytes);
+		
+		return map;
+		
 	}
 	
 }

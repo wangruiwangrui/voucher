@@ -33,6 +33,7 @@ import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Assets_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Data_Join;
+import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.daoModelJoin.Assets.Position_Check_Join;
 import com.voucher.manage.daoModelJoin.Assets.Position_Hidden_Join;
 import com.voucher.manage.daoModelJoin.Assets.Position_Neaten_Join;
@@ -322,7 +323,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	}
 	
 	@Override
-	public Map findHiddenByDistance(int limit,int offset,Double lng, Double lat,Double distance,String search) {
+	public Map findHiddenByDistance(int limit,int offset,Double lng, Double lat,String search) {
 		// TODO Auto-generated method stub
 		
 		String sql0="SELECT TOP "+limit+" "+
@@ -348,16 +349,14 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 					"[Hidden].date "+
 					"FROM [Hidden] left join  [Position]"+
 					"on [Hidden].GUID = [Position].GUID "+
-					"WHERE "+  
+					"WHERE [Position].lng is not null AND [Position].lat is not null "+ 
+					"AND "+
 					"[Hidden].id not in( select top "+offset+" [Hidden].id from [Hidden] left join  [Position]"+
 					"on [Hidden].GUID = [Position].GUID "+
+					"WHERE [Position].lng is not null AND [Position].lat is not null "+ 
 					"ORDER BY   SQRT(("+lng+"-lng)*("+lng+"-lng)+("+lat+"-lat)*("+lat+"-lat))) ";
 					
-		String sql1="AND "+
-					"geography::STGeomFromText('POINT(' + cast([lng] as varchar(20)) + ' '"+  
-					"+ cast([lat] as varchar(20)) +')', 4326).STDistance(  "+
-					"geography::STGeomFromText('POINT(105.4955 28.91866)', 4326))<"+distance+" "+
-					"ORDER BY   "+
+		String sql1="ORDER BY   "+
 					"SQRT(("+lng+"-lng)*("+lng+"-lng)+("+lat+"-lat)*("+lat+"-lat))  ";
 		
 		String sql;
@@ -387,7 +386,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	
 	
 	@Override
-	public Map findAssetByDistance(int limit,int offset,Double lng, Double lat,Double distance,String search) {
+	public Map findAssetByDistance(int limit,int offset,Double lng, Double lat,String search) {
 		// TODO Auto-generated method stub
 		
 		String sql0="SELECT TOP "+limit+" "+
@@ -431,16 +430,15 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 				    "[TTT].[dbo].[RoomInfo].PropertyCardUnit "+				   
 					"FROM [TTT].[dbo].[RoomInfo] left join  [Position]"+
 					"on [TTT].[dbo].[RoomInfo].GUID = [Position].GUID "+
-					"WHERE "+  
+					"WHERE [Position].lng is not null AND [Position].lat is not null "+  
+					"AND "+
 					"[TTT].[dbo].[RoomInfo].GUID not in( select top "+offset+" [TTT].[dbo].[RoomInfo].GUID from [TTT].[dbo].[RoomInfo] left join  [Position]"+
 					"on [TTT].[dbo].[RoomInfo].GUID = [Position].GUID "+
+					"WHERE [Position].lng is not null AND [Position].lat is not null "+ 
 					"ORDER BY   SQRT(("+lng+"-lng)*("+lng+"-lng)+("+lat+"-lat)*("+lat+"-lat))) ";
-					
-		String sql1="AND "+
-					"geography::STGeomFromText('POINT(' + cast([lng] as varchar(20)) + ' '"+  
-					"+ cast([lat] as varchar(20)) +')', 4326).STDistance(  "+
-					"geography::STGeomFromText('POINT(105.4955 28.91866)', 4326))<"+distance+" "+
-					"ORDER BY   "+
+		
+		
+		String sql1="ORDER BY   "+
 					"SQRT(("+lng+"-lng)*("+lng+"-lng)+("+lat+"-lat)*("+lat+"-lat))  ";
 		
 		String sql;
@@ -450,6 +448,8 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		}else{
 			sql=sql0+"AND [TTT].[dbo].[RoomInfo].Address like '%"+search+"%' "+sql1;
 		}
+		
+		System.out.println("sql="+sql);
 		
 		RoomInfo_Position roomInfo_Position=new RoomInfo_Position();
 		
@@ -473,10 +473,174 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	
 	
 	@Override
+	public Map findHiddenByPoint(Double lng, Double lat,Double distance,String search) {
+		// TODO Auto-generated method stub
+		
+		String sql0="SELECT "+
+		            "[Position].GUID,"+
+					"[Position].province,"+
+					"[Position].city,"+
+					"[Position].district,"+
+					"[Position].street,"+
+					"[Position].street_number,"+
+					"[Position].lng,"+
+					"[Position].lat,"+
+					"[Position].date,"+
+					"[Hidden].name,"+
+					"[Hidden].hidden_level,"+
+					"[Hidden].detail,"+
+					"[Hidden].progress,"+
+					"[Hidden].happen_time,"+
+					"[Hidden].principal,"+
+					"[Hidden].type,"+
+					"[Hidden].state,"+
+					"[Hidden].remark,"+
+					"[Hidden].update_time,"+
+					"[Hidden].date "+
+					"FROM [Hidden] left join  [Position]"+
+					"on [Hidden].GUID = [Position].GUID "+
+					"WHERE ";
+					
+		String sql1="geography::STGeomFromText('POINT(' + cast([lng] as varchar(20)) + ' '"+  
+					"+ cast([lat] as varchar(20)) +')', 4326).STDistance(  "+
+					"geography::STGeomFromText('POINT(105.4955 28.91866)', 4326))<"+distance+" "+
+					"ORDER BY   "+
+					"SQRT(("+lng+"-lng)*("+lng+"-lng)+("+lat+"-lat)*("+lat+"-lat))  ";
+		
+		String sql;
+		
+		if(search.equals("")){
+			sql=sql0+sql1;
+		}else{
+			sql=sql0+"AND [Hidden].name like '%"+search+"%' "+sql1;
+		}
+		
+		Position_Hidden_Join position_Hidden_Join=new Position_Hidden_Join();
+		
+		Position position=new Position();		
+		
+		Hidden hidden=new Hidden();
+		
+		Object[] objects={hidden,position};
+		
+		List list=SelectSqlJoinExe.get(this.getJdbcTemplate(), sql, objects,position_Hidden_Join);
+		
+		Map map=new HashMap<>();
+		
+		map.put("row", list);
+		
+		return map;
+	}
+	
+	
+	@Override
+	public Map findAssetByPoint(Double lng, Double lat,Double distance,String search) {
+		// TODO Auto-generated method stub
+		
+		String sql0="SELECT "+
+		            "[Position].GUID,"+
+					"[Position].province,"+
+					"[Position].city,"+
+					"[Position].district,"+
+					"[Position].street,"+
+					"[Position].street_number,"+
+					"[Position].lng,"+
+					"[Position].lat,"+
+					"[Position].date,"+
+					"[TTT].[dbo].[RoomInfo].GUID,"+
+				    "[TTT].[dbo].[RoomInfo].Num,"+
+				    "[TTT].[dbo].[RoomInfo].OriginalNum,"+
+				    "[TTT].[dbo].[RoomInfo].Address,"+
+				    "[TTT].[dbo].[RoomInfo].OriginalAddress,"+
+				    "[TTT].[dbo].[RoomInfo].Region,"+
+				    "[TTT].[dbo].[RoomInfo].Segment,"+
+				    "[TTT].[dbo].[RoomInfo].ManageRegion,"+
+				    "[TTT].[dbo].[RoomInfo].RoomProperty,"+
+				    "[TTT].[dbo].[RoomInfo].Useful,"+
+				    "[TTT].[dbo].[RoomInfo].Floor,"+
+				    "[TTT].[dbo].[RoomInfo].State,"+
+				    "[TTT].[dbo].[RoomInfo].Structure,"+
+				    "[TTT].[dbo].[RoomInfo].BuildArea,"+
+				    "[TTT].[dbo].[RoomInfo].RoomType,"+
+				    "[TTT].[dbo].[RoomInfo].IsCity,"+
+				    "[TTT].[dbo].[RoomInfo].Manager,"+
+				    "[TTT].[dbo].[RoomInfo].ManagerPhone,"+
+				    "[TTT].[dbo].[RoomInfo].IsStreet,"+
+				    "[TTT].[dbo].[RoomInfo].FitMent,"+
+				    "[TTT].[dbo].[RoomInfo].BeFrom,"+
+				    "[TTT].[dbo].[RoomInfo].InDate,"+
+				    "[TTT].[dbo].[RoomInfo].PropertyRightNo,"+
+				    "[TTT].[dbo].[RoomInfo].PropertyRightArea,"+
+				    "[TTT].[dbo].[RoomInfo].DesignUseful,"+
+				    "[TTT].[dbo].[RoomInfo].BuildYear,"+
+				    "[TTT].[dbo].[RoomInfo].PropertyRightUnit,"+
+				    "[TTT].[dbo].[RoomInfo].RealPropertyRightUnit,"+
+				    "[TTT].[dbo].[RoomInfo].PropertyCardUnit "+				   
+					"FROM [TTT].[dbo].[RoomInfo] left join  [Position]"+
+					"on [TTT].[dbo].[RoomInfo].GUID = [Position].GUID "+
+					"WHERE ";
+		
+		
+		String sql1="geography::STGeomFromText('POINT(' + cast([lng] as varchar(20)) + ' '"+  
+					"+ cast([lat] as varchar(20)) +')', 4326).STDistance(  "+
+					"geography::STGeomFromText('POINT(105.4955 28.91866)', 4326))<"+distance+" "+
+					"ORDER BY   "+
+					"SQRT(("+lng+"-lng)*("+lng+"-lng)+("+lat+"-lat)*("+lat+"-lat))  ";
+		
+		String sql;
+		
+		if(search.equals("")){
+			sql=sql0+sql1;
+		}else{
+			sql=sql0+"AND [TTT].[dbo].[RoomInfo].Address like '%"+search+"%' "+sql1;
+		}
+		
+		System.out.println("sql="+sql);
+		
+		RoomInfo_Position roomInfo_Position=new RoomInfo_Position();
+		
+		Position position=new Position();		
+		
+		RoomInfo roomInfo=new RoomInfo();
+		
+		Object[] objects={roomInfo,position};
+		
+		Map map=new HashMap<>();
+		
+		try{
+			List list=SelectSqlJoinExe.get(this.getJdbcTemplate(), sql, objects,roomInfo_Position);
+			map.put("row", list);
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		return map;
+	}
+	
+	@Override
 	public Integer insertIntoHidden_Assets(Hidden_Assets hidden_Assets) {
 		// TODO Auto-generated method stub
+		
+		String asset_GUID=hidden_Assets.getAsset_GUID();
+		String hidden_GUID=hidden_Assets.getHidden_GUID();
+		
+		String[] where={"asset_GUID=",asset_GUID,"hidden_GUID=",hidden_GUID};
+		
+		Hidden_Assets hidden_Assets2=new Hidden_Assets();
+		
+		hidden_Assets2.setWhere(where);
+		
+		int result;
+		
+		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden_Assets2).get("");
+		
+		if(count==0){
+			result=InsertExe.get(this.getJdbcTemplate(), hidden_Assets);
+		}else{
+			result=2;
+		}
 
-		return InsertExe.get(this.getJdbcTemplate(), hidden_Assets);
+		return result;
 	}
 
 	@Override
@@ -678,6 +842,165 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		
 		String countSql="select count(*) FROM "+
 			    "[Hidden_Assets] left join [TTT].[dbo].[RoomInfo] on [Hidden_Assets].[asset_GUID]=[TTT].[dbo].[RoomInfo].[GUID]";
+		
+		if(!search.isEmpty()){
+			countSql=countSql+   //sqlserver鍒嗛〉闇�瑕佸湪top涔熷姞涓妛here鏉′欢
+	          		 "\n  where "+
+	                    whereCommand.substring(0,whereCommand.length()-7);
+    	}
+		
+    	Map amount=this.getJdbcTemplate().queryForMap(countSql,paramsCount.toArray());
+    	
+		map.put("total", amount.get(""));
+		
+		return map;
+
+	}
+	
+	@Override
+	public Map findHideenByAsset(Integer limit, Integer offset, String sort, String order, Map<String, String> search) {
+		// TODO Auto-generated method stub
+		
+		Hidden_Assets hidden_Assets=new Hidden_Assets();
+		
+		hidden_Assets.setLimit(limit);
+		hidden_Assets.setOffset(offset);
+		hidden_Assets.setSort(sort);
+		hidden_Assets.setOffset(offset);
+		hidden_Assets.setNotIn("id");
+		
+		Hidden hidden=new Hidden();
+		
+		hidden.setLimit(limit);
+		hidden.setOffset(offset);
+		hidden.setSort(sort);
+		hidden.setOffset(offset);
+		hidden.setNotIn("id");
+			
+		Object[] objects={hidden_Assets,hidden};
+		
+		Map map=new HashMap<String, Object>();
+		
+		Hidden_Join hidden_Join=new Hidden_Join();
+		
+
+  String sql="SELECT top "+limit+
+    "[Hidden_Assets].id,"+
+    "[Hidden_Assets].asset_GUID,"+
+    "[Hidden_Assets].hidden_GUID,"+
+    "[Hidden].[GUID],"+
+    "[Hidden].[exist],"+
+    "[Hidden].[name],"+
+    "[Hidden].[hidden_level],"+
+    "[Hidden].[detail],"+
+    "[Hidden].[happen_time],"+
+    "[Hidden].[progress],"+
+    "[Hidden].[principal],"+
+    "[Hidden].[type],"+
+    "[Hidden].[state],"+
+    "[Hidden].[remark],"+
+    "[Hidden].[update_time],"+
+    "[Hidden].[date],"+
+    "[Hidden].[campusAdmin],"+
+    "[Hidden].[terminal],"+
+    "[ManageRegion] "+
+    "FROM "+
+    "[Hidden_Assets] left join [Hidden] on [Hidden_Assets].[hidden_GUID]=[Hidden].[GUID]"+
+    ""; 
+  
+  //  String sqlWhere="AND [Hidden_Assets].[asset_GUID] not in( select top "+offset+" [Hidden_Assets].[asset_GUID] FROM [Hidden_Assets] left join [TTT].[dbo].[RoomInfo] on [Hidden_Assets].[asset_GUID]=[TTT].[dbo].[RoomInfo].[GUID] ORDER BY [Hidden_Assets].[asset_GUID]) ORDER BY [Hidden_Assets].[asset_GUID]";
+	
+  		StringBuilder whereCommand = new StringBuilder(); 
+       
+  		Class<?>[] classeNames=new Class<?>[2];
+  
+  		classeNames[0]=Hidden_Assets.class;
+  		classeNames[1]=Hidden.class;
+  		
+    	List params=new ArrayList<>();
+        List paramsCount=new ArrayList<>();
+    	
+    	if(!search.isEmpty()){
+			String[] where=TransMapToString.get(search);	
+			
+			List wheres=new ArrayList<String[]>();
+			
+			String[] columnWhere;
+			
+			wheres.add(where);
+             			        
+	          Iterator<String[]> iterator=wheres.iterator();
+	          System.out.println("wheres="+wheres);
+	          
+	          while (iterator.hasNext()) {
+	        	  columnWhere=iterator.next();
+	        	  int k=1;
+	        	  for(String whereterm:columnWhere){
+	            	  if(k%2==0){
+	            		//  System.out.println("鍋舵暟");
+	            		//  whereCommand.append(whereterm+"\n  AND ");
+	            	   }else{
+	            		//  System.out.println("濂囨暟");
+	            		//  whereCommand.append("\n   "+whereterm);
+	            		   whereCommand.append(whereterm+"? \n  AND ");
+	            	   }
+	               k++;
+	               System.out.println("whereCommand="+whereCommand);
+	              }
+	            }
+	          
+	          iterator=wheres.iterator();
+	          while (iterator.hasNext()) {
+	        	  columnWhere=iterator.next();
+	        	  int k=1;
+	        	  for(String whereterm:columnWhere){
+	            	  if(k%2==0){
+	            		//  System.out.println("鍋舵暟");
+	            		  params.add(whereterm);
+	            	   }else{
+	            		//  System.out.println("濂囨暟");
+	            		//  whereCommand.append("\n   "+whereterm);
+	            	   }
+	               k++;
+	              }
+			  }
+	          
+	          iterator=wheres.iterator();
+		       while (iterator.hasNext()) {
+		        	  columnWhere=iterator.next();
+		        	  int k=1;
+		        	  for(String whereterm:columnWhere){
+		            	  if(k%2==0){
+		            		//  System.out.println("鍋舵暟");
+		            		  params.add(whereterm);
+		            		  paramsCount.add(whereterm);
+		            	   }else{
+		            		//  System.out.println("濂囨暟");
+		            		//  whereCommand.append("\n   "+whereterm);
+		            	   }
+		               k++;
+		              }
+				  }
+	          
+		}
+
+    	System.out.println("params="+params);
+    	
+    	if(!search.isEmpty()){
+    		   sql=sql+   //sqlserver鍒嗛〉闇�瑕佸湪top涔熷姞涓妛here鏉′欢
+    	         		 "\n  where "+whereCommand+
+    	                  " [Hidden_Assets].hidden_GUID not in("+
+    	                  " select top "+offset+" [Hidden_Assets].hidden_GUID  FROM [Hidden_Assets] where "+
+    	                   whereCommand.substring(0,whereCommand.length()-7)+")";
+    	}
+    	
+    	List list=this.getJdbcTemplate().query(sql,params.toArray(), new RowMappersJoin(classeNames,hidden_Join.getClass()));
+       
+    	map.put("rows", list);
+		MyTestUtil.print(list);
+		
+		String countSql="select count(*) FROM "+
+			    "[Hidden_Assets] left join [Hidden] on [Hidden_Assets].[hidden_GUID]=[Hidden].[GUID]";
 		
 		if(!search.isEmpty()){
 			countSql=countSql+   //sqlserver鍒嗛〉闇�瑕佸湪top涔熷姞涓妛here鏉′欢
@@ -1160,6 +1483,20 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 			return hiddenAssetByMonthAmount;
 		}
 		
+	}
+
+	@Override
+	public Integer getAllAssetByHidden_GUID(String guid) {
+		// TODO Auto-generated method stub
+		Hidden_Assets hidden_Assets=new Hidden_Assets();
+		
+		String[] where={"asset_GUID=",guid};
+		
+		hidden_Assets.setWhere(where);
+		
+		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden_Assets).get("");
+		
+		return count;
 	}
 
 	

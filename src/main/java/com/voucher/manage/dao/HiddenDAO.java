@@ -85,4 +85,6 @@ public interface HiddenDAO {
 	public Integer deleteHiddenNeaten(Hidden_Neaten hidden_Neaten);
 	
 	public List<Hidden_Join> selectHiddenOfMap(Map<String, String> search);
+	
+	public Integer getAllAssetByHidden_GUID(String guid);
 }

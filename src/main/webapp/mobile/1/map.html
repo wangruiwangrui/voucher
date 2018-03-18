@@ -67,7 +67,7 @@ function getQueryString(name) {
  
     
     var xhm=new XMLHttpRequest();
-    xhm.open("GET","../../baiduMap/getByDistance.do?limit=100&offset=0&lng="+lng+"&lat="+lat+"&distance=10000",false);
+    xhm.open("GET","../../baiduMap/getByPoint.do?limit=100&offset=0&lng="+lng+"&lat="+lat+"&distance=10000",false);
     xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
     xhm.send();
     var ticket=JSON.parse(xhm.responseText);

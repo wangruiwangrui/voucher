@@ -14,6 +14,7 @@ import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.RoomInfoLittle;
 import com.voucher.manage.daoModel.Assets.Hidden;
+import com.voucher.manage.daoModel.Assets.Hidden_Assets;
 import com.voucher.manage.daoModel.Assets.Hidden_Check;
 import com.voucher.manage.daoModel.Assets.Hidden_Check_Date;
 import com.voucher.manage.daoModel.Assets.Hidden_Data;
@@ -838,6 +839,22 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		List hidden_joins=SelectJoinExe.get(this.getJdbcTemplate(), objects, hidden_Join, join);		
 			 
 		return hidden_joins;
+	}
+
+
+	@Override
+	public Integer getAllAssetByHidden_GUID(String guid) {
+		// TODO Auto-generated method stub
+		
+		Hidden_Assets hidden_Assets=new Hidden_Assets();
+		
+		String[] where={"hidden_GUID=",guid};
+		
+		hidden_Assets.setWhere(where);
+		
+		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden_Assets).get("");
+		
+		return count;
 	}
 
 

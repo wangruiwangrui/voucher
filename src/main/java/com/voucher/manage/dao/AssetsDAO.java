@@ -41,15 +41,22 @@ public interface AssetsDAO {
 	
 	public List findPosition(Position position);
 	
-	public Map findHiddenByDistance(int limit,int offset,Double lng, Double lat,Double distance,String search);
+	public Map findHiddenByDistance(int limit,int offset,Double lng, Double lat,String search);
 	
-	public Map findAssetByDistance(int limit,int offset,Double lng, Double lat,Double distance,String search);
+	public Map findAssetByDistance(int limit,int offset,Double lng, Double lat,String search);
 	
+	public Map findHiddenByPoint(Double lng, Double lat,Double distance,String search);
+	
+	public Map findAssetByPoint(Double lng, Double lat,Double distance,String search);
+		
 	public Integer insertIntoHidden_Assets(Hidden_Assets hidden_Assets);
 	
 	public Integer deleteHidden_Assets(Hidden_Assets hidden_Assets);
 	
 	public Map findAssetByHideen(Integer limit, Integer offset, String sort, String order,
+			Map<String, String> search);
+	
+	public Map findHideenByAsset(Integer limit, Integer offset, String sort, String order,
 			Map<String, String> search);
 	
 	public Integer findNotHidden();
@@ -83,4 +90,6 @@ public interface AssetsDAO {
 	public List findHiddenByMonthOfYear(String year);
 	
 	public List findHiddenAssetsByMonthOfYear(String year);
+	
+	public Integer getAllAssetByHidden_GUID(String guid);
 }

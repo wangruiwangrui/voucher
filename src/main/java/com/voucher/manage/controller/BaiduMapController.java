@@ -124,7 +124,20 @@ public class BaiduMapController {
 	public @ResponseBody List getByDistance(Integer limit,Integer offset,Double lng,Double lat,
 			Double distance,HttpServletRequest request){
 		
-		Map map=assetsDAO.findHiddenByDistance(limit, offset, lng, lat, distance,"");
+		Map map=assetsDAO.findHiddenByDistance(limit, offset, lng, lat, "");
+		
+		MyTestUtil.print(map);
+		
+		List list=(List) map.get("row");
+		
+		return list;
+	}
+	
+	@RequestMapping("/getByPoint")
+	public @ResponseBody List getByPoint(Integer limit,Integer offset,Double lng,Double lat,
+			Double distance,HttpServletRequest request){
+		
+		Map map=assetsDAO.findHiddenByPoint(lng, lat, distance, "");
 		
 		MyTestUtil.print(map);
 		
@@ -140,7 +153,7 @@ public class BaiduMapController {
 		if(search==null)
 			search="";
 		
-		Map map=assetsDAO.findHiddenByDistance(limit, offset, lng, lat, distance,search);
+		Map map=assetsDAO.findHiddenByDistance(limit, offset, lng, lat, search);
 		
 		MyTestUtil.print(map);
 		
@@ -160,7 +173,22 @@ public class BaiduMapController {
 	public @ResponseBody Map getAssetsByDistance(Integer limit,Integer offset,Double lng,Double lat,
 			Double distance,HttpServletRequest request){
 
-		Map map=assetsDAO.findAssetByDistance(limit, offset, lng, lat, distance,"");
+		Map map=assetsDAO.findAssetByDistance(limit, offset, lng, lat,"");
+	
+		List list=(List) map.get("row");
+
+		Map result=new HashMap<>();
+		
+		result.put("rows", list);
+		
+		return result;
+	}
+	
+	@RequestMapping("/getAssetsByPoint")
+	public @ResponseBody Map getAssetsByPoint(Integer limit,Integer offset,Double lng,Double lat,
+			Double distance,HttpServletRequest request){
+
+		Map map=assetsDAO.findAssetByPoint(lng, lat, distance, "");
 	
 		List list=(List) map.get("row");
 
@@ -178,7 +206,7 @@ public class BaiduMapController {
 		if(search==null)
 			search="";
 		
-		Map map=assetsDAO.findAssetByDistance(limit, offset, lng, lat, distance,search);
+		Map map=assetsDAO.findAssetByDistance(limit, offset, lng, lat, search);
 		
 		MyTestUtil.print(map);
 		

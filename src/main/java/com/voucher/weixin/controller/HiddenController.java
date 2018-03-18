@@ -724,4 +724,13 @@ public class HiddenController {
 		
 	}
 	
+	@RequestMapping("/getAllAssetByHidden_GUID")
+	public @ResponseBody Integer getAllAssetByHidden_GUID(@RequestParam String guid){
+		
+		int count=hiddenDAO.getAllAssetByHidden_GUID(guid);
+		
+		return count;
+		
+	}
+	
 }
