@@ -490,7 +490,7 @@ public class HiddenController {
 		
 		Users users=userService.getUserByOnlyOpenId(campusAdmin);
 		
-		map.put("nickname",users.getNickname());
+		map.put("name",users.getName());
 		
 		return map;
 		

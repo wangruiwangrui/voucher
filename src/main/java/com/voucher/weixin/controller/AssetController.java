@@ -169,6 +169,13 @@ public class AssetController {
 	public @ResponseBody Map getHireListByGUID(@RequestParam Integer limit,@RequestParam Integer offset,
 			@RequestParam String hireGUID,String sort,String order,
 			String search,HttpServletRequest request){
+		if(sort==""||sort.equals("")){
+			sort="HireDate";
+		}
+		
+		if(order==""||order.equals("")){
+			order="asc";
+		}
 		
 		Map searchMap=new HashMap<>();
     	
@@ -376,6 +383,20 @@ public class AssetController {
 
 		Map fileBytes=mobileDao.hiddenImageQuery(request, hidden_Joins);
 		map.put("fileBytes", fileBytes);
+		
+		return map;
+		
+	}
+	
+	@RequestMapping("/getChartInfoByChartGUID")
+	public @ResponseBody Map<String, Object> getChartInfoByChartGUID(@RequestParam String chartGUID
+			,HttpServletRequest request){
+		
+		Map map=new HashMap<>();
+		
+		ChartInfo chartInfo=assetsDAO.getChartInfoByChartGUID(chartGUID);
+		
+		map.put("chartInfo", chartInfo);
 		
 		return map;
 		

@@ -65,18 +65,16 @@
     </div>
    
      <div class="weui-cells weui-cells_form">
-            <div class="weui-cell">
+            <div class="weui-cell weui-cell_access">
                 <div class="weui-cell__hd"><label class="weui-label">状态</label></div>
-                <div id="securityClassification" class="weui-cell__bd">
+                <div id="State" class="weui-cell__bd">
                 </div>
+                <div class="weui-cell__ft"></div>
             </div>
     </div>
     
     <div class="weui-cells weui-cells_form">
-            <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">关联隐患</label></div>
-                <div id="hidden" class="weui-cell__bd">
-                </div>
+            <div id="hidden" class="weui-cell weui-cell_access">
             </div>
     </div>
   
@@ -210,29 +208,61 @@
 
 
                   var buildArea=document.createElement("span");
-                  buildArea.innerHTML=obj.buildArea;
+                  buildArea.innerHTML=obj.buildArea+" m<sup>2</sup>";
                   $("#buildArea").append(buildArea);
                   
 
-                  var securityClassification=document.createElement("span");
-                  securityClassification.innerHTML=obj.securityClassification;
-                  $("#securityClassification").append(securityClassification);
+                  var State=document.createElement("span");
+                  State.innerHTML=obj.state;
+                  $("#State").append(State);
+                  
+                  var chartGUID=encodeURI(obj.chartGUID);
+                  
+                  $("#State").click(function(){
+          			  location.href="assetState.html?chartGUID="+chartGUID+"&latitude="+latitude+"&longitude="+longitude;
+                  });
                   
                   var hidden=document.createElement("span");
             	  $.get("/voucher/mobile/asset/getAllAssetByHidden_GUID.do",{
   				 		guid:guid
   			  		},function(text){
   			  			if(text>0){
-  			  				hidden.innerHTML=text+"处";
-                    		$("#hidden").append(hidden);                   		
+  			  				//hidden.innerHTML=text+"处";
+  			  				var hidden1=document.createElement("div");
+  			  				hidden1.setAttribute("class","weui-cell__bd");
+  			  				var span1=document.createElement("span");
+  			  				span1.setAttribute("style","vertical-align: middle");
+  			  				span1.innerHTML="关联隐患";
+  			  				var span2=document.createElement("span");
+			  				span2.setAttribute("class","weui-badge");
+			  				span2.setAttribute("style","margin-left: 5px;");
+			  				span2.innerHTML=text;
+			  				hidden1.appendChild(span1);
+			  				hidden1.appendChild(span2);
+                    		$("#hidden").append(hidden1); 
+                    		var hidden2=document.createElement("div");
+                    		hidden2.setAttribute("class","weui-cell__ft");
+                    		$("#hidden").append(hidden2); 
+                    		
+                    		$("#hidden").click(function(){
+          			  			var assetGuid=encodeURI(guid);
+                    			location.href="assetHiddenList.html?assetGuid="+assetGuid+"&latitude="+latitude+"&longitude="+longitude;
+                    		});
+                    		
   			  			}else{
-  			  				hidden.innerHTML="无";
+  			  				var hidden=document.createElement("div");
+			  				hidden.setAttribute("class","weui-cell__bd");
+			  				var span1=document.createElement("span");
+			  				span1.setAttribute("style","vertical-align: middle");
+			  				span1.innerHTML="关联隐患";
+			  				var span2=document.createElement("span");
+			  				span2.setAttribute("style","margin-left: 15px;");
+			  				span2.innerHTML="无";
+			  				hidden.appendChild(span1);
+			  				hidden.appendChild(span2);
                 			$("#hidden").append(hidden);
   			  			}
-  			  			
-  			  		$("#hidden").click(function(){
-            			location.href="assetHiddenList.html?assetGuid="+guid+"&latitude="+latitude+"&longitude="+longitude;
-            			});
+  			  			 			  		
   			  		
   			  		});
                   

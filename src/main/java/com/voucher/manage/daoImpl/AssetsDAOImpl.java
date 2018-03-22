@@ -1321,6 +1321,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	@Override
 	public ChartInfo getChartInfoByIDNo(String IDNo) {
 		// TODO Auto-generated method stub
+		System.out.println("IDNo="+IDNo);
 		ChartInfo chartInfo=new ChartInfo();
 		chartInfo.setLimit(10);
 		chartInfo.setOffset(0);
@@ -1329,6 +1330,8 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		chartInfo.setWhere(where);
 		
 		List list=SelectExe.get(this.getJdbcTemplate(), chartInfo);
+		
+		MyTestUtil.print(list);
 		
 		ChartInfo chartInfo2 = null;
 		
@@ -1342,6 +1345,32 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		return chartInfo2;
 	}
 
+	@Override
+	public ChartInfo getChartInfoByChartGUID(String chartGUID) {
+		// TODO Auto-generated method stub
+		ChartInfo chartInfo=new ChartInfo();
+		chartInfo.setLimit(10);
+		chartInfo.setOffset(0);
+		chartInfo.setNotIn("GUID");
+		String[] where = {"[TTT].[dbo].[ChartInfo].GUID=",chartGUID};
+		chartInfo.setWhere(where);
+		
+		List list=SelectExe.get(this.getJdbcTemplate(), chartInfo);
+		
+		MyTestUtil.print(list);
+		
+		ChartInfo chartInfo2 = null;
+		
+		try {
+		 chartInfo2=(ChartInfo) list.get(0);
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		return chartInfo2;
+	}
+	
 	@Override
 	public Map findChartInfo_HireListByIDNo(String IDNo) {
 		// TODO Auto-generated method stub

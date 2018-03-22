@@ -81,10 +81,7 @@
     </div>
     
     <div class="weui-cells weui-cells_form">
-            <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">关联资产</label></div>
-                  <div id="asset" class="weui-cell__bd">
-                  </div>
+            <div id="asset" class="weui-cell weui-cell_access">
             </div>
     </div>
     
@@ -189,7 +186,7 @@
             			  		},function(text){
             			  			var name = $.parseJSON(text);
             			  			var username=document.createElement("span");
-                       			 username.innerHTML=name.nickname;
+            			  			username.innerHTML=name.name;
                                    $("#username").append(username);
             			  		});	
             		  }
@@ -200,15 +197,39 @@
             	  $.get("/voucher/mobile/hidden/getAllAssetByHidden_GUID.do",{
   				 		guid:guid
   			  		},function(text){
-  			  			if(text>0){
-  			  				asset.innerHTML=text+"处";
-                    		$("#asset").append(asset);
-                    		$("#asset").click(function(){
+  			  		if(text>0){
+  			  			var asset1=document.createElement("div");
+			  				asset1.setAttribute("class","weui-cell__bd");
+			  				var span1=document.createElement("span");
+			  				span1.setAttribute("style","vertical-align: middle");
+			  				span1.innerHTML="关联资产";
+			  				var span2=document.createElement("span");
+		  					span2.setAttribute("class","weui-badge");
+		  					span2.setAttribute("style","margin-left: 5px;");
+		  					span2.innerHTML=text;
+		  					asset1.appendChild(span1);
+		  					asset1.appendChild(span2);
+                			$("#asset").append(asset1); 
+                			var asset2=document.createElement("div");
+                			asset2.setAttribute("class","weui-cell__ft");
+                			$("#asset").append(asset2);  
+                			
+                			$("#asset").click(function(){
                     			location.href="hiddenAsset.html?hiddenGuid="+guid+"&latitude="+latitude+"&longitude="+longitude;
                     		});
+                			
   			  			}else{
-  			  				asset.innerHTML="无";
-                			$("#asset").append(asset);
+  			  				var asset=document.createElement("div");
+		  					asset.setAttribute("class","weui-cell__bd");
+		  					var span1=document.createElement("span");
+		  					span1.setAttribute("style","vertical-align: middle");
+		  					span1.innerHTML="关联资产";
+		  					var span2=document.createElement("span");
+		  					span2.setAttribute("style","margin-left: 15px;");
+		  					span2.innerHTML="无";
+		  					asset.appendChild(span1);
+		  					asset.appendChild(span2);
+            				$("#asset").append(asset);
   			  			}
   			  		});
             	  

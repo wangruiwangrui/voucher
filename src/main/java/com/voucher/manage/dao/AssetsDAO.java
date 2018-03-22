@@ -79,6 +79,8 @@ public interface AssetsDAO {
 	
 	public ChartInfo getChartInfoByIDNo(String IDNo);           //根据身份证查找承租户
 	
+	public ChartInfo getChartInfoByChartGUID(String chartGUID);           //根据GUID查找承租户
+	
 	public Map findChartInfo_HireListByIDNo(String IDNo);
 	
 	public Map findHireListByGUID(String GUID);

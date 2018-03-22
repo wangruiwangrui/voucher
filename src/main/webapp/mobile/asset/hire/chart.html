@@ -48,7 +48,8 @@
                                         <th data-align="left" data-field="idno">身份证</th>
                                         <th data-align="left" data-field="status" data-formatter="actionReport">查看详情</th>
                                         <th data-align="left" data-field="totalHire">金额</th>
-                                        <th data-align="left" data-field="concludeDate" data-formatter="actionTime">日期</th>                               
+                                        <th data-align="left" data-field="concludeDate" data-formatter="actionTime">开始日期</th>     
+                                        <th data-align="left" data-field="chartEndDate" data-formatter="actionTime">结束日期</th>                            
                                         <th data-align="left" data-field="roomAddress" >地址</th>
                                         <th data-align="left" data-field="hireGUID" >合同编号</th>
                                     </tr>
@@ -105,7 +106,7 @@
 
     function repayment(temp){
         var hang = $(temp.parentNode).parent().prevAll().length + 1;
-        var hireGUID =encodeURI(document.getElementById("table").rows[hang].cells[6].innerHTML);
+        var hireGUID =encodeURI(document.getElementById("table").rows[hang].cells[7].innerHTML);
         
         window.location.href = "hire.html?hireGUID="+hireGUID;
         
