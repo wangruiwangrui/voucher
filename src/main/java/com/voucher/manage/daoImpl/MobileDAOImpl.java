@@ -19,6 +19,7 @@ import com.voucher.manage.dao.MobileDAO;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Assets.Hidden_Check_Date;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten_Date;
+import com.voucher.manage.daoModel.Assets.WeiXin_User;
 import com.voucher.manage.daoModel.TTT.FileSelfBelong;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
@@ -26,6 +27,10 @@ import com.voucher.manage.daoModelJoin.Assets.Hidden_Data_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Neaten_Join;
 import com.voucher.manage.daoModelJoin.Assets.Position_Hidden_Join;
+import com.voucher.manage.daoSQL.DeleteExe;
+import com.voucher.manage.daoSQL.InsertExe;
+import com.voucher.manage.daoSQL.SelectExe;
+import com.voucher.manage.daoSQL.UpdateExe;
 import com.voucher.manage.file.AbstractFileUpload;
 import com.voucher.manage.tools.Base64Test;
 import com.voucher.manage.tools.CopyFile;
@@ -673,6 +678,59 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 			return fileSelfBelong;
 		}
 		
+	}
+
+
+	@Override
+	public Integer insertWeiXinUser(WeiXin_User weiXin_User) {
+		// TODO Auto-generated method stub
+		return InsertExe.get(this.getJdbcTemplate(), weiXin_User);
+	}
+
+
+	@Override
+	public Integer deleteWeiXinUser(WeiXin_User weiXin_User) {
+		// TODO Auto-generated method stub
+		
+		String campusAdmin=weiXin_User.getCampusAdmin();
+		
+		String[] where={"[WeiXin_User].campusAdmin=",campusAdmin};
+		
+		weiXin_User.setWhere(where);
+		
+		return DeleteExe.get(this.getJdbcTemplate(), weiXin_User);
+		
+	}
+
+
+	@Override
+	public Integer updateWeiXinUser(WeiXin_User weiXin_User) {
+		// TODO Auto-generated method stub
+		
+		String campusAdmin=weiXin_User.getCampusAdmin();
+		
+		String[] where={"[WeiXin_User].campusAdmin=",campusAdmin};
+		
+		weiXin_User.setWhere(where);
+		
+		return UpdateExe.get(this.getJdbcTemplate(), weiXin_User);
+		
+	}
+
+
+	@Override
+	public Integer selectCountWeiXinUser(WeiXin_User weiXin_User) {
+		// TODO Auto-generated method stub
+		
+		String campusAdmin=weiXin_User.getCampusAdmin();
+		
+		String[] where={"[WeiXin_User].campusAdmin=",campusAdmin};
+		
+		weiXin_User.setWhere(where);
+		
+		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), weiXin_User).get("");
+		
+		return count;
 	}
 	
 }

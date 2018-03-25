@@ -204,6 +204,7 @@ public class HiddenController {
 	@RequestMapping("/updateHidden")
 	public @ResponseBody Integer updateHidden(@RequestParam String guid,
 			@RequestParam String name,@RequestParam Integer level,
+			@RequestParam String manageRegion,
 			@RequestParam String happenTime,@RequestParam String remark,
 			@RequestParam String detail,@RequestParam Double lng,
 			@RequestParam Double lat){
@@ -216,6 +217,10 @@ public class HiddenController {
 		hidden.setName(name);
 		if(level!=null)
 		 hidden.setHidden_level(level);
+		
+		if(manageRegion!=null&&!manageRegion.equals("")){
+			hidden.setManageRegion(manageRegion);
+		}
 		if(happenTime!=null&&!happenTime.equals("")){
 			try {
 				DateFormat fmt =new SimpleDateFormat("yyyy-MM-dd");
@@ -255,6 +260,7 @@ public class HiddenController {
 	@RequestMapping("/insertHidden")
 	public @ResponseBody Map insertHidden(
 			@RequestParam String name,@RequestParam Integer level,
+			@RequestParam String manageRegion,
 			@RequestParam String happenTime,@RequestParam String remark,
 			@RequestParam String detail,@RequestParam String addComp,
 			@RequestParam Double lng,@RequestParam Double lat,
@@ -273,6 +279,9 @@ public class HiddenController {
 		hidden.setName(name);
 		if(level!=null)
 		 hidden.setHidden_level(level);
+		if(manageRegion!=null&&!manageRegion.equals("")){
+			hidden.setManageRegion(manageRegion);
+		}
 		if(happenTime!=null&&!happenTime.equals("")){
 			try {
 				DateFormat fmt =new SimpleDateFormat("yyyy-MM-dd");

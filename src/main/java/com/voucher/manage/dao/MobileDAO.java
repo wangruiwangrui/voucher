@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.voucher.manage.daoModel.RoomInfo;
+import com.voucher.manage.daoModel.Assets.WeiXin_User;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Neaten_Join;
@@ -32,4 +33,11 @@ public interface MobileDAO {
 		
 	public List allRoomInfoImageByGUID(HttpServletRequest request, RoomInfo roomInfo);
 	
+	public Integer insertWeiXinUser(WeiXin_User weiXin_User);
+	
+	public Integer deleteWeiXinUser(WeiXin_User weiXin_User);
+	
+	public Integer updateWeiXinUser(WeiXin_User weiXin_User);
+	
+	public Integer selectCountWeiXinUser(WeiXin_User weiXin_User);
 }

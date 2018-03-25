@@ -402,4 +402,14 @@ public class AssetController {
 		
 	}
 	
+	@RequestMapping("/selectManageRegion")
+	public @ResponseBody List selectHiddenLevel(){
+		return assetsDAO.selectManageRegion();
+	}
+	
+	@RequestMapping("/getWetchatAllUsers")
+	public @ResponseBody List getWetchatAllUsers(){
+		return userService.getWetchatAllUsers(1, 1, null, null, null, null);
+	}
+	
 }

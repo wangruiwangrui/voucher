@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationContext;
 
 import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.HiddenDAO;
+import com.voucher.manage.dao.MobileDAO;
 import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Assets.Hidden;
@@ -19,6 +20,7 @@ import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
 import com.voucher.manage.daoModel.Assets.Hidden_Type;
 import com.voucher.manage.daoModel.Assets.Hidden_User;
 import com.voucher.manage.daoModel.Assets.Position;
+import com.voucher.manage.daoModel.Assets.WeiXin_User;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Data_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.file.DocFileFactory;
@@ -42,6 +44,8 @@ public class AssetsImpl implements Assets{
 	HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
 	
 	AssetsDAO assetsDAO=(AssetsDAO) applicationContext.getBean("assetsdao");
+	
+	MobileDAO mobileDao=(MobileDAO) applicationContext.getBean("mobileDao");
 	
 	private UserService userService;
 	
@@ -282,6 +286,25 @@ public class AssetsImpl implements Assets{
 	public Integer deleteHiddenUser(Hidden_User hidden_User) {
 		// TODO Auto-generated method stub
 		return hiddenDAO.deleteHiddenUser(hidden_User);
+	}
+	
+	
+	@Override
+	public Integer insertWeiXinUser(WeiXin_User weiXin_User) {
+		// TODO Auto-generated method stub
+		return mobileDao.insertWeiXinUser(weiXin_User);
+	}
+
+	@Override
+	public Integer deleteWeiXinUser(WeiXin_User weiXin_User) {
+		// TODO Auto-generated method stub
+		return mobileDao.deleteWeiXinUser(weiXin_User);
+	}
+
+	@Override
+	public Integer updateWeiXinUser(WeiXin_User weiXin_User) {
+		// TODO Auto-generated method stub
+		return mobileDao.updateWeiXinUser(weiXin_User);
 	}
 
 

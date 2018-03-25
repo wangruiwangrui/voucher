@@ -37,6 +37,13 @@
         </div>
     </div>
     
+   <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">管理分区</label></div>
+                <div id="hiddenManageRegion" class="weui-cell__bd">
+                </div>              
+        </div>
+    </div>
     
      <div class="weui-cells weui-cells_form">
       <div class="weui-cell">
@@ -178,7 +185,7 @@
             	  if(terminal!=null&&terminal!=""){
             		  if(terminal=="PC"){
             			 var username=document.createElement("span");
-            			 username.innerHTML=obj.campusAdmin;
+            			 username.innerHTML=obj.user_name;
                         $("#username").append(username);
             		  }else if(terminal=="Wechat"){
             			  $.get("/voucher/mobile/hidden/selectNameBycampusAdmin.do",{
@@ -205,7 +212,7 @@
 			  				span1.innerHTML="关联资产";
 			  				var span2=document.createElement("span");
 		  					span2.setAttribute("class","weui-badge");
-		  					span2.setAttribute("style","margin-left: 5px;");
+		  					span2.setAttribute("style","margin-left: 25px;");
 		  					span2.innerHTML=text;
 		  					asset1.appendChild(span1);
 		  					asset1.appendChild(span2);
@@ -240,6 +247,10 @@
                   var level=document.createElement("span");
                   level.innerHTML=obj.level_text;
                   $("#level").append(level);
+                  
+                  var hiddenManageRegion=document.createElement("span");
+                  hiddenManageRegion.innerHTML=obj.manageRegion;
+                  $("#hiddenManageRegion").append(hiddenManageRegion);
                   
                   var progre=obj.progress;
                   var type;

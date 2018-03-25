@@ -24,6 +24,7 @@ import com.voucher.manage.daoModel.Assets.Hidden_Neaten_Date;
 import com.voucher.manage.daoModel.Assets.Hidden_Type;
 import com.voucher.manage.daoModel.Assets.Hidden_User;
 import com.voucher.manage.daoModel.Assets.Position;
+import com.voucher.manage.daoModel.Assets.WeiXin_User;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Neaten_Join;
@@ -394,6 +395,12 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		position.setOffset(offset);
 		position.setNotIn("id");
 		
+		WeiXin_User weiXin_User=new WeiXin_User();
+		
+		weiXin_User.setLimit(limit);
+		weiXin_User.setOffset(offset);
+		weiXin_User.setNotIn("id");
+		
 		if(!search.isEmpty()){
 		    String[] where=TransMapToString.get(search);
 		    hidden.setWhere(where);
@@ -401,15 +408,16 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		    hidden_Type.setWhere(where);
 		    hidden_User.setWhere(where);
 		    position.setWhere(where);
+		    weiXin_User.setWhere(where);
 		}
 		
-		Object[] objects={hidden,hidden_Level,hidden_Type,hidden_User,position};
+		Object[] objects={hidden,hidden_Level,hidden_Type,hidden_User,position,weiXin_User};
 		
 		Map map=new HashMap<String, Object>();
 		
 		Hidden_Join hidden_Jion=new Hidden_Join();
 		
-		String[] join={"hidden_level","type","principal","GUID"};
+		String[] join={"hidden_level","type","principal","GUID","campusAdmin"};
 		
 		List list=SelectJoinExe.get(this.getJdbcTemplate(), objects,hidden_Jion,join);
 		MyTestUtil.print(list);
@@ -651,18 +659,27 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		position.setOrder(order);
 		position.setNotIn("id");
 		
+		WeiXin_User weiXin_User=new WeiXin_User();
+		
+		weiXin_User.setLimit(limit);
+		weiXin_User.setOffset(offset);
+		weiXin_User.setSort(sort);
+		weiXin_User.setOrder(order);
+		weiXin_User.setNotIn("id");
+		
 		if(!search.isEmpty()){
 		    String[] where=TransMapToString.get(search);
 		    hidden_Check.setWhere(where);
 		    roomInfo.setWhere(where);
 		    position.setWhere(where);
+		    weiXin_User.setWhere(where);
 		}
 		
 		Map map=new HashMap<String, Object>();
 		
-		Object[] objects={hidden_Check,roomInfo,position};
+		Object[] objects={hidden_Check,roomInfo,position,weiXin_User};
 		
-		String[] join={"GUID","check_id"};
+		String[] join={"GUID","check_id","campusAdmin"};
 		
 		Hidden_Check_Join hidden_Check_Join=new Hidden_Check_Join();
 		
@@ -735,20 +752,29 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		position.setOrder(order);
 		position.setNotIn("id");
 		
+		WeiXin_User weiXin_User=new WeiXin_User();
+		
+		weiXin_User.setLimit(limit);
+		weiXin_User.setOffset(offset);
+		weiXin_User.setSort(sort);
+		weiXin_User.setOrder(order);
+		weiXin_User.setNotIn("id");
+		
 		if(!search.isEmpty()){
 		    String[] where=TransMapToString.get(search);
 		    hidden_Neaten.setWhere(where);
 		    hidden.setWhere(where);
 		    position.setWhere(where);
+		    weiXin_User.setWhere(where);
 		}
 		
 		Map map=new HashMap<String, Object>();
 		
-		Object[] objects={hidden_Neaten,hidden,position};
+		Object[] objects={hidden_Neaten,hidden,position,weiXin_User};
 		
 		Hidden_Neaten_Join hidden_Neaten_Join=new Hidden_Neaten_Join();
 		
-		String[] join={"GUID","neaten_id"};
+		String[] join={"GUID","neaten_id","campusAdmin"};
 		
 		List<Hidden_Neaten> list=SelectJoinExe.get(this.getJdbcTemplate(), objects, hidden_Neaten_Join, join);
 		

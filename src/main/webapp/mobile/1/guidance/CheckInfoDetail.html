@@ -35,15 +35,7 @@
                 </div>
             </div>
     </div>
-    
-    <div class="weui-cells weui-cells_form">
-            <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">录入人员</label></div>
-                <div id="username" class="weui-cell__bd">
-                </div>
-            </div>
-    </div>
-    
+     
     <div class="weui-cells weui-cells_form">
      <div class="weui-cell">
         <div class="weui-cell__hd"><label class="weui-label">标题</label></div>
@@ -68,6 +60,14 @@
                 <div id="insertTime" class="weui-cell__bd">
                 </div>
         </div>
+    </div>
+    
+     <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">录入人员</label></div>
+                <div id="username" class="weui-cell__bd">
+                </div>
+            </div>
     </div>
     
     <div class="weui-cells weui-cells_form">
@@ -182,7 +182,7 @@
              	  if(terminal!=null&&terminal!=""){
              		  if(terminal=="PC"){
              			 var username=document.createElement("span");
-             			 username.innerHTML=obj.campusAdmin;
+             			 username.innerHTML=obj.user_name;
                          $("#username").append(username);
              		  }else if(terminal=="Wechat"){
              			  $.get("/voucher/mobile/hidden/selectNameBycampusAdmin.do",{
@@ -190,7 +190,7 @@
              			  		},function(text){
              			  			var name = $.parseJSON(text);
              			  			var username=document.createElement("span");
-                        			 username.innerHTML=name.nickname;
+                        			 username.innerHTML=name.name;
                                     $("#username").append(username);
              			  		});	
              		  }

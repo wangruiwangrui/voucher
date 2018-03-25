@@ -2,6 +2,10 @@ package com.voucher.manage.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -293,6 +297,89 @@ public class BaiduMapController {
 		List list=(List) map.get("rows");
 		
 		return list;
+		
+	}
+	
+	
+	@RequestMapping("/getAllCheckByOpenId")
+	public @ResponseBody Map getAllCheckByOpenId(@RequestParam String openId,
+			String datepicker, String datepicker2){
+				
+		Calendar calendar; 
+		
+		SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
+		
+		String startTime = null;
+		String endTime = null;
+		
+		Date sTime = null;
+		Date eTime = null;
+		
+		try {
+			if(datepicker!=null&&!datepicker.equals("")){
+				sTime=sdf.parse(datepicker);
+				startTime=sdf.format(sTime);
+				System.out.println("startTime="+startTime);
+			}
+			if(datepicker2!=null&&!datepicker2.equals("")){
+				eTime=sdf.parse(datepicker2);			
+				endTime=sdf.format(eTime);	
+				System.out.println("endTime="+endTime);
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		if(startTime==null||startTime.equals("")){
+			
+			calendar=Calendar.getInstance();
+			
+			calendar.set(Calendar.HOUR_OF_DAY, 0);  
+		    calendar.set(Calendar.SECOND, 0);  
+		    calendar.set(Calendar.MINUTE, 0);  
+		    calendar.set(Calendar.MILLISECOND, 0); 
+			
+			calendar.add(Calendar.DATE, -1);
+			
+			Date start=calendar.getTime();
+			
+			startTime=sdf.format(start);			
+		}
+		
+		
+		if(endTime==null||endTime.equals("")){
+			
+			calendar=Calendar.getInstance();
+			
+			calendar.set(Calendar.HOUR_OF_DAY, 0);  
+		    calendar.set(Calendar.SECOND, 0);  
+		    calendar.set(Calendar.MINUTE, 0);  
+		    calendar.set(Calendar.MILLISECOND, 0); 
+			
+			Date end=calendar.getTime();
+			
+			endTime=sdf.format(end);	
+			
+		}
+		
+		Map searchMap=new HashMap<>();
+		
+		searchMap.put("[Hidden_Check].campusAdmin=", openId);	
+		searchMap.put("[Position].check_id !=", "");
+		searchMap.put("convert(varchar(11),[Hidden_Check].date,120)>",startTime);
+		searchMap.put("convert(varchar(11),[Hidden_Check].date,120)<=",endTime);
+		
+		Map map=hiddenDAO.selectAllHiddenCheck(1000, 0, "date", "asc", searchMap);
+		
+		System.out.println("datepicker="+datepicker+" "+datepicker2);
+		
+		System.out.println("openid="+openId);
+		System.out.println("time="+startTime+"   "+endTime);
+		
+		MyTestUtil.print(map);
+		
+		return map;
 		
 	}
 	

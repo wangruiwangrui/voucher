@@ -11,12 +11,17 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.voucher.manage.dao.AssetsDAO;
+import com.voucher.manage.dao.HiddenDAO;
+import com.voucher.manage.dao.MobileDAO;
+import com.voucher.manage.daoModel.Assets.WeiXin_User;
 import com.voucher.manage.model.Sellers;
 import com.voucher.manage.model.Users;
 import com.voucher.manage.service.SellerService;
@@ -25,6 +30,7 @@ import com.voucher.manage.tools.Constants;
 import com.voucher.manage.tools.Md5;
 import com.voucher.manage.tools.verifycode.Captcha;
 import com.voucher.manage.tools.verifycode.SpecCaptcha;
+import com.voucher.sqlserver.context.Connect;
 
 @Controller
 @RequestMapping("/mobile/register")
@@ -38,6 +44,14 @@ public class UserRegisterController {
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
+	
+	ApplicationContext applicationContext=new Connect().get();
+	
+	HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
+	
+	AssetsDAO assetsDAO=(AssetsDAO) applicationContext.getBean("assetsdao");
+	
+	MobileDAO mobileDao=(MobileDAO) applicationContext.getBean("mobileDao");
 	
 	/*
 	 * 生成验证码类
@@ -207,29 +221,55 @@ public class UserRegisterController {
 	   
 	   try {		
                 Users users=new Users();
+                
+                WeiXin_User weiXin_User=new WeiXin_User();
+                
                 users.setOpenId(openId);
-                if(!phone.equals(""))
-                users.setPhone(phone);
-                if(!name.equals(""))
-                users.setName(name);
-                if(!headship.equals(""))
-                users.setHeadship(headship);
-                if(!email.equals(""))
-                users.setEmail(email);
-                if(!address.equals(""))
-                users.setAddress(address);
+                
+                weiXin_User.setOpen_id(openId);
+                weiXin_User.setCampusAdmin(openId);
+                
+                if(!phone.equals("")){
+                	users.setPhone(phone);
+                	weiXin_User.setPhone(phone);
+                }
+                if(!name.equals("")){
+                	users.setName(name);
+                	weiXin_User.setUser_name(name);
+                }
+                if(!headship.equals("")){
+                	users.setHeadship(headship);
+                	weiXin_User.setHeadship(headship);
+                }
+                if(!email.equals("")){
+                	users.setEmail(email);
+                	weiXin_User.setEmail(email);
+                }
+                if(!address.equals("")){
+                	users.setAddress(address);
+                	weiXin_User.setAddress(address);
+                }
 				users.setUpTime(upTime);
+				weiXin_User.setUp_time(upTime);
 				
 				int testRepeat=userService.selectRepeatUserByOpenId(openId);
 				
 				int type;
 				
-				if(testRepeat==1){
-					type=userService.updateUsersInfo(users);
+				if(testRepeat==0){
+					type=userService.insertUsersInfo(users);					
 				}else{
-					type=userService.insertUsersInfo(users);
+					type=userService.updateUsersInfo(users);
 				}
+				
+				int count=mobileDao.selectCountWeiXinUser(weiXin_User);
 
+				if(count==0){
+					mobileDao.insertWeiXinUser(weiXin_User);
+				}else{
+					mobileDao.updateWeiXinUser(weiXin_User);
+				}
+				
 				return type;
 			
 			}

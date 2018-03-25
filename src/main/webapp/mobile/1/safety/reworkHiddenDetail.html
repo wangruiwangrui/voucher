@@ -37,6 +37,13 @@
         </div>
     </div>
     
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">管理分区</label></div>
+                <div id="hiddenManageRegion" class="weui-cell__bd">
+                </div>              
+        </div>
+    </div>
     
      <div class="weui-cells weui-cells_form">
       <div class="weui-cell">
@@ -213,7 +220,6 @@
         		  		select.setAttribute("onchange","gradeChange()");
         		  		var option = document.createElement("option");
         		  		for(var i=0;i<hiddenLevels.length;i++){
-        			  		if(hiddenLevels[i].manageRegion!=""){
         			  			var option = document.createElement("option");
         			  			option.innerHTML=hiddenLevels[i].level_text;
         			  			option.setAttribute("value",hiddenLevels[i].hidden_level);
@@ -221,13 +227,36 @@
         			  				option.setAttribute("selected","selected");
         			  			}
         			  			select.appendChild(option);
-        			 		   }
         		 			 }
                   
         		  		 select.setAttribute("class","weui-input");
                   		 $("#level").append(select);
                   		 
                 	 });
+                  
+                  
+                  $.get("/voucher/mobile/asset/selectManageRegion.do", { 
+            	  	}, function(data) {
+            			var manageRegions=JSON.parse(data);
+            			console.log(manageRegions);
+            			var select = document.createElement("select");
+            			select.setAttribute("id","selectManageRegions");
+            			select.setAttribute("onchange","gradeChangeManageRegions()");
+            			var option = document.createElement("option");
+            			for(var i=0;i<manageRegions.length;i++){
+            	  			var option = document.createElement("option");
+            	  			option.innerHTML=manageRegions[i].manageRegion;
+            	  			option.setAttribute("value",manageRegions[i].manageRegion);
+            	  			if(manageRegions[i].manageRegion==obj.manageRegion){
+            	  				option.setAttribute("selected","selected");
+            	  			}
+            	  			select.appendChild(option);	 		   
+            			 }
+
+            		 select.setAttribute("class","weui-input");
+            		 $("#hiddenManageRegion").append(select);
+            		 
+            	 });
                   
                   var progre=obj.progress;
                   var type;
@@ -268,7 +297,7 @@
             	  if(terminal!=null&&terminal!=""){
             		  if(terminal=="PC"){
             			 var username=document.createElement("span");
-            			 username.innerHTML=obj.campusAdmin;
+            			 username.innerHTML=obj.user_name;
                         $("#username").append(username);
             		  }else if(terminal=="Wechat"){
             			  $.get("/voucher/mobile/hidden/selectNameBycampusAdmin.do",{
@@ -294,7 +323,7 @@
 			  				span1.innerHTML="关联资产";
 			  				var span2=document.createElement("span");
 		  					span2.setAttribute("class","weui-badge");
-		  					span2.setAttribute("style","margin-left: 5px;");
+		  					span2.setAttribute("style","margin-left: 25px;");
 		  					span2.innerHTML=text;
 		  					asset1.appendChild(span1);
 		  					asset1.appendChild(span2);
@@ -373,6 +402,8 @@
     
 	var hiddenlevel=null;
 	
+	var manageRegion=null;
+	
 	function gradeChange(){ 
         var objS = document.getElementById("select"); 
         var grade = objS.options[objS.selectedIndex].value; 
@@ -380,6 +411,12 @@
         hiddenlevel=grade;
        } 
 	
+	function gradeChangeManageRegions(){ 
+	      var objS = document.getElementById("selectManageRegions"); 
+	      var grade = objS.options[objS.selectedIndex].value; 
+	      console.log(objS.options[objS.selectedIndex]);
+	      manageRegion=grade;
+	     } 
 	
 	function actionTime(value){
   	    var date = new Date(value); 
@@ -424,12 +461,13 @@
     	var happenTime=$("#happenTime").val();
     	var remark=$("#remark").val();
     	var detail=$("#detail").val();
-
+    	
     	 $.post("/voucher/mobile/hidden/updateHidden.do",
     		  {
 		    	guid:guid,
 		    	name:name,
 		    	level:level,
+		    	manageRegion:manageRegion,
 		    	happenTime:happenTime,
 		    	remark:remark,
 		    	detail:detail,

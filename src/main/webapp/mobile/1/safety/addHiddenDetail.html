@@ -37,7 +37,13 @@
         </div>
     </div>
     
-    
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">管理分区</label></div>
+                <div id="hiddenManageRegion" class="weui-cell__bd">
+                </div>              
+        </div>
+    </div>
     
     <div class="weui-cells weui-cells_form">
         <div class="weui-cell">
@@ -135,6 +141,8 @@
     
 	var hiddenlevel=null;
 	
+	var manageRegion=null;
+	
 	 $.get("/voucher/mobile/hidden/selectHiddenLevel.do", { 
 	  }, function(data) {
 		var hiddenLevels=JSON.parse(data);
@@ -144,12 +152,10 @@
  		select.setAttribute("onchange","gradeChange()");
  		var option = document.createElement("option");
  		for(var i=hiddenLevels.length-1;i>=0;i--){
-	  		if(hiddenLevels[i].manageRegion!=""){
 	  			var option = document.createElement("option");
 	  			option.innerHTML=hiddenLevels[i].level_text;
 	  			option.setAttribute("value",hiddenLevels[i].hidden_level);
-	  			select.appendChild(option);
-	 		   }
+	  			select.appendChild(option);	 		   
 			 }
  
  		 select.setAttribute("class","weui-input");
@@ -164,6 +170,32 @@
         hiddenlevel=grade;
        } 
 	
+	$.get("/voucher/mobile/asset/selectManageRegion.do", { 
+	  }, function(data) {
+		var manageRegions=JSON.parse(data);
+		console.log(manageRegions);
+		var select = document.createElement("select");
+		select.setAttribute("id","selectManageRegions");
+		select.setAttribute("onchange","gradeChangeManageRegions()");
+		var option = document.createElement("option");
+		for(var i=0;i<manageRegions.length;i++){
+	  			var option = document.createElement("option");
+	  			option.innerHTML=manageRegions[i].manageRegion;
+	  			option.setAttribute("value",manageRegions[i].manageRegion);
+	  			select.appendChild(option);	 		   
+			 }
+
+		 select.setAttribute("class","weui-input");
+		 $("#hiddenManageRegion").append(select);
+		 
+	 });
+	
+	function gradeChangeManageRegions(){ 
+      var objS = document.getElementById("selectManageRegions"); 
+      var grade = objS.options[objS.selectedIndex].value; 
+      console.log(objS.options[objS.selectedIndex]);
+      manageRegion=grade;
+     } 
 	
 	function actionTime(value){
   	    var date = new Date(value); 
@@ -221,6 +253,7 @@
     	    		  {
     			    	name:name,
     			    	level:level,
+    			    	manageRegion:manageRegion,
     			    	happenTime:happenTime,
     			    	remark:remark,
     			    	detail:detail,
