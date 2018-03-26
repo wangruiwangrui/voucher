@@ -12,10 +12,10 @@
 <style type="text/css">
     body, html,#allmap {width: 100%;height: 100%;margin:0;font-family:"微软雅黑";}
 </style>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=cR98TwX2FnKTpANIOYhMYMot9a4ioxjc"></script>
-<script type="text/javascript" src="http://developer.baidu.com/map/jsdemo/demo/convertor.js"></script>
-<link rel="stylesheet" type="text/css" href="../date/css/pikaday.css"/>
-<script type="text/javascript" src="../date/js/pikaday.min.js"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=cR98TwX2FnKTpANIOYhMYMot9a4ioxjc"></script>
+<script type="text/javascript" src="https://developer.baidu.com/map/jsdemo/demo/convertor.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../date/css/pikaday.css"/>
+<script type="text/javascript" src="../../../date/js/pikaday.min.js"></script>
 </head>
 
             <div id="allmap"></div>
@@ -30,7 +30,7 @@
     // 百度地图API功能
     var map = new BMap.Map("allmap");    // 创建Map实例
     var xhm=new XMLHttpRequest();
- 	 xhm.open("GET","../baiduMap/location.do",false);
+ 	 xhm.open("GET","/voucher/baiduMap/location.do",false);
  	 xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
  	 xhm.send();
  	 var ticket=JSON.parse(xhm.responseText);
@@ -38,8 +38,7 @@
     map.centerAndZoom(point, 14);  // 初始化地图,设置中心点坐标和地图级别
 
     
-    map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
-    map.addControl(top_left_control);        
+    map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放      
 	map.addControl(top_left_navigation); 
     
 	//配置搜索
@@ -53,11 +52,11 @@
 	function menuControl(){
 		  // 默认停靠位置和偏移量
 		  this.defaultAnchor = BMAP_ANCHOR_TOP_LEFT;
-		  this.defaultOffset = new BMap.Size(200, 25);
+		  this.defaultOffset = new BMap.Size(10, 25);
 		}
 
 	 var xhm=new XMLHttpRequest();
-	 xhm.open("GET","../mobile/asset/getWetchatAllUsers.do",false);
+	 xhm.open("GET","/voucher/mobile/asset/getWetchatAllUsers.do",false);
 	 xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
 	 xhm.send();
 	 var users=JSON.parse(xhm.responseText);
@@ -120,7 +119,7 @@
 	 function menuControl1(){
 		  // 默认停靠位置和偏移量
 		  this.defaultAnchor = BMAP_ANCHOR_TOP_LEFT;
-		  this.defaultOffset = new BMap.Size(400, 25);
+		  this.defaultOffset = new BMap.Size(200, 25);
 		}
 	
 	// 通过JavaScript的prototype属性继承于BMap.Control
@@ -224,7 +223,7 @@
 	function menuControl2(){
 		  // 默认停靠位置和偏移量
 		  this.defaultAnchor = BMAP_ANCHOR_TOP_LEFT;
-		  this.defaultOffset = new BMap.Size(500, 25);
+		  this.defaultOffset = new BMap.Size(10, 50);
 		}
 	
 	// 通过JavaScript的prototype属性继承于BMap.Control
@@ -233,12 +232,12 @@
 	menuControl2.prototype.initialize = function(map){
 		var div = document.createElement("div");
 		  var span = document.createElement("span");
-		  span.innerHTML="结束日期 : ";
+		  span.innerHTML="开始日期 : ";
       	 div.appendChild(span);
        
       	var input=document.createElement("input");
         input.setAttribute("id","datepicker");
-        input.style.cssText = "width:100px;";
+        input.style.cssText = "width:70px;";
         div.appendChild(input);
       
         var picker=new Pikaday(
@@ -262,7 +261,7 @@
 	function menuControl3(){
 		  // 默认停靠位置和偏移量
 		  this.defaultAnchor = BMAP_ANCHOR_TOP_LEFT;
-		  this.defaultOffset = new BMap.Size(700, 25);
+		  this.defaultOffset = new BMap.Size(200, 50);
 		}
 	
 	// 通过JavaScript的prototype属性继承于BMap.Control
@@ -277,7 +276,7 @@
           
           var input=document.createElement("input");
           input.setAttribute("id","datepicker2");
-          input.style.cssText = "width:100px;";
+          input.style.cssText = "width:70px;";
           div.appendChild(input);
           
           var picker2=new Pikaday(
@@ -299,7 +298,7 @@
 	function menuControl4(){
 		  // 默认停靠位置和偏移量
 		  this.defaultAnchor = BMAP_ANCHOR_TOP_LEFT;
-		  this.defaultOffset = new BMap.Size(900, 25);
+		  this.defaultOffset = new BMap.Size(10, 80);
 		}
 	
 	// 通过JavaScript的prototype属性继承于BMap.Control
@@ -332,7 +331,7 @@
 	function buttonControl(){
 		  // 默认停靠位置和偏移量
 		  this.defaultAnchor = BMAP_ANCHOR_TOP_LEFT;
-		  this.defaultOffset = new BMap.Size(1050, 25);
+		  this.defaultOffset = new BMap.Size(150, 80);
 		}
 	
 	// 通过JavaScript的prototype属性继承于BMap.Control
@@ -365,7 +364,7 @@
 		var datepicker=document.getElementById('datepicker').value;
   	   var datepicker2=document.getElementById('datepicker2').value;
 		var xhm=new XMLHttpRequest();
-		    xhm.open("GET","../baiduMap/getAllCheckByOpenId.do?openId="+openId+"&datepicker="+datepicker+"&datepicker2="+datepicker2,false);
+		    xhm.open("GET","/voucher/baiduMap/getAllCheckByOpenId.do?openId="+openId+"&datepicker="+datepicker+"&datepicker2="+datepicker2,false);
 	    	xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
 	    	xhm.send();
 	    	var ticket=JSON.parse(xhm.responseText);
@@ -435,7 +434,7 @@
 
 		for(var i=0;i<ticket.length;i++){
 			var point=new BMap.Point(ticket[i].lng, ticket[i].lat);
-			var myIcon = new BMap.Icon("../img/blackPoint.jpg", new BMap.Size(30,38));
+			var myIcon = new BMap.Icon("../../../img/blackPoint.jpg", new BMap.Size(30,38));
 			var marker = new BMap.Marker(point,{icon:myIcon}); // 创建点
 			map.addOverlay(marker);    //增加点
 			

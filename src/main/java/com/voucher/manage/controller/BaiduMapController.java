@@ -372,12 +372,14 @@ public class BaiduMapController {
 		
 		Map map=hiddenDAO.selectAllHiddenCheck(1000, 0, "date", "asc", searchMap);
 		
+		/*
 		System.out.println("datepicker="+datepicker+" "+datepicker2);
 		
 		System.out.println("openid="+openId);
 		System.out.println("time="+startTime+"   "+endTime);
 		
 		MyTestUtil.print(map);
+		*/
 		
 		return map;
 		

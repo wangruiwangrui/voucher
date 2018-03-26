@@ -12,7 +12,6 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.daoModel.RoomInfo;
-import com.voucher.manage.daoModel.RoomInfoLittle;
 import com.voucher.manage.daoModel.Assets.Hidden;
 import com.voucher.manage.daoModel.Assets.Hidden_Assets;
 import com.voucher.manage.daoModel.Assets.Hidden_Check;
@@ -644,7 +643,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		hidden_Check.setOrder(order);
 		hidden_Check.setNotIn("id");
 		
-        RoomInfoLittle roomInfo=new RoomInfoLittle();
+        RoomInfo roomInfo=new RoomInfo();
         
         roomInfo.setLimit(limit);
         roomInfo.setOffset(offset);
@@ -686,6 +685,8 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		List<Hidden_Check> list=SelectJoinExe.get(this.getJdbcTemplate(), objects, hidden_Check_Join, join);
 		
 		map.put("rows", list);
+		System.out.println("checkjoinlist=");
+		MyTestUtil.print(list);
 		
         Map countMap=SelectJoinExe.getCount(this.getJdbcTemplate(), objects, join);
 		
