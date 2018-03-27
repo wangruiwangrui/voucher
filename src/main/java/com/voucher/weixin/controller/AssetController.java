@@ -21,6 +21,7 @@ import com.voucher.manage.dao.MobileDAO;
 import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Assets.Hidden_Assets;
+import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Assets_Join;
@@ -179,7 +180,7 @@ public class AssetController {
 		
 		Map searchMap=new HashMap<>();
     	
-    	searchMap.put("[HireList].HireGUID=", hireGUID);
+    	searchMap.put("[HireList].ChartGUID=", hireGUID);
     	   	    	
     	Map map=roomInfoDao.getHireListByGUID(limit, offset, sort, order, searchMap);
     	
@@ -410,6 +411,19 @@ public class AssetController {
 	@RequestMapping("/getWetchatAllUsers")
 	public @ResponseBody List getWetchatAllUsers(){
 		return userService.getWetchatAllUsers(1, 1, null, null, null, null);
+	}
+	
+	@RequestMapping("/updatePositionByRoomInfo")
+	public @ResponseBody Integer updatePositionByRoomInfo(@RequestParam String GUID,
+			@RequestParam Double lng,@RequestParam Double lat){
+		
+		Position position=new Position();
+		
+		position.setGUID(GUID);
+		position.setLat(lat);
+		position.setLng(lng);
+		
+		return assetsDAO.updatePositionByRoomInfo(position);
 	}
 	
 }

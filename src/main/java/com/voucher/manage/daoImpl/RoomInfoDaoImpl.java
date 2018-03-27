@@ -350,7 +350,16 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		fileSelfBelong.setRoomGUID(RoomGUID);
 		fileSelfBelong.setUpFileFullName(UpFileFullName);
 		fileSelfBelong.setFileType(FileType);
-		fileSelfBelong.setFileBelong(FileBelong);
+		fileSelfBelong.setFileBelong("房屋图片");
+		
+		String[] where={"[FileSelfBelong].RoomGUID=",RoomGUID,
+				"[FileSelfBelong].FileBelong=","房屋图片"};
+		
+		fileSelfBelong.setWhere(where);
+		
+		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), fileSelfBelong).get("");
+		
+		fileSelfBelong.setFileIndex(count+1);
 		
 		return InsertExe.get(this.getJdbcTemplate(), fileSelfBelong);
 	}

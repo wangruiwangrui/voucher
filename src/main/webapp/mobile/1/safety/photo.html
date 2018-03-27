@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="../css/example.css"/>
     <link rel="stylesheet" href="../css/jquery-weui.css">
     <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=pQFgFpS0VnMXwCRN6cTc1jDOcBVi3XoD"></script>
+	<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 </head>
 <body>
 
@@ -122,9 +123,51 @@
           }, 1500);   //模拟延迟
     	  
       });
-         
+      
+      sign_URL=document.location.toString();
        
-    
+      $.ajax({
+ 	     url : "../../../wechat/sign.do",
+ 	     data : {
+ 	    	 campusId:1,
+ 	    	 url:sign_URL
+ 	     },
+ 	     async: false,
+ 	     type : "GET",
+ 	     success : function(data) {
+ 	    	 var ticket=JSON.parse(data);
+        	     /*
+      	      * 此处需要两次执行相同的函数，否则返回ture时不能执行以下函数
+      	      */  
+        	          
+ 	    	 
+ 	    	 wx.config({
+ 	    		debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+ 	      		appId: ticket.appId,
+ 	      		timestamp: ticket.timestamp,
+ 	      		nonceStr: ticket.nonceStr,
+ 	      		signature: ticket.signature,
+ 	      		jsApiList : [ 'checkJsApi', 'onMenuShareTimeline',
+ 	                            'onMenuShareAppMessage', 'onMenuShareQQ',
+ 	                            'onMenuShareWeibo', 'hideMenuItems',
+ 	                            'showMenuItems', 'hideAllNonBaseMenuItem',
+ 	                            'showAllNonBaseMenuItem', 'translateVoice',
+ 	                            'startRecord', 'stopRecord', 'onRecordEnd',
+ 	                            'playVoice', 'pauseVoice', 'stopVoice',
+ 	                            'uploadVoice', 'downloadVoice', 'chooseImage',
+ 	                            'previewImage', 'uploadImage', 'downloadImage',
+ 	                            'getNetworkType', 'openLocation', 'getLocation',
+ 	                            'hideOptionMenu', 'showOptionMenu', 'closeWindow',
+ 	                            'scanQRCode', 'chooseWXPay',
+ 	                            'openProductSpecificView', 'addCard', 'chooseCard',
+ 	                            'openCard' ]
+ 	      	});
+        	    
+ 	    	 
+ 	    	
+        	     
+ 	      }
+ 	 });
       
    // =======加载数据loadlist();
       function loadlist() {
@@ -238,7 +281,29 @@
           
           function clickEvent(that){
         	  var guid=$(that).attr("guid");
-        	  location.href="reworkHiddenDetail.html?guid="+guid+"&latitude="+latitude+"&longitude="+longitude;
+        	  wx.getLocation({
+     	         success : function(res) {
+     	            // alert(JSON.stringify(res));
+     	            var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+     	            // $("#latitude").val(latitude);
+     	            var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+     	            
+     	            $.get("/voucher/mobile/map/baiduSwitch.do",{ //微信地理位置坐标转换成百度地图坐标
+     	              	 longitude:longitude,
+     	              	 latitude:latitude               	 
+     	               },function(text){
+     	              	 var obj = $.parseJSON(text);
+     	              	 var result=obj.result;
+     	              	 var lat=result[0].y;
+     	              	 var lng=result[0].x;
+     	              	location.href="reworkHiddenDetail.html?guid="+guid+"&latitude="+lat+"&longitude="+lng;
+     	            });
+     	            
+     	        },
+     	        cancel : function(res) {
+     	     	   console.log('用户拒绝授权获取地理位置');
+     	        }
+     	    });        	  
           }
           
           function addSpan(div,text){
