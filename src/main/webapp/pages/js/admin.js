@@ -13,6 +13,7 @@ $('#roominfo').click(function(){
 	   $('#content').attr('src','pages/roomInfo.html');
 	 });
 
+/*
 $('#roomChangeHireLog').click(function(){
 	   $('#content').load('pages/roomChangeHireLog.html');
 	   $('#content').attr('src','pages/roomChangeHireLog.html');
@@ -27,6 +28,13 @@ $('#roomChange').click(function(){
 $('#photo').click(function(){
 	   $('#content').load('pages/photo.html');
 	   $('#content').attr('src','pages/photo.html');
+	 });
+
+*/
+
+$('#access').click(function(){
+	   $('#content').load('pages/access.html');
+	   $('#content').attr('src','pages/access.html');
 	 });
 
 

@@ -2,6 +2,7 @@ package com.voucher.weixin.controller;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -26,6 +27,7 @@ import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Assets_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
+import com.voucher.manage.model.Access;
 import com.voucher.manage.model.Users;
 import com.voucher.manage.service.UserService;
 import com.voucher.manage.tools.MyTestUtil;
@@ -424,6 +426,39 @@ public class AssetController {
 		position.setLng(lng);
 		
 		return assetsDAO.updatePositionByRoomInfo(position);
+	}
+	
+	@RequestMapping("/insertAccess")
+	public @ResponseBody Integer insertAccess(@RequestParam String page,
+			@RequestParam Integer campusId,String guid,HttpServletRequest hrequest){
+		Access access=new Access();
+		
+		String openId=( String ) hrequest.getSession().getAttribute("openId");
+		
+		access.setCampusId(campusId);
+		access.setOpenId(openId);
+		access.setPage(page);
+		
+		if(guid!=null&&!guid.equals("")){
+			access.setGuid(guid);
+		}
+		
+		Date date=new Date();
+		
+		access.setAccessTime(date);
+		
+		return userService.insertAccess(access);
+	}
+	
+	@RequestMapping("/selectAllAccess")
+	public @ResponseBody Map selectAllAccess(@RequestParam Integer limit,@RequestParam Integer offset,
+			String sort,String order,
+			String search,String page,HttpServletRequest request){
+		
+		Integer campusId=1;
+		
+		return userService.selectAllAccess(campusId, limit, offset, sort, order, search,page);
+		
 	}
 	
 }

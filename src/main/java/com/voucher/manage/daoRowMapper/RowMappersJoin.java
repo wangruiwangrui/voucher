@@ -169,19 +169,19 @@ public class RowMappersJoin<T> implements RowMapper<T> {
 		//	e.printStackTrace();
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		}catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		} catch (InvocationTargetException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		}catch (SQLException e) {  // ResultSet的异常
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		   }
 	}
 	

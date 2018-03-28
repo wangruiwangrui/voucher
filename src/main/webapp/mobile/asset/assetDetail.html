@@ -16,6 +16,7 @@
 </style>
 <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=cR98TwX2FnKTpANIOYhMYMot9a4ioxjc"></script>
 <script type="text/javascript" src="https://api.map.baidu.com/library/CurveLine/1.5/src/CurveLine.min.js"></script>
+
 </head>
 
 <body>
@@ -86,7 +87,28 @@
 
   var guid=getQueryString("guid");
 
-//百度地图API功能
+  function pageName(){
+		
+      var a = location.href;
+      var b = a.split("/");
+      var c = b.slice(b.length-1, b.length).toString(String).split(".");
+      return c.slice(0, 1);
+  
+	}
+
+	var campusId=1;
+	var page=pageName();
+
+	var httpRequest=new XMLHttpRequest();
+	
+	var guid2=encodeURI(guid);
+	
+	var xhm=new XMLHttpRequest();
+	xhm.open("GET","/voucher/mobile/asset/insertAccess.do?campusId="+campusId+"&page="+page+"&guid="+guid2,false);
+	xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	xhm.send();
+  
+	//百度地图API功能
   var map = new BMap.Map("allmap");    // 创建Map实例
 
   var longitude=getQueryString("longitude");

@@ -1,5 +1,6 @@
 ﻿package com.voucher.manage.serviceImpl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -7,8 +8,10 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.voucher.manage.mapper.AccessMapper;
 import com.voucher.manage.mapper.User_AssetMapper;
 import com.voucher.manage.mapper.UsersMapper;
+import com.voucher.manage.model.Access;
 import com.voucher.manage.model.User_Asset;
 import com.voucher.manage.model.Users;
 import com.voucher.manage.service.UserService;
@@ -21,6 +24,8 @@ public class UserServiceImpl implements UserService {
 
 	private User_AssetMapper user_AssetMapper;
 	
+	private AccessMapper accessMapper;
+	
 	@Autowired
 	public void setUsersMapper(UsersMapper usersMapper) {
 		this.usersMapper = usersMapper;
@@ -29,6 +34,11 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	public void setUser_AssetMapper(User_AssetMapper user_AssetMapper) {
 		this.user_AssetMapper = user_AssetMapper;
+	}
+	
+	@Autowired
+	public void setAccessMapper(AccessMapper accessMapper) {
+		this.accessMapper = accessMapper;
 	}
 	
 	public List<Users> getAllFullUser(Integer campusId,Integer limit, Integer offset, String sort,
@@ -152,6 +162,30 @@ public class UserServiceImpl implements UserService {
 	public List<Users> getWetchatAllUsers(Integer campusId,Integer place,Integer limit,Integer offset, String sort,String order) {
 		// TODO Auto-generated method stub
 		return usersMapper.getWetchatAllUsers(campusId, place,limit,offset,sort,order);
+	}
+
+	@Override
+	public int insertAccess(Access access) {
+		// TODO Auto-generated method stub
+		return accessMapper.insert(access);
+	}
+
+	@Override
+	public Map selectAllAccess(Integer campusId, Integer limit, Integer offset, String sort, String order,
+			String search,String page) {
+		// TODO Auto-generated method stub
+		
+		List list=accessMapper.selectAllAccess(campusId, limit, offset, sort, order, search,page);
+		
+		int total=accessMapper.selectCountAccess(campusId, search,page);
+	    
+		Map map=new HashMap<>();
+		
+		map.put("rows", list);
+		
+		map.put("total", total);
+		
+		return map;
 	}
 
 }
