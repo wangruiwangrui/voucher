@@ -116,15 +116,15 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	}
 
 	@Override
-	public Integer updatePositionByRoomInfo(Position position) {
+	public Integer updatePositionByRoomInfo(Position position , boolean isUpdate) {
 		// TODO Auto-generated method stub
-		int i;
+		int i = 0;
 		String[] where={"[Position].GUID=",position.getGUID()};
 		position.setWhere(where);
 		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), position).get("");
 		if(count==0){
 			i=InsertExe.get(this.getJdbcTemplate(), position);			
-		}else{
+		}else if(isUpdate){
 			i=UpdateExe.get(this.getJdbcTemplate(), position);
 		}
 		

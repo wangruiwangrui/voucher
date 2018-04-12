@@ -312,11 +312,31 @@
     		            //存储到服务器成功后的处理
     		            //
     		            var neaten_id=obj.neaten_id;
-    		        	alert("新建"+name+"隐患整改记录成功!");
+    		        	//alert("新建"+name+"隐患整改记录成功!");
     		        	
-    		        	location.href="NeatenInfoDetail.html?neaten_id="+neaten_id+"&latitude="+latitude+"&longitude="+longitude;
+    		        	//location.href="NeatenInfoDetail.html?neaten_id="+neaten_id+"&latitude="+latitude+"&longitude="+longitude;
 
-    		       	 }
+    		            $.alert("新建"+name+"隐患整改记录成功!","",function(){
+    		        		
+   		        		 $.confirm("是否上传隐患整改记录"+name+"的照片", function() {
+      	     	    			//点击确认后的回调函数
+      			            	
+      	     	    			location.href="NeatenInfoDetail.html?neaten_id="+neaten_id+"&latitude="+latitude+"&longitude="+longitude;
+      	     	    			
+      			            	}, function() {
+      	     	    			//点击取消后的回调函数
+      	     	    			
+      	     	    			history.back();
+      	     	    			
+      	     	    		});
+   		        		 
+   		        		});
+    		        	
+    		       	 }else{
+    			        	
+    			        	$.alert("新建隐患整改记录失败!");
+    			        	
+    			     }
     		    });
     	  
     	   }); 

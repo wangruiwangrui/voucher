@@ -6,7 +6,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.voucher.manage.mapper.MessageListMapper;
 import com.voucher.manage.mapper.WeiXinMapper;
+import com.voucher.manage.model.MessageList;
 import com.voucher.manage.model.WeiXin;
 import com.voucher.manage.service.WeiXinService;
 
@@ -16,6 +18,8 @@ public class WeiXinServiceImpl implements WeiXinService{
 
 	private WeiXinMapper weixinMapper;
 	
+	private MessageListMapper messageListMapper;
+	
 	@Autowired
 	public void setWeiXinMapper(WeiXinMapper weixinMapper) {
 		this.weixinMapper=weixinMapper;
@@ -23,6 +27,11 @@ public class WeiXinServiceImpl implements WeiXinService{
 	
 	public WeiXinMapper getAccessTokenMapper() {
 		return weixinMapper;
+	}
+	
+	@Autowired
+	public void setMessageListMapper(MessageListMapper messageListMapper) {
+		this.messageListMapper = messageListMapper;
 	}
 	
 	@Override
@@ -71,6 +80,25 @@ public class WeiXinServiceImpl implements WeiXinService{
 	public Integer getCampusIdByUserName(String userName) {
 		// TODO Auto-generated method stub
 		return weixinMapper.getCampusIdByUserName(userName);
+	}
+
+	@Override
+	public Integer insertMessageList(MessageList messageList) {
+		// TODO Auto-generated method stub
+		return messageListMapper.insertMessageList(messageList);
+	}
+
+	@Override
+	public List<MessageList> getAllMessageList(Integer campusId, Integer limit, Integer offset, String sort,
+			String order, String search) {
+		// TODO Auto-generated method stub
+		return messageListMapper.getAllMessageList(campusId, limit, offset, sort, order, search);
+	}
+
+	@Override
+	public Integer getAllMessageCount(Integer campusId, String search) {
+		// TODO Auto-generated method stub
+		return messageListMapper.getAllMessageCount(campusId, search);
 	}
 
 

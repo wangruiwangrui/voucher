@@ -412,7 +412,9 @@ public class HiddenController {
 		position.setCheck_id(null);
 		position.setGUID(guid);
 		
-		assetsDAO.updatePositionByRoomInfo(position); //更新资产位置
+		boolean isUpdate=false;   //如果有位置就不更新
+		
+		assetsDAO.updatePositionByRoomInfo(position,isUpdate); //更新资产位置
 		
 		return map;
 		

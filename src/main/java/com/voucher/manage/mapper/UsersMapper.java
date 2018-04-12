@@ -9,6 +9,8 @@ import org.apache.ibatis.annotations.Param;
 import com.voucher.manage.model.Users;
 import com.voucher.weixin.base.SNSUserInfo;
 
+import cn.jpush.api.report.UsersResult.User;
+
 public interface UsersMapper {
     int deleteByPrimaryKey(String phone);
 
@@ -87,4 +89,6 @@ public interface UsersMapper {
 	Users checkLogin(String phone);
 
 	List<String> getUserByType(Map<String, Object> paramMap);
+	
+	Users getUserByAssetCharter(@Param(value="charter")String charter, @Param(value="idNo")String idNo);
 }

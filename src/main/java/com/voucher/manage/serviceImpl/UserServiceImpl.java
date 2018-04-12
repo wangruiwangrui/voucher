@@ -175,6 +175,20 @@ public class UserServiceImpl implements UserService {
 			String search,String page) {
 		// TODO Auto-generated method stub
 		
+		if(sort!=null&&sort.equals("accessTime")){
+			sort="access_time";
+		}else{
+			sort="access_time";
+		}
+		
+		if(order!=null&&order.equals("asc")){
+			order="asc";
+		}
+		
+		if(order!=null&&order.equals("desc")){
+			order="desc";
+		}
+		
 		List list=accessMapper.selectAllAccess(campusId, limit, offset, sort, order, search,page);
 		
 		int total=accessMapper.selectCountAccess(campusId, search,page);
@@ -186,6 +200,14 @@ public class UserServiceImpl implements UserService {
 		map.put("total", total);
 		
 		return map;
+	}
+
+	@Override
+	public Users getUserByAssetCharter(String charter, String idNo) {
+		// TODO Auto-generated method stub
+		
+		return usersMapper.getUserByAssetCharter(charter, idNo);
+		
 	}
 
 }

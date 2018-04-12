@@ -49,7 +49,7 @@
     </javaClientGenerator>
 
     <!-- 要对那些数据表进行生成操作，必须要有一个. -->
-    <table  tableName="access" domainObjectName="Access" 
+    <table  tableName="message_list" domainObjectName="MessageList" 
         enableCountByExample="false" enableUpdateByExample="false"
         enableDeleteByExample="false" enableSelectByExample="false"
         selectByExampleQueryId="false">     

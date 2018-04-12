@@ -33,6 +33,7 @@ public class CopyFile {
             			fs.write(buffer, 0, byteread); 
             		} 
             		inStream.close(); 
+            		fs.close();
             		System.out.println(imgPath+"\\"+newPath);
             	}else{
             		System.out.println("文件存在"); 

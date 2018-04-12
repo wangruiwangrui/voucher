@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModel.RoomInfo;
+import com.voucher.manage.service.WeiXinService;
 import com.voucher.sqlserver.context.Connect;
 
 @Controller
@@ -21,6 +23,13 @@ import com.voucher.sqlserver.context.Connect;
 public class RoomInfoController {
 
 	ApplicationContext applicationContext=new Connect().get();
+	
+	private WeiXinService weiXinService;
+	
+	@Autowired
+	public void setWeiXinService(WeiXinService weiXinService) {
+		this.weiXinService = weiXinService;
+	}
 	
 	@RequestMapping("/getAll")
 	public @ResponseBody Map<String, Object> RoomInfo(Integer limit,Integer offset,String sort,String order,
@@ -108,6 +117,39 @@ public class RoomInfoController {
 		
 		map.put("rows", map2.get("value"));
 		map.put("total", map2.get("rows"));
+		
+		return map;
+	}
+	
+	
+	@RequestMapping("/getAllMessageList")
+	public @ResponseBody Map<String, Object> getAllMessageList(Integer limit,Integer offset,String sort,String order,
+			String search,HttpServletRequest request){
+		
+		Integer campusId=1;
+		
+		if(sort!=null&&sort.equals("sendTime")){
+			sort="send_time";
+		}else{
+			sort="send_time";
+		}
+		
+		if(order!=null&&order.equals("asc")){
+			order="asc";
+		}
+		
+		if(order!=null&&order.equals("desc")){
+			order="desc";
+		}
+		
+		List list=weiXinService.getAllMessageList(campusId, limit, offset, sort, order, search);
+		
+		int count=weiXinService.getAllMessageCount(campusId, search);
+		
+		Map map=new HashMap<>();
+		
+		map.put("rows", list);
+		map.put("total", count);
 		
 		return map;
 	}

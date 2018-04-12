@@ -416,4 +416,29 @@
        </where>
     </update>
     
+    <select id="getUserByAssetCharter" resultMap="BaseResultMap" useCache="false">
+		select
+		users.id,users.open_id,total_amount,
+		campus_id,subscribe,nickname, headimg_url,
+		language,province,groupid,country,
+		city,sex,remark,
+		subscribe_time,
+		usersinfo.name,users.place,	
+		usersinfo.headship,usersinfo.email,	
+		address ,phone,
+		user_asset.charter, user_asset.IDNo,user_asset.hire_phone
+		from users
+		left join usersinfo
+		on
+		users.open_id = usersinfo.open_id
+		left join user_asset
+		on
+		users.open_id = user_asset.open_id
+		<where>
+			user_asset.charter=#{charter,jdbcType=VARCHAR}
+			and
+			user_asset.IDNo=#{idNo,jdbcType=VARCHAR}
+	    </where>
+	</select>
+    
 </mapper>

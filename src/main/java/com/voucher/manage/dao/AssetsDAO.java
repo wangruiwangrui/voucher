@@ -19,7 +19,7 @@ public interface AssetsDAO {
 	
 	public Integer updatePosition(Position position);
 	
-	public Integer updatePositionByRoomInfo(Position position);
+	public Integer updatePositionByRoomInfo(Position position , boolean isUpdate);
 	
 	public Integer updatePositionByCheck(Position position);
 	

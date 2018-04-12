@@ -125,7 +125,8 @@ function attribute(e){
     	lat:hidden_lat
     }, function(data){
     	var obj=$.parseJSON(data);
-    	location.href="assetDetail.html?guid="+obj.guid+"&latitude="+lat+"&longitude="+lng;
+    	var assetGuid=encodeURI(obj.guid);
+    	location.href="assetDetail.html?guid="+assetGuid+"&latitude="+lat+"&longitude="+lng;
     });
     
 }	

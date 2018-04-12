@@ -1,5 +1,6 @@
 package com.voucher.weixin.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -9,15 +10,30 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import com.voucher.manage.dao.AssetsDAO;
+import com.voucher.manage.dao.HiddenDAO;
+import com.voucher.manage.dao.RoomInfoDao;
+import com.voucher.manage.daoModel.RoomInfo;
+import com.voucher.manage.daoModel.Assets.Hidden;
+import com.voucher.manage.daoModel.TTT.ChartInfo;
+import com.voucher.manage.mapper.MessageListMapper;
+import com.voucher.manage.mapper.UsersMapper;
+import com.voucher.manage.mapper.WeiXinMapper;
+import com.voucher.manage.model.MessageList;
 import com.voucher.manage.model.Users;
 import com.voucher.manage.model.WeiXin;
 import com.voucher.manage.service.UserService;
 import com.voucher.manage.service.WeiXinService;
+import com.voucher.manage.serviceImpl.UserServiceImpl;
+import com.voucher.sqlserver.context.Connect;
 import com.voucher.weixin.MessageTemplate.ChatTemplateProcessor;
 import com.voucher.weixin.MessageTemplate.TemplateData;
 import com.voucher.weixin.MessageTemplate.WxTemplate;
@@ -40,6 +56,14 @@ public class WechatSendMessageController {
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
+	
+	ApplicationContext applicationContext=new Connect().get();
+	
+	HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
+	
+	AssetsDAO assetsDAO=(AssetsDAO) applicationContext.getBean("assetsdao");
+	
+	RoomInfoDao roomInfoDao=(RoomInfoDao) applicationContext.getBean("roomInfodao");
 	
 	@RequestMapping("/send")
 	public @ResponseBody String template(HttpServletRequest request,HttpServletResponse response,
@@ -102,10 +126,130 @@ public class WechatSendMessageController {
     	
     	message=message+"  "+users.getNickname()+"  "+s;
     	
+    	Date date=new Date();
+    	
+    	MessageList messageList=new MessageList();
+    	
+    	messageList.setCampusId(campusId);
+    	messageList.setOpenId(openid);
+    	messageList.setContext(reportContext);
+    	messageList.setType("紧急报告");
+    	messageList.setSendTime(date);
+    	if(s.equals("消息发送成功")){
+    		messageList.setState(1);
+    	}else{
+    		messageList.setState(0);
     	}
     	
-    	return message;
+    	weixinService.insertMessageList(messageList);
     	
+       }
+    	
+      return message;
+    	
+	}
+	
+	
+	public void send(@RequestParam String guid,@RequestParam String hidden_GUID,HttpServletRequest request){
+
+		Integer campusId=1;
+		
+		String accessToken;
+    	WeiXin weixin;
+
+		Map search=new HashMap<>();
+		
+		search.put("[TTT].[dbo].[RoomInfo].GUID=", guid);
+		
+		List<RoomInfo> list=roomInfoDao.findAllRoomInfo(2, 0, null, null, search);
+		
+		RoomInfo roomInfo=list.get(0);
+		
+		String chartGUID=roomInfo.getChartGUID();
+		
+		Map search2=new HashMap<>();
+		
+		search2.put("[TTT].[dbo].[ChartInfo].GUID=", chartGUID);
+		
+		List<ChartInfo> list2=(List<ChartInfo>) roomInfoDao.getChartInfoByGUID(2, 0, null, null, search2).get("rows");
+		
+		if(list2!=null){
+			
+			ChartInfo chartInfo=list2.get(0);
+			
+			String charter=chartInfo.getCharter().trim();
+			String idNo=chartInfo.getIDNo().trim();
+			
+			System.out.println("charter="+charter+"     idno="+idNo);
+			
+			HttpServletRequest httpRequest = (HttpServletRequest) request;
+			WebApplicationContext wac = WebApplicationContextUtils    //controller浠ュ鐨勫寘鍒濆鍖栫被
+					.getRequiredWebApplicationContext(httpRequest.getSession()
+							.getServletContext());
+	        
+			UsersMapper usersMapper=wac.getBean(UsersMapper.class);
+			
+			Users users=usersMapper.getUserByAssetCharter(charter, idNo);
+			
+			String openId=users.getOpenId();
+			
+			Map search3=new HashMap<>();
+			
+			search3.put("[Assets].[dbo].[Hidden].GUID=", hidden_GUID);
+			
+			List<Hidden> list3=(List<Hidden>) hiddenDAO.selectAllHidden(2, 0, null, null, search3).get("rows");
+			
+			Hidden hidden=list3.get(0);
+			
+			WeiXinMapper weiXinMapper=wac.getBean(WeiXinMapper.class);
+			
+			weixin=weiXinMapper.getCampus(campusId);   	
+			accessToken=weixin.getAccessToken();
+		
+			WxTemplate templateData=new WxTemplate();
+	    	templateData.setTouser(openId);
+	    	templateData.setTopcolor("#000000");
+	    	templateData.setTemplate_id("c5vZy_C4H68pwxKUa5sBVfkLwHjQscikJ3S_qrDDsv4");
+	    	Map<String,TemplateData> m = new HashMap<String,TemplateData>();
+	    	TemplateData first = new TemplateData();
+	    	first.setColor("#000000");
+	    	first.setValue("");
+	    	m.put("first", first);
+	    	TemplateData keyword1 = new TemplateData();
+	    	keyword1.setColor("#328392");
+	    	keyword1.setValue("尊敬的承租人"+charter+" , 您好 : ");
+	    	m.put("keyword1", keyword1);
+	    	TemplateData keyword2 = new TemplateData();
+	    	keyword2.setColor("#328392");
+	    	keyword2.setValue("您承租的资产存在"+hidden.getName()+","+
+	    			hidden.getDetail()+"的隐患,请注意安全防范!");
+	    	m.put("keyword2", keyword2);
+	    	templateData.setData(m);
+	    	
+	    	ChatTemplateProcessor wechatTemplate=new ChatTemplateProcessor();
+	    	
+	    	String s=wechatTemplate.sendTemplateMessage(accessToken, templateData,weixinService);
+	    	
+	    	Date date=new Date();
+	    	
+	    	MessageList messageList=new MessageList();
+	    	
+	    	messageList.setCampusId(campusId);
+	    	messageList.setOpenId(openId);
+	    	messageList.setContext("您承租的资产存在"+hidden.getName()+","+
+	    			hidden.getDetail()+"的隐患,请注意安全防范!");
+	    	messageList.setType("安全通知");
+	    	messageList.setSendTime(date);
+	    	if(s.equals("消息发送成功")){
+	    		messageList.setState(1);
+	    	}else{
+	    		messageList.setState(0);
+	    	}
+	    	
+	    	MessageListMapper messageListMapper=wac.getBean(MessageListMapper.class);
+	    	
+	    	messageListMapper.insertMessageList(messageList);
+		}
 	}
 	
 }

@@ -339,6 +339,10 @@ public class AssetController {
 		hidden_Assets.setAsset_GUID(guid);
 		hidden_Assets.setHidden_GUID(hiddenGuid);
 		
+		WechatSendMessageController wechatSendMessageController=new WechatSendMessageController();
+		
+		wechatSendMessageController.send(guid, hiddenGuid,request);
+		
 		return assetsDAO.insertIntoHidden_Assets(hidden_Assets);
 		
 	}
@@ -418,6 +422,7 @@ public class AssetController {
 	@RequestMapping("/updatePositionByRoomInfo")
 	public @ResponseBody Integer updatePositionByRoomInfo(@RequestParam String GUID,
 			@RequestParam Double lng,@RequestParam Double lat){
+		boolean isUpdate=false;   //如果有位置就不更新
 		
 		Position position=new Position();
 		
@@ -425,7 +430,7 @@ public class AssetController {
 		position.setLat(lat);
 		position.setLng(lng);
 		
-		return assetsDAO.updatePositionByRoomInfo(position);
+		return assetsDAO.updatePositionByRoomInfo(position,isUpdate);
 	}
 	
 	@RequestMapping("/insertAccess")

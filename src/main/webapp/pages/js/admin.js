@@ -13,13 +13,13 @@ $('#roominfo').click(function(){
 	   $('#content').attr('src','pages/roomInfo.html');
 	 });
 
-/*
-$('#roomChangeHireLog').click(function(){
-	   $('#content').load('pages/roomChangeHireLog.html');
-	   $('#content').attr('src','pages/roomChangeHireLog.html');
+
+$('#messageList').click(function(){
+	   $('#content').load('pages/messageList.html');
+	   $('#content').attr('src','pages/messageList.html');
 	 });
 
-
+/*
 $('#roomChange').click(function(){
 	   $('#content').load('pages/findChange.html');
 	   $('#content').attr('src','pages/findChange.html');
