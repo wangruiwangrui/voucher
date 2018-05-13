@@ -39,21 +39,25 @@
     
     <div class="weui-cells weui-cells_form">
      <div class="weui-cell">
-        <div class="weui-cell__hd"><label class="weui-label">标题</label></div>
-        <div  class="weui-cell__bd">
-          <input id="check_name" class="weui-input" />
-        </div>
-     </div>
-    </div>
-   	
-	<div class="weui-cells weui-cells_form">
-     <div class="weui-cell">
-        <div class="weui-cell__hd"><label class="weui-label">检查时间</label></div>
+        <div class="weui-cell__hd"><label class="weui-label">检查日期</label></div>
         <div  class="weui-cell__bd">
          <input id="happenTime" class="weui-input" type="date"/>
         </div>
      </div>
     </div>
+    
+    <div class="weui-cells weui-cells_form">
+     <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">检查结果</label></div>
+        <div id="progress_img" class="weui-cell weui-cell_warn">                  
+            </div>
+        <div class="weui-cell__ft">
+      		<input id="check_name" class="weui-switch" type="checkbox">
+    	</div>
+     </div>
+    </div>
+   	
+ 	<div id="context" >
     
     <div class="weui-cells weui-cells_form">
      <div class="weui-cell">
@@ -72,7 +76,8 @@
                 </div>
             </div>
         </div>
-       
+    
+    </div> 
  </form>
 
  <div class="weui-cells__title">检查位置</div>
@@ -216,14 +221,38 @@
     console.log(timestamp);
     $("#happenTime").val(timestamp); 
  
+    $("#context").hide();
+    
+    var progress_img=document.createElement("i");
+    progress_img.setAttribute("class","weui-icon-success");
+    $("#progress_img").append(progress_img);
+    
+    $("#check_name").on("click",function(){
+    	var isChecked = $('#check_name').is(":checked");         
+        console.log(isChecked);
+        if(isChecked){
+        	$("#context").show();
+        	progress_img.setAttribute("class","weui-icon-warn");
+        }else{
+        	$("#context").hide();
+        	progress_img.setAttribute("class","weui-icon-success");
+        }
+    });
+    
     
    $("#save").on("click",function(){
     	
 	  geoc.getLocation(point, function(rs){
 	    var addComp;
-	  	addComp = rs.addressComponents;
-    	
-    	var check_name=$("#check_name").val();
+	  	addComp = rs.addressComponents;    	
+	  	
+    	var check_name;
+    	var isChecked = $('#check_name').is(":checked");
+    	if(isChecked){
+    		check_name="异常";
+    	}else{
+    		check_name="正常";
+    	}
     	var happenTime=$("#happenTime").val();
     	var remark=$("#remark").val();
     	var check_circs=$("#check_circs").val();
@@ -257,7 +286,7 @@
 		        		 $.confirm("是否上传安全巡查记录"+name+"的照片", function() {
    	     	    			//点击确认后的回调函数
    			            	
-   	     	    			location.href="CheckInfoDetail.html?check_id="+check_id+"&latitude="+latitude+"&longitude="+longitude;
+   	     	    			location.href="aCheckInfoDetail.html?check_id="+check_id+"&latitude="+latitude+"&longitude="+longitude;
    	     	    			
    			            	}, function() {
    	     	    			//点击取消后的回调函数

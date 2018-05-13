@@ -35,10 +35,13 @@ import com.voucher.manage.daoSQL.SelectJoinExe;
 import com.voucher.manage.daoSQL.SelectSQL;
 import com.voucher.manage.daoSQL.SelectSQLJoin;
 import com.voucher.manage.daoSQL.UpdateExe;
+import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.manage.tools.TransMapToString;
 
 import voucher.UpdateSql;
+
+import com.voucher.manage.singleton.Singleton;
 
 public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 	
@@ -56,10 +59,10 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
                     ",[EvaluationPlace],[BefromAmount],[MarketHire],[EvaluationUnit],[EvaluationNo],[IsPawn],[PawnUnit],[OriginalUnit]"+
                     ",[FinanceMemo],[Utility],[ChartGUID],[AddressCode],[OriginalAddressCode],[SecurityClassification],[DangerClassification]"+
                     ",[HiddenDanger],[ResponsiblePerson],[sMemo],[BelongUnit],[FileIndex],[SecurityRegion],[RoomCount],[LandArea],[UseYears]"+
-                    "FROM [TTT].[dbo].[RoomInfo]"+
+                    "FROM ROOMDATABASE"+".[dbo].[RoomInfo]"+
                     "where [GUID]"+
                     "not in("+
-                    "select top "+offset+"[GUID] FROM [TTT].[dbo].[RoomInfo])";
+                    "select top "+offset+"[GUID] FROM ROOMDATABASE"+".[dbo].[RoomInfo])";
 		*/
 		
 		
@@ -115,7 +118,7 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 	public Integer getRoomInfoCount(Map search) {
 		// TODO Auto-generated method stub
 		Map<String,Object> map=new HashMap<>();
-		//String sql="SELECT count(*) FROM [TTT].[dbo].[RoomInfo]";
+		//String sql="SELECT count(*) FROM ROOMDATABASE"+".[dbo].[RoomInfo]";
 		
 		RoomInfo roomInfo=new RoomInfo();
 		/*
@@ -438,7 +441,7 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 	public Double getAllTotalHire() {
 		// TODO Auto-generated method stub
 		String sql="SELECT SUM(TotalHire) as Hire "+
-					"FROM [TTT].[dbo].[ChartInfo] ";
+					"FROM "+Singleton.ROOMDATABASE+".[dbo].[ChartInfo] ";
 		
 		Double totalHire=this.getJdbcTemplate().query(sql, new Hire()).get(0);
 		
@@ -450,7 +453,7 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 	public Double getAlreadyHire() {
 		// TODO Auto-generated method stub
 		String sql="SELECT SUM(Hire) as Hire "+
-					"FROM [TTT].[dbo].[HireList] where State='未交'";
+					"FROM "+Singleton.ROOMDATABASE+".[dbo].[HireList] where State='未交'";
 	
 		Double alreadyHire=this.getJdbcTemplate().query(sql, new Hire()).get(0);
 	
@@ -461,7 +464,7 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 	public Double getNotHire() {
 		// TODO Auto-generated method stub
 		String sql="SELECT SUM(Hire) as Hire "+
-				"FROM [TTT].[dbo].[HireList] where State='已交'";
+				"FROM "+Singleton.ROOMDATABASE+".[dbo].[HireList] where State='已交'";
 	
 		Double notHire=this.getJdbcTemplate().query(sql, new Hire()).get(0);
 	
@@ -501,7 +504,7 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		// TODO Auto-generated method stub
 
 		String sql="SELECT convert(varchar(4),ConcludeDate,120) as year "+
-				 	"FROM [TTT].[dbo].[ChartInfo] where ConcludeDate is not null "+
+				 	"FROM "+Singleton.ROOMDATABASE+".[dbo].[ChartInfo] where ConcludeDate is not null "+
 				 	"group by convert(varchar(4),ConcludeDate,120) order by year desc";
 
 		List list=this.getJdbcTemplate().query(sql, new Year());
@@ -515,7 +518,7 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 	public List findChartInfoByMonthOfYear(String year) {
 		// TODO Auto-generated method stub
 		String sql="SELECT convert(varchar(7),ConcludeDate,120) as year "+
-					"FROM [TTT].[dbo].[ChartInfo] where ConcludeDate is not null "+
+					"FROM "+Singleton.ROOMDATABASE+".[dbo].[ChartInfo] where ConcludeDate is not null "+
 					"AND convert(varchar(4),ConcludeDate,120) = "+year+" group by convert(varchar(7),ConcludeDate,120)";
 		
 		List list=this.getJdbcTemplate().query(sql, new Year());
@@ -527,7 +530,7 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 	public Double getTotalHireByMonth(String month) {
 		// TODO Auto-generated method stub
 		String sql="SELECT SUM(TotalHire) as Hire "+
-					"FROM [TTT].[dbo].[ChartInfo] where ConcludeDate is not null "+
+					"FROM "+Singleton.ROOMDATABASE+".[dbo].[ChartInfo] where ConcludeDate is not null "+
 					"AND convert(varchar(7),ConcludeDate,120) = '"+month+"'";
 		
 		Double hireByMonth=this.getJdbcTemplate().query(sql, new Hire()).get(0);
@@ -543,7 +546,7 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		String currentYear=sdf.format(new Date());
 		
 		String sql="SELECT convert(varchar(4),HireDate,120) as year "+
-				 	"FROM [TTT].[dbo].[HireList] where HireDate is not null "+
+				 	"FROM "+Singleton.ROOMDATABASE+".[dbo].[HireList] where HireDate is not null "+
 				 	"AND convert(varchar(4),HireDate,120)<= "+currentYear+" "+
 				 	"group by convert(varchar(4),HireDate,120) order by year desc";
 
@@ -557,7 +560,7 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 	public List findHireListByMonthOfYear(String year) {
 		// TODO Auto-generated method stub
 		String sql="SELECT convert(varchar(7),HireDate,120) as year "+
-					"FROM [TTT].[dbo].[HireList] where HireDate is not null "+ 
+					"FROM "+Singleton.ROOMDATABASE+".[dbo].[HireList] where HireDate is not null "+ 
 					"AND convert(varchar(4),HireDate,120) = "+year+" group by convert(varchar(7),HireDate,120)";
 		
 		List list=this.getJdbcTemplate().query(sql, new Year());
@@ -569,7 +572,7 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 	public Double getAlreadyHireByMonth(String month) {
 		// TODO Auto-generated method stub
 		String sql="SELECT SUM(Hire) as Hire "+
-					"FROM [TTT].[dbo].[HireList] where HireDate is not null "+
+					"FROM "+Singleton.ROOMDATABASE+".[dbo].[HireList] where HireDate is not null "+
 					"AND State='已交' "+
 					"AND convert(varchar(7),HireDate,120) =  '"+month+"'";
 		
@@ -582,7 +585,7 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 	public Double getNotHireByMonth(String month) {
 		// TODO Auto-generated method stub
 		String sql="SELECT SUM(Hire) as Hire "+
-				"FROM [TTT].[dbo].[HireList] where HireDate is not null "+
+				"FROM "+Singleton.ROOMDATABASE+".[dbo].[HireList] where HireDate is not null "+
 				"AND State='未交' "+
 				"AND convert(varchar(7),HireDate,120) =  '"+month+"'";
 	

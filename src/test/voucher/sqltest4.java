@@ -59,7 +59,7 @@ public class sqltest4 {
 		*/
 	//	roomInfo=new RoomInfo();
 		/*RoomChangeHireLog roomChangeHireLog=new RoomChangeHireLog();
-		 String[] where={"[TTT].[dbo].[RoomInfo].Address like ","%江阳区%"};
+		 String[] where={ROOMDATABASE+".[dbo].[RoomInfo].Address like ","%江阳区%"};
 	     roomInfo.setWhere(where);
 		RoomChartLog roomChartLog=new RoomChartLog();
 		roomChartLog.setLimit(10);

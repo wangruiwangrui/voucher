@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 import com.voucher.manage.daoSQL.annotations.*;
 
-@DBTable(name="[TTT].[dbo].[FloorPic]")
+@DBTable(name="[YTRoomManage].[dbo].[FloorPic]")
 public class FloorPic implements Serializable{
 
     private static final long serialVersionUID = 1L;

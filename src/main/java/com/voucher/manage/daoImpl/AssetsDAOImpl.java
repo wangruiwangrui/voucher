@@ -45,6 +45,7 @@ import com.voucher.manage.daoSQL.SelectJoinExe;
 import com.voucher.manage.daoSQL.SelectSqlJoinExe;
 import com.voucher.manage.daoSQL.UpdateExe;
 import com.voucher.manage.file.AbstractFileUpload;
+import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.FileConvect;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.manage.tools.TransMapToString;
@@ -399,41 +400,41 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 					"[Position].lng,"+
 					"[Position].lat,"+
 					"[Position].date,"+
-					"[TTT].[dbo].[RoomInfo].GUID,"+
-				    "[TTT].[dbo].[RoomInfo].Num,"+
-				    "[TTT].[dbo].[RoomInfo].OriginalNum,"+
-				    "[TTT].[dbo].[RoomInfo].Address,"+
-				    "[TTT].[dbo].[RoomInfo].OriginalAddress,"+
-				    "[TTT].[dbo].[RoomInfo].Region,"+
-				    "[TTT].[dbo].[RoomInfo].Segment,"+
-				    "[TTT].[dbo].[RoomInfo].ManageRegion,"+
-				    "[TTT].[dbo].[RoomInfo].RoomProperty,"+
-				    "[TTT].[dbo].[RoomInfo].Useful,"+
-				    "[TTT].[dbo].[RoomInfo].Floor,"+
-				    "[TTT].[dbo].[RoomInfo].State,"+
-				    "[TTT].[dbo].[RoomInfo].Structure,"+
-				    "[TTT].[dbo].[RoomInfo].BuildArea,"+
-				    "[TTT].[dbo].[RoomInfo].RoomType,"+
-				    "[TTT].[dbo].[RoomInfo].IsCity,"+
-				    "[TTT].[dbo].[RoomInfo].Manager,"+
-				    "[TTT].[dbo].[RoomInfo].ManagerPhone,"+
-				    "[TTT].[dbo].[RoomInfo].IsStreet,"+
-				    "[TTT].[dbo].[RoomInfo].FitMent,"+
-				    "[TTT].[dbo].[RoomInfo].BeFrom,"+
-				    "[TTT].[dbo].[RoomInfo].InDate,"+
-				    "[TTT].[dbo].[RoomInfo].PropertyRightNo,"+
-				    "[TTT].[dbo].[RoomInfo].PropertyRightArea,"+
-				    "[TTT].[dbo].[RoomInfo].DesignUseful,"+
-				    "[TTT].[dbo].[RoomInfo].BuildYear,"+
-				    "[TTT].[dbo].[RoomInfo].PropertyRightUnit,"+
-				    "[TTT].[dbo].[RoomInfo].RealPropertyRightUnit,"+
-				    "[TTT].[dbo].[RoomInfo].PropertyCardUnit "+				   
-					"FROM [TTT].[dbo].[RoomInfo] left join  [Position]"+
-					"on [TTT].[dbo].[RoomInfo].GUID = [Position].GUID "+
+					Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].OriginalNum,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].OriginalAddress,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Region,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Segment,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManageRegion,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomProperty,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Useful,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Floor,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].State,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Structure,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BuildArea,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomType,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].IsCity,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Manager,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManagerPhone,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].IsStreet,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].FitMent,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BeFrom,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].InDate,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightNo,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightArea,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].DesignUseful,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BuildYear,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightUnit,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RealPropertyRightUnit,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyCardUnit "+				   
+					"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
+					"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
 					"WHERE [Position].lng is not null AND [Position].lat is not null "+  
 					"AND "+
-					"[TTT].[dbo].[RoomInfo].GUID not in( select top "+offset+" [TTT].[dbo].[RoomInfo].GUID from [TTT].[dbo].[RoomInfo] left join  [Position]"+
-					"on [TTT].[dbo].[RoomInfo].GUID = [Position].GUID "+
+					Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID not in( select top "+offset+" "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID from "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
+					"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
 					"WHERE [Position].lng is not null AND [Position].lat is not null "+ 
 					"ORDER BY   SQRT(("+lng+"-lng)*("+lng+"-lng)+("+lat+"-lat)*("+lat+"-lat))) ";
 		
@@ -446,7 +447,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		if(search.equals("")){
 			sql=sql0+sql1;
 		}else{
-			sql=sql0+"AND [TTT].[dbo].[RoomInfo].Address like '%"+search+"%' "+sql1;
+			sql=sql0+"AND "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address like '%"+search+"%' "+sql1;
 		}
 		
 		System.out.println("sql="+sql);
@@ -547,37 +548,37 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 					"[Position].lng,"+
 					"[Position].lat,"+
 					"[Position].date,"+
-					"[TTT].[dbo].[RoomInfo].GUID,"+
-				    "[TTT].[dbo].[RoomInfo].Num,"+
-				    "[TTT].[dbo].[RoomInfo].OriginalNum,"+
-				    "[TTT].[dbo].[RoomInfo].Address,"+
-				    "[TTT].[dbo].[RoomInfo].OriginalAddress,"+
-				    "[TTT].[dbo].[RoomInfo].Region,"+
-				    "[TTT].[dbo].[RoomInfo].Segment,"+
-				    "[TTT].[dbo].[RoomInfo].ManageRegion,"+
-				    "[TTT].[dbo].[RoomInfo].RoomProperty,"+
-				    "[TTT].[dbo].[RoomInfo].Useful,"+
-				    "[TTT].[dbo].[RoomInfo].Floor,"+
-				    "[TTT].[dbo].[RoomInfo].State,"+
-				    "[TTT].[dbo].[RoomInfo].Structure,"+
-				    "[TTT].[dbo].[RoomInfo].BuildArea,"+
-				    "[TTT].[dbo].[RoomInfo].RoomType,"+
-				    "[TTT].[dbo].[RoomInfo].IsCity,"+
-				    "[TTT].[dbo].[RoomInfo].Manager,"+
-				    "[TTT].[dbo].[RoomInfo].ManagerPhone,"+
-				    "[TTT].[dbo].[RoomInfo].IsStreet,"+
-				    "[TTT].[dbo].[RoomInfo].FitMent,"+
-				    "[TTT].[dbo].[RoomInfo].BeFrom,"+
-				    "[TTT].[dbo].[RoomInfo].InDate,"+
-				    "[TTT].[dbo].[RoomInfo].PropertyRightNo,"+
-				    "[TTT].[dbo].[RoomInfo].PropertyRightArea,"+
-				    "[TTT].[dbo].[RoomInfo].DesignUseful,"+
-				    "[TTT].[dbo].[RoomInfo].BuildYear,"+
-				    "[TTT].[dbo].[RoomInfo].PropertyRightUnit,"+
-				    "[TTT].[dbo].[RoomInfo].RealPropertyRightUnit,"+
-				    "[TTT].[dbo].[RoomInfo].PropertyCardUnit "+				   
-					"FROM [TTT].[dbo].[RoomInfo] left join  [Position]"+
-					"on [TTT].[dbo].[RoomInfo].GUID = [Position].GUID "+
+					Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].OriginalNum,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].OriginalAddress,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Region,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Segment,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManageRegion,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomProperty,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Useful,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Floor,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].State,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Structure,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BuildArea,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomType,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].IsCity,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Manager,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManagerPhone,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].IsStreet,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].FitMent,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BeFrom,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].InDate,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightNo,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightArea,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].DesignUseful,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BuildYear,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightUnit,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RealPropertyRightUnit,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyCardUnit "+				   
+					"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
+					"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
 					"WHERE ";
 		
 		
@@ -592,7 +593,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		if(search.equals("")){
 			sql=sql0+sql1;
 		}else{
-			sql=sql0+"AND [TTT].[dbo].[RoomInfo].Address like '%"+search+"%' "+sql1;
+			sql=sql0+"AND "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address like '%"+search+"%' "+sql1;
 		}
 		
 		System.out.println("sql="+sql);
@@ -674,82 +675,82 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
     "[Hidden_Assets].id,"+
     "[Hidden_Assets].asset_GUID,"+
     "[Hidden_Assets].hidden_GUID,"+
-    "[TTT].[dbo].[RoomInfo].GUID,"+
-    "[TTT].[dbo].[RoomInfo].Num,"+
-    "[TTT].[dbo].[RoomInfo].OriginalNum,"+
-    "[TTT].[dbo].[RoomInfo].Address,"+
-    "[TTT].[dbo].[RoomInfo].OriginalAddress,"+
-    "[TTT].[dbo].[RoomInfo].Region,"+
-    "[TTT].[dbo].[RoomInfo].Segment,"+
-    "[TTT].[dbo].[RoomInfo].ManageRegion,"+
-    "[TTT].[dbo].[RoomInfo].RoomProperty,"+
-    "[TTT].[dbo].[RoomInfo].Useful,"+
-    "[TTT].[dbo].[RoomInfo].Floor,"+
-    "[TTT].[dbo].[RoomInfo].State,"+
-    "[TTT].[dbo].[RoomInfo].Structure,"+
-    "[TTT].[dbo].[RoomInfo].BuildArea,"+
-    "[TTT].[dbo].[RoomInfo].RoomType,"+
-    "[TTT].[dbo].[RoomInfo].IsCity,"+
-    "[TTT].[dbo].[RoomInfo].Manager,"+
-    "[TTT].[dbo].[RoomInfo].ManagerPhone,"+
-    "[TTT].[dbo].[RoomInfo].IsStreet,"+
-    "[TTT].[dbo].[RoomInfo].FitMent,"+
-    "[TTT].[dbo].[RoomInfo].BeFrom,"+
-    "[TTT].[dbo].[RoomInfo].InDate,"+
-    "[TTT].[dbo].[RoomInfo].PropertyRightNo,"+
-    "[TTT].[dbo].[RoomInfo].PropertyRightArea,"+
-    "[TTT].[dbo].[RoomInfo].DesignUseful,"+
-    "[TTT].[dbo].[RoomInfo].BuildYear,"+
-    "[TTT].[dbo].[RoomInfo].PropertyRightUnit,"+
-    "[TTT].[dbo].[RoomInfo].RealPropertyRightUnit,"+
-    "[TTT].[dbo].[RoomInfo].PropertyCardUnit,"+
-    "[TTT].[dbo].[RoomInfo].GlebeCardUnit,"+
-    "[TTT].[dbo].[RoomInfo].TransferUnit,"+
-    "[TTT].[dbo].[RoomInfo].GlebeCardNo,"+
-    "[TTT].[dbo].[RoomInfo].GlebeUseType,"+
-    "[TTT].[dbo].[RoomInfo].GlebeEndDate,"+
-    "[TTT].[dbo].[RoomInfo].GlebeTypeUseful,"+
-    "[TTT].[dbo].[RoomInfo].PlanUseful,"+
-    "[TTT].[dbo].[RoomInfo].BefromFile,"+
-    "[TTT].[dbo].[RoomInfo].NoPRNResion,"+
-    "[TTT].[dbo].[RoomInfo].NoGCResion,"+
-    "[TTT].[dbo].[RoomInfo].RealEstateNo,"+
-    "[TTT].[dbo].[RoomInfo].PropertyMemo,"+
-    "[TTT].[dbo].[RoomInfo].OriginalAmount,"+
-    "[TTT].[dbo].[RoomInfo].AllDepreciation,"+
-    "[TTT].[dbo].[RoomInfo].DepreciationYear,"+
-    "[TTT].[dbo].[RoomInfo].NetWorth,"+
-    "[TTT].[dbo].[RoomInfo].EvaluationPrice,"+
-    "[TTT].[dbo].[RoomInfo].EvaluationSinglePrice,"+
-    "[TTT].[dbo].[RoomInfo].EvaluationPlace,"+
-    "[TTT].[dbo].[RoomInfo].BefromAmount,"+
-    "[TTT].[dbo].[RoomInfo].MarketHire,"+
-    "[TTT].[dbo].[RoomInfo].EvaluationUnit,"+
-    "[TTT].[dbo].[RoomInfo].EvaluationNo,"+
-    "[TTT].[dbo].[RoomInfo].IsPawn,"+
-    "[TTT].[dbo].[RoomInfo].PawnUnit,"+
-    "[TTT].[dbo].[RoomInfo].OriginalUnit,"+
-    "[TTT].[dbo].[RoomInfo].FinanceMemo,"+
-    "[TTT].[dbo].[RoomInfo].Utility,"+
-    "[TTT].[dbo].[RoomInfo].ChartGUID,"+
-    "[TTT].[dbo].[RoomInfo].AddressCode,"+
-    "[TTT].[dbo].[RoomInfo].OriginalAddressCode,"+
-    "[TTT].[dbo].[RoomInfo].SecurityClassification,"+
-    "[TTT].[dbo].[RoomInfo].DangerClassification,"+
-    "[TTT].[dbo].[RoomInfo].HiddenDanger,"+
-    "[TTT].[dbo].[RoomInfo].ResponsiblePerson,"+
-    "[TTT].[dbo].[RoomInfo].sMemo,"+
-    "[TTT].[dbo].[RoomInfo].BelongUnit,"+
-    "[TTT].[dbo].[RoomInfo].FileIndex,"+
-    "[TTT].[dbo].[RoomInfo].SecurityRegion,"+
-    "[TTT].[dbo].[RoomInfo].RoomCount,"+
-    "[TTT].[dbo].[RoomInfo].LandArea,"+
-    "[TTT].[dbo].[RoomInfo].UseYears "+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].OriginalNum,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].OriginalAddress,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Region,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Segment,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManageRegion,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomProperty,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Useful,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Floor,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].State,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Structure,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BuildArea,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomType,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].IsCity,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Manager,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManagerPhone,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].IsStreet,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].FitMent,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BeFrom,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].InDate,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightNo,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightArea,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].DesignUseful,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BuildYear,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightUnit,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RealPropertyRightUnit,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyCardUnit,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GlebeCardUnit,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].TransferUnit,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GlebeCardNo,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GlebeUseType,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GlebeEndDate,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GlebeTypeUseful,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PlanUseful,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BefromFile,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].NoPRNResion,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].NoGCResion,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RealEstateNo,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyMemo,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].OriginalAmount,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].AllDepreciation,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].DepreciationYear,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].NetWorth,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].EvaluationPrice,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].EvaluationSinglePrice,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].EvaluationPlace,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BefromAmount,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].MarketHire,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].EvaluationUnit,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].EvaluationNo,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].IsPawn,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PawnUnit,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].OriginalUnit,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].FinanceMemo,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Utility,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ChartGUID,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].AddressCode,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].OriginalAddressCode,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].SecurityClassification,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].DangerClassification,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].HiddenDanger,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ResponsiblePerson,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].sMemo,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BelongUnit,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].FileIndex,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].SecurityRegion,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomCount,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].LandArea,"+
+    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].UseYears "+
     "FROM "+
-    "[Hidden_Assets] left join [TTT].[dbo].[RoomInfo] on [Hidden_Assets].[asset_GUID]=[TTT].[dbo].[RoomInfo].[GUID]"+
+    "[Hidden_Assets] left join "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] on [Hidden_Assets].[asset_GUID]="+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].[GUID]"+
     ""; 
   
-  //  String sqlWhere="AND [Hidden_Assets].[asset_GUID] not in( select top "+offset+" [Hidden_Assets].[asset_GUID] FROM [Hidden_Assets] left join [TTT].[dbo].[RoomInfo] on [Hidden_Assets].[asset_GUID]=[TTT].[dbo].[RoomInfo].[GUID] ORDER BY [Hidden_Assets].[asset_GUID]) ORDER BY [Hidden_Assets].[asset_GUID]";
+  //  String sqlWhere="AND [Hidden_Assets].[asset_GUID] not in( select top "+offset+" [Hidden_Assets].[asset_GUID] FROM [Hidden_Assets] left join Singleton.ROOMDATABASE"+".[dbo].[RoomInfo] on [Hidden_Assets].[asset_GUID]=Singleton.ROOMDATABASE"+".[dbo].[RoomInfo].[GUID] ORDER BY [Hidden_Assets].[asset_GUID]) ORDER BY [Hidden_Assets].[asset_GUID]";
 	
   		StringBuilder whereCommand = new StringBuilder(); 
        
@@ -841,7 +842,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		MyTestUtil.print(list);
 		
 		String countSql="select count(*) FROM "+
-			    "[Hidden_Assets] left join [TTT].[dbo].[RoomInfo] on [Hidden_Assets].[asset_GUID]=[TTT].[dbo].[RoomInfo].[GUID]";
+			    "[Hidden_Assets] left join "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] on [Hidden_Assets].[asset_GUID]="+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].[GUID]";
 		
 		if(!search.isEmpty()){
 			countSql=countSql+   //sqlserver鍒嗛〉闇�瑕佸湪top涔熷姞涓妛here鏉′欢
@@ -908,7 +909,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
     "[Hidden_Assets] left join [Hidden] on [Hidden_Assets].[hidden_GUID]=[Hidden].[GUID]"+
     ""; 
   
-  //  String sqlWhere="AND [Hidden_Assets].[asset_GUID] not in( select top "+offset+" [Hidden_Assets].[asset_GUID] FROM [Hidden_Assets] left join [TTT].[dbo].[RoomInfo] on [Hidden_Assets].[asset_GUID]=[TTT].[dbo].[RoomInfo].[GUID] ORDER BY [Hidden_Assets].[asset_GUID]) ORDER BY [Hidden_Assets].[asset_GUID]";
+  //  String sqlWhere="AND [Hidden_Assets].[asset_GUID] not in( select top "+offset+" [Hidden_Assets].[asset_GUID] FROM [Hidden_Assets] left join Singleton.ROOMDATABASE"+".[dbo].[RoomInfo] on [Hidden_Assets].[asset_GUID]=Singleton.ROOMDATABASE"+".[dbo].[RoomInfo].[GUID] ORDER BY [Hidden_Assets].[asset_GUID]) ORDER BY [Hidden_Assets].[asset_GUID]";
 	
   		StringBuilder whereCommand = new StringBuilder(); 
        
@@ -1209,7 +1210,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		
         String pathRoot = System.getProperty("user.home");
 		
-		String filePath=pathRoot+AbstractFileUpload.filePath;
+		String filePath=pathRoot+Singleton.filePath;
 		
 		List<String> GUIDs=new ArrayList<String>();
 		List<String> names=new ArrayList<String>();
@@ -1302,7 +1303,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		// TODO Auto-generated method stub
 		
 		String sql="SELECT [ManageRegion] "+
-                    "FROM [TTT].[dbo].[RoomInfo] group by [ManageRegion]";
+                    "FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] group by [ManageRegion]";
 		
 		List list=this.getJdbcTemplate().query(sql, new roomInfoRowMapper());
 		
@@ -1326,7 +1327,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		chartInfo.setLimit(10);
 		chartInfo.setOffset(0);
 		chartInfo.setNotIn("GUID");
-		String[] where = {"[TTT].[dbo].[ChartInfo].IDNo=",IDNo};
+		String[] where = {Singleton.ROOMDATABASE+".[dbo].[ChartInfo].IDNo=",IDNo};
 		chartInfo.setWhere(where);
 		
 		List list=SelectExe.get(this.getJdbcTemplate(), chartInfo);
@@ -1352,7 +1353,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		chartInfo.setLimit(10);
 		chartInfo.setOffset(0);
 		chartInfo.setNotIn("GUID");
-		String[] where = {"[TTT].[dbo].[ChartInfo].GUID=",chartGUID};
+		String[] where = {Singleton.ROOMDATABASE+".[dbo].[ChartInfo].GUID=",chartGUID};
 		chartInfo.setWhere(where);
 		
 		List list=SelectExe.get(this.getJdbcTemplate(), chartInfo);
@@ -1399,7 +1400,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	public List findAssetByYear() {
 		// TODO Auto-generated method stub
 		String sql="SELECT convert(varchar(4),InDate,120) as year"+
-				" FROM [TTT].[dbo].[RoomInfo] where InDate is not null "+
+				" FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] where InDate is not null "+
 				" group by convert(varchar(4),InDate,120) order by year desc";
 	
 		List years=this.getJdbcTemplate().query(sql, new HiddenByYear());
@@ -1456,14 +1457,14 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		// TODO Auto-generated method stub
 		
 		String sql="SELECT convert(varchar(7),InDate,120) as year ,COUNT(*) as amount "+
-					"FROM [TTT].[dbo].[RoomInfo] where InDate is not null "+
+					"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] where InDate is not null "+
 					"and convert(varchar(4),InDate,120) = "+year+" group by convert(varchar(7),InDate,120)";
 		
 		List list=this.getJdbcTemplate().query(sql,new HiddenAssetByMonth());
 		
 		String sql2="SELECT convert(varchar(7),InDate,120) as year ,COUNT(*) as amount "+
-					"FROM [TTT].[dbo].[RoomInfo] left join [Assets].[dbo].[Hidden_Assets] on "+
-					"[TTT].[dbo].[RoomInfo].GUID=[Assets].[dbo].[Hidden_Assets].asset_GUID "+
+					"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join [Assets].[dbo].[Hidden_Assets] on "+
+					Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID=[Assets].[dbo].[Hidden_Assets].asset_GUID "+
 					"where InDate is not null and [Assets].[dbo].[Hidden_Assets].asset_GUID is not null "+
 					"and convert(varchar(4),InDate,120) = "+year+" group by convert(varchar(7),InDate,120)";
 		

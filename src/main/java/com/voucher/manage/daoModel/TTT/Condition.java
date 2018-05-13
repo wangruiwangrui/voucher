@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.voucher.manage.daoSQL.annotations.*;
 
-@DBTable(name="[TTT].[dbo].[Condition]")
+@DBTable(name="[YTRoomManage].[dbo].[Condition]")
 public class Condition implements Serializable{
 
     private static final long serialVersionUID = 1L;

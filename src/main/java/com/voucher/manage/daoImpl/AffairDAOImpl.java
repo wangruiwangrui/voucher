@@ -17,7 +17,7 @@ public class AffairDAOImpl extends JdbcDaoSupport implements AffairDAO{
 	@Override
 	public int insertTest(Map<String, Object> paramMap) {
 		// TODO Auto-generated method stub
-		String sql=" insert into  [TTT].[dbo].[test]  values(?,?)";
+		String sql=" insert into  ROOMDATABASE"+".[dbo].[test]  values(?,?)";
 		
 		return this.getJdbcTemplate().update(sql, paramMap.get("id"),paramMap.get("val"));
 	}
@@ -25,14 +25,14 @@ public class AffairDAOImpl extends JdbcDaoSupport implements AffairDAO{
 	@Override
 	public int insertTest2(Map<String, Object> paramMap) {
 		// TODO Auto-generated method stub
-		String sql="insert into  [TTT].[dbo].[test2]  values(?,?)";
+		String sql="insert into  ROOMDATABASE"+".[dbo].[test2]  values(?,?)";
 		return this.getJdbcTemplate().update(sql, paramMap.get("id"),paramMap.get("val"));
 	}
 
 	@Override
 	public int  insertTest3(Map<String, Object> paramMap) {
 		// TODO Auto-generated method stub
-		String sql=" update  [TTT].[dbo].[test3] set amount=amount-1 WHERE id=1 and amount>0";
+		String sql=" update  ROOMDATABASE"+".[dbo].[test3] set amount=amount-1 WHERE id=1 and amount>0";
 		return this.getJdbcTemplate().update(sql);
 	}
 

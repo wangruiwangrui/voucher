@@ -8,13 +8,13 @@ import java.io.Serializable;
 
 import com.voucher.manage.daoSQL.annotations.*;
 
-@DBTable(name="[TTT].[dbo].[SysLog]")
+@DBTable(name="[YTRoomManage].[dbo].[SysLog]")
 public class SysLog implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
-    @SQLInteger(name="ID")
-   	private Integer ID;
+    @SQLString(name="ID")
+	private Integer ID;
 
     @SQLString(name="RoomAddress")
 	private String RoomAddress;

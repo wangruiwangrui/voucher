@@ -37,6 +37,7 @@ import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
+import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
 
@@ -287,7 +288,7 @@ public class BaiduMapController {
 	
 		if(manageRegion!=null&&!manageRegion.equals("")){
 			where.put("[Position].GUID !=","''");
-			where.put("[TTT].[dbo].[RoomInfo].ManageRegion = ", manageRegion);
+			where.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManageRegion = ", manageRegion);
 		}else{
 			where.put("[Position].GUID !=","''");
 		}

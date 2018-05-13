@@ -32,23 +32,22 @@ import com.voucher.manage.daoSQL.InsertExe;
 import com.voucher.manage.daoSQL.SelectExe;
 import com.voucher.manage.daoSQL.UpdateExe;
 import com.voucher.manage.file.AbstractFileUpload;
+import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.Base64Test;
 import com.voucher.manage.tools.CopyFile;
 import com.voucher.manage.tools.MyTestUtil;
 
 public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 
-	public static final String ROOMINFOIMGPATH	="D:\\SYSPICTURE\\";
-	
 	@Override
 	public Map<String, Object> hiddenImageQuery(HttpServletRequest request,List guidLits) {
 		// TODO Auto-generated method stub
 	
 		String pathRoot = System.getProperty("user.home");
 	
-		String filePath=pathRoot+AbstractFileUpload.filePath;
+		String filePath=pathRoot+Singleton.filePath;
         
-		String imgPath=request.getSession().getServletContext().getRealPath(AbstractFileUpload.filePath);
+		String imgPath=request.getSession().getServletContext().getRealPath(Singleton.filePath);
 		
 		//List<byte[]> fileBytes=new ArrayList<byte[]>();
 		
@@ -84,7 +83,7 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 				
 				CopyFile.set(imgPath, oldFile, hidden_Data_Join.getURI());
 				
-				fileBytes.put(GUID, AbstractFileUpload.filePath+"\\"+hidden_Data_Join.getURI());
+				fileBytes.put(GUID, Singleton.filePath+"\\"+hidden_Data_Join.getURI());
 		
 			}catch (Exception e) {
 			// TODO: handle exception
@@ -106,9 +105,9 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 	
 		String pathRoot = System.getProperty("user.home");
 	
-		String filePath=pathRoot+AbstractFileUpload.filePath;
+		String filePath=pathRoot+Singleton.filePath;
         
-		String imgPath=request.getSession().getServletContext().getRealPath(AbstractFileUpload.filePath);
+		String imgPath=request.getSession().getServletContext().getRealPath(Singleton.filePath);
 		
 		//List<byte[]> fileBytes=new ArrayList<byte[]>();
 		
@@ -144,7 +143,7 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 				
 				CopyFile.set(imgPath, oldFile, hidden_Data_Join.getURI());
 				
-				fileBytes.put(GUID, AbstractFileUpload.filePath+"\\"+hidden_Data_Join.getURI());
+				fileBytes.put(GUID, Singleton.filePath+"\\"+hidden_Data_Join.getURI());
 		
 			}catch (Exception e) {
 			// TODO: handle exception
@@ -166,9 +165,9 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 	
 		String pathRoot = System.getProperty("user.home");
 	
-		String filePath=pathRoot+AbstractFileUpload.filePath;
+		String filePath=pathRoot+Singleton.filePath;
         
-		String imgPath=request.getSession().getServletContext().getRealPath(AbstractFileUpload.filePath);
+		String imgPath=request.getSession().getServletContext().getRealPath(Singleton.filePath);
 		
 		String GUID=hidden_Join.getGUID();
 		
@@ -201,7 +200,7 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 				Map<String,String> map=new HashMap<>();
 				
 				map.put("name", hidden_Data_Join.getNAME());
-				map.put("uri", AbstractFileUpload.filePath+"\\"+hidden_Data_Join.getURI());
+				map.put("uri", Singleton.filePath+"\\"+hidden_Data_Join.getURI());
 				map.put("date", hidden_Data_Join.getDate().toString());
 				MyTestUtil.print(map);
 				fileBytes.add(map);
@@ -234,9 +233,9 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 	
 		String pathRoot = System.getProperty("user.home");
 	
-		String filePath=pathRoot+AbstractFileUpload.filePath;
+		String filePath=pathRoot+Singleton.filePath;
         
-		String imgPath=request.getSession().getServletContext().getRealPath(AbstractFileUpload.filePath);
+		String imgPath=request.getSession().getServletContext().getRealPath(Singleton.filePath);
 		
 		//List<byte[]> fileBytes=new ArrayList<byte[]>();
 		
@@ -272,7 +271,7 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 				
 				CopyFile.set(imgPath, oldFile, hidden_Check_Date.getURI());
 				
-				fileBytes.put(Check_id, AbstractFileUpload.filePath+"\\"+hidden_Check_Date.getURI());
+				fileBytes.put(Check_id, Singleton.filePath+"\\"+hidden_Check_Date.getURI());
 		
 			}catch (Exception e) {
 			// TODO: handle exception
@@ -294,9 +293,9 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 	
 		String pathRoot = System.getProperty("user.home");
 	
-		String filePath=pathRoot+AbstractFileUpload.filePath;
+		String filePath=pathRoot+Singleton.filePath;
         
-		String imgPath=request.getSession().getServletContext().getRealPath(AbstractFileUpload.filePath);
+		String imgPath=request.getSession().getServletContext().getRealPath(Singleton.filePath);
 		
 		String check_id=hidden_Check_Join.getCheck_id();
 		
@@ -329,7 +328,7 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 				Map<String,String> map=new HashMap<>();
 				
 				map.put("name", hidden_Check_Date.getNAME());
-				map.put("uri", AbstractFileUpload.filePath+"\\"+hidden_Check_Date.getURI());
+				map.put("uri", Singleton.filePath+"\\"+hidden_Check_Date.getURI());
 				map.put("date", hidden_Check_Date.getDate().toString());
 				
 				fileBytes.add(map);
@@ -363,9 +362,9 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 	
 		String pathRoot = System.getProperty("user.home");
 	
-		String filePath=pathRoot+AbstractFileUpload.filePath;
+		String filePath=pathRoot+Singleton.filePath;
         
-		String imgPath=request.getSession().getServletContext().getRealPath(AbstractFileUpload.filePath);
+		String imgPath=request.getSession().getServletContext().getRealPath(Singleton.filePath);
 		
 		//List<byte[]> fileBytes=new ArrayList<byte[]>();
 		
@@ -401,7 +400,7 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 				
 				CopyFile.set(imgPath, oldFile, hidden_Neaten_Date.getURI());
 				
-				fileBytes.put(neaten_id, AbstractFileUpload.filePath+"\\"+hidden_Neaten_Date.getURI());
+				fileBytes.put(neaten_id, Singleton.filePath+"\\"+hidden_Neaten_Date.getURI());
 		
 			}catch (Exception e) {
 			// TODO: handle exception
@@ -423,9 +422,9 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 	
 		String pathRoot = System.getProperty("user.home");
 	
-		String filePath=pathRoot+AbstractFileUpload.filePath;
+		String filePath=pathRoot+Singleton.filePath;
         
-		String imgPath=request.getSession().getServletContext().getRealPath(AbstractFileUpload.filePath);
+		String imgPath=request.getSession().getServletContext().getRealPath(Singleton.filePath);
 		
 		String neaten_id=hidden_Neaten_Join.getNeaten_id();
 		
@@ -458,7 +457,7 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 				Map<String,String> map=new HashMap<>();
 				
 				map.put("name", hidden_Neaten_Date.getNAME());
-				map.put("uri", AbstractFileUpload.filePath+"\\"+hidden_Neaten_Date.getURI());
+				map.put("uri", Singleton.filePath+"\\"+hidden_Neaten_Date.getURI());
 				map.put("date", hidden_Neaten_Date.getDate().toString());
 				
 				fileBytes.add(map);
@@ -491,9 +490,9 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 		// TODO Auto-generated method stub
 		String pathRoot = System.getProperty("user.home");
 		
-		String filePath=pathRoot+AbstractFileUpload.filePath;
+		String filePath=pathRoot+Singleton.filePath;
         
-		String imgPath=request.getSession().getServletContext().getRealPath(AbstractFileUpload.filePath);
+		String imgPath=request.getSession().getServletContext().getRealPath(Singleton.filePath);
 		
 		Map fileBytes=new HashMap<>();
 		
@@ -514,7 +513,7 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 					",[FileIndex] "+
 					",[ViewFileName] "+
 				"FROM "+
-				"[TTT].[dbo].[FileSelfBelong] "+  
+				Singleton.ROOMDATABASE+".[dbo].[FileSelfBelong] "+  
 				"where RoomGUID='"+roomGUID+"'";
 		
 			List fileSelfBelongs=this.getJdbcTemplate().query(sql,new fileSelfBelongRowMapper());
@@ -524,11 +523,11 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 							
 				//String fileByte=Base64Test.getImageStr(filePath+"\\"+hidden_Data_Join.getURI());
 				
-				String oldFile=ROOMINFOIMGPATH+fileSelfBelong.getUpFileFullName();
+				String oldFile=Singleton.ROOMINFOIMGPATH+fileSelfBelong.getUpFileFullName();
 				
 				CopyFile.set(imgPath, oldFile, fileSelfBelong.getUpFileFullName());
 				
-				fileBytes.put(roomGUID, AbstractFileUpload.filePath+"\\"+fileSelfBelong.getUpFileFullName());
+				fileBytes.put(roomGUID, Singleton.filePath+"\\"+fileSelfBelong.getUpFileFullName());
 		
 			}catch (Exception e) {
 			// TODO: handle exception
@@ -548,9 +547,9 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 		// TODO Auto-generated method stub
 		String pathRoot = System.getProperty("user.home");
 		
-		String filePath=pathRoot+AbstractFileUpload.filePath;
+		String filePath=pathRoot+Singleton.filePath;
         
-		String imgPath=request.getSession().getServletContext().getRealPath(AbstractFileUpload.filePath);
+		String imgPath=request.getSession().getServletContext().getRealPath(Singleton.filePath);
 		
 		Map fileBytes=new HashMap<>();
 		
@@ -571,7 +570,7 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 					",[FileIndex] "+
 					",[ViewFileName] "+
 				"FROM "+
-				"[TTT].[dbo].[FileSelfBelong] "+  
+				Singleton.ROOMDATABASE+".[dbo].[FileSelfBelong] "+  
 				"where RoomGUID='"+roomGUID+"'";
 		
 			List fileSelfBelongs=this.getJdbcTemplate().query(sql,new fileSelfBelongRowMapper());
@@ -581,11 +580,11 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 							
 				//String fileByte=Base64Test.getImageStr(filePath+"\\"+hidden_Data_Join.getURI());
 				
-				String oldFile=ROOMINFOIMGPATH+fileSelfBelong.getUpFileFullName();
+				String oldFile=Singleton.ROOMINFOIMGPATH+fileSelfBelong.getUpFileFullName();
 				
 				CopyFile.set(imgPath, oldFile, fileSelfBelong.getUpFileFullName());
 				
-				fileBytes.put(roomGUID, AbstractFileUpload.filePath+"\\"+fileSelfBelong.getUpFileFullName());
+				fileBytes.put(roomGUID, Singleton.filePath+"\\"+fileSelfBelong.getUpFileFullName());
 		
 			}catch (Exception e) {
 			// TODO: handle exception
@@ -605,9 +604,9 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 		// TODO Auto-generated method stub
 		String pathRoot = System.getProperty("user.home");
 		
-		String filePath=pathRoot+AbstractFileUpload.filePath;
+		String filePath=pathRoot+Singleton.filePath;
         
-		String imgPath=request.getSession().getServletContext().getRealPath(AbstractFileUpload.filePath);
+		String imgPath=request.getSession().getServletContext().getRealPath(Singleton.filePath);
 		
 		List fileBytes=new ArrayList<>();
 				
@@ -622,7 +621,7 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 				",[FileIndex] "+
 				",[ViewFileName] "+
 			"FROM "+
-			"[TTT].[dbo].[FileSelfBelong] "+  
+			Singleton.ROOMDATABASE+".[dbo].[FileSelfBelong] "+  
 			"where RoomGUID='"+roomGUID+"'";
 		
 		List fileSelfBelongs=this.getJdbcTemplate().query(sql,new fileSelfBelongRowMapper());
@@ -637,13 +636,13 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 			
 				//String fileByte=Base64Test.getImageStr(filePath+"\\"+hidden_Data_Join.getURI());
 				
-				String oldFile=ROOMINFOIMGPATH+fileSelfBelong.getUpFileFullName();
+				String oldFile=Singleton.ROOMINFOIMGPATH+fileSelfBelong.getUpFileFullName();
 				
 				CopyFile.set(imgPath, oldFile, fileSelfBelong.getUpFileFullName());
 				
 				Map<String,String> map=new HashMap<>();
 				
-				map.put("uri", AbstractFileUpload.filePath+"\\"+fileSelfBelong.getUpFileFullName());
+				map.put("uri", Singleton.filePath+"\\"+fileSelfBelong.getUpFileFullName());
 				
 				map.put("fileBelong", fileSelfBelong.getFileBelong());
 

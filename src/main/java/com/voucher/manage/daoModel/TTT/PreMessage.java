@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 import com.voucher.manage.daoSQL.annotations.*;
 
-@DBTable(name="[TTT].[dbo].[PreMessage]")
+@DBTable(name="[YTRoomManage].[dbo].[PreMessage]")
 public class PreMessage implements Serializable{
 
     private static final long serialVersionUID = 1L;

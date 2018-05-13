@@ -33,6 +33,7 @@ import com.voucher.manage.daoSQL.SelectExe;
 import com.voucher.manage.daoSQL.SelectJoinExe;
 import com.voucher.manage.daoSQL.UpdateExe;
 import com.voucher.manage.file.AbstractFileUpload;
+import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.FileConvect;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.manage.tools.TransMapToString;
@@ -91,7 +92,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		
 		String pathRoot = System.getProperty("user.home");
 		
-		String filePath=pathRoot+AbstractFileUpload.filePath;
+		String filePath=pathRoot+Singleton.filePath;
 		
 		List<String> names=new ArrayList<String>();
 		List<String> types=new ArrayList<String>();
@@ -139,7 +140,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		// TODO Auto-generated method stub
         String pathRoot = System.getProperty("user.home");
 		
-		String filePath=pathRoot+AbstractFileUpload.filePath;
+		String filePath=pathRoot+Singleton.filePath;
 		
 		List<String> names=new ArrayList<String>();
 		List<String> types=new ArrayList<String>();
@@ -187,7 +188,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		// TODO Auto-generated method stub
         String pathRoot = System.getProperty("user.home");
 		
-		String filePath=pathRoot+AbstractFileUpload.filePath;
+		String filePath=pathRoot+Singleton.filePath;
 		
 		List<String> names=new ArrayList<String>();
 		List<String> types=new ArrayList<String>();

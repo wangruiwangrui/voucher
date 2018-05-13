@@ -33,6 +33,7 @@ import com.voucher.manage.model.WeiXin;
 import com.voucher.manage.service.UserService;
 import com.voucher.manage.service.WeiXinService;
 import com.voucher.manage.serviceImpl.UserServiceImpl;
+import com.voucher.manage.singleton.Singleton;
 import com.voucher.sqlserver.context.Connect;
 import com.voucher.weixin.MessageTemplate.ChatTemplateProcessor;
 import com.voucher.weixin.MessageTemplate.TemplateData;
@@ -159,7 +160,7 @@ public class WechatSendMessageController {
 
 		Map search=new HashMap<>();
 		
-		search.put("[TTT].[dbo].[RoomInfo].GUID=", guid);
+		search.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID=", guid);
 		
 		List<RoomInfo> list=roomInfoDao.findAllRoomInfo(2, 0, null, null, search);
 		
@@ -169,7 +170,7 @@ public class WechatSendMessageController {
 		
 		Map search2=new HashMap<>();
 		
-		search2.put("[TTT].[dbo].[ChartInfo].GUID=", chartGUID);
+		search2.put(Singleton.ROOMDATABASE+".[dbo].[ChartInfo].GUID=", chartGUID);
 		
 		List<ChartInfo> list2=(List<ChartInfo>) roomInfoDao.getChartInfoByGUID(2, 0, null, null, search2).get("rows");
 		

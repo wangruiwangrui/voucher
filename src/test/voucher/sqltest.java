@@ -54,7 +54,7 @@ public class sqltest {
 		roomInfo.setNotIn("[GUID]");
 	//	roomInfo.setSort("BuildArea");
 	//	roomInfo.setOrder("desc");
-	//	String[] where={"[TTT].[dbo].[RoomInfo].Region=","江阳区"};
+	//	String[] where={ROOMDATABASE+".[dbo].[RoomInfo].Region=","江阳区"};
 	//	roomInfo.setWhere(where);
  
 		RoomChangeHireLog roomChangeHireLog=new RoomChangeHireLog();
@@ -129,7 +129,7 @@ public class sqltest {
 	//	Map map2=new SelectSQLJoin().getCount(objects,"[Charter]");
 	//	Map map2=new SelectSQL().get(roomInfo);
         MyTestUtil.print(map2);
-	//	String[] where={"[TTT].[dbo].[RoomInfo].Region=","江阳区","[TTT].[dbo].[RoomInfo].Region=","江阳区"};
+	//	String[] where={ROOMDATABASE+".[dbo].[RoomInfo].Region=","江阳区",ROOMDATABASE+".[dbo].[RoomInfo].Region=","江阳区"};
 	//	String[] where={"Address like ","%新二村%"};
 	//	roomInfo.setWhere(where);
 	//	roomInfo.setWhereTerm("OR");

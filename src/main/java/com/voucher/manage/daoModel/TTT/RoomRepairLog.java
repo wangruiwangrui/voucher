@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 import com.voucher.manage.daoSQL.annotations.*;
 
-@DBTable(name="[TTT].[dbo].[RoomRepairLog]")
+@DBTable(name="[YTRoomManage].[dbo].[RoomRepairLog]")
 public class RoomRepairLog implements Serializable{
 
     private static final long serialVersionUID = 1L;
