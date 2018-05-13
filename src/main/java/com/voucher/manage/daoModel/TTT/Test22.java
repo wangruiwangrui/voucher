@@ -4,42 +4,31 @@ import java.io.Serializable;
 
 import com.voucher.manage.daoSQL.annotations.*;
 
-@DBTable(name="[YTRoomManage].[dbo].[TelephoneBook]")
-public class TelephoneBook implements Serializable{
+@DBTable(name="[TTT].[dbo].[Test22]")
+public class Test22 implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
-    @SQLString(name="GUID")
-	private String GUID;
+    @SQLInteger(name="ID")
+	private Integer ID;
 
-    @SQLString(name="EName")
-	private String EName;
+    @SQLString(name="Name")
+	private String Name;
 
-    @SQLString(name="Phone")
-	private String Phone;
-
-	public void setGUID(String GUID){
-		this.GUID = GUID;
+	public void setID(Integer ID){
+		this.ID = ID;
 	}
 
-	public String getGUID(){
-		return GUID;
+	public Integer getID(){
+		return ID;
 	}
 
-	public void setEName(String EName){
-		this.EName = EName;
+	public void setName(String Name){
+		this.Name = Name;
 	}
 
-	public String getEName(){
-		return EName;
-	}
-
-	public void setPhone(String Phone){
-		this.Phone = Phone;
-	}
-
-	public String getPhone(){
-		return Phone;
+	public String getName(){
+		return Name;
 	}
 
 

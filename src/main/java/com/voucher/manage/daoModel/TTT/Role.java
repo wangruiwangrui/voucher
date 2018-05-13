@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.voucher.manage.daoSQL.annotations.*;
 
-@DBTable(name="[YTRoomManage].[dbo].[Role]")
+@DBTable(name="[TTT].[dbo].[Role]")
 public class Role implements Serializable{
 
     private static final long serialVersionUID = 1L;
@@ -179,9 +179,6 @@ public class Role implements Serializable{
 
     @SQLBoolean(name="complexquery")
 	private Boolean complexquery;
-
-    @SQLBoolean(name="HireUpdate")
-	private Boolean HireUpdate;
 
 	public void setGUID(String GUID){
 		this.GUID = GUID;
@@ -637,14 +634,6 @@ public class Role implements Serializable{
 
 	public Boolean getComplexquery(){
 		return complexquery;
-	}
-
-	public void setHireUpdate(Boolean HireUpdate){
-		this.HireUpdate = HireUpdate;
-	}
-
-	public Boolean getHireUpdate(){
-		return HireUpdate;
 	}
 
 

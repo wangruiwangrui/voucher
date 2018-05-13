@@ -1,36 +1,34 @@
 package com.voucher.manage.daoModel.TTT;
 
-import java.sql.Blob;
-
 import java.io.Serializable;
 
 import com.voucher.manage.daoSQL.annotations.*;
 
-@DBTable(name="[TTT].[dbo].[FloorPic]")
-public class FloorPic implements Serializable{
+@DBTable(name="[TTT].[dbo].[test3]")
+public class Test3 implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
-    @SQLString(name="FloorGUID")
-	private String FloorGUID;
+    @SQLInteger(name="id")
+	private Integer id;
 
-    @SQLBlob(name="Pic")
-	private Blob Pic;
+    @SQLString(name="amount")
+	private String amount;
 
-	public void setFloorGUID(String FloorGUID){
-		this.FloorGUID = FloorGUID;
+	public void setId(Integer id){
+		this.id = id;
 	}
 
-	public String getFloorGUID(){
-		return FloorGUID;
+	public Integer getId(){
+		return id;
 	}
 
-	public void setPic(Blob Pic){
-		this.Pic = Pic;
+	public void setAmount(String amount){
+		this.amount = amount;
 	}
 
-	public Blob getPic(){
-		return Pic;
+	public String getAmount(){
+		return amount;
 	}
 
 

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.voucher.manage.daoSQL.annotations.*;
 
-@DBTable(name="[YTRoomManage].[dbo].[DataDictionary]")
+@DBTable(name="[TTT].[dbo].[DataDictionary]")
 public class DataDictionary implements Serializable{
 
     private static final long serialVersionUID = 1L;
