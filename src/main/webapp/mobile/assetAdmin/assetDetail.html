@@ -29,10 +29,20 @@
             </div>
     </div>
     
+    <!--  
     <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">管理分区</label></div>
                 <div id="manageRegion" class="weui-cell__bd">
+                </div>
+            </div>
+    </div>
+    -->
+    
+    <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">资产编号</label></div>
+                <div id="num" class="weui-cell__bd">
                 </div>
             </div>
     </div>
@@ -188,11 +198,17 @@
              	 var address=document.createElement("span");
                	  address.innerHTML=obj.address;
                   $("#address").append(address);
-                    
+                 
+                 <!--
                  var manageRegion=document.createElement("span");
                   manageRegion.innerHTML=obj.manageRegion;
                   $("#manageRegion").append(manageRegion);
-                  
+                 -->
+                 
+                 var num=document.createElement("span");
+                 num.innerHTML=obj.num;
+                 $("#num").append(num);
+                 
                   var region=document.createElement("span");
                   region.innerHTML=obj.region;
                   $("#region").append(region);
@@ -427,13 +443,16 @@
 	 
 	 function wxImgCallback(imagename,serverId) {
 		    //将serverId传给wx_upload.php的upload方法
-		    var url = "../file/upload.do";
+		    var url = "/voucher/mobile/asset/updatePositionByRoomInfo.do";
 		    $.get(url,{
 		    	campusId:1,
 		    	imagename:imagename,
 		    	serverId:serverId,
 		    	id:guid,
-		    	classType:"roomInfo"
+		    	classType:"roomInfo",
+		    	GUID:guid,
+            	lng:longitude,
+            	lat:latitude
 		    }, function(data){
 		    	console.log(data);
 		        if (data == 0) {
@@ -441,14 +460,14 @@
 		        	console.log(data.msg);
 		        } else if (data == 1) {
 		            //存储到服务器成功后的处理
-		            $.get("/voucher/mobile/asset/updatePositionByRoomInfo.do",{
+		         /*   $.get("/voucher/mobile/asset/updatePositionByRoomInfo.do",{
 		            	GUID:guid,
 		            	lng:longitude,
 		            	lat:latitude
 		            },function(text){
 		            	//console.log(text);
 		            });
-		            
+		           */ 
 		        	location.reload();
 		        }
 		    });

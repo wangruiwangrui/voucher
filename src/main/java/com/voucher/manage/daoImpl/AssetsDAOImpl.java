@@ -49,6 +49,7 @@ import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.FileConvect;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.manage.tools.TransMapToString;
+import com.voucher.weixin.controller.WechatSendMessageController;
 
 public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 
@@ -637,6 +638,11 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		
 		if(count==0){
 			result=InsertExe.get(this.getJdbcTemplate(), hidden_Assets);
+			
+			WechatSendMessageController wechatSendMessageController=new WechatSendMessageController();
+			
+			wechatSendMessageController.send(asset_GUID, hidden_GUID);
+			
 		}else{
 			result=2;
 		}

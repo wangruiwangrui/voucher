@@ -9,8 +9,12 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.defaults.DefaultSqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -123,7 +127,7 @@ public class WechatSendMessageController {
     	m.put("remark", remark);
     	templateData.setData(m);
     	
-    	String s=wechatTemplate.sendTemplateMessage(accessToken, templateData,weixinService);
+    	String s=wechatTemplate.sendTemplateMessage(accessToken, templateData);
     	
     	message=message+"  "+users.getNickname()+"  "+s;
     	
@@ -151,7 +155,7 @@ public class WechatSendMessageController {
 	}
 	
 	
-	public void send(@RequestParam String guid,@RequestParam String hidden_GUID,HttpServletRequest request){
+	public void send(@RequestParam String guid,@RequestParam String hidden_GUID){
 
 		Integer campusId=1;
 		
@@ -183,14 +187,18 @@ public class WechatSendMessageController {
 			
 			System.out.println("charter="+charter+"     idno="+idNo);
 			
-			HttpServletRequest httpRequest = (HttpServletRequest) request;
-			WebApplicationContext wac = WebApplicationContextUtils    //controller浠ュ鐨勫寘鍒濆鍖栫被
-					.getRequiredWebApplicationContext(httpRequest.getSession()
-							.getServletContext());
-	        
-			UsersMapper usersMapper=wac.getBean(UsersMapper.class);
+			ClassPathXmlApplicationContext applicationContext=new ClassPathXmlApplicationContext("spring-mybatis2.xml");
+			
+			DefaultSqlSessionFactory defaultSqlSessionFactory= (DefaultSqlSessionFactory) applicationContext.getBean("sqlSessionFactory");
+				
+			SqlSession sqlSession=defaultSqlSessionFactory.openSession();
+			
+			UsersMapper usersMapper=sqlSession.getMapper(UsersMapper.class);
 			
 			Users users=usersMapper.getUserByAssetCharter(charter, idNo);
+			
+			if(users==null)
+				return ;
 			
 			String openId=users.getOpenId();
 			
@@ -202,7 +210,7 @@ public class WechatSendMessageController {
 			
 			Hidden hidden=list3.get(0);
 			
-			WeiXinMapper weiXinMapper=wac.getBean(WeiXinMapper.class);
+			WeiXinMapper weiXinMapper=sqlSession.getMapper(WeiXinMapper.class);
 			
 			weixin=weiXinMapper.getCampus(campusId);   	
 			accessToken=weixin.getAccessToken();
@@ -229,7 +237,7 @@ public class WechatSendMessageController {
 	    	
 	    	ChatTemplateProcessor wechatTemplate=new ChatTemplateProcessor();
 	    	
-	    	String s=wechatTemplate.sendTemplateMessage(accessToken, templateData,weixinService);
+	    	String s=wechatTemplate.sendTemplateMessage(accessToken, templateData);
 	    	
 	    	Date date=new Date();
 	    	
@@ -247,7 +255,7 @@ public class WechatSendMessageController {
 	    		messageList.setState(0);
 	    	}
 	    	
-	    	MessageListMapper messageListMapper=wac.getBean(MessageListMapper.class);
+	    	MessageListMapper messageListMapper=sqlSession.getMapper(MessageListMapper.class);
 	    	
 	    	messageListMapper.insertMessageList(messageList);
 		}

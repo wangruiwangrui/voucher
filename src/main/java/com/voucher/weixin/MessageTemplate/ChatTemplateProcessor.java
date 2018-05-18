@@ -4,9 +4,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.defaults.DefaultSqlSessionFactory;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
+import com.voucher.manage.mapper.WeiXinMapper;
 import com.voucher.manage.model.WeiXin;
 import com.voucher.manage.service.WeiXinService;
 import com.voucher.weixin.base.AdvancedUtil;
@@ -17,7 +21,15 @@ public class ChatTemplateProcessor {
 
 	private final int campusId=1;
 	
-	public String sendTemplateMessage(String accessToken, WxTemplate wxTemplate, WeiXinService weixinService) {	
+	private ClassPathXmlApplicationContext applicationContext=new ClassPathXmlApplicationContext("spring-mybatis2.xml");
+	
+	private DefaultSqlSessionFactory defaultSqlSessionFactory= (DefaultSqlSessionFactory) applicationContext.getBean("sqlSessionFactory");
+		
+	SqlSession sqlSession=defaultSqlSessionFactory.openSession();
+	
+	WeiXinMapper weiXinMapper=sqlSession.getMapper(WeiXinMapper.class);
+	
+	public String sendTemplateMessage(String accessToken, WxTemplate wxTemplate) {	
 		String jsonString = new Gson().toJson(wxTemplate).toString();	
 		System.out.println("templatemessage="+jsonString);
 		String requestUrl = SEND_TEMPLAYE_MESSAGE_URL.replace("ACCESS_TOKEN", accessToken);	
@@ -31,7 +43,7 @@ public class ChatTemplateProcessor {
 			} else  if(errorCode==40001||errorCode==42001){
 				String appId, appSecret;
 		        WeiXin weiXin;
-				weiXin=weixinService.getCampusById(campusId);
+				weiXin=weiXinMapper.getCampus(campusId);
 		        
 		        appId=weiXin.getAppId();
 		        appSecret=weiXin.getAppSecret();
@@ -44,7 +56,7 @@ public class ChatTemplateProcessor {
       		    Date date=new Date();
       		    paramMap.put("createTime", date);
       		    System.out.println("errorcode="+errorCode+"   accessToken="+accessToken);
-      		     weixinService.updateCampusById(paramMap);
+      		    weiXinMapper.updateCampus(paramMap);
       		    requestUrl = SEND_TEMPLAYE_MESSAGE_URL.replace("ACCESS_TOKEN", accessToken);
       		    jsonObject = CommonUtil.httpsRequest(requestUrl, "POST", jsonString);
       			System.out.println("jsonObject="+jsonObject);

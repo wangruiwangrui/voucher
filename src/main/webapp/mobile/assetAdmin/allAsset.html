@@ -217,7 +217,7 @@
                error: function (request){
             	   console.log(request);
                    $(".weui-loadmore").hide();         
-                   html += "获取数据错误";
+                   html += "网络连接故障";
                    $("#ul").append(html);
                },
                success: function (text) {              	   

@@ -8,8 +8,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -32,6 +34,8 @@ import com.voucher.manage.model.Users;
 import com.voucher.manage.service.UserService;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
+
+import common.HttpClient;
 
 @Controller
 @RequestMapping("/mobile/asset")
@@ -341,7 +345,7 @@ public class AssetController {
 		
 		WechatSendMessageController wechatSendMessageController=new WechatSendMessageController();
 		
-		wechatSendMessageController.send(guid, hiddenGuid,request);
+		wechatSendMessageController.send(guid, hiddenGuid);
 		
 		return assetsDAO.insertIntoHidden_Assets(hidden_Assets);
 		
@@ -420,17 +424,50 @@ public class AssetController {
 	}
 	
 	@RequestMapping("/updatePositionByRoomInfo")
-	public @ResponseBody Integer updatePositionByRoomInfo(@RequestParam String GUID,
+	public @ResponseBody Integer updatePositionByRoomInfo(
+			HttpServletRequest request,ServletResponse response, 
+			@RequestParam String imagename,@RequestParam String serverId,  
+    		@RequestParam Integer campusId,@RequestParam String id,
+    		@RequestParam String classType,
+    		@RequestParam String GUID,
 			@RequestParam Double lng,@RequestParam Double lat){
-		boolean isUpdate=false;   //如果有位置就不更新
 		
-		Position position=new Position();
+		int upload=0;
 		
-		position.setGUID(GUID);
-		position.setLat(lat);
-		position.setLng(lng);
+		String url="http://"+request.getServerName()+"/voucher/mobile/file/upload.do";
 		
-		return assetsDAO.updatePositionByRoomInfo(position,isUpdate);
+		System.out.println("url="+url);
+		
+		List<BasicNameValuePair> reqParam = new ArrayList<BasicNameValuePair>();
+		
+		reqParam.add(new BasicNameValuePair("imagename", imagename));
+		reqParam.add(new BasicNameValuePair("serverId", serverId));
+		reqParam.add(new BasicNameValuePair("campusId", String.valueOf(campusId)));
+		reqParam.add(new BasicNameValuePair("id", id));
+		reqParam.add(new BasicNameValuePair("classType", classType));
+		
+		HttpClient httpClient = new HttpClient();
+		
+		upload=Integer.parseInt(httpClient.doGet(url, reqParam));
+		
+		if(upload==1){
+			
+			boolean isUpdate=false;   //如果有位置就不更新
+			
+			Position position=new Position();		
+			position.setGUID(GUID);
+			position.setLat(lat);
+			position.setLng(lng);
+
+			Date date=new Date();
+		    
+		    position.setDate(date);
+		    
+			assetsDAO.updatePositionByRoomInfo(position,isUpdate);
+		}
+		
+		return upload;
+		
 	}
 	
 	@RequestMapping("/insertAccess")
