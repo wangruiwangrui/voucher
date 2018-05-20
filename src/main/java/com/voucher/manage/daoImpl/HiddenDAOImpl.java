@@ -633,7 +633,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	
 	@Override
 	public Map<String, Object> selectAllHiddenCheck(Integer limit, Integer offset, String sort,
-			String order,Map<String, String> search) {
+			String order,String address,Map<String, String> search) {
 		// TODO Auto-generated method stub
 		Hidden_Check hidden_Check=new Hidden_Check();
 		search.put("[Hidden_Check].exist =", "1");
@@ -643,14 +643,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		hidden_Check.setSort(sort);
 		hidden_Check.setOrder(order);
 		hidden_Check.setNotIn("id");
-		
-        RoomInfo roomInfo=new RoomInfo();
-        
-        roomInfo.setLimit(limit);
-        roomInfo.setOffset(offset);
-        roomInfo.setSort(sort);
-        roomInfo.setOrder(order);
-		
+
 		Position position=new Position();
 		
 		position.setLimit(limit);
@@ -667,23 +660,96 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		weiXin_User.setOrder(order);
 		weiXin_User.setNotIn("id");
 		
+		if(address!=null&&!address.equals("")){
+			
+			RoomInfo roomInfo3=new RoomInfo();
+			
+			String[] where3={Singleton.ROOMDATABASE+".[dbo].[RoomInfo].[Address] like ","%"+address+"%"};
+			
+			roomInfo3.setWhere(where3);
+			roomInfo3.setLimit(2);
+			roomInfo3.setOffset(0);			
+			roomInfo3.setNotIn("GUID");
+			
+			List<RoomInfo> list3=SelectExe.get(this.getJdbcTemplate(), roomInfo3);
+			
+			try{
+				
+				RoomInfo roomInfo4=list3.get(0);
+							
+				MyTestUtil.print(roomInfo4);
+				
+				if(roomInfo4!=null){
+
+					search.put("[Hidden_Check].[GUID] = ", roomInfo4.getGUID());
+				}
+				
+			}catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+				return null;
+			}
+			
+		}
+		
 		if(!search.isEmpty()){
 		    String[] where=TransMapToString.get(search);
 		    hidden_Check.setWhere(where);
-		    roomInfo.setWhere(where);
 		    position.setWhere(where);
 		    weiXin_User.setWhere(where);
 		}
 		
 		Map map=new HashMap<String, Object>();
 		
-		Object[] objects={hidden_Check,roomInfo,position,weiXin_User};
+		Object[] objects={hidden_Check,position,weiXin_User};
 		
-		String[] join={"GUID","check_id","campusAdmin"};
+		String[] join={"check_id","campusAdmin"};
 		
 		Hidden_Check_Join hidden_Check_Join=new Hidden_Check_Join();
 		
-		List<Hidden_Check> list=SelectJoinExe.get(this.getJdbcTemplate(), objects, hidden_Check_Join, join);
+		List<Hidden_Check_Join> list=SelectJoinExe.get(this.getJdbcTemplate(), objects, hidden_Check_Join, join);
+		
+		Iterator<Hidden_Check_Join> iterator=list.iterator();
+
+		int i=0;
+		
+		while (iterator.hasNext()) {
+			
+			Hidden_Check_Join hidden_Check_Join2=iterator.next();
+			
+			String guid=hidden_Check_Join2.getGUID();
+			
+			RoomInfo roomInfo=new RoomInfo();
+			
+			String[] where2={Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = ",guid};
+			
+			roomInfo.setWhere(where2);
+			roomInfo.setLimit(2);
+			roomInfo.setOffset(0);			
+			roomInfo.setNotIn("GUID");
+			
+			System.out.println("guid="+guid);
+			
+			List<RoomInfo> list2=SelectExe.get(this.getJdbcTemplate(), roomInfo);
+			
+			try{
+				
+				RoomInfo roomInfo2=list2.get(0);
+							
+				MyTestUtil.print(roomInfo2);
+				
+				hidden_Check_Join2.setAddress(roomInfo2.getAddress());
+				hidden_Check_Join2.setManageRegion(roomInfo2.getManageRegion());
+				
+				list.set(i, hidden_Check_Join2);
+				
+			}catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+			
+			i++;
+		}
 		
 		map.put("rows", list);
 		System.out.println("checkjoinlist=");

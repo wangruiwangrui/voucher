@@ -371,7 +371,7 @@ public class BaiduMapController {
 		searchMap.put("convert(varchar(11),[Hidden_Check].date,120)>",startTime);
 		searchMap.put("convert(varchar(11),[Hidden_Check].date,120)<=",endTime);
 		
-		Map map=hiddenDAO.selectAllHiddenCheck(1000, 0, "date", "asc", searchMap);
+		Map map=hiddenDAO.selectAllHiddenCheck(1000, 0, "date", "asc","", searchMap);
 		
 		/*
 		System.out.println("datepicker="+datepicker+" "+datepicker2);

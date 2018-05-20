@@ -67,7 +67,7 @@ public interface HiddenDAO {
 	public Integer updateUserPassword(Hidden_User hidden_User,String OldPw);
 	
 	public Map<String, Object> selectAllHiddenCheck(Integer limit, Integer offset, String sort,
-			String order,Map<String, String> search);
+			String order,String address,Map<String, String> search);
 	
 	public Integer insertHiddenCheck(Hidden_Check hidden_Check);
 	

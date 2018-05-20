@@ -106,11 +106,13 @@ public class HiddenController {
 			@RequestParam String search,HttpServletRequest request) {
 		Map searchMap=new HashMap<>();
 		
+		/*
 		if(!search.equals("")){
 			searchMap.put("check_name like", "%"+search+"%");
 		}
+		*/
 		
-		Map map=hiddenDAO.selectAllHiddenCheck(limit, offset, sort, order, searchMap);
+		Map map=hiddenDAO.selectAllHiddenCheck(limit, offset, sort, order,search, searchMap);
 		
 		List list=(List) map.get("rows");
 		
@@ -130,7 +132,7 @@ public class HiddenController {
 		
 	    searchMap.put("[Hidden_Check].check_id = ", check_id);
 		
-		Map map=hiddenDAO.selectAllHiddenCheck(10, 0, null, null, searchMap);
+		Map map=hiddenDAO.selectAllHiddenCheck(10, 0, null, null,null, searchMap);
 		
 		List list=(List) map.get("rows");
 		

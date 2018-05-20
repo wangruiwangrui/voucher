@@ -409,7 +409,8 @@
 	     urls.push(v.src);
 	 })
      
-	 var current = this.src;
+	 var thisStr = this.src;
+	 var current = thisStr.replace(/\/compressFile/, "");
 	 console.log(current);
      var obj = {
          urls : urls,

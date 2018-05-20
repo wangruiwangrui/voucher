@@ -285,7 +285,7 @@
                    	   
                    	  var data=imgs[i];
                    	  var name=data.fileBelong;
-                   	  var uri=data.uri;
+                   	  var uri=data.compressUri;
                    	  var panel=document.createElement("div");
                    	  panel.setAttribute("class","weui-panel__bd");
                      	   var a=document.createElement("a");
@@ -537,10 +537,13 @@
 	 var urls = [];
 	 var imgs = im.all('img',im.all('#img')[0]);
 	 imgs.forEach(function(v,i){
-	     urls.push(v.src);
+		 var str=v.src;
+		 var url=str.replace(/\/compressFile/, "");
+	     urls.push(url);
 	 })
      
-	 var current = this.src;
+	 var thisStr = this.src;
+	 var current = thisStr.replace(/\/compressFile/, "");
 	 console.log(current);
      var obj = {
          urls : urls,

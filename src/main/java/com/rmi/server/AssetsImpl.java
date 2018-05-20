@@ -310,9 +310,9 @@ public class AssetsImpl implements Assets{
 
 	@Override
 	public Map<String, Object> selectAllHiddenCheck(Integer limit, Integer offset, String sort, String order,
-			Map<String, String> search) {
+			String address,Map<String, String> search) {
 		// TODO Auto-generated method stub
-		return hiddenDAO.selectAllHiddenCheck(limit, offset, sort, order, search);
+		return hiddenDAO.selectAllHiddenCheck(limit, offset, sort, order, address, search);
 	}
 
 

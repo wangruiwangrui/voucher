@@ -110,7 +110,7 @@
 		<filter-class>com.voucher.manage.filter.MobileIsLoginFilter</filter-class>
 		<init-param>
 			<param-name>loginStrings</param-name><!-- 对页面不进行过滤 -->
-			<param-value>/oauth;/getCampusId;/beg;/claim;/asset</param-value>
+			<param-value>/oauth;/getCampusId;/beg;/claim</param-value>
 		</init-param>
 		<init-param>
 			<param-name>includeStrings</param-name>
@@ -134,7 +134,7 @@
 		<filter-class>com.voucher.manage.filter.MobileAdminIsLoginFilter</filter-class>
 		<init-param>
 			<param-name>loginStrings</param-name>
-			<param-value>/login.html;.js;.css;restrict.html;index.html;/test;/asset</param-value>
+			<param-value>/login.html;.js;.css;restrict.html;index.html;/test</param-value>
 		</init-param>
 		<init-param>
 			<param-name>includeStrings</param-name>

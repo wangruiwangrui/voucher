@@ -83,7 +83,9 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 				
 				CopyFile.set(imgPath, oldFile, hidden_Data_Join.getURI());
 				
-				fileBytes.put(GUID, Singleton.filePath+"\\"+hidden_Data_Join.getURI());
+				System.out.println("imgPath="+imgPath);
+				
+				fileBytes.put(GUID, Singleton.filePath+"\\compressFile\\"+hidden_Data_Join.getURI());
 		
 			}catch (Exception e) {
 			// TODO: handle exception
@@ -141,9 +143,11 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 				
 				String oldFile=filePath+"\\"+hidden_Data_Join.getURI();
 				
+				System.out.println("imgpath="+imgPath);
+				
 				CopyFile.set(imgPath, oldFile, hidden_Data_Join.getURI());
 				
-				fileBytes.put(GUID, Singleton.filePath+"\\"+hidden_Data_Join.getURI());
+				fileBytes.put(GUID, Singleton.filePath+"\\compressFile\\"+hidden_Data_Join.getURI());
 		
 			}catch (Exception e) {
 			// TODO: handle exception
@@ -197,10 +201,13 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 			
 				CopyFile.set(imgPath, oldFile, hidden_Data_Join.getURI());
 			
+				System.out.println("imgpath="+imgPath);
+				
 				Map<String,String> map=new HashMap<>();
 				
 				map.put("name", hidden_Data_Join.getNAME());
 				map.put("uri", Singleton.filePath+"\\"+hidden_Data_Join.getURI());
+				map.put("compressUri", Singleton.filePath+"\\compressFile\\"+hidden_Data_Join.getURI());
 				map.put("date", hidden_Data_Join.getDate().toString());
 				MyTestUtil.print(map);
 				fileBytes.add(map);
@@ -271,7 +278,7 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 				
 				CopyFile.set(imgPath, oldFile, hidden_Check_Date.getURI());
 				
-				fileBytes.put(Check_id, Singleton.filePath+"\\"+hidden_Check_Date.getURI());
+				fileBytes.put(Check_id, Singleton.filePath+"\\compressFile\\"+hidden_Check_Date.getURI());
 		
 			}catch (Exception e) {
 			// TODO: handle exception
@@ -329,6 +336,7 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 				
 				map.put("name", hidden_Check_Date.getNAME());
 				map.put("uri", Singleton.filePath+"\\"+hidden_Check_Date.getURI());
+				map.put("compressUri", Singleton.filePath+"\\compressFile\\"+hidden_Check_Date.getURI());
 				map.put("date", hidden_Check_Date.getDate().toString());
 				
 				fileBytes.add(map);
@@ -400,7 +408,7 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 				
 				CopyFile.set(imgPath, oldFile, hidden_Neaten_Date.getURI());
 				
-				fileBytes.put(neaten_id, Singleton.filePath+"\\"+hidden_Neaten_Date.getURI());
+				fileBytes.put(neaten_id, Singleton.filePath+"\\compressFile\\"+hidden_Neaten_Date.getURI());
 		
 			}catch (Exception e) {
 			// TODO: handle exception
@@ -458,6 +466,7 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 				
 				map.put("name", hidden_Neaten_Date.getNAME());
 				map.put("uri", Singleton.filePath+"\\"+hidden_Neaten_Date.getURI());
+				map.put("compressUri", Singleton.filePath+"\\compressFile\\"+hidden_Neaten_Date.getURI());
 				map.put("date", hidden_Neaten_Date.getDate().toString());
 				
 				fileBytes.add(map);
@@ -527,7 +536,7 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 				
 				CopyFile.set(imgPath, oldFile, fileSelfBelong.getUpFileFullName());
 				
-				fileBytes.put(roomGUID, Singleton.filePath+"\\"+fileSelfBelong.getUpFileFullName());
+				fileBytes.put(roomGUID, Singleton.filePath+"\\compressFile\\"+fileSelfBelong.getUpFileFullName());
 		
 			}catch (Exception e) {
 			// TODO: handle exception
@@ -584,7 +593,7 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 				
 				CopyFile.set(imgPath, oldFile, fileSelfBelong.getUpFileFullName());
 				
-				fileBytes.put(roomGUID, Singleton.filePath+"\\"+fileSelfBelong.getUpFileFullName());
+				fileBytes.put(roomGUID, Singleton.filePath+"\\compressFile\\"+fileSelfBelong.getUpFileFullName());
 		
 			}catch (Exception e) {
 			// TODO: handle exception
@@ -643,7 +652,7 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 				Map<String,String> map=new HashMap<>();
 				
 				map.put("uri", Singleton.filePath+"\\"+fileSelfBelong.getUpFileFullName());
-				
+				map.put("compressUri", Singleton.filePath+"\\compressFile\\"+fileSelfBelong.getUpFileFullName());
 				map.put("fileBelong", fileSelfBelong.getFileBelong());
 
 				fileBytes.add(map);

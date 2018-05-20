@@ -361,7 +361,7 @@
                         	   
                         	  var data=imgs[i];
                         	  var name=data.name;
-                        	  var uri=data.uri;
+                        	  var uri=data.compressUri;
                         	  var date=data.date;
                         	  var panel=document.createElement("div");
                         	  panel.setAttribute("class","weui-panel__bd");
@@ -666,11 +666,14 @@
 	 var urls = [];
 	 var imgs = im.all('img',im.all('#img')[0]);
 	 imgs.forEach(function(v,i){
-	     urls.push(v.src);
+		 var str=v.src;
+		 var url=str.replace(/\/compressFile/, "");
+	     urls.push(url);
 	 })
      
-	 var current = this.src;
-	 console.log(current);
+	 var thisStr = this.src;
+	 var current = thisStr.replace(/\/compressFile/, "");
+	 
      var obj = {
          urls : urls,
          current : current

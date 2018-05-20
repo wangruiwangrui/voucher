@@ -165,7 +165,7 @@
         success: function (text) {              	   
      	   var obj=text.hidden;
      	   var imgs=text.fileBytes;
-  
+  			console.log(text);
              	   var guid=obj.guid;
   
              	   var distance=null;
@@ -298,6 +298,7 @@
                    	   
                    	  var data=imgs[i];
                    	  var name=data.name;
+                   	  var compressUri=data.compressUri;
                    	  var uri=data.uri;
                    	  var date=data.date;
                    	  var panel=document.createElement("div");
@@ -310,11 +311,11 @@
                     	   var div=document.createElement("div");
                     	  	div.setAttribute("class","weui-media-box__hd");
                     	  
-               	   	 	 src="/voucher/"+uri;
+               	   	 	 src="/voucher/"+compressUri;
+               	   	 	 
                	  	  	var img=document.createElement("img");
                	  	  	img.setAttribute("class","weui-media-box__thumb");
                          	img.setAttribute("src",src);
-                       
                       	  	div.appendChild(img);
                       	   		
                       	  	div2=document.createElement("div");
@@ -502,16 +503,20 @@
 	 var urls = [];
 	 var imgs = im.all('img',im.all('#img')[0]);
 	 imgs.forEach(function(v,i){
-	     urls.push(v.src);
+		 var str=v.src;
+		 var url=str.replace(/\/compressFile/, "");
+	     urls.push(url);
 	 })
      
-	 var current = this.src;
-	 console.log(current);
+	 var thisStr = this.src;
+	 var current = thisStr.replace(/\/compressFile/, "");
+
      var obj = {
          urls : urls,
          current : current
      };
      previewImage.start(obj);
  });
+ 
  
 </script>

@@ -22,6 +22,7 @@ import com.voucher.manage.daoSQL.annotations.SQLFloat;
 import com.voucher.manage.daoSQL.annotations.SQLInteger;
 import com.voucher.manage.daoSQL.annotations.SQLLong;
 import com.voucher.manage.daoSQL.annotations.SQLString;
+import com.voucher.manage.tools.MyTestUtil;
 
 public class SelectSQLJoin {
 	public static Map<String, Object> get(Object[] objects,String[] joinParameters) throws ClassNotFoundException{
@@ -208,15 +209,17 @@ public class SelectSQLJoin {
 	  
 	//  params.add(0,limit); //把limit插入到最前面
   
+      int r=0;
+      
 	  if(term){
           StringBuilder whereCommand = new StringBuilder();         
           Iterator<String[]> iterator=wheres.iterator();
-          System.out.println("wheres="+wheres);
-          while (iterator.hasNext()) {
+          MyTestUtil.print(wheres);
+         
         	  columnWhere=iterator.next();
-        	  int k=1;
+        	  int k1=1;
         	  for(String whereterm:columnWhere){
-            	  if(k%2==0){
+            	  if(k1%2==0){
             		//  System.out.println("偶数");
             		//  whereCommand.append(whereterm+"\n  AND ");
             	   }else{
@@ -224,10 +227,12 @@ public class SelectSQLJoin {
             		//  whereCommand.append("\n   "+whereterm);
             		   whereCommand.append(whereterm+"? \n  "+Term+" ");
             	   }
-               k++;
+               k1++;
                System.out.println("whereCommand="+whereCommand);
+               System.out.println("r="+r);
+               r++;
               }
-		  }
+		  
           
           
           select=select+   //sqlserver分页需要在top也加上where条件
@@ -256,11 +261,11 @@ public class SelectSQLJoin {
           }
           iterator=wheres.iterator();
           System.out.println("wheres1="+wheres);
-          int k;
-          while (iterator.hasNext()) {
+          int k2;
+        
         	columnWhere=iterator.next();
         	System.out.println("length="+length);
-            for(k=1;k<length;k++){
+            for(k2=1;k2<length;k2++){
              for(String whereterm:columnWhere){
         	   if(i%2==0){
         		//  System.out.println("偶数");
@@ -272,17 +277,19 @@ public class SelectSQLJoin {
               i++;
              }
             }
-          }
+         
           
           select=select+"\n  AND "+whereCommand.substring(0,whereCommand.length()-7);
        //   System.out.println("select="+select);
           i=1;
           iterator=wheres.iterator();
           System.out.println("wheres2="+wheres);
-          while (iterator.hasNext()) {
+          
+          int k3;
+          
           columnWhere=iterator.next();
           System.out.println("length="+length);
-          for(k=1;k<length;k++){
+          for(k3=1;k3<length;k3++){
             for(String whereterm:columnWhere){
         	  if(i%2==0){
         		//  System.out.println("偶数");
@@ -294,7 +301,7 @@ public class SelectSQLJoin {
               i++;
            }
           }
-         }
+         
           
         }else{
         	select=select+
@@ -433,11 +440,11 @@ public class SelectSQLJoin {
 	          StringBuilder whereCommand = new StringBuilder();         
 	          Iterator<String[]> iterator=wheres.iterator();
 	          System.out.println("wheres="+wheres);
-	          while (iterator.hasNext()) {
+	          
 	        	  columnWhere=iterator.next();
-	        	  int k=1;
+	        	  int k1=1;
 	        	  for(String whereterm:columnWhere){
-	            	  if(k%2==0){
+	            	  if(k1%2==0){
 	            		//  System.out.println("偶数");
 	            		//  whereCommand.append(whereterm+"\n  AND ");
 	            	   }else{
@@ -445,29 +452,29 @@ public class SelectSQLJoin {
 	            		//  whereCommand.append("\n   "+whereterm);
 	            		   whereCommand.append(whereterm+"? \n  "+Term+" ");
 	            	   }
-	               k++;
+	               k1++;
 	               System.out.println("whereCommand="+whereCommand);
 	              }
-			  }
+			 
 	          select=select+   //sqlserver分页需要在top也加上where条件
 	          		 "\n  where "+
 	                    whereCommand.substring(0,whereCommand.length()-7);
 	          
 	       iterator=wheres.iterator();
-	       while (iterator.hasNext()) {
+	       
 	        	  columnWhere=iterator.next();
-	        	  int k=1;
+	        	  int k2=1;
 	        	  for(String whereterm:columnWhere){
-	            	  if(k%2==0){
+	            	  if(k2%2==0){
 	            		//  System.out.println("偶数");
 	            		  params.add(whereterm);
 	            	   }else{
 	            		//  System.out.println("奇数");
 	            		//  whereCommand.append("\n   "+whereterm);
 	            	   }
-	               k++;
+	               k2++;
 	              }
-			  }
+			  
 	          
 	        }
 		
