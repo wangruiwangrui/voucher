@@ -78,6 +78,8 @@ public class AssetController {
 		
 		Map where=new HashMap<>();
 		
+		where.put("[RoomInfo].State !=", "已划拨");
+		
 		if(search!=null&&!search.trim().equals("")){
 			search="%"+search+"%";  
 			where.put("Address like ", search);
@@ -103,6 +105,60 @@ public class AssetController {
 		map.put("fileBytes", fileBytes);
 		
 		MyTestUtil.print(fileBytes);
+		
+		return map;
+	}
+	
+	@RequestMapping("/getNotPlace")
+	public @ResponseBody Map<String, Object> notPlaceRoomInfo(@RequestParam Integer limit,@RequestParam Integer offset,String sort,String order,
+			String search,HttpServletRequest request) {
+		Map<String, Object> map = new HashMap<String, Object>();
+			
+		if(sort!=null&&sort.equals("buildArea")){
+			sort="BuildArea";
+		}
+		
+		if(sort!=null&&sort.equals("address")){
+			sort="Address";
+		}
+		if(order!=null&&order.equals("asc")){
+			order="asc";
+		}
+		
+		if(order!=null&&order.equals("desc")){
+			order="desc";
+		}
+		
+		Map where=new HashMap<>();
+		
+		where.put("[RoomInfo].State !=", "已划拨");
+		
+		if(search!=null&&!search.trim().equals("")){
+			search="%"+search+"%";  
+			where.put("Address like ", search);
+		}		
+
+		
+		/*
+		List<RoomInfo> roomInfos=roomInfoDao.findAllRoomInfo(limit,offset,sort,
+				order,where);
+		System.out.println("roominfocontroller sort="+sort+"   order="+order);
+		*/
+		
+		Map roomInfo_Positions=roomInfoDao.notPlaceRoomInfo(limit, offset, search);
+		
+		List roominfos=(List) roomInfo_Positions.get("rows");
+
+		
+		map.put("rows", roominfos);
+			
+		Map fileBytes=mobileDao.roomInfo_PositionImageQuery(request, roominfos);
+		map.put("fileBytes", fileBytes);
+		
+		int total=(int) roomInfo_Positions.get("total");		
+		map.put("total", total);
+		
+		//MyTestUtil.print(fileBytes);
 		
 		return map;
 	}

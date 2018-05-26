@@ -32,9 +32,10 @@ public class testController {
 	
 	ApplicationContext applicationContext=new Connect().get();
 	
+	HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
+	
      private AffairService testService;
 	
-     private HiddenDAO hiddenDAO;
      
 	/*
      private RedisDao orderDao;
@@ -156,4 +157,14 @@ public class testController {
 		return set;
 	}
 	*/
+	
+	
+	@RequestMapping("getAllCheck")
+	public @ResponseBody Map getAllCheck(@RequestParam Integer limit,@RequestParam
+			Integer offset){
+		
+		return hiddenDAO.selectAllHiddenCheck(limit, offset, null, null, null, new HashMap<>());
+		
+	}
+	
 }

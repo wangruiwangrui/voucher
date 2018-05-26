@@ -34,6 +34,7 @@ import com.voucher.manage.daoSQL.SelectExe;
 import com.voucher.manage.daoSQL.SelectJoinExe;
 import com.voucher.manage.daoSQL.SelectSQL;
 import com.voucher.manage.daoSQL.SelectSQLJoin;
+import com.voucher.manage.daoSQL.SelectSqlJoinExe;
 import com.voucher.manage.daoSQL.UpdateExe;
 import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.MyTestUtil;
@@ -592,6 +593,105 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		Double nothireByMonth=this.getJdbcTemplate().query(sql, new Hire()).get(0);
 	
 		return nothireByMonth;
+	}
+	
+	@Override
+	public Map notPlaceRoomInfo(int limit,int offset,String search) {
+		// TODO Auto-generated method stub
+		
+		String sql01="SELECT TOP "+limit+" "+		            
+					Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].OriginalNum,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].OriginalAddress,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Region,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Segment,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManageRegion,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomProperty,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Useful,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Floor,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].State,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Structure,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BuildArea,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomType,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].IsCity,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Manager,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManagerPhone,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].IsStreet,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].FitMent,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BeFrom,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].InDate,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightNo,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightArea,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].DesignUseful,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BuildYear,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightUnit,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RealPropertyRightUnit,"+
+				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyCardUnit, "+	
+				    "[Position].GUID,"+
+					"[Position].province,"+
+					"[Position].city,"+
+					"[Position].district,"+
+					"[Position].street,"+
+					"[Position].street_number,"+
+					"[Position].lng,"+
+					"[Position].lat,"+
+					"[Position].date "+
+					"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position] "+
+					"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
+					"WHERE " ;
+					
+    String sql02= "[Position].lng is null AND [Position].lat is  null "+  
+					"AND [RoomInfo].State != '已划拨' "+
+					"AND "+
+					Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID not in( select top "+offset+" "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID from "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position] "+
+					"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
+					"WHERE [Position].lng is null AND [Position].lat is null "+ 
+					"AND [RoomInfo].State != '已划拨' )";
+		
+		
+		String sql1="SELECT count(*) "+
+				"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position] "+
+				"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
+				"WHERE [Position].lng is null AND [Position].lat is  null "+  
+				"AND [RoomInfo].State != '已划拨' ";		
+		
+		String sql;
+		
+		if(search.equals("")){
+			sql=sql01+sql02;
+		}else{
+			sql=sql01+sql02+"AND "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address like '"+search+ "' ";
+		    
+			sql1=sql1+"AND "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address like '"+search+"'";
+		}
+		
+		System.out.println("sql="+sql);
+		
+		RoomInfo_Position roomInfo_Position=new RoomInfo_Position();
+		
+		Position position=new Position();		
+		
+		RoomInfo roomInfo=new RoomInfo();
+		
+		Object[] objects={roomInfo,position};
+		
+		Map map=new HashMap<>();
+		
+		try{
+			List list=SelectSqlJoinExe.get(this.getJdbcTemplate(), sql, objects,roomInfo_Position);
+			
+			int total=(int) SelectSqlJoinExe.getCount(this.getJdbcTemplate(), sql1, objects).get("");
+			
+			map.put("rows", list);
+			
+			map.put("total", total);
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		return map;
 	}
 	
 }

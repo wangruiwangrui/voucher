@@ -580,7 +580,8 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 					",[ViewFileName] "+
 				"FROM "+
 				Singleton.ROOMDATABASE+".[dbo].[FileSelfBelong] "+  
-				"where RoomGUID='"+roomGUID+"'";
+				"where RoomGUID='"+roomGUID+"'"+
+				"AND FileBelong='房屋图片'";
 		
 			List fileSelfBelongs=this.getJdbcTemplate().query(sql,new fileSelfBelongRowMapper());
 		
@@ -631,7 +632,8 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 				",[ViewFileName] "+
 			"FROM "+
 			Singleton.ROOMDATABASE+".[dbo].[FileSelfBelong] "+  
-			"where RoomGUID='"+roomGUID+"'";
+			"where RoomGUID='"+roomGUID+"'"+
+			"AND FileBelong='房屋图片'";
 		
 		List fileSelfBelongs=this.getJdbcTemplate().query(sql,new fileSelfBelongRowMapper());
 	

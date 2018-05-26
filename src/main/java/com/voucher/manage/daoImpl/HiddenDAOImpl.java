@@ -635,6 +635,11 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	public Map<String, Object> selectAllHiddenCheck(Integer limit, Integer offset, String sort,
 			String order,String address,Map<String, String> search) {
 		// TODO Auto-generated method stub
+		
+		Map map=new HashMap<String, Object>();
+		List<Hidden_Check_Join> list;
+		Map countMap;
+		
 		Hidden_Check hidden_Check=new Hidden_Check();
 		search.put("[Hidden_Check].exist =", "1");
 		
@@ -643,7 +648,15 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		hidden_Check.setSort(sort);
 		hidden_Check.setOrder(order);
 		hidden_Check.setNotIn("id");
-
+		
+		RoomInfo roomInfo=new RoomInfo();
+		
+		roomInfo.setOffset(offset);
+		roomInfo.setLimit(limit);
+		roomInfo.setSort(sort);
+		roomInfo.setOrder(order);
+		roomInfo.setNotIn("id");
+		
 		Position position=new Position();
 		
 		position.setLimit(limit);
@@ -662,26 +675,26 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		
 		if(address!=null&&!address.equals("")){
 			
-			RoomInfo roomInfo3=new RoomInfo();
+			RoomInfo roomInfo2=new RoomInfo();
 			
-			String[] where3={Singleton.ROOMDATABASE+".[dbo].[RoomInfo].[Address] like ","%"+address+"%"};
+			String[] where2={Singleton.ROOMDATABASE+".[dbo].[RoomInfo].[Address] like ","%"+address+"%"};
 			
-			roomInfo3.setWhere(where3);
-			roomInfo3.setLimit(2);
-			roomInfo3.setOffset(0);			
-			roomInfo3.setNotIn("GUID");
+			roomInfo2.setWhere(where2);
+			roomInfo2.setLimit(2);
+			roomInfo2.setOffset(0);			
+			roomInfo2.setNotIn("GUID");
 			
-			List<RoomInfo> list3=SelectExe.get(this.getJdbcTemplate(), roomInfo3);
+			List<RoomInfo> list3=SelectExe.get(this.getJdbcTemplate(), roomInfo2);
 			
 			try{
 				
-				RoomInfo roomInfo4=list3.get(0);
+				RoomInfo roomInfo3=list3.get(0);
 							
-				MyTestUtil.print(roomInfo4);
+				//MyTestUtil.print(roomInfo3);
 				
-				if(roomInfo4!=null){
+				if(roomInfo3!=null){
 
-					search.put("[Hidden_Check].[GUID] = ", roomInfo4.getGUID());
+					search.put("[Hidden_Check].[GUID] = ", roomInfo3.getGUID());
 				}
 				
 			}catch (Exception e) {
@@ -695,68 +708,161 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		if(!search.isEmpty()){
 		    String[] where=TransMapToString.get(search);
 		    hidden_Check.setWhere(where);
+		    roomInfo.setWhere(where);
 		    position.setWhere(where);
 		    weiXin_User.setWhere(where);
 		}
-		
-		Map map=new HashMap<String, Object>();
-		
-		Object[] objects={hidden_Check,position,weiXin_User};
-		
-		String[] join={"check_id","campusAdmin"};
-		
-		Hidden_Check_Join hidden_Check_Join=new Hidden_Check_Join();
-		
-		List<Hidden_Check_Join> list=SelectJoinExe.get(this.getJdbcTemplate(), objects, hidden_Check_Join, join);
-		
-		Iterator<Hidden_Check_Join> iterator=list.iterator();
 
-		int i=0;
+		if(offset>0){
+			
+			Object[] objects={hidden_Check,weiXin_User};
+			
+			String[] join={"campusAdmin"};
 		
-		while (iterator.hasNext()) {
+			Hidden_Check_Join hidden_Check_Join=new Hidden_Check_Join();
+		
+			list=SelectJoinExe.get(this.getJdbcTemplate(), objects, hidden_Check_Join, join);
+		
+			Iterator<Hidden_Check_Join> iterator=list.iterator();
 			
-			Hidden_Check_Join hidden_Check_Join2=iterator.next();
+			int i=0;
 			
-			String guid=hidden_Check_Join2.getGUID();
-			
-			RoomInfo roomInfo=new RoomInfo();
-			
-			String[] where2={Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = ",guid};
-			
-			roomInfo.setWhere(where2);
-			roomInfo.setLimit(2);
-			roomInfo.setOffset(0);			
-			roomInfo.setNotIn("GUID");
-			
-			System.out.println("guid="+guid);
-			
-			List<RoomInfo> list2=SelectExe.get(this.getJdbcTemplate(), roomInfo);
-			
-			try{
+			while (iterator.hasNext()) {
 				
-				RoomInfo roomInfo2=list2.get(0);
-							
-				MyTestUtil.print(roomInfo2);
+				Hidden_Check_Join hidden_Check_Join2=iterator.next();
 				
-				hidden_Check_Join2.setAddress(roomInfo2.getAddress());
-				hidden_Check_Join2.setManageRegion(roomInfo2.getManageRegion());
+				String guid=hidden_Check_Join2.getGUID();
+				
+				RoomInfo roomInfo4=new RoomInfo();
+				
+				String[] where4={Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = ",guid};
+				
+				roomInfo4.setWhere(where4);
+				roomInfo4.setLimit(2);
+				roomInfo4.setOffset(0);			
+				roomInfo4.setNotIn("GUID");
+				
+				System.out.println("guid="+guid);
+				
+				List<RoomInfo> list2=SelectExe.get(this.getJdbcTemplate(), roomInfo4);
+				
+				try{
+					
+					RoomInfo roomInfo5=list2.get(0);
+								
+					//MyTestUtil.print(roomInfo5);
+					
+					hidden_Check_Join2.setAddress(roomInfo5.getAddress());
+					hidden_Check_Join2.setManageRegion(roomInfo5.getManageRegion());
+					hidden_Check_Join2.setState(roomInfo5.getState());
+					
+					
+				}catch (Exception e) {
+					// TODO: handle exception
+					e.printStackTrace();
+				}
+				
+				Position position2=new Position();
+				
+				String[] where5={"[Position].[check_id]=",hidden_Check_Join2.getCheck_id()};
+				
+				position2.setWhere(where5);
+				position2.setLimit(2);
+				position2.setOffset(0);
+				position2.setNotIn("id");
+				
+				List<Position> list3=SelectExe.get(this.getJdbcTemplate(), position2);
+				
+				try{
+					if(!list3.isEmpty()){
+					
+						Position position3=list3.get(0);
+					
+						hidden_Check_Join2.setLat(position3.getLat());
+						hidden_Check_Join2.setLng(position3.getLng());
+						hidden_Check_Join2.setCity(position3.getCity());
+						hidden_Check_Join2.setDistrict(position3.getDistrict());
+						hidden_Check_Join2.setStreet(position3.getStreet());
+					
+					}
+				}catch (Exception e) {
+					// TODO: handle exception
+					e.printStackTrace();
+				}
 				
 				list.set(i, hidden_Check_Join2);
 				
-			}catch (Exception e) {
-				// TODO: handle exception
-				e.printStackTrace();
+				i++;
 			}
 			
-			i++;
+			countMap=SelectJoinExe.getCount(this.getJdbcTemplate(), objects, join);
+			
+		}else{
+
+			
+			Object[] objects={hidden_Check,position,weiXin_User};
+			
+			String[] join={"check_id","campusAdmin"};
+		
+			Hidden_Check_Join hidden_Check_Join=new Hidden_Check_Join();
+		
+			list=SelectJoinExe.get(this.getJdbcTemplate(), objects, hidden_Check_Join, join);
+		
+			Iterator<Hidden_Check_Join> iterator=list.iterator();
+			
+			int i=0;
+			
+			while (iterator.hasNext()) {
+				
+				Hidden_Check_Join hidden_Check_Join2=iterator.next();
+				
+				String guid=hidden_Check_Join2.getGUID();
+				
+				RoomInfo roomInfo4=new RoomInfo();
+				
+				String[] where4={Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = ",guid};
+				
+				roomInfo4.setWhere(where4);
+				roomInfo4.setLimit(2);
+				roomInfo4.setOffset(0);			
+				roomInfo4.setNotIn("GUID");
+				
+				System.out.println("guid="+guid);
+				
+				List<RoomInfo> list2=SelectExe.get(this.getJdbcTemplate(), roomInfo4);
+				
+				try{
+					
+					RoomInfo roomInfo5=list2.get(0);
+								
+					//MyTestUtil.print(roomInfo5);
+					
+					hidden_Check_Join2.setAddress(roomInfo5.getAddress());
+					hidden_Check_Join2.setManageRegion(roomInfo5.getManageRegion());
+					hidden_Check_Join2.setState(roomInfo5.getState());
+					
+					
+				}catch (Exception e) {
+					// TODO: handle exception
+					e.printStackTrace();
+				}
+							
+				
+				list.set(i, hidden_Check_Join2);
+				
+				i++;
+			}
+			
+			countMap=SelectJoinExe.getCount(this.getJdbcTemplate(), objects, join);
 		}
+		
+		
 		
 		map.put("rows", list);
 		System.out.println("checkjoinlist=");
 		MyTestUtil.print(list);
 		
-        Map countMap=SelectJoinExe.getCount(this.getJdbcTemplate(), objects, join);
-		
+
 		map.put("total", countMap.get(""));
 		
 		return map;

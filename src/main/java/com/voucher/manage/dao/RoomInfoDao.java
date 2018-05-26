@@ -55,4 +55,6 @@ public interface RoomInfoDao {
 	public Double getAlreadyHireByMonth(String month);
 	
 	public Double getNotHireByMonth(String month);
+	
+	public Map notPlaceRoomInfo(int limit,int offset,String search);
 }

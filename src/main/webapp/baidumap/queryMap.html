@@ -40,7 +40,7 @@
 	function ZoomControl(){
 	  // 默认停靠位置和偏移量
 	  this.defaultAnchor = BMAP_ANCHOR_TOP_LEFT;
-	  this.defaultOffset = new BMap.Size(200, 20);
+	  this.defaultOffset = new BMap.Size(200, 25);
 	}
 
 	// 通过JavaScript的prototype属性继承于BMap.Control
@@ -54,10 +54,9 @@
 	  // 添加文字说明
 	  var input=document.createElement("input");
 	  input.setAttribute("id","input");
+	  input.setAttribute("class","btn_wr");
 	  div.appendChild(input);
 	  // 设置样式
-	  div.style.cursor = "pointer";
-	  div.style.border = "1px solid gray";
 	  div.style.backgroundColor = "white";
 	  // 绑定事件,点击一次放大两级
 	  input.onkeydown = keyDown;  

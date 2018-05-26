@@ -432,11 +432,13 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 				    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyCardUnit "+				   
 					"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
 					"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
-					"WHERE [Position].lng is not null AND [Position].lat is not null "+  
+					"WHERE [Position].lng is not null AND [Position].lat is not null "+
+					"AND [RoomInfo].State != '已划拨' "+
 					"AND "+
 					Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID not in( select top "+offset+" "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID from "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
 					"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
 					"WHERE [Position].lng is not null AND [Position].lat is not null "+ 
+					"AND [RoomInfo].State != '已划拨' "+
 					"ORDER BY   SQRT(("+lng+"-lng)*("+lng+"-lng)+("+lat+"-lat)*("+lat+"-lat))) ";
 		
 		
