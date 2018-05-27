@@ -488,6 +488,12 @@ public class AssetsImpl implements Assets{
 		return assetsDAO.selectManageRegion();
 	}
 
+	@Override
+	public List selectRoomProperty() {
+		// TODO Auto-generated method stub
+		return assetsDAO.selectRoomProperty();
+	}
+
 
 	@Override
 	public Users getWetchatUsers(String openId) {

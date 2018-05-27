@@ -1318,12 +1318,33 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		return list;
 	}
 
+	@Override
+	public List selectRoomProperty(){
+		// TODO Auto-generated method stub
+		
+		String sql="SELECT [RoomProperty] "+
+		                    "FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] group by [RoomProperty]";
+				
+		List list=this.getJdbcTemplate().query(sql, new roomInfoRowMapper());
+				
+		return list;
+	}
+	
 	class roomInfoRowMapper implements RowMapper<RoomInfo> {
         //rs涓鸿繑鍥炵粨鏋滈泦锛屼互姣忚涓哄崟浣嶅皝瑁呯潃
-        public RoomInfo mapRow(ResultSet rs, int rowNum) throws SQLException {    
+        public RoomInfo mapRow(ResultSet rs, int rowNum) {    
         	RoomInfo roomInfo=new RoomInfo();
-        	roomInfo.setManageRegion(rs.getString("ManageRegion"));        	
-            return roomInfo;
+        	try{
+        		roomInfo.setManageRegion(rs.getString("ManageRegion"));               		
+        	}catch (SQLException e) {
+				// TODO: handle exception
+			}
+        	try{
+        		roomInfo.setRoomProperty(rs.getString("RoomProperty"));
+        	}catch (Exception e) {
+				// TODO: handle exception
+			}
+        	return roomInfo;
         }
     }
 

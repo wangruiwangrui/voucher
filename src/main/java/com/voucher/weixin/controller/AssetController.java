@@ -32,6 +32,7 @@ import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.model.Access;
 import com.voucher.manage.model.Users;
 import com.voucher.manage.service.UserService;
+import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
 
@@ -274,6 +275,69 @@ public class AssetController {
 		
 	}
 	
+	@RequestMapping("/getAssetByState")
+	public @ResponseBody Map getAssetByState(){
+		
+		Map search=new HashMap<>();
+		
+		search.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].State=","已出租");
+		
+		int alreadyHire=roomInfoDao.getRoomInfoCount(search);
+		
+		search=new HashMap<>();
+		
+		search.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].State=","空置");
+		
+		int notHire=roomInfoDao.getRoomInfoCount(search);
+		
+		search=new HashMap<>();
+		
+		search.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].State=","不可出租");
+		
+		int catnotHire=roomInfoDao.getRoomInfoCount(search);
+		
+		int total=alreadyHire+notHire+catnotHire;
+		
+		Map map=new HashMap<>();
+		
+		map.put("alreadyHire", alreadyHire);
+		
+		map.put("notHire", notHire);
+		
+		map.put("catnotHire", catnotHire);
+		
+		map.put("total", total);
+		
+		return map;
+		
+	}
+	
+	
+	@RequestMapping("/getAssetByDangerClass")
+	public @ResponseBody Map getAssetByDangerClass(){
+		
+		Map search=new HashMap<>();
+		
+		search.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].State !=","已划拨");
+		
+		int normal=roomInfoDao.getRoomInfoCount(search);
+		
+		search.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].DangerClassification=","D级");
+		
+		int danger=roomInfoDao.getRoomInfoCount(search);
+		
+		int total=normal+danger;
+		
+		Map map=new HashMap<>();
+		
+		map.put("normal", normal);
+		
+		map.put("danger", danger);
+		
+		map.put("total", total);
+		
+		return map;
+	}
 	
 	@RequestMapping("/findChartInfoByYear")
 	public @ResponseBody List findChartInfoByYear(){

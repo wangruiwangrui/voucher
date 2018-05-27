@@ -36,6 +36,9 @@
 		{renderOptions: {map: map,autoViewport: false},pageCapacity: 1}      
 	); 
 	
+	var showLable=1;
+	
+	/*
 	// 定义一个控件类,即function
 	function ZoomControl(){
 	  // 默认停靠位置和偏移量
@@ -152,6 +155,100 @@
 	var menuCtrl = new menuControl();
 	// 添加到地图当中
 	map.addControl(menuCtrl);
+	*/
+	
+	var menu = new BMap.ContextMenu();
+	var txtMenuItem = [
+		{
+			text:'更新资产位置',
+			callback:function(e){
+				console.log(e);
+				var value=new Object();
+		        value.type="onclick";
+		        value.lng=e.lng;
+		        value.lat=e.lat;
+		        var json = JSON.stringify(value); 
+		        alert(json);
+			}
+		}
+	];
+	for(var i=0; i < txtMenuItem.length; i++){
+		menu.addItem(new BMap.MenuItem(txtMenuItem[i].text,txtMenuItem[i].callback,100));
+	}
+	map.addContextMenu(menu);
+	
+	function search(val) {   		  
+		   local.search(val);
+	 }
+	
+	function gradeChange1(manageRegion){ 
+		map.clearOverlays();
+		 if(manageRegion!=null){
+	        	var xhm=new XMLHttpRequest();
+	   	    	xhm.open("GET","../baiduMap/getAllAsset.do?manageRegion="+manageRegion,false);
+	   	    	xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	   	    	xhm.send();
+	   	    	var ticket=JSON.parse(xhm.responseText);
+	        }else{
+	        	var xhm=new XMLHttpRequest();
+	   	    	xhm.open("GET","../baiduMap/getAllAsset.do?",false);
+	   	    	xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	   	    	xhm.send();
+	   	    	var ticket=JSON.parse(xhm.responseText);
+	       }
+        addDeck(ticket);
+     }
+	
+	function gradeChange2(roomProperty){ 
+		map.clearOverlays();
+		 if(roomProperty!=null){
+	        	var xhm=new XMLHttpRequest();
+	   	    	xhm.open("GET","../baiduMap/getAllAsset.do?roomProperty="+roomProperty,false);
+	   	    	xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	   	    	xhm.send();
+	   	    	var ticket=JSON.parse(xhm.responseText);
+	        }else{
+	        	var xhm=new XMLHttpRequest();
+	   	    	xhm.open("GET","../baiduMap/getAllAsset.do?",false);
+	   	    	xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	   	    	xhm.send();
+	   	    	var ticket=JSON.parse(xhm.responseText);
+	       }
+        addDeck(ticket);
+     }
+	
+	function gradeChangeAll(manageRegion,roomProperty){ 
+		map.clearOverlays();
+		 if(manageRegion!=null||roomProperty!=null){
+	        	var xhm=new XMLHttpRequest();
+	   	    	xhm.open("GET","../baiduMap/getAllAsset.do?manageRegion="+manageRegion+"&roomProperty="+roomProperty,false);
+	   	    	xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	   	    	xhm.send();
+	   	    	var ticket=JSON.parse(xhm.responseText);
+	        }else{
+	        	var xhm=new XMLHttpRequest();
+	   	    	xhm.open("GET","../baiduMap/getAllAsset.do?",false);
+	   	    	xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	   	    	xhm.send();
+	   	    	var ticket=JSON.parse(xhm.responseText);
+	       }
+        addDeck(ticket);
+     } 
+	
+	function lableShow(show){
+		
+		showLable=show;
+		
+		map.clearOverlays();
+		
+		var xhm=new XMLHttpRequest();
+			xhm.open("GET","../baiduMap/getAllAsset.do?",false);
+	    	xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	    	xhm.send();
+	    var ticket=JSON.parse(xhm.responseText);
+	    
+	    addDeck(ticket);
+	}
 	
 	var xhm=new XMLHttpRequest();
     xhm.open("GET","../baiduMap/getPosition.do",false);
@@ -182,7 +279,11 @@
    map.addOverlay(label);   
    map.enableScrollWheelZoom(true);
   
+   
+   
    var geoc = new BMap.Geocoder();  
+   
+   /*
    map.addEventListener("click", function(e){    
    	 var pt = e.point;
         geoc.getLocation(pt, function(rs){
@@ -201,6 +302,8 @@
         });        
    }
    ); 
+ */
+ 
  
    var xhm=new XMLHttpRequest();
    xhm.open("GET","../baiduMap/getAllAsset.do",false);
@@ -224,25 +327,34 @@
 	console.log(json_data);
 	for(var i=0;i<json_data.length;i++){
 		var point=new BMap.Point(json_data[i][0], json_data[i][1]);
-		var myIcon = new BMap.Icon("house.jpg", new BMap.Size(50,80));
+		var myIcon = new BMap.Icon("../img/blackPoint.jpg", new BMap.Size(30,40));
 		var marker = new BMap.Marker(point,{icon:myIcon}); // 创建点
-		map.addOverlay(marker);    //增加点		
-		var str = "资产 :"+json_data[i][2];
-		var opts = {
+		map.addOverlay(marker);    //增加点	
+		if(showLable==1){		   //是否显示文字标注
+			var str = "资产 :"+json_data[i][2];
+			var opts = {
 				   position : point,    // 指定文本标注所在的地理位置
 				   offset   : new BMap.Size(-getByteLen(str)*3, 5)    //设置文本偏移量
-				}	
-		console.log(getByteLen(str));
-		var label = new BMap.Label(str, opts);  // 创建文本标注对象
-		label.setStyle({
+					}	
+			console.log(getByteLen(str));
+			var label = new BMap.Label(str, opts);  // 创建文本标注对象
+			label.setStyle({
 						 color : "blue",
 						 fontSize : "12px",
 						 height : "20px",
 						 lineHeight : "20px",
 						 fontFamily:"微软雅黑"
 					  });
-	    map.addOverlay(label);   
-	    
+	    	map.addOverlay(label);   
+		}
+		
+		var content="资产名称 : "+ticket[i].address+"<br/>"+
+        " 管理分区 : "+ticket[i].manageRegion+" "+
+        " 资产性质 : "+ticket[i].roomProperty+" "+
+        " 资产编号 : "+ticket[i].num;
+        
+        addClickHandler(content,marker);
+		
 	    marker.enableDragging(); //标注可拖拽	    
 		 // 开启事件监听
 		marker.addEventListener("dragend", function (e) {
@@ -271,6 +383,25 @@
     
     }
 	
+    function addClickHandler(content,marker){
+		marker.addEventListener("click",function(e){
+			openInfo(content,e)}
+		);
+	}
+    
+    var opts = {
+			width : 250,     // 信息窗口宽度
+			height: 120,     // 信息窗口高度
+			title : "资产详情" , // 信息窗口标题
+			enableMessage:true//设置允许信息窗发送短息
+		   };
+ 
+ 	function openInfo(content,e){
+		var p = e.target;
+		var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+		var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象 
+		map.openInfoWindow(infoWindow,point); //开启信息窗口
+	}
     
     function script(){
     	map.clearOverlays();

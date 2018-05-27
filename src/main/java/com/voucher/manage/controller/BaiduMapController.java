@@ -282,15 +282,22 @@ public class BaiduMapController {
 	}
 	
 	@RequestMapping("/getAllAsset")
-	public @ResponseBody List getAllAsset(String manageRegion){
+	public @ResponseBody List getAllAsset(String manageRegion,String roomProperty){
 	
 		Map where = new HashMap<>();
 	
+		System.out.println("manageRegion="+manageRegion);
+		System.out.println("roomProperty="+roomProperty);
+		
 		if(manageRegion!=null&&!manageRegion.equals("")){
 			where.put("[Position].GUID !=","''");
 			where.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManageRegion = ", manageRegion);
 		}else{
 			where.put("[Position].GUID !=","''");
+		}
+		
+		if(roomProperty!=null&&!roomProperty.equals("")){
+			where.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomProperty = ", roomProperty);
 		}
 		
 		Map map=roomInfoDao.findAllRoomInfo_Position(1000, 0, null, null, where);

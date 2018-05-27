@@ -14,6 +14,10 @@
   
   <div id="myDiv2"><!-- Plotly chart will be drawn inside this DIV --></div>
   
+  <div id="myDiv5"><!-- Plotly chart will be drawn inside this DIV --></div>
+  
+  <div id="myDiv6"><!-- Plotly chart will be drawn inside this DIV --></div>
+  
   <div class="weui-cells weui-cells_form">
         <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">选择日期</label></div>
@@ -81,6 +85,47 @@
 		Plotly.newPlot('myDiv2', data2 ,layout2);
     });
     
+	
+	$.post("/voucher/mobile/asset/getAssetByState.do",{
+    	
+    },function(text){
+    	var obj = $.parseJSON(text);
+    	var data = [{
+  			values: [obj.alreadyHire, obj.notHire,obj.catnotHire],
+  			labels: ['已出租资产'+obj.alreadyHire+"处","空置资产"+obj.notHire+"处",
+  			       "不可出租资产"+obj.catnotHire+"处"],
+  			hoverinfo: 'label+percent',
+		  	type: 'pie'
+			}];
+
+		 var layout = {
+				title: '资产状态统计'
+			};
+
+		Plotly.newPlot('myDiv5', data ,layout);
+	
+	});
+	
+	$.post("/voucher/mobile/asset/getAssetByDangerClass.do",{
+    	
+    },function(text){
+    	var obj = $.parseJSON(text);
+    	var data = [{
+  			values: [obj.normal, obj.danger],
+  			labels: ['正常资产'+obj.normal+"处","D级资产"+obj.danger+"处"],
+  			hoverinfo: 'label+percent',
+		  	type: 'pie'
+			}];
+
+		 var layout = {
+				title: '全部与D级资产数量'
+			};
+
+		Plotly.newPlot('myDiv6', data ,layout);
+	
+	});
+	
+	
 	
 	$.get("/voucher/mobile/asset/findChartInfoByYear.do", { 
 	  }, function(data) {

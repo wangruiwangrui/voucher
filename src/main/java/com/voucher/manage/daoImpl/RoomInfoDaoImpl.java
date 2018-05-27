@@ -132,7 +132,6 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		
 		if(!search.isEmpty()){
 		    String[] where=TransMapToString.get(search);
-		    roomInfo.setWhereTerm("OR");
 		    roomInfo.setWhere(where);
 		}
 		

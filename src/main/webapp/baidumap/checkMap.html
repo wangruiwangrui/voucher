@@ -28,14 +28,14 @@
     var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
     
     // 百度地图API功能
-    var map = new BMap.Map("allmap");    // 创建Map实例
+    var map = new BMap.Map("allmap",{enableMapClick:false});    // 创建Map实例
     var xhm=new XMLHttpRequest();
  	 xhm.open("GET","../baiduMap/location.do",false);
  	 xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
  	 xhm.send();
  	 var ticket=JSON.parse(xhm.responseText);
   	var point = new BMap.Point(ticket.content.point.x, ticket.content.point.y);
-    map.centerAndZoom(point, 14);  // 初始化地图,设置中心点坐标和地图级别
+    map.centerAndZoom(point, 15);  // 初始化地图,设置中心点坐标和地图级别
 
     
     map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
@@ -49,6 +49,10 @@
 
 	
 	var openId;
+	
+	var showLable=1;
+	
+	/*
 	
 	function menuControl(){
 		  // 默认停靠位置和偏移量
@@ -373,8 +377,8 @@
 	    	console.log(ticket);
 	        addDeck(ticket);
 	}
+	*/
 	
-
 	  /*  
 	    var xhm=new XMLHttpRequest();
 	    xhm.open("GET","../baiduMap/get.do",false);
@@ -384,20 +388,39 @@
 	    
 	 addDeck(ticket);
 	 */
+
+	 function lableShow(show){
+			
+			showLable=show;			
+			
+		}
 	 
+	 function checkMap(openId,datepicker,datepicker2){
+			var xhm=new XMLHttpRequest();
+			    xhm.open("GET","../baiduMap/getAllCheckByOpenId.do?openId="+openId+"&datepicker="+datepicker+"&datepicker2="+datepicker2,false);
+		    	xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+		    	xhm.send();
+		    	var ticket=JSON.parse(xhm.responseText);
+		    	
+		    	console.log(ticket);
+		        addDeck(ticket);
+		} 
+	
   function addDeck(text){	
 
+	  map.clearOverlays();
+	  
 		 var ticket=text.rows;
 		 var total=text.total;
 		 
+		 /*
 		 var amount = document.getElementById("amount"); 
 		 amount.value="  "+total+"处";		 
-		 
+		 */
    		// console.log(ticket);
     	var json_data = new Array();
     
     	var point = new BMap.Point(ticket[0].lng, ticket[0].lat);
-        map.centerAndZoom(point, 12);  // 初始化地图,设置中心点坐标和地图级别
     	
     	var pois=[];
     	
@@ -413,7 +436,7 @@
     	var sy = new BMap.Symbol(BMap_Symbol_SHAPE_BACKWARD_OPEN_ARROW, {
     	    scale: 0.6,//图标缩放大小
     	    strokeColor:'#fff',//设置矢量图标的线填充颜色
-    	    strokeWeight: '2',//设置线宽
+    	    strokeWeight: '3',//设置线宽
     	});
     	var icons = new BMap.IconSequence(sy, '10', '30');
     	
@@ -443,24 +466,24 @@
 			            " 管理分区 : "+ticket[i].manageRegion+" "+
 			            " 结构 : "+ticket[i].structure+" "+
 			            " 资产状态 : "+ticket[i].state;
-			
-			var str = actionTime(ticket[i].date);
-			var opts = {
+		  if(showLable==1){		   //是否显示文字标注
+				var str = actionTime(ticket[i].date);
+				var opts = {
 				  	 position : point,    // 指定文本标注所在的地理位置
 				  	 offset   : new BMap.Size(-getByteLen(str)*3, 5)    //设置文本偏移量
 					}	
-			console.log(getByteLen(str));
-			var label = new BMap.Label(str, opts);  // 创建文本标注对象
-			label.setStyle({
+				console.log(getByteLen(str));
+				var label = new BMap.Label(str, opts);  // 创建文本标注对象
+				label.setStyle({
 						 color : "bule",
 						 fontSize : "12px",
 						 height : "20px",
 						 lineHeight : "20px",
 						 fontFamily:"微软雅黑"
 					  });
-	    	map.addOverlay(label);   
+	    		map.addOverlay(label);   
 			//marker.addEventListener("click",attribute);
-			
+		  }
 	    	addClickHandler(content,marker);
 		}
 				
