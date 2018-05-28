@@ -507,7 +507,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 					
 		String sql1="geography::STGeomFromText('POINT(' + cast([lng] as varchar(20)) + ' '"+  
 					"+ cast([lat] as varchar(20)) +')', 4326).STDistance(  "+
-					"geography::STGeomFromText('POINT(105.4955 28.91866)', 4326))<"+distance+" "+
+					"geography::STGeomFromText('POINT("+lng+"  "+lat+")', 4326))<"+distance+" "+
 					"ORDER BY   "+
 					"SQRT(("+lng+"-lng)*("+lng+"-lng)+("+lat+"-lat)*("+lat+"-lat))  ";
 		
@@ -587,7 +587,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		
 		String sql1="geography::STGeomFromText('POINT(' + cast([lng] as varchar(20)) + ' '"+  
 					"+ cast([lat] as varchar(20)) +')', 4326).STDistance(  "+
-					"geography::STGeomFromText('POINT(105.4955 28.91866)', 4326))<"+distance+" "+
+					"geography::STGeomFromText('POINT("+lng+"  "+lat+")', 4326))<"+distance+" "+
 					"ORDER BY   "+
 					"SQRT(("+lng+"-lng)*("+lng+"-lng)+("+lat+"-lat)*("+lat+"-lat))  ";
 		

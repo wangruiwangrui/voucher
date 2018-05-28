@@ -39,7 +39,7 @@ function getQueryString(name) {
  
 
  var point = new BMap.Point(lng, lat);
-    map.centerAndZoom(point, 12);
+    map.centerAndZoom(point, 14);
     var marker = new BMap.Marker(point); // 创建点
 	map.addOverlay(marker);    //增加点
 	var str = "我的位置";
@@ -67,7 +67,7 @@ function getQueryString(name) {
  
     
     var xhm=new XMLHttpRequest();
-    xhm.open("GET","../../baiduMap/getAssetsByPoint.do?limit=100&offset=0&lng="+lng+"&lat="+lat+"&distance=10000",false);
+    xhm.open("GET","../../baiduMap/getAssetsByPoint.do?limit=100&offset=0&lng="+lng+"&lat="+lat+"&distance=1500",false);
     xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
     xhm.send();
     var ticket=JSON.parse(xhm.responseText);
@@ -92,6 +92,7 @@ for(var i=0;i<json_data.length;i++){
 	var myIcon = new BMap.Icon("../../img/blackPoint.jpg", new BMap.Size(30,38));
 	var marker = new BMap.Marker(point,{icon:myIcon}); // 创建点
 	map.addOverlay(marker);    //增加点
+	/*
 	var str = json_data[i][2];
 	var opts = {
 			   position : point,    // 指定文本标注所在的地理位置
@@ -106,7 +107,8 @@ for(var i=0;i<json_data.length;i++){
 					 lineHeight : "20px",
 					 fontFamily:"微软雅黑"
 				  });
-    map.addOverlay(label);   
+    map.addOverlay(label); 
+    */
 	marker.addEventListener("click",attribute);
 }
 //让所有点在视野范围内
