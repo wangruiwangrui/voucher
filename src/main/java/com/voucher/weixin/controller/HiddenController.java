@@ -403,6 +403,7 @@ public class HiddenController {
 		position.setDistrict(district);
 		position.setStreet(streetNumber);
 		position.setStreet_number(streetNumber);
+		position.setDate(date);
 		
 		assetsDAO.updatePosition(position);
 		

@@ -125,6 +125,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		position.setWhere(where);
 		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), position).get("");
 		if(count==0){
+			position.setIs_roomInfo(1);
 			i=InsertExe.get(this.getJdbcTemplate(), position);			
 		}else if(isUpdate){
 			i=UpdateExe.get(this.getJdbcTemplate(), position);

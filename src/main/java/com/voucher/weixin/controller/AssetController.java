@@ -320,7 +320,13 @@ public class AssetController {
 		
 		search.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].State !=","已划拨");
 		
+		search.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].DangerClassification !=","D级");
+		
 		int normal=roomInfoDao.getRoomInfoCount(search);
+		
+		search=new HashMap<>();
+		
+		search.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].State !=","已划拨");
 		
 		search.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].DangerClassification=","D级");
 		
