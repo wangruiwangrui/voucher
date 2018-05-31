@@ -23,6 +23,7 @@ import com.voucher.manage.daoModel.Users;
 import com.voucher.manage.daoModel.Assets.Hidden;
 import com.voucher.manage.daoModel.Assets.Hidden_Assets;
 import com.voucher.manage.daoModel.Assets.Hidden_Check;
+import com.voucher.manage.daoModel.Assets.Hidden_Check_Date;
 import com.voucher.manage.daoModel.Assets.Hidden_Data;
 import com.voucher.manage.daoModel.Assets.Hidden_Level;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
@@ -32,6 +33,7 @@ import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Assets_Join;
+import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Data_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.daoModelJoin.Assets.Position_Check_Join;
@@ -393,7 +395,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		// TODO Auto-generated method stub
 		
 		String sql0="SELECT TOP "+limit+" "+
-		            "[Position].GUID,"+
+					"[Position].GUID,"+
 					"[Position].province,"+
 					"[Position].city,"+
 					"[Position].district,"+
@@ -439,8 +441,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 					Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID not in( select top "+offset+" "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID from "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
 					"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
 					"WHERE [Position].lng is not null AND [Position].lat is not null "+ 
-					"AND [RoomInfo].State != '已划拨' "+
-					"ORDER BY   SQRT(("+lng+"-lng)*("+lng+"-lng)+("+lat+"-lat)*("+lat+"-lat))) ";
+					"AND [RoomInfo].State != '已划拨' ";
 		
 		
 		String sql1="ORDER BY   "+
@@ -448,10 +449,22 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		
 		String sql;
 		
+		String sql2="SELECT count(*) "+				   
+				"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
+				"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
+				"WHERE [Position].lng is not null AND [Position].lat is not null "+
+				"AND [RoomInfo].State != '已划拨' ";
+		
 		if(search.equals("")){
-			sql=sql0+sql1;
+			sql=sql0+sql1+")"+sql1;
 		}else{
-			sql=sql0+"AND "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address like '%"+search+"%' "+sql1;
+			sql=sql0+" AND ("+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address like '%"+search+"%' "
+					+" OR "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num like '%"+search+"%' )"+
+					sql1+")"+
+					" AND ("+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address like '%"+search+"%' "
+					+" OR "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num like '%"+search+"%' )"+sql1;
+			sql2=sql2+" AND ("+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address like '%"+search+"%' "
+					+" OR "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num like '%"+search+"%' )";
 		}
 		
 		System.out.println("sql="+sql);
@@ -468,7 +481,9 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		
 		try{
 			List list=SelectSqlJoinExe.get(this.getJdbcTemplate(), sql, objects,roomInfo_Position);
-			map.put("row", list);
+			int total=(int) SelectSqlJoinExe.getCount(this.getJdbcTemplate(), sql2, objects).get("");
+			map.put("rows", list);
+			map.put("total", total);
 		}catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -1066,6 +1081,10 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		
 		int i=(int) SelectExe.getCount(this.getJdbcTemplate(), roomInfo).get("");
 		
+		String[] where={Singleton.ROOMDATABASE+".[dbo].[RoomInfo].State !=","已划拨"};
+		
+		roomInfo.setWhere(where);
+		
 		String sql="select asset_GUID "+
 				"FROM [Assets].[dbo].[Hidden_Assets]  group by asset_GUID "	;
 		
@@ -1557,6 +1576,150 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		int count=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden_Assets).get("");
 		
 		return count;
+	}
+
+	@Override
+	public Map getTestOr(Map search) {
+		// TODO Auto-generated method stub
+
+		Hidden_Check hidden_Check=new Hidden_Check();
+	
+		hidden_Check.setOffset(0);
+		hidden_Check.setLimit(1000);
+		hidden_Check.setNotIn("GUID");
+		hidden_Check.setWhereTerm("OR");
+		
+		RoomInfo roomInfo=new RoomInfo();
+		
+		roomInfo.setOffset(0);
+		roomInfo.setLimit(1000);
+		roomInfo.setNotIn("GUID");
+		roomInfo.setWhereTerm("OR");
+		
+		if(!search.isEmpty()){
+		    String[] where=TransMapToString.get(search);
+		    hidden_Check.setWhere(where);
+		    roomInfo.setWhere(where);
+		}
+		
+		Hidden_Check_Join hidden_Check_Join=new Hidden_Check_Join();
+		
+		Object[] objects={roomInfo,hidden_Check};
+		
+		String[] join={"GUID"};
+		
+		List list=SelectJoinExe.get(this.getJdbcTemplate(), objects, hidden_Check_Join, join);
+		
+		int count=(int) SelectJoinExe.getCount(this.getJdbcTemplate(), objects,join).get("");
+		
+		Map map=new HashMap<>();
+		
+		map.put("rows", list);
+		
+		map.put("total", count);
+		
+		return map;
+	}
+
+	@Override
+	public Map<String, Object> findAllRoomInfo_Position(Integer limit, Integer offset, String sort, String order,
+			String search) {
+		// TODO Auto-generated method stub
+		String sql0="SELECT TOP "+limit+" "+
+				"[Position].province,"+
+				"[Position].city,"+
+				"[Position].district,"+
+				"[Position].street,"+
+				"[Position].street_number,"+
+				"[Position].lng,"+
+				"[Position].lat,"+
+				"[Position].date,"+
+				Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].OriginalNum,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].OriginalAddress,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Region,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Segment,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManageRegion,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomProperty,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Useful,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Floor,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].State,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Structure,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BuildArea,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomType,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].IsCity,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Manager,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManagerPhone,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].IsStreet,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].FitMent,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BeFrom,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].InDate,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightNo,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightArea,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].DesignUseful,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BuildYear,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightUnit,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RealPropertyRightUnit,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyCardUnit "+				   
+				"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
+				"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
+				"WHERE "+
+				"[RoomInfo].State != '已划拨' "+
+				"AND "+
+				Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID not in( select top "+offset+" "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID from "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
+				"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
+				"WHERE "+ 
+				"[RoomInfo].State != '已划拨' ";
+	
+	
+		String sql1="ORDER BY  "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num ";
+	
+		String sql;
+	
+		String sql2="SELECT count(*) "+				   
+				"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
+				"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
+				"WHERE "+
+				"[RoomInfo].State != '已划拨' ";
+		
+		if(search.equals("")){
+			sql=sql0+sql1+")"+sql1;
+		}else{
+			sql=sql0+" AND ("+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address like '"+search+"' "
+				+" OR "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num like '"+search+"' )"+
+				sql1+")"+
+				" AND ("+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address like '"+search+"' "
+				+" OR "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num like '"+search+"' )"+sql1;
+			sql2=sql2+" AND ("+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address like '"+search+"' "
+					+" OR "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num like '"+search+"' )";
+		}
+	
+		System.out.println("sql="+sql);
+	
+		RoomInfo_Position roomInfo_Position=new RoomInfo_Position();
+	
+		Position position=new Position();		
+	
+		RoomInfo roomInfo=new RoomInfo();
+	
+		Object[] objects={roomInfo,position};
+	
+		Map map=new HashMap<>();
+	
+		try{
+			List list=SelectSqlJoinExe.get(this.getJdbcTemplate(), sql, objects,roomInfo_Position);
+			int total=(int) SelectSqlJoinExe.getCount(this.getJdbcTemplate(), sql2, objects).get("");
+			map.put("rows", list);
+			map.put("total", total);
+			MyTestUtil.print(list);
+		}catch (Exception e) {
+		// TODO: handle exception
+		}
+
+		return map;
+		
 	}
 
 	

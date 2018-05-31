@@ -5,12 +5,30 @@
 <style type="text/css">
 body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
 </style>
+<link rel="stylesheet" href="css/weui.css"/>
+    <link rel="stylesheet" href="css/example.css"/>
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
 <script type="text/javascript" src="https://api.map.baidu.com/api?v=3.0&ak=cR98TwX2FnKTpANIOYhMYMot9a4ioxjc"></script>
 <title>导航路线</title>
 </head>
 <body>
 <div id="allmap"></div>
+
+<div class="weui-tabbar">
+    <a href="javascript:;" class="weui-tabbar__item" id="drive">
+      <div class="weui-tabbar__icon">
+        <img src="../../img/drive.jpg" alt="">
+      </div>
+      <p class="weui-tabbar__label">驾车</p>
+    </a>
+    <a href="javascript:;" class="weui-tabbar__item" id="walk">
+      <div class="weui-tabbar__icon">
+        <img src="../../img/walk.jpg" alt="">
+      </div>
+      <p class="weui-tabbar__label">步行</p>
+    </a>
+  </div>
+
 </body>
 </html>
 <script type="text/javascript">
@@ -56,6 +74,31 @@ body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-fami
 		$("title").html("步行导航路线");
 	}
 	
+	$("#drive").on("click",function(){
+		map.clearOverlays();
+		
+		var driving = new BMap.DrivingRoute(map, {renderOptions:{map: map, autoViewport: true}});
+		
+		driving.search(p1, p2);
+		
+		document.title = "驾车导航路线";
+	});
+	
+	$("#walk").on("click",function(){
+		map.clearOverlays();
+		
+		//步行
+		var walking = new BMap.WalkingRoute(map, { 
+	    	renderOptions: { 
+	        	map: map, 
+	        	autoViewport: true 
+	    	}
+		});
+	
+		walking.search(p1,p2);
+		
+		document.title = "步行导航路线";
+	});
 	
 	 function getDistance(){
 	    	var pointA = new BMap.Point(longitude,latitude);  // 创建点坐标A--大渡口区

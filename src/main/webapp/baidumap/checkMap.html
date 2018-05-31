@@ -458,14 +458,14 @@
 
 		for(var i=0;i<ticket.length;i++){
 			var point=new BMap.Point(ticket[i].lng, ticket[i].lat);
-			var myIcon = new BMap.Icon("../img/blackPoint.jpg", new BMap.Size(30,38));
+			var myIcon = new BMap.Icon("../img/checkPoint.png", new BMap.Size(20,19));
 			var marker = new BMap.Marker(point,{icon:myIcon}); // 创建点
 			map.addOverlay(marker);    //增加点
 			
 			var content="巡查资产 : "+ticket[i].address+"<br/>"+
 			            " 管理分区 : "+ticket[i].manageRegion+" "+
-			            " 结构 : "+ticket[i].structure+" "+
-			            " 资产状态 : "+ticket[i].state;
+			            " 检查结果 : "+ticket[i].check_name+" "+
+			            " 检查时间 : "+actionTime(ticket[i].date);
 		  if(showLable==1){		   //是否显示文字标注
 				var str = actionTime(ticket[i].date);
 				var opts = {

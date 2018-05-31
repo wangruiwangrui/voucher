@@ -4,6 +4,7 @@ package com.voucher.manage.controller;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import com.rmi.server.AssetsImpl;
+import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.daoImpl.HiddenDAOImpl;
 import com.voucher.manage.redis.Orders;
@@ -33,6 +35,8 @@ public class testController {
 	ApplicationContext applicationContext=new Connect().get();
 	
 	HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
+	
+	AssetsDAO assetsDAO=(AssetsDAO) applicationContext.getBean("assetsdao");
 	
      private AffairService testService;
 	
@@ -164,6 +168,20 @@ public class testController {
 			Integer offset){
 		
 		return hiddenDAO.selectAllHiddenCheck(limit, offset, null, null, null, new HashMap<>());
+		
+	}
+	
+	
+	@RequestMapping("getTestOr")
+	public @ResponseBody Map getTestOr(@RequestParam String address,@RequestParam
+			String Num){
+		
+		Map search=new HashMap<>();
+		
+		search.put("[TTT].[dbo].[RoomInfo].Address like", "%"+address+"%");
+		search.put("[TTT].[dbo].[RoomInfo].Num like", "%"+Num+"%");
+		
+		return assetsDAO.getTestOr(search);
 		
 	}
 	

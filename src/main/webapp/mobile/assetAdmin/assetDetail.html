@@ -59,8 +59,8 @@
     
      <div class="weui-cells weui-cells_form">
         <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">用途</label></div>
-                <div id="designUseful" class="weui-cell__bd">
+                <div class="weui-cell__hd"><label class="weui-label">资产性质</label></div>
+                <div id="roomProperty" class="weui-cell__bd">
                 </div>
                
         </div>
@@ -70,6 +70,14 @@
         <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">面积</label></div>
                 <div id="buildArea" class="weui-cell__bd">
+                </div>
+        </div>
+    </div>
+   
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">租金</label></div>
+                <div id="hire" class="weui-cell__bd">
                 </div>
         </div>
     </div>
@@ -214,14 +222,18 @@
                   $("#region").append(region);
                   
                   
-                  var designUseful=document.createElement("span");
-                  designUseful.innerHTML=obj.designUseful;
-                  $("#designUseful").append(designUseful);
+                  var roomProperty=document.createElement("span");
+                  roomProperty.innerHTML=obj.roomProperty;
+                  $("#roomProperty").append(roomProperty);
 
 
                   var buildArea=document.createElement("span");
                   buildArea.innerHTML=obj.buildArea+" m<sup>2</sup>";
                   $("#buildArea").append(buildArea);
+  
+                  var hire=document.createElement("span");
+                  hire.innerHTML=obj.hire;
+                  $("#hire").append(hire);
                   
 
                   var State=document.createElement("span");

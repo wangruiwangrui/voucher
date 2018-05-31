@@ -96,4 +96,9 @@ public interface AssetsDAO {
 	public List findHiddenAssetsByMonthOfYear(String year);
 	
 	public Integer getAllAssetByHidden_GUID(String guid);
+	
+	public Map getTestOr(Map search);
+	
+	public Map<String, Object> findAllRoomInfo_Position(Integer limit, Integer offset, String sort,
+			String order,String search);
 }

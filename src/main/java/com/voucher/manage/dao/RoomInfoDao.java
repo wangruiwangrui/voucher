@@ -57,4 +57,6 @@ public interface RoomInfoDao {
 	public Double getNotHireByMonth(String month);
 	
 	public Map notPlaceRoomInfo(int limit,int offset,String search);
+	
+	public List getChartInfosByGUID(String GUID);
 }

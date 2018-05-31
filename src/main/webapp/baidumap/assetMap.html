@@ -351,10 +351,12 @@
 		var content="资产名称 : "+ticket[i].address+"<br/>"+
         " 管理分区 : "+ticket[i].manageRegion+" "+
         " 资产性质 : "+ticket[i].roomProperty+" "+
-        " 资产编号 : "+ticket[i].num;
+        " 资产编号 : "+ticket[i].num+" "+
+        " 面积 : "+ticket[i].buildArea+" m<sup>2</sup> "+
+        " 租金 :"+ticket[i].hire;
         
         addClickHandler(content,marker);
-		
+		/*
 	    marker.enableDragging(); //标注可拖拽	    
 		 // 开启事件监听
 		marker.addEventListener("dragend", function (e) {
@@ -377,6 +379,7 @@
 		         alert(json);
 		         }); 
 		    });
+	    */
 	}
 	//让所有点在视野范围内
 	map.setViewport(pointArray);

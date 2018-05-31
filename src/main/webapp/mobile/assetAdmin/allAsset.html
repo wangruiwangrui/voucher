@@ -39,7 +39,7 @@
     </div>
 
         <div class="weui-cells weui-cells_form">
-              <div class="weui-cell">
+           <div class="weui-cell">
                 <div class="weui-cell__bd weui_cell_primary name">
                     <input id="input" class="weui-input" type="text" placeholder=""/>
                 </div class="weui-cell__bd weui_cell_primary name">
@@ -49,10 +49,14 @@
 
         
 		<div class="weui-cells">
+		  <div class="weui-panel weui-panel_access">
+  			<div id="count" class="weui-panel__hd"></div>
+  		  </div>           
          <div id="ul" >
             
          </div>
 		</div>
+		
           <div class="weui-loadmore" style="padding-bottom:30px;height:20px">
               <i class="weui-loading"></i>
               <span class="weui-loadmore__tips">正在加载</span>
@@ -222,9 +226,17 @@
                },
                success: function (text) {              	   
             	   var data=text.rows;
+            	   var count=text.total;
             	   var imgs=text.fileBytes;
             	   console.log(data);
             	   console.log(imgs);
+            	   
+            	   var span=document.createElement("span");
+                   span.innerHTML=" "+count+"条记录";
+                   var count = document.getElementById('count'); 
+                   $("#count").children().remove();
+                   count.appendChild(span);
+            	   
                    if (data.length > 0) {
                 	   var i = 0;
                        for(; i < data.length; i++){

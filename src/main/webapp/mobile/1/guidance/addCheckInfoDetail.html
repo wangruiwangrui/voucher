@@ -136,8 +136,18 @@
            	  
            	  navigation(pointStart, pointEnd);
            	  */
+           	if(obj.lng!=""&&obj.lat!=""){  
+           		var pointA = new BMap.Point(longitude,latitude);  // 创建点坐标A--大渡口区
+  	    		var pointB = new BMap.Point(obj.lng,obj.lat);  // 创建点坐标B--江北区
+  	    		var d=map.getDistance(pointA,pointB);
            	  
-           	  
+  	    		if(d>200){
+  	    			$.alert("新建安全巡查记录必须在资产附近的位置", "错误提示", function() {
+  	    			  //点击确认后的回调函数
+  	    				history.back();
+  	    			});
+  	    		}
+           	}
            	  var address=document.createElement("span");
            	  address.innerHTML=obj.address;
               $("#address").append(address);

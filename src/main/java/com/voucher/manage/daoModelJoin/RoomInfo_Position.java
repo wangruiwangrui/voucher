@@ -225,6 +225,12 @@ public class RoomInfo_Position implements Serializable{
     @SQLFloat(name="UseYears")
 	private Float UseYears;
 	
+    /*
+     * ChartInfo
+     */
+    @SQLFloat(name="Hire")
+	private Float Hire;
+    
 	/*
 	 * Position
 	 */
@@ -879,5 +885,12 @@ public class RoomInfo_Position implements Serializable{
 		this.date = date;
 	}
 
-	
+	public void setHire(Float Hire){
+		this.Hire = Hire;
+	}
+
+	public Float getHire(){
+		return Hire;
+	}
+
 }

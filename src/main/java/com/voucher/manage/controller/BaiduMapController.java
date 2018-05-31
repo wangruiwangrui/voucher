@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +36,7 @@ import com.voucher.manage.dao.MobileDAO;
 import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Assets.Position;
+import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.singleton.Singleton;
@@ -215,13 +217,15 @@ public class BaiduMapController {
 		
 		MyTestUtil.print(map);
 		
-		List list=(List) map.get("row");
+		List list=(List) map.get("rows");
+		int total=(int) map.get("total");
 		
 		Map fileBytes=mobileDao.roomInfo_PositionImageQuery(request, list);
 		
 		Map result=new HashMap<>();
 		
 		result.put("rows", list);
+		result.put("total", total);
 		result.put("fileBytes", fileBytes);
 		
 		return result;
@@ -304,6 +308,25 @@ public class BaiduMapController {
 	
 		List list=(List) map.get("rows");
 		
+		Iterator<RoomInfo_Position> iterator=list.iterator();
+		
+		int i=0;
+		
+		while(iterator.hasNext()){
+			RoomInfo_Position roomInfo_Position=iterator.next();
+			String GUID=roomInfo_Position.getChartGUID();
+			
+			try{
+				ChartInfo chartInfo=(ChartInfo) roomInfoDao.getChartInfosByGUID(GUID).get(0);
+			    roomInfo_Position.setHire(chartInfo.getHire());
+			    list.set(i,roomInfo_Position);
+			}catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+			
+		}
+		
 		return list;
 		
 	}
@@ -375,8 +398,8 @@ public class BaiduMapController {
 		
 		searchMap.put("[Hidden_Check].campusAdmin=", openId);	
 		searchMap.put("[Position].check_id !=", "");
-		searchMap.put("convert(varchar(11),[Hidden_Check].date,120)>",startTime);
-		searchMap.put("convert(varchar(11),[Hidden_Check].date,120)<=",endTime);
+		searchMap.put("[Hidden_Check].date>",startTime);
+		searchMap.put("[Hidden_Check].date<",endTime);
 		
 		Map map=hiddenDAO.selectAllHiddenCheck(1000, 0, "date", "asc","", searchMap);
 		

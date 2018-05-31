@@ -692,5 +692,21 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 
 		return map;
 	}
+
+	@Override
+	public List getChartInfosByGUID(String GUID) {
+		// TODO Auto-generated method stub
+		
+		ChartInfo chartInfo=new ChartInfo();
+		
+		chartInfo.setLimit(1);
+		chartInfo.setOffset(0);
+		
+		String[] where={Singleton.ROOMDATABASE+".[dbo].[ChartInfo].GUID=",GUID};
+		
+		chartInfo.setWhere(where);
+		
+		return SelectExe.get(this.getJdbcTemplate(), chartInfo);
+	}
 	
 }

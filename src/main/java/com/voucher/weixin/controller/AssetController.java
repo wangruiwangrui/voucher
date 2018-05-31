@@ -59,9 +59,57 @@ public class AssetController {
 	
 	@RequestMapping("/getAll")
 	public @ResponseBody Map<String, Object> RoomInfo(@RequestParam Integer limit,@RequestParam Integer offset,String sort,String order,
-			String search,String search2,HttpServletRequest request) {
+			String search,HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<String, Object>();
 			
+		if(sort!=null&&sort.equals("buildArea")){
+			sort="BuildArea";
+		}else if(sort!=null&&sort.equals("address")){
+			sort="Address";
+		}else{
+			sort="Num";
+		}
+		
+		if(order!=null&&order.equals("asc")){
+			order="asc";
+		}else if(order!=null&&order.equals("desc")){
+			order="desc";
+		}else{
+			order="asc";
+		}
+		
+		Map where=new HashMap<>();
+		
+		where.put("[RoomInfo].State !=", "已划拨");
+		
+		if(search!=null&&!search.trim().equals("")){
+			search="%"+search+"%";  
+			where.put("Address like ", search);
+			where.put("Num like ", search);
+		}		
+
+		
+		Map roomInfo_Positions=assetsDAO.findAllRoomInfo_Position(limit, offset, sort, order, search);
+		
+		List roominfos=(List) roomInfo_Positions.get("rows");
+		int total=(int) roomInfo_Positions.get("total");
+		
+		map.put("rows", roominfos);
+		map.put("total", total);
+		
+		Map fileBytes=mobileDao.roomInfo_PositionImageQuery(request, roominfos);
+		map.put("fileBytes", fileBytes);
+		
+		MyTestUtil.print(fileBytes);
+		
+		return map;
+	}
+	
+	@RequestMapping("/getAll2")
+	public @ResponseBody Map<String, Object> RoomInfo2(@RequestParam Integer limit,@RequestParam Integer offset,String sort,String order,
+			String search,HttpServletRequest request){
+		Map<String, Object> map = new HashMap<String, Object>();
+		
 		if(sort!=null&&sort.equals("buildArea")){
 			sort="BuildArea";
 		}
@@ -80,22 +128,13 @@ public class AssetController {
 		Map where=new HashMap<>();
 		
 		where.put("[RoomInfo].State !=", "已划拨");
+		where.put("[RoomInfo].State= ", "空置");
 		
 		if(search!=null&&!search.trim().equals("")){
 			search="%"+search+"%";  
 			where.put("Address like ", search);
 		}		
 
-		if(search2!=null&&!search2.trim().equals("")){ 
-			where.put("[RoomInfo].State= ", search2);
-		}
-		
-		/*
-		List<RoomInfo> roomInfos=roomInfoDao.findAllRoomInfo(limit,offset,sort,
-				order,where);
-		System.out.println("roominfocontroller sort="+sort+"   order="+order);
-		*/
-		
 		Map roomInfo_Positions=roomInfoDao.findAllRoomInfo_Position(limit, offset, sort, order, where);
 		
 		List roominfos=(List) roomInfo_Positions.get("rows");
@@ -170,11 +209,21 @@ public class AssetController {
 		Map searchMap=new HashMap<>();
 		searchMap.put("[RoomInfo].GUID = ", guid);
 		
-		List<RoomInfo_Position> roomInfo_Positions=(List<RoomInfo_Position>) roomInfoDao.findAllRoomInfo_Position(2,0,null,null,searchMap).get("rows");
+		Map map=new HashMap<>();
+		
+		try{
+		List<RoomInfo_Position> roomInfo_Positions=(List<RoomInfo_Position>) roomInfoDao.findAllRoomInfo_Position(1,0,null,null,searchMap).get("rows");
 		
 		RoomInfo_Position roomInfo_Position=roomInfo_Positions.get(0);
+
+		String chartGUID=roomInfo_Position.getChartGUID();
 		
-		Map map=new HashMap<>();
+		List<ChartInfo> chartInfos=roomInfoDao.getChartInfosByGUID(chartGUID);
+		
+		if(chartInfos.size()>0){
+			ChartInfo chartInfo=chartInfos.get(0);		
+			roomInfo_Position.setHire(chartInfo.getHire());
+		}
 		
 		map.put("roomInfo", roomInfo_Position);
 		
@@ -185,6 +234,12 @@ public class AssetController {
 		List fileBytes=mobileDao.allRoomInfoImageByGUID(request, roomInfo);
 		
 		map.put("fileBytes", fileBytes);
+		
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
 		
 		return map;
 		
