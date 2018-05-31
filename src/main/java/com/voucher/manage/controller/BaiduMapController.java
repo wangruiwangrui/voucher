@@ -289,44 +289,25 @@ public class BaiduMapController {
 	public @ResponseBody List getAllAsset(String manageRegion,String roomProperty){
 	
 		Map where = new HashMap<>();
-	
+		
 		System.out.println("manageRegion="+manageRegion);
 		System.out.println("roomProperty="+roomProperty);
 		
 		if(manageRegion!=null&&!manageRegion.equals("")){
 			where.put("[Position].GUID !=","''");
-			where.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManageRegion = ", manageRegion);
+			where.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManageRegion = ", "'"+manageRegion+"'");
 		}else{
 			where.put("[Position].GUID !=","''");
 		}
 		
 		if(roomProperty!=null&&!roomProperty.equals("")){
-			where.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomProperty = ", roomProperty);
+			where.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomProperty = ", "'"+roomProperty+"'");
 		}
 		
 		Map map=roomInfoDao.findAllRoomInfo_Position(1000, 0, null, null, where);
 	
 		List list=(List) map.get("rows");
-		
-		Iterator<RoomInfo_Position> iterator=list.iterator();
-		
-		int i=0;
-		
-		while(iterator.hasNext()){
-			RoomInfo_Position roomInfo_Position=iterator.next();
-			String GUID=roomInfo_Position.getChartGUID();
-			
-			try{
-				ChartInfo chartInfo=(ChartInfo) roomInfoDao.getChartInfosByGUID(GUID).get(0);
-			    roomInfo_Position.setHire(chartInfo.getHire());
-			    list.set(i,roomInfo_Position);
-			}catch (Exception e) {
-				// TODO: handle exception
-				e.printStackTrace();
-			}
-			
-		}
-		
+				
 		return list;
 		
 	}
