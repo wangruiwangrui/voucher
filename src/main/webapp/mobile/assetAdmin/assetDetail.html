@@ -59,8 +59,8 @@
     
      <div class="weui-cells weui-cells_form">
         <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">资产性质</label></div>
-                <div id="roomProperty" class="weui-cell__bd">
+                <div class="weui-cell__hd"><label class="weui-label">经营性质</label></div>
+                <div id="fareItem" class="weui-cell__bd">
                 </div>
                
         </div>
@@ -222,9 +222,9 @@
                   $("#region").append(region);
                   
                   
-                  var roomProperty=document.createElement("span");
-                  roomProperty.innerHTML=obj.roomProperty;
-                  $("#roomProperty").append(roomProperty);
+                  var fareItem=document.createElement("span");
+                  fareItem.innerHTML=obj.fareItem;
+                  $("#fareItem").append(fareItem);
 
 
                   var buildArea=document.createElement("span");

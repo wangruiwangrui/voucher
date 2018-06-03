@@ -100,5 +100,8 @@ public interface AssetsDAO {
 	public Map getTestOr(Map search);
 	
 	public Map<String, Object> findAllRoomInfo_Position(Integer limit, Integer offset, String sort,
-			String order,String search);
+			String order,Map search);
+	
+	public Map<String, Object> findAllRoomInfoCheckDateNULL(Integer limit, Integer offset, String sort,
+			String order,Map search,Integer type);
 }

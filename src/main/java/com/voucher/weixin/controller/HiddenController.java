@@ -3,6 +3,7 @@ package com.voucher.weixin.controller;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +23,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.dao.MobileDAO;
+import com.voucher.manage.dao.RoomInfoDao;
+import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Assets.Hidden;
 import com.voucher.manage.daoModel.Assets.Hidden_Check;
 import com.voucher.manage.daoModel.Assets.Hidden_Neaten;
@@ -31,6 +34,7 @@ import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Neaten_Join;
 import com.voucher.manage.model.Users;
 import com.voucher.manage.service.UserService;
+import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
 
@@ -45,6 +49,8 @@ public class HiddenController {
 	AssetsDAO assetsDAO=(AssetsDAO) applicationContext.getBean("assetsdao");
 	
 	MobileDAO mobileDao=(MobileDAO) applicationContext.getBean("mobileDao");
+	
+	RoomInfoDao roomInfoDao=(RoomInfoDao) applicationContext.getBean("roomInfodao");
 	
 	private UserService userService;
 	
@@ -103,7 +109,7 @@ public class HiddenController {
 	@RequestMapping("/selectAllCheck")
 	public @ResponseBody Map selectAllCheck(@RequestParam Integer limit, @RequestParam Integer offset, 
 			String sort, String order,
-			@RequestParam String search,HttpServletRequest request) {
+			@RequestParam String search,String search2,HttpServletRequest request) {
 		Map searchMap=new HashMap<>();
 		
 		/*
@@ -112,15 +118,34 @@ public class HiddenController {
 		}
 		*/
 		
+		if(search2!=null&&!search2.equals("")){
+			
+			Calendar cal = Calendar.getInstance();  
+	        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);  
+	        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+	        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
+			
+			String startTime = null;
+			
+			startTime=sdf.format(cal.getTime());
+			
+			searchMap.put("convert(varchar(11),[Hidden_Check].date,120 ) >", startTime);
+			
+			System.out.println("startTime="+startTime);
+		}
+		
 		Map map=hiddenDAO.selectAllHiddenCheck(limit, offset, sort, order,search, searchMap);
 		
 		List list=(List) map.get("rows");
+		
+		int total=(int) map.get("total");
 		
 		Map fileBytes=mobileDao.checkImageQuery(request,list);
 		
 		Map result=new HashMap<>();
 		
 		result.put("hidden_Check", list);
+		result.put("total", total);
 		result.put("fileBytes", fileBytes);
 		
 		return result;
@@ -418,6 +443,17 @@ public class HiddenController {
 		boolean isUpdate=false;   //如果有位置就不更新
 		
 		assetsDAO.updatePositionByRoomInfo(position,isUpdate); //更新资产位置
+		
+		//更新安全巡查时间
+		RoomInfo roomInfo=new RoomInfo();
+		
+		roomInfo.setHidden_check_date(date);
+		
+		String[] where={Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = ",guid};
+		
+		roomInfo.setWhere(where);
+		
+		roomInfoDao.updateRoomInfo(roomInfo);
 		
 		return map;
 		

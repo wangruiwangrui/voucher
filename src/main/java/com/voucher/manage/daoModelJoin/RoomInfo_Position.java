@@ -231,6 +231,9 @@ public class RoomInfo_Position implements Serializable{
     @SQLFloat(name="Hire")
 	private Float Hire;
     
+    @SQLString(name="FareItem")
+   	private String FareItem;
+    
 	/*
 	 * Position
 	 */
@@ -893,4 +896,12 @@ public class RoomInfo_Position implements Serializable{
 		return Hire;
 	}
 
+	public void setFareItem(String FareItem){
+		this.FareItem = FareItem;
+	}
+
+	public String getFareItem(){
+		return FareItem;
+	}
+	
 }

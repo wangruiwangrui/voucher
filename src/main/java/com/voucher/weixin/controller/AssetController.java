@@ -1,7 +1,9 @@
 package com.voucher.weixin.controller;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -59,7 +61,7 @@ public class AssetController {
 	
 	@RequestMapping("/getAll")
 	public @ResponseBody Map<String, Object> RoomInfo(@RequestParam Integer limit,@RequestParam Integer offset,String sort,String order,
-			String search,HttpServletRequest request) {
+			String search,Integer search2,Integer search3,HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<String, Object>();
 			
 		if(sort!=null&&sort.equals("buildArea")){
@@ -88,8 +90,72 @@ public class AssetController {
 			where.put("Num like ", search);
 		}		
 
+		if(search2!=null){
 		
-		Map roomInfo_Positions=assetsDAO.findAllRoomInfo_Position(limit, offset, sort, order, search);
+			Calendar cal = Calendar.getInstance();  
+	        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);  
+	        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+	        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
+			
+			String startTime = null;
+			
+			startTime=sdf.format(cal.getTime());
+			
+			if(search2==0){
+				where.put("convert(varchar(11),"+Singleton.ROOMDATABASE+
+						".[dbo].[RoomInfo].hidden_check_date ,120 )<", startTime);
+				//用于查询datatime等于空值
+				Map roomInfo_Positions=assetsDAO.findAllRoomInfoCheckDateNULL(limit, offset, sort, order, where, 1);
+				
+				List roominfos=(List) roomInfo_Positions.get("rows");
+				int total=(int) roomInfo_Positions.get("total");
+				
+				map.put("rows", roominfos);
+				map.put("total", total);
+				
+				Map fileBytes=mobileDao.roomInfo_PositionImageQuery(request, roominfos);
+				map.put("fileBytes", fileBytes);
+				
+				return map;
+				
+			}else if(search2==1){
+				where.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].hidden_check_date >", startTime);
+			}
+		}
+		
+		if(search3!=null){
+			Calendar cal = Calendar.getInstance();  
+	        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);  
+	        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+	        cal.add(Calendar.DAY_OF_MONTH, -1);
+	        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
+			
+			String startTime = null;
+			
+			startTime=sdf.format(cal.getTime());
+			
+			if(search3==0){
+				where.put("convert(varchar(11),"+Singleton.ROOMDATABASE+
+						".[dbo].[RoomInfo].asset_check_date ,120 )<", startTime);
+				Map roomInfo_Positions=assetsDAO.findAllRoomInfoCheckDateNULL(limit, offset, sort, order, where, 2);
+				
+				List roominfos=(List) roomInfo_Positions.get("rows");
+				int total=(int) roomInfo_Positions.get("total");
+				
+				map.put("rows", roominfos);
+				map.put("total", total);
+				
+				Map fileBytes=mobileDao.roomInfo_PositionImageQuery(request, roominfos);
+				map.put("fileBytes", fileBytes);
+				
+				return map;
+				
+			}else if(search3==1){
+				where.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].asset_check_date >", startTime);
+			}
+		}
+		
+		Map roomInfo_Positions=assetsDAO.findAllRoomInfo_Position(limit, offset, sort, order, where);
 		
 		List roominfos=(List) roomInfo_Positions.get("rows");
 		int total=(int) roomInfo_Positions.get("total");
@@ -216,15 +282,6 @@ public class AssetController {
 		
 		RoomInfo_Position roomInfo_Position=roomInfo_Positions.get(0);
 
-		String chartGUID=roomInfo_Position.getChartGUID();
-		
-		List<ChartInfo> chartInfos=roomInfoDao.getChartInfosByGUID(chartGUID);
-		
-		if(chartInfos.size()>0){
-			ChartInfo chartInfo=chartInfos.get(0);		
-			roomInfo_Position.setHire(chartInfo.getHire());
-		}
-		
 		map.put("roomInfo", roomInfo_Position);
 		
 		RoomInfo roomInfo=new RoomInfo();

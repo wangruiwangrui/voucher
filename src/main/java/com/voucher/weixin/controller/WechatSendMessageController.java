@@ -178,6 +178,8 @@ public class WechatSendMessageController {
 		
 		List<ChartInfo> list2=(List<ChartInfo>) roomInfoDao.getChartInfoByGUID(2, 0, null, null, search2).get("rows");
 		
+		try{
+		
 		if(list2!=null){
 			
 			ChartInfo chartInfo=list2.get(0);
@@ -258,6 +260,10 @@ public class WechatSendMessageController {
 	    	MessageListMapper messageListMapper=sqlSession.getMapper(MessageListMapper.class);
 	    	
 	    	messageListMapper.insertMessageList(messageList);
+		 }
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
 		}
 	}
 	

@@ -129,11 +129,9 @@ public class AssetUserRegisterController {
 	 public static boolean isPhone(String str) { 
         Pattern p1 = null,p2 = null;
         Matcher m = null;
-        boolean b = false;  
-        p1 = Pattern.compile("^((13[0-9])|(15[^4])|(18[0,2,3,5-9])|(17[0-8])|(147))\\d{8}$");
-
-         m = p1.matcher(str);
-         b = m.matches();  
+        if(str.length()!=11){
+        	return false;
+        }
       //  return b;
          return true;
      }

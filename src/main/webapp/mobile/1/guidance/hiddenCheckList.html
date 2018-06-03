@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="../css/example.css"/>
     <link rel="stylesheet" href="../css/jquery-weui.css">
     <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=pQFgFpS0VnMXwCRN6cTc1jDOcBVi3XoD"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 </head>
 <body>
 
@@ -23,9 +24,21 @@
         <div class="refresh">正在刷新</div>
        </div>
 
+	<div class="page__bd" style="height:50px;">
+        <div class="weui-tab">
+            <div class="weui-navbar">
+                <div id="tab1" class="weui-navbar__item weui-bar__item_on">
+                    	全部巡查记录
+                </div>
+                <div id="tab2" class="weui-navbar__item">
+                   	 	本月巡查记录
+                </div>
+            </div>
+        </div>
+    </div>
+
         <div class="weui-cells weui-cells_form">
               <div class="weui-cell">
-                <div class="weui-cell__hd"></div>
                 <div class="weui-cell__bd weui_cell_primary name">
                     <input id="input" class="weui-input" type="text" placeholder=""/>
                 </div class="weui-cell__bd weui_cell_primary name">
@@ -34,6 +47,9 @@
         </div>
         
 		<div class="weui-cells">
+		  <div class="weui-panel weui-panel_access">
+  			<div id="count" class="weui-panel__hd"></div>
+  		  </div>           
          <div id="ul" >
             
          </div>
@@ -54,6 +70,15 @@
 </body>
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
 <script src="../../../js/jquery-weui.js"></script>
+
+<script type="text/javascript" class="navbar js_show">
+    $(function(){
+        $('.weui-navbar__item').on('click', function () {
+            $(this).addClass('weui-bar__item_on').siblings('.weui-bar__item_on').removeClass('weui-bar__item_on');
+        });
+    });
+</script>
+
 <script>
   function getQueryString(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
@@ -84,6 +109,26 @@
         loading = false;
   	  loadlist();
     });
+    
+    url="/voucher/mobile/hidden/selectAllCheck.do";
+    
+    $("#tab1").on("click",function(){
+  	  url="/voucher/mobile/hidden/selectAllCheck.do";
+  	  limit = 10;
+        offset = 0;
+        $("#ul").children('li').remove();
+        loading = false;
+  	  loadlist();
+    });
+  
+  $("#tab2").on("click",function(){
+	  url="/voucher/mobile/hidden/selectAllCheck.do?search2=1";
+	  limit = 10;
+      offset = 0;
+      $("#ul").children('li').remove();
+      loading = false;
+	  loadlist();
+  });
     
     loadlist();
     
@@ -117,7 +162,7 @@
            var html = "";
            $.ajax({
                type: "POST",
-               url: "/voucher/mobile/hidden/selectAllCheck.do",
+               url: url,
                data: { "limit" : limit, 
                        "offset" : offset,
                        "search" : search,
@@ -133,7 +178,15 @@
                },
                success: function (text) {              	   
             	   var data=text.hidden_Check;
+            	   var count=text.total;
             	   var imgs=text.fileBytes;
+            	   
+            	   var span=document.createElement("span");
+                   span.innerHTML=" "+count+"条记录";
+                   var count = document.getElementById('count'); 
+                   $("#count").children().remove();
+                   count.appendChild(span);
+            	   
                    if (data.length > 0) {
                 	   var i = 0;
                        for(; i < data.length; i++){

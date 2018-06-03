@@ -152,10 +152,9 @@ function getQueryString(name) {
     	  var reportContext=$("#reportContext").val();
     	  var place=$("#place").val();  		        
     	  
-    	  var url=window.location.host+"/voucher/mobile/1/safety/safePlace.html?lng="+lng+"&lat="+lat;
+    	  var url=window.location.host+"/voucher/mobile/1/hidden/safePlace.html?lng="+lng+"&lat="+lat;
     	  
     	  $.get("/voucher/mobile/WechatSendMessage/send.do", { 
-    		  openid:"odos2s-S4k3qupgn-pDW42osG1Gg",
     		  title:title,
     		  reportUser:reportUser,
     		  reportContext:reportContext,

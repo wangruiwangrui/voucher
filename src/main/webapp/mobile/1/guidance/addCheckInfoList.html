@@ -29,10 +29,13 @@
         <div class="weui-tab">
             <div class="weui-navbar">
                 <div id="tab1" class="weui-navbar__item weui-bar__item_on">
-                    	按位置查询
+                    	按位置
                 </div>
                 <div id="tab2" class="weui-navbar__item">
-                   	 	按名称查询
+                   	 	未巡查
+                </div>
+                <div id="tab3" class="weui-navbar__item">
+                   	 	已巡查
                 </div>
             </div>
         </div>
@@ -49,6 +52,9 @@
 
         
 		<div class="weui-cells">
+		  <div class="weui-panel weui-panel_access">
+  			<div id="count" class="weui-panel__hd"></div>
+  		  </div>           
          <div id="ul" >
             
          </div>
@@ -121,13 +127,22 @@
       });
     
     $("#tab2").on("click",function(){
-    	  url="/voucher/mobile/asset/getAll.do";
+    	  url="/voucher/mobile/asset/getAll.do?search2=0";
     	  limit = 10;
           offset = 0;
           $("#ul").children('li').remove();
           loading = false;
     	  loadlist();
       });
+    
+    $("#tab3").on("click",function(){
+  	  url="/voucher/mobile/asset/getAll.do?search2=1";
+  	  limit = 10;
+        offset = 0;
+        $("#ul").children('li').remove();
+        loading = false;
+  	  loadlist();
+    });
     
     loadlist();
     
@@ -221,9 +236,17 @@
                },
                success: function (text) {              	   
             	   var data=text.rows;
+            	   var count=text.total;
             	   var imgs=text.fileBytes;
             	   console.log(data);
             	   console.log(imgs);
+            	   
+            	   var span=document.createElement("span");
+                   span.innerHTML=" "+count+"条记录";
+                   var count = document.getElementById('count'); 
+                   $("#count").children().remove();
+                   count.appendChild(span);
+            	   
                    if (data.length > 0) {
                 	   var i = 0;
                        for(; i < data.length; i++){

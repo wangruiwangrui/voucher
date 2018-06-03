@@ -860,7 +860,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		
 		map.put("rows", list);
 		System.out.println("checkjoinlist=");
-		MyTestUtil.print(list);
+		//MyTestUtil.print(list);
 		
 
 		map.put("total", countMap.get(""));
@@ -868,6 +868,66 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		return map;
 	}
 
+	//安全巡查位置
+	@Override
+	public Map<String, Object> selectAllHiddenCheckPosition(Integer limit, Integer offset, String sort,
+			String order,Map<String, String> search){
+		Map map=new HashMap<String, Object>();
+		List<Hidden_Check_Join> list;
+		Map countMap;
+		
+		Hidden_Check hidden_Check=new Hidden_Check();
+		search.put("[Hidden_Check].exist =", "1");
+		
+		hidden_Check.setOffset(offset);
+		hidden_Check.setLimit(limit);
+		hidden_Check.setSort(sort);
+		hidden_Check.setOrder(order);
+		hidden_Check.setNotIn("id");
+		
+		Position position=new Position();
+		
+		position.setLimit(limit);
+		position.setOffset(offset);
+		position.setSort(sort);
+		position.setOrder(order);
+		position.setNotIn("id");
+		
+		WeiXin_User weiXin_User=new WeiXin_User();
+		
+		weiXin_User.setLimit(limit);
+		weiXin_User.setOffset(offset);
+		weiXin_User.setSort(sort);
+		weiXin_User.setOrder(order);
+		weiXin_User.setNotIn("id");
+		
+		if(!search.isEmpty()){
+		    String[] where=TransMapToString.get(search);
+		    hidden_Check.setWhere(where);
+		    position.setWhere(where);
+		    weiXin_User.setWhere(where);
+		}
+		
+		Object[] objects={hidden_Check,position,weiXin_User};
+		
+		String[] join={"check_id","campusAdmin"};
+	
+		Hidden_Check_Join hidden_Check_Join=new Hidden_Check_Join();
+	
+		list=SelectJoinExe.get(this.getJdbcTemplate(), objects, position, join);
+	
+		countMap=SelectJoinExe.getCount(this.getJdbcTemplate(), objects, join);
+		
+		map.put("rows", list);
+		System.out.println("checkjoinlist=");
+		//MyTestUtil.print(list);
+		
+
+		map.put("total", countMap.get(""));
+		
+		return map;
+	}
+	
 
 	@Override
 	public Integer insertHiddenCheck(Hidden_Check hidden_Check) {

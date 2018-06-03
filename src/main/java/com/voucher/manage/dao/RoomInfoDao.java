@@ -59,4 +59,6 @@ public interface RoomInfoDao {
 	public Map notPlaceRoomInfo(int limit,int offset,String search);
 	
 	public List getChartInfosByGUID(String GUID);
+	
+	public Map getAllRoomInfoPosition();
 }

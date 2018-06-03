@@ -341,7 +341,8 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RealPropertyRightUnit,"+
 			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyCardUnit ,"+	
 			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ChartGUID ,"+
-			    Singleton.ROOMDATABASE+".[dbo].[ChartInfo].Hire "+
+			    Singleton.ROOMDATABASE+".[dbo].[ChartInfo].Hire ,"+
+			    Singleton.ROOMDATABASE+".[dbo].[ChartInfo].FareItem "+
 				"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
 				"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
 				"left join "+Singleton.ROOMDATABASE+".[dbo].[ChartInfo] "+
@@ -366,7 +367,9 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 				"WHERE "+
 				"[RoomInfo].State != '已划拨' ";
 		
-		if(search.equals("")||search==null){
+		System.out.println("search="+search);
+		
+		if(search.equals("")||search.isEmpty()){
 			sql=sql0+sql01+sql1+")"+sql1;
 		}else{
 			
@@ -376,10 +379,11 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 			
 			int i=0;
 			for(String str : where){
-			    sb.append(str);
+			    
 			    if(i%2==0){
-			    	
+			    	sb.append(str);
 			    }else{
+			    	sb.append("'"+str+"'");
 			    	sb.append(" and ");
 			    }
 			    i++;
@@ -390,7 +394,7 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 			
 			System.out.println("serach="+serach);
 			
-			sql=sql0+" AND ("+serach+")"+sql01+
+			sql=sql0+" AND ("+serach+sql01+sql1+")"+
 				" AND ("+serach+" ))"+sql1;
 			sql2=sql2+" AND ("+serach+")";
 		}
@@ -789,6 +793,30 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		chartInfo.setWhere(where);
 		
 		return SelectExe.get(this.getJdbcTemplate(), chartInfo);
+	}
+
+	@Override
+	public Map getAllRoomInfoPosition() {
+		// TODO Auto-generated method stub
+		Position position=new Position();
+		
+		String[] where={"[Position].is_roomInfo = ","1"};
+		
+		position.setLimit(1000000);
+		position.setOffset(0);
+		position.setWhere(where);
+		
+		Map map=new HashMap<>();
+		
+		List list=SelectExe.get(this.getJdbcTemplate(), position);
+		
+		int total=(int) SelectExe.getCount(this.getJdbcTemplate(), position).get("");
+		
+		map.put("rows", list);
+		
+		map.put("total", total);
+		
+		return map;
 	}
 	
 }

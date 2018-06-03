@@ -47,6 +47,8 @@ public class AssetsImpl implements Assets{
 	
 	MobileDAO mobileDao=(MobileDAO) applicationContext.getBean("mobileDao");
 	
+	RoomInfoDao roomInfoDao=(RoomInfoDao) applicationContext.getBean("roomInfodao");
+	
 	private UserService userService;
 	
 	@Autowired
@@ -312,7 +314,14 @@ public class AssetsImpl implements Assets{
 	public Map<String, Object> selectAllHiddenCheck(Integer limit, Integer offset, String sort, String order,
 			String address,Map<String, String> search) {
 		// TODO Auto-generated method stub
-		return hiddenDAO.selectAllHiddenCheck(limit, offset, sort, order, address, search);
+		return hiddenDAO.selectAllHiddenCheck(limit, offset, sort, order,address,search);
+	}
+
+	@Override
+	public Map<String, Object> selectAllHiddenCheckPosition(Integer limit, Integer offset, String sort, String order,
+			Map<String, String> search) {
+		// TODO Auto-generated method stub
+		return hiddenDAO.selectAllHiddenCheckPosition(limit, offset, sort, order, search);
 	}
 
 
@@ -540,6 +549,12 @@ public class AssetsImpl implements Assets{
 	public String getGUIDByPosition(String lng, String lat) {
 		// TODO Auto-generated method stub
 		return assetsDAO.getGUIDByPosition(lng, lat);
+	}
+
+	@Override
+	public Integer getAllRoomInfoPosition() {
+		// TODO Auto-generated method stub
+		return (Integer) roomInfoDao.getAllRoomInfoPosition().get("total");
 	}
 
 

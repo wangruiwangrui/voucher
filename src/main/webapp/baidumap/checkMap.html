@@ -364,7 +364,9 @@
 	// 添加到地图当中
 	map.addControl(buttonCtrl);
 	
+	*/
 	
+	/*
 	function checkMap(){
 		var datepicker=document.getElementById('datepicker').value;
   	   var datepicker2=document.getElementById('datepicker2').value;
@@ -423,15 +425,29 @@
     	var point = new BMap.Point(ticket[0].lng, ticket[0].lat);
     	
     	var pois=[];
+
+    	var n=300;
     	
-    	for(var i=0;i<ticket.length;i++){
+    	if(ticket.length<300){
+    		n=ticket.length;
+    	}
+    	
+    	for(var i=0;i<n;i++){
 
     		pois.push(new BMap.Point(ticket[i].lng,ticket[i].lat));
 
     	}
     
+    	var points = [];  // 添加海量点数据
     	
-       console.log(pois);
+    	for(var i=0;i<ticket.length;i++){
+    		
+    		points.push(new BMap.Point(ticket[i].lng, ticket[i].lat));
+    		
+    	}
+    	
+    	
+       //console.log(pois);
     
     	var sy = new BMap.Symbol(BMap_Symbol_SHAPE_BACKWARD_OPEN_ARROW, {
     	    scale: 0.6,//图标缩放大小
@@ -454,8 +470,10 @@
     	}catch(err){
     		console.log(err);
     	}
+    	
 		var pointArray = new Array();
 
+		/*
 		for(var i=0;i<ticket.length;i++){
 			var point=new BMap.Point(ticket[i].lng, ticket[i].lat);
 			var myIcon = new BMap.Icon("../img/checkPoint.png", new BMap.Size(20,19));
@@ -486,7 +504,34 @@
 		  }
 	    	addClickHandler(content,marker);
 		}
-				
+		*/
+		
+		var options = {
+	             size: BMAP_POINT_SIZE_SMALL,
+	             color: '#00bfff'
+	         }
+		
+	    var pointCollection = new BMap.PointCollection(points, options);  // 初始化PointCollection
+
+	    pointCollection.addEventListener('click', function (e) {
+	          // alert('单击点的坐标为：' + e.point.lng + ',' + e.point.lat);  // 监听点击事件
+	          		var xhm=new XMLHttpRequest();
+	  				 xhm.open("GET","../baiduMap/getCheckByPosition.do?lng="+e.point.lng+"&lat="+e.point.lat,false);
+	  				 xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	  				 xhm.send();
+	   				var obj=JSON.parse(xhm.responseText);
+	   				console.log(obj);
+	   				var content="巡查资产 : "+obj.address+"<br/>"+
+		            			" 管理分区 : "+obj.manageRegion+" "+
+		            			" 检查结果 : "+obj.check_name+" "+
+		            			" 检查时间 : "+actionTime(obj.date);
+	    				var infoWindow = new BMap.InfoWindow(content);  // 创建信息窗口对象
+	    	            map.openInfoWindow(infoWindow,new BMap.Point(e.point.lng, e.point.lat)); //开启信息窗口
+	    	       	
+	         });
+	         map.addOverlay(pointCollection);  // 添加Overlay
+		
+		
 		//让所有点在视野范围内
 		map.setViewport(pointArray);
 	

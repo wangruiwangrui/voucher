@@ -38,6 +38,7 @@ import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
+import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.MyTestUtil;
@@ -264,24 +265,58 @@ public class BaiduMapController {
 	
 	@RequestMapping("getAssetGUIDByPosition")
 	public @ResponseBody Map getAssetGUIDByPosition(@RequestParam Double lng,
-			@RequestParam Double lat){
+			@RequestParam Double lat ,HttpServletRequest request){
 		  
 		Map searchMap=new HashMap<>();
         
         searchMap.put("[Position].lng=", String.valueOf(lng));
         searchMap.put("[Position].lat=", String.valueOf(lat));
 
-        Map map=roomInfoDao.findAllRoomInfo_Position(2, 0, null, null, searchMap); 
+        Map map=roomInfoDao.findAllRoomInfo_Position(1, 0, null, null, searchMap); 
         
         List list=(List) map.get("rows"); 
         
         RoomInfo_Position roomInfo_Position=(RoomInfo_Position) list.get(0);
         
+        Map fileBytes=mobileDao.roomInfo_PositionImageQuery(request, list);
+        
+        String url=(String) fileBytes.get(roomInfo_Position.getGUID());
+        
         Map map2=new HashMap<>();
         
-        map2.put("guid", roomInfo_Position.getGUID());
+        map2.put("roomInfo", roomInfo_Position);
+        
+        map2.put("url", url);
         
         return map2;
+        
+	}
+	
+	@RequestMapping("getCheckByPosition")
+	public @ResponseBody Hidden_Check_Join getCheckByPosition(@RequestParam Double lng,
+			@RequestParam Double lat ,HttpServletRequest request){
+		
+		Map searchMap=new HashMap<>();
+        
+        searchMap.put("[Position].lng=", String.valueOf(lng));
+        searchMap.put("[Position].lat=", String.valueOf(lat));
+        
+        Map map=hiddenDAO.selectAllHiddenCheck(1, 0, null, null,null, searchMap);
+        
+        Hidden_Check_Join hidden_Check_Join = null;
+        
+        try{
+        	
+        	List list=(List) map.get("rows");
+        	
+        	hidden_Check_Join=(Hidden_Check_Join) list.get(0);
+        	
+        }catch (Exception e) {
+			// TODO: handle exception
+        	e.printStackTrace();
+		}
+        
+        return hidden_Check_Join;
         
 	}
 	
@@ -294,17 +329,17 @@ public class BaiduMapController {
 		System.out.println("roomProperty="+roomProperty);
 		
 		if(manageRegion!=null&&!manageRegion.equals("")){
-			where.put("[Position].GUID !=","''");
-			where.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManageRegion = ", "'"+manageRegion+"'");
+			where.put("[Position].GUID !=","");
+			where.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManageRegion = ", manageRegion);
 		}else{
-			where.put("[Position].GUID !=","''");
+			where.put("[Position].GUID !=","");
 		}
 		
 		if(roomProperty!=null&&!roomProperty.equals("")){
-			where.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomProperty = ", "'"+roomProperty+"'");
+			where.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomProperty = ", roomProperty);
 		}
 		
-		Map map=roomInfoDao.findAllRoomInfo_Position(1000, 0, null, null, where);
+		Map map=roomInfoDao.findAllRoomInfo_Position(100000, 0, null, null, where);
 	
 		List list=(List) map.get("rows");
 				
@@ -312,6 +347,17 @@ public class BaiduMapController {
 		
 	}
 	
+	
+	@RequestMapping("/getAllAssetPosition")
+	public @ResponseBody List getAllAssetPosition(){
+		
+		Map map=roomInfoDao.getAllRoomInfoPosition();
+		
+		List list=(List) map.get("rows");
+		
+		return list;
+		
+	}
 	
 	@RequestMapping("/getAllCheckByOpenId")
 	public @ResponseBody Map getAllCheckByOpenId(@RequestParam String openId,
@@ -382,7 +428,7 @@ public class BaiduMapController {
 		searchMap.put("[Hidden_Check].date>",startTime);
 		searchMap.put("[Hidden_Check].date<",endTime);
 		
-		Map map=hiddenDAO.selectAllHiddenCheck(1000, 0, "date", "asc","", searchMap);
+		Map map=hiddenDAO.selectAllHiddenCheckPosition(1000, 0, "date", "asc", searchMap);
 		
 		/*
 		System.out.println("datepicker="+datepicker+" "+datepicker2);
