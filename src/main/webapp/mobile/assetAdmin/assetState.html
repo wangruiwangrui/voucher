@@ -31,6 +31,13 @@
             </div>
     </div>
     
+    <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">合同编号</label></div>
+                <div id="corporation" class="weui-cell__bd">
+                </div>
+            </div>
+    </div> 
     
     <div class="weui-cells weui-cells_form">
             <div class="weui-cell weui-cell_access">
@@ -125,6 +132,10 @@
                   manageRegion.innerHTML=obj.manageRegion;
                   $("#manageRegion").append(manageRegion);
              	  
+                  var corporation=document.createElement("span");
+       	  		  corporation.innerHTML=obj.corporation;
+            	  $("#corporation").append(corporation);
+                  
              	  var charter=document.createElement("span");
              	 charter.innerHTML=obj.charter;
                   $("#charter").append(charter);

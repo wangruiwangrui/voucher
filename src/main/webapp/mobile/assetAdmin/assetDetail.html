@@ -59,7 +59,7 @@
     
      <div class="weui-cells weui-cells_form">
         <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">经营性质</label></div>
+                <div class="weui-cell__hd"><label class="weui-label">经营项目</label></div>
                 <div id="fareItem" class="weui-cell__bd">
                 </div>
                
@@ -90,6 +90,22 @@
                 <div class="weui-cell__ft"></div>
             </div>
     </div>
+    
+    <div class="weui-cells weui-cells_form" id="charter_div">
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__hd"><label class="weui-label">承租人</label></div>
+                <div id="charter" class="weui-cell__bd">
+                </div>
+            </div>
+    </div>
+    
+    <div class="weui-cells weui-cells_form" id="phone_div">
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__hd"><label class="weui-label">承租人电话</label></div>
+                <div id="phone" class="weui-cell__bd">
+                </div>
+            </div>
+    </div>  
     
     <div class="weui-cells weui-cells_form">
             <div id="hidden" class="weui-cell weui-cell_access">
@@ -239,6 +255,24 @@
                   var State=document.createElement("span");
                   State.innerHTML=obj.state;
                   $("#State").append(State);
+                  
+                  if(obj.charter!=null&&obj.charter!=""){
+                  	var charter=document.createElement("span");
+              	 	charter.innerHTML=obj.charter;
+                   	$("#charter").append(charter);
+                  }else{
+                	  $("#charter_div").hide();
+                  }
+                  
+                  if(obj.phone!=null&&obj.phone!=""){
+                	  console.log("phone="+obj.phone);
+                   	var phone=document.createElement("a");
+                   	phone.setAttribute("href","tel:"+obj.phone);
+                   	phone.innerHTML=obj.phone;
+                   	$("#phone").append(phone);
+                  }else{
+                	  $("#phone_div").hide();
+                  }
                   
                   var chartGUID=encodeURI(obj.chartGUID);
                   

@@ -180,7 +180,9 @@ public class AssetsImpl implements Assets{
 		// TODO Auto-generated method stub
 		RoomInfoDao roomInfoDao=(RoomInfoDao) applicationContext.getBean("roomInfodao");
 		
-		Map map=roomInfoDao.findAllRoomInfo_Position(limit, offset, sort, order, search);
+		String term="AND";
+		
+		Map map=assetsDAO.findAllRoomInfo_Position(limit, offset, sort, order,term , search);
 		
 		return map;
 	}

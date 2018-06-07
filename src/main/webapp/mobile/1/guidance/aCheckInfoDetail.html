@@ -370,8 +370,8 @@
     		            var check_id=obj.check_id;
     		        	alert("更新"+name+"安全巡查记录成功!");
     		        	
-    		        	location.href="CheckInfoDetail.html?check_id="+check_id+"&latitude="+latitude+"&longitude="+longitude;
-    		        	
+    		        	//location.href="aCheckInfoDetail.html?check_id="+check_id+"&latitude="+latitude+"&longitude="+longitude;
+    		        	location.reload();
     		        	/*
     		        	var images = {
     		        	   		 localId: [],
@@ -527,7 +527,8 @@
 		            //存储到服务器成功后的处理
 		            //
 		            alert("上传图片"+name+"成功!");
-		            location.href="CheckInfoDetail.html?check_id="+check_id+"&latitude="+latitude+"&longitude="+longitude;
+		           // location.href="aCheckInfoDetail.html?check_id="+check_id+"&latitude="+latitude+"&longitude="+longitude;
+		            location.reload();
 		        }
 		    });
 		}		

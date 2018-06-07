@@ -17,10 +17,7 @@ public interface RoomInfoDao {
 	public Integer updateRoomInfo(RoomInfo roomInfo);
 	
 	public Integer deleteRoomInfo(RoomInfo roomInfo);
-	
-	public Map<String, Object> findAllRoomInfo_Position(Integer limit, Integer offset, String sort,
-			String order,Map search);
-	
+		
 	public Map<String, Object> findAllChangehire_CharLog(Integer limit, Integer offset, String sort,
 			String order,String search);
 	

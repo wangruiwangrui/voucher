@@ -234,6 +234,12 @@ public class RoomInfo_Position implements Serializable{
     @SQLString(name="FareItem")
    	private String FareItem;
     
+    @SQLString(name="Charter")
+	private String Charter;
+    
+    @SQLString(name="Phone")
+	private String Phone;
+    
 	/*
 	 * Position
 	 */
@@ -904,4 +910,19 @@ public class RoomInfo_Position implements Serializable{
 		return FareItem;
 	}
 	
+	public void setCharter(String Charter){
+		this.Charter = Charter;
+	}
+
+	public String getCharter(){
+		return Charter;
+	}
+	
+	public void setPhone(String Phone){
+		this.Phone = Phone;
+	}
+
+	public String getPhone(){
+		return Phone;
+	}
 }

@@ -63,7 +63,9 @@ public class AssetController {
 	public @ResponseBody Map<String, Object> RoomInfo(@RequestParam Integer limit,@RequestParam Integer offset,String sort,String order,
 			String search,Integer search2,Integer search3,HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<String, Object>();
-			
+		
+		String term="OR";
+		
 		if(sort!=null&&sort.equals("buildArea")){
 			sort="BuildArea";
 		}else if(sort!=null&&sort.equals("address")){
@@ -82,16 +84,19 @@ public class AssetController {
 		
 		Map where=new HashMap<>();
 		
-		where.put("[RoomInfo].State !=", "已划拨");
-		
 		if(search!=null&&!search.trim().equals("")){
 			search="%"+search+"%";  
 			where.put("Address like ", search);
 			where.put("Num like ", search);
 		}		
 
+		//设置有搜索条件并且时间为空时的查询条件
+		String searchTerm="";
+		
 		if(search2!=null){
 		
+			term="and";
+			
 			Calendar cal = Calendar.getInstance();  
 	        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);  
 	        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
@@ -101,11 +106,20 @@ public class AssetController {
 			
 			startTime=sdf.format(cal.getTime());
 			
+			where=new HashMap<>();
+			
+			if(search!=null&&!search.trim().equals("")){
+				where.put("Address like ", search);
+				searchTerm="Address like '"+search+"'";
+			}
+		
 			if(search2==0){
+				
 				where.put("convert(varchar(11),"+Singleton.ROOMDATABASE+
 						".[dbo].[RoomInfo].hidden_check_date ,120 )<", startTime);
+				
 				//用于查询datatime等于空值
-				Map roomInfo_Positions=assetsDAO.findAllRoomInfoCheckDateNULL(limit, offset, sort, order, where, 1);
+				Map roomInfo_Positions=assetsDAO.findAllRoomInfoCheckDateNULL(limit, offset, sort, order,term,searchTerm,where, 1);
 				
 				List roominfos=(List) roomInfo_Positions.get("rows");
 				int total=(int) roomInfo_Positions.get("total");
@@ -127,17 +141,27 @@ public class AssetController {
 			Calendar cal = Calendar.getInstance();  
 	        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);  
 	        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
-	        cal.add(Calendar.DAY_OF_MONTH, -1);
+	        cal.add(Calendar.MONTH, -1);
 	        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
 			
 			String startTime = null;
 			
 			startTime=sdf.format(cal.getTime());
 			
+			where=new HashMap<>();
+			
+			if(search!=null&&!search.trim().equals("")){
+				where.put("Address like ", search);
+				searchTerm="Address like '"+search+"'";
+			}
+	
 			if(search3==0){
+		
 				where.put("convert(varchar(11),"+Singleton.ROOMDATABASE+
 						".[dbo].[RoomInfo].asset_check_date ,120 )<", startTime);
-				Map roomInfo_Positions=assetsDAO.findAllRoomInfoCheckDateNULL(limit, offset, sort, order, where, 2);
+				
+				//用于查询datatime等于空值
+				Map roomInfo_Positions=assetsDAO.findAllRoomInfoCheckDateNULL(limit, offset, sort, order,term,searchTerm, where, 2);
 				
 				List roominfos=(List) roomInfo_Positions.get("rows");
 				int total=(int) roomInfo_Positions.get("total");
@@ -155,7 +179,7 @@ public class AssetController {
 			}
 		}
 		
-		Map roomInfo_Positions=assetsDAO.findAllRoomInfo_Position(limit, offset, sort, order, where);
+		Map roomInfo_Positions=assetsDAO.findAllRoomInfo_Position(limit, offset, sort, order,term, where);
 		
 		List roominfos=(List) roomInfo_Positions.get("rows");
 		int total=(int) roomInfo_Positions.get("total");
@@ -175,6 +199,8 @@ public class AssetController {
 	public @ResponseBody Map<String, Object> RoomInfo2(@RequestParam Integer limit,@RequestParam Integer offset,String sort,String order,
 			String search,HttpServletRequest request){
 		Map<String, Object> map = new HashMap<String, Object>();
+		
+		String term="OR";
 		
 		if(sort!=null&&sort.equals("buildArea")){
 			sort="BuildArea";
@@ -201,7 +227,7 @@ public class AssetController {
 			where.put("Address like ", search);
 		}		
 
-		Map roomInfo_Positions=roomInfoDao.findAllRoomInfo_Position(limit, offset, sort, order, where);
+		Map roomInfo_Positions=assetsDAO.findAllRoomInfo_Position(limit, offset, sort, order,term, where);
 		
 		List roominfos=(List) roomInfo_Positions.get("rows");
 		
@@ -275,10 +301,12 @@ public class AssetController {
 		Map searchMap=new HashMap<>();
 		searchMap.put("[RoomInfo].GUID = ", guid);
 		
+		String term="AND";
+		
 		Map map=new HashMap<>();
 		
 		try{
-		List<RoomInfo_Position> roomInfo_Positions=(List<RoomInfo_Position>) roomInfoDao.findAllRoomInfo_Position(1,0,null,null,searchMap).get("rows");
+		List<RoomInfo_Position> roomInfo_Positions=(List<RoomInfo_Position>) assetsDAO.findAllRoomInfo_Position(1,0,null,null,term,searchMap).get("rows");
 		
 		RoomInfo_Position roomInfo_Position=roomInfo_Positions.get(0);
 

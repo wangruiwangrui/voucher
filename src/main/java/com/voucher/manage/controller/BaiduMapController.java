@@ -42,6 +42,7 @@ import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.MyTestUtil;
+import com.voucher.manage.tools.TestDistance;
 import com.voucher.sqlserver.context.Connect;
 
 import voucher.Mybatis;
@@ -196,9 +197,9 @@ public class BaiduMapController {
 	public @ResponseBody Map getAssetsByPoint(Integer limit,Integer offset,Double lng,Double lat,
 			Double distance,HttpServletRequest request){
 
-		Map map=assetsDAO.findAssetByPoint(lng, lat, distance, "");
+		Map map=assetsDAO.findAssetByPoint(limit,offset,lng, lat, distance, "");
 	
-		List list=(List) map.get("row");
+		List list=(List) map.get("rows");
 
 		Map result=new HashMap<>();
 		
@@ -211,10 +212,26 @@ public class BaiduMapController {
 	public @ResponseBody Map getAssetsByDistanceImg(Integer limit,Integer offset,Double lng,Double lat,
 			Double distance,String search,HttpServletRequest request){
 		System.out.println("search="+search);
+
+		Map map;
+		
 		if(search==null)
 			search="";
 		
-		Map map=assetsDAO.findAssetByDistance(limit, offset, lng, lat, search);
+		if(search!=null&&!search.equals("")){
+			double d=TestDistance.get(search);
+			
+			System.out.println("d="+d);
+			
+			if(d>0){
+				map=assetsDAO.findAssetByPoint(limit,offset,lng, lat, d, null);
+			}else{
+				map=assetsDAO.findAssetByDistance(limit, offset, lng, lat, search);
+			}
+			
+		}else{
+			map=assetsDAO.findAssetByDistance(limit, offset, lng, lat, search);
+		}
 		
 		MyTestUtil.print(map);
 		
@@ -268,11 +285,13 @@ public class BaiduMapController {
 			@RequestParam Double lat ,HttpServletRequest request){
 		  
 		Map searchMap=new HashMap<>();
-        
+
+		String term="AND";
+		
         searchMap.put("[Position].lng=", String.valueOf(lng));
         searchMap.put("[Position].lat=", String.valueOf(lat));
 
-        Map map=roomInfoDao.findAllRoomInfo_Position(1, 0, null, null, searchMap); 
+        Map map=assetsDAO.findAllRoomInfo_Position(1, 0, null, null,term, searchMap); 
         
         List list=(List) map.get("rows"); 
         
@@ -325,6 +344,8 @@ public class BaiduMapController {
 	
 		Map where = new HashMap<>();
 		
+		String term="AND";
+		
 		System.out.println("manageRegion="+manageRegion);
 		System.out.println("roomProperty="+roomProperty);
 		
@@ -339,7 +360,7 @@ public class BaiduMapController {
 			where.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomProperty = ", roomProperty);
 		}
 		
-		Map map=roomInfoDao.findAllRoomInfo_Position(100000, 0, null, null, where);
+		Map map=assetsDAO.findAllRoomInfo_Position(100000, 0, null, null,term,where);
 	
 		List list=(List) map.get("rows");
 				

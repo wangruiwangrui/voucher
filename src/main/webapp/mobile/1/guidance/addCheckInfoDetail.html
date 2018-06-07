@@ -78,6 +78,59 @@
         </div>
     
     </div> 
+    
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">经营项目</label></div>
+                <div id="fareItem" class="weui-cell__bd">
+                </div>
+               
+        </div>
+    </div>
+    
+    <div class="weui-cells weui-cells_form" id="dangerClassification_div">
+        <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">房屋等级</label></div>
+                <div id="dangerClassification" class="weui-cell__bd">
+                </div>
+               
+        </div>
+    </div>
+    
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">面积</label></div>
+                <div id="buildArea" class="weui-cell__bd">
+                </div>
+        </div>
+    </div>
+   
+    <div class="weui-cells weui-cells_form" id="hire_div">
+        <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">租金</label></div>
+                <div id="hire" class="weui-cell__bd">
+                </div>
+        </div>
+    </div>
+   
+   
+    <div class="weui-cells weui-cells_form" id="charter_div">
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__hd"><label class="weui-label">承租人</label></div>
+                <div id="charter" class="weui-cell__bd">
+                </div>
+            </div>
+    </div>
+    
+    <div class="weui-cells weui-cells_form" id="phone_div">
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__hd"><label class="weui-label">承租人电话</label></div>
+                <div id="phone" class="weui-cell__bd">
+                </div>
+            </div>
+    </div>  
+    
+    
  </form>
 
  <div class="weui-cells__title">检查位置</div>
@@ -136,6 +189,7 @@
            	  
            	  navigation(pointStart, pointEnd);
            	  */
+           	  /*
            	if(obj.lng!=""&&obj.lat!=""){  
            		var pointA = new BMap.Point(longitude,latitude);  // 创建点坐标A--大渡口区
   	    		var pointB = new BMap.Point(obj.lng,obj.lat);  // 创建点坐标B--江北区
@@ -148,6 +202,7 @@
   	    			});
   	    		}
            	}
+           	  */
            	  var address=document.createElement("span");
            	  address.innerHTML=obj.address;
               $("#address").append(address);
@@ -155,6 +210,47 @@
               var manageRegion=document.createElement("span");
               manageRegion.innerHTML=obj.manageRegion;
               $("#manageRegion").append(manageRegion);
+              
+              var buildArea=document.createElement("span");
+              buildArea.innerHTML=obj.buildArea+" m<sup>2</sup>";
+              $("#buildArea").append(buildArea);
+       
+              var fareItem=document.createElement("span");
+              fareItem.innerHTML=obj.fareItem;
+              $("#fareItem").append(fareItem);
+              
+              if(obj.dangerClassification!=null&&obj.dangerClassification!=""){
+               	var dangerClassification=document.createElement("a");
+               	dangerClassification.innerHTML=obj.dangerClassification;
+               	$("#dangerClassification").append(dangerClassification);
+              }else{
+            	  $("#dangerClassification_div").hide();
+              }
+              
+              if(obj.charter!=null&&obj.charter!=""){
+              	var charter=document.createElement("span");
+          	 	charter.innerHTML=obj.charter;
+               	$("#charter").append(charter);
+               	
+               	var hire=document.createElement("span");
+                hire.innerHTML=obj.hire;
+                $("#hire").append(hire);
+               	
+              }else{
+            	  $("#charter_div").hide();
+            	  $("#hire_div").hide();
+              }
+              
+              if(obj.phone!=null&&obj.phone!=""){
+            	  console.log("phone="+obj.phone);
+               	var phone=document.createElement("a");
+               	phone.setAttribute("href","tel:"+obj.phone);
+               	phone.innerHTML=obj.phone;
+               	$("#phone").append(phone);
+              }else{
+            	  $("#phone_div").hide();
+              }
+              
       }
   });
   

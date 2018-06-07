@@ -29,13 +29,13 @@
         <div class="weui-tab">
             <div class="weui-navbar">
                 <div id="tab1" class="weui-navbar__item weui-bar__item_on">
-                    	按位置
+                    	资产位置
                 </div>
                 <div id="tab2" class="weui-navbar__item">
-                   	 	未巡查
+                   	 	
                 </div>
                 <div id="tab3" class="weui-navbar__item">
-                   	 	已巡查
+                   	 	
                 </div>
             </div>
         </div>
@@ -144,6 +144,18 @@
   	  loadlist();
     });
     
+    var today = new Date();//获得当前日期
+    var month = today.getMonth() + 1;
+    var span2=document.createElement("span");
+    span2.innerHTML=month+"月未巡查";
+    var tab2=document.getElementById('tab2');
+    tab2.appendChild(span2);
+    
+    var span3=document.createElement("span");
+    span3.innerHTML=month+"月已巡查";
+    var tab2=document.getElementById('tab3');
+    tab3.appendChild(span3);
+    
     loadlist();
     
     $(document.body).pullToRefresh().on("pull-to-refresh", function() {
@@ -218,7 +230,7 @@
       function loadlist() {
            var html = "";
            $.ajax({
-               type: "POST",
+               type: "get",
                url: url,
                data: { "limit" : limit, 
                        "offset" : offset,

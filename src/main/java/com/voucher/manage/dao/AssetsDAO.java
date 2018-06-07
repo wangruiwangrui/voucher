@@ -47,7 +47,7 @@ public interface AssetsDAO {
 	
 	public Map findHiddenByPoint(Double lng, Double lat,Double distance,String search);
 	
-	public Map findAssetByPoint(Double lng, Double lat,Double distance,String search);
+	public Map findAssetByPoint(int limit,int offset,Double lng, Double lat,Double distance,String search);
 		
 	public Integer insertIntoHidden_Assets(Hidden_Assets hidden_Assets);
 	
@@ -100,8 +100,8 @@ public interface AssetsDAO {
 	public Map getTestOr(Map search);
 	
 	public Map<String, Object> findAllRoomInfo_Position(Integer limit, Integer offset, String sort,
-			String order,Map search);
+			 String order,String term,Map search);
 	
 	public Map<String, Object> findAllRoomInfoCheckDateNULL(Integer limit, Integer offset, String sort,
-			String order,Map search,Integer type);
+			String order,String term,String searchTerm,Map search,Integer type);
 }
