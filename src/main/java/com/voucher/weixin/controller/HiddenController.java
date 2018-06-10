@@ -36,6 +36,7 @@ import com.voucher.manage.model.Users;
 import com.voucher.manage.service.UserService;
 import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.MyTestUtil;
+import com.voucher.manage.tools.TestDistance;
 import com.voucher.sqlserver.context.Connect;
 
 @Controller
@@ -112,11 +113,66 @@ public class HiddenController {
 			@RequestParam String search,String search2,HttpServletRequest request) {
 		Map searchMap=new HashMap<>();
 		
+		Map map;
+		
 		/*
 		if(!search.equals("")){
 			searchMap.put("check_name like", "%"+search+"%");
 		}
 		*/
+		
+		if(search!=null&&!search.equals("")){
+			
+			int d=(int) TestDistance.get(search);
+			
+			System.out.println("d="+d);
+			
+			if(d>0){
+				
+				Calendar cal = Calendar.getInstance();  
+				cal.set(cal.get(Calendar.YEAR), d-1, 0, 0, 0, 0);  
+		        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
+				
+				String startTime = null;
+				
+				String endTime=null;
+				
+				startTime=sdf.format(cal.getTime());
+				
+				cal.set(cal.get(Calendar.YEAR), d, 0, 0, 0, 0);
+		        
+		        endTime=sdf.format(cal.getTime());
+				
+		        System.out.println("searchMap="+searchMap);
+		        
+				searchMap.put("convert(varchar(11),[Hidden_Check].date,120 ) >", startTime);
+				searchMap.put("convert(varchar(11),[Hidden_Check].date,120 ) <", endTime);
+				
+				System.out.println("cal.getActualMinimum(Calendar.DAY_OF_MONTH="+startTime);
+				
+				System.out.println("searchMap="+searchMap);
+				
+				map=hiddenDAO.selectAllHiddenCheck(limit, offset, sort, order,null, searchMap);
+
+				List list=(List) map.get("rows");
+				
+				int total=(int) map.get("total");
+				
+				Map fileBytes=mobileDao.checkImageQuery(request,list);
+				
+				Map result=new HashMap<>();
+				
+				result.put("hidden_Check", list);
+				result.put("total", total);
+				result.put("fileBytes", fileBytes);
+				
+				return result;
+				
+			}else{
+				searchMap.put("check_name like", "%"+search+"%");
+			}
+	
+		}
 		
 		if(search2!=null&&!search2.equals("")){
 			
@@ -134,7 +190,7 @@ public class HiddenController {
 			System.out.println("startTime="+startTime);
 		}
 		
-		Map map=hiddenDAO.selectAllHiddenCheck(limit, offset, sort, order,search, searchMap);
+		map=hiddenDAO.selectAllHiddenCheck(limit, offset, sort, order,search, searchMap);
 		
 		List list=(List) map.get("rows");
 		
@@ -157,7 +213,7 @@ public class HiddenController {
 		
 	    searchMap.put("[Hidden_Check].check_id = ", check_id);
 		
-		Map map=hiddenDAO.selectAllHiddenCheck(10, 0, null, null,null, searchMap);
+		Map map=hiddenDAO.selectAllHiddenCheck(1, 0, null, null,null, searchMap);
 		
 		List list=(List) map.get("rows");
 		

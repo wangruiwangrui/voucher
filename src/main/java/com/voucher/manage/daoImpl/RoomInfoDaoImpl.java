@@ -600,19 +600,19 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 					"WHERE " ;
 					
     String sql02= "[Position].lng is null AND [Position].lat is  null "+  
-					"AND [RoomInfo].State != '已划拨' "+
+					"AND ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) "+
 					"AND "+
 					Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID not in( select top "+offset+" "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID from "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position] "+
 					"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
 					"WHERE [Position].lng is null AND [Position].lat is null "+ 
-					"AND [RoomInfo].State != '已划拨' )";
+					"AND ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) )";
 		
 		
 		String sql1="SELECT count(*) "+
 				"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position] "+
 				"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
 				"WHERE [Position].lng is null AND [Position].lat is  null "+  
-				"AND [RoomInfo].State != '已划拨' ";		
+				"AND ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) ";		
 		
 		String sql;
 		

@@ -5,40 +5,33 @@ import java.util.regex.Pattern;
 
 public class TestDistance {
 
+	public static void main(String[] args) {
+		String aString="10000";
+		
+		System.out.println(get(aString));
+	}
+	
 	public static double get(String str) { 
 		
-        Pattern p1 = null,p2 = null;
+        Pattern p1 = null;
         Matcher m = null;
         boolean b = false;  
-        boolean b2 = false;
-        p1 = Pattern.compile(".*米.*");
 
-         m = p1.matcher(str);
-         b = m.matches();  
-         
-         p2 = Pattern.compile(".*公里.*");
+        double i=0;
 
-         m = p2.matcher(str);
-         b2 = m.matches();
-         
-         if(b){
         	 
-        	 p1 = Pattern.compile("[^0-9]");
+        	 p1 = Pattern.compile("^-?[0-9]+$");
 	         m = p1.matcher(str);
-	        
-        	 double i=Double.parseDouble(m.replaceAll(""));
+	         
+	         b = m.matches(); 
+        	 
+	         
+	         if(b){
+	        	 i=Double.parseDouble(str);
+	         }
 	         
         	 return i;
-         }else if(b2){
-        	 p1 = Pattern.compile("[^0-9]");
-	         m = p1.matcher(str);
-	        
-        	 double i=Double.parseDouble(m.replaceAll(""));
-	         
-        	 return i*1000;
-         }else{
-        	 return 0;
-         }
+
      }
 	
 }

@@ -436,12 +436,12 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 					"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
 					"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
 					"WHERE [Position].lng is not null AND [Position].lat is not null "+
-					"AND [RoomInfo].State != '已划拨' "+
+					"AND ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) "+
 					"AND "+
 					Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID not in( select top "+offset+" "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID from "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
 					"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
 					"WHERE [Position].lng is not null AND [Position].lat is not null "+ 
-					"AND [RoomInfo].State != '已划拨' ";
+					"AND ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) ";
 		
 		
 		String sql1="ORDER BY   "+
@@ -453,7 +453,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 				"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
 				"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
 				"WHERE [Position].lng is not null AND [Position].lat is not null "+
-				"AND [RoomInfo].State != '已划拨' ";
+				"AND ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) ";
 		
 		if(search.equals("")){
 			sql=sql0+sql1+")"+sql1;
@@ -1692,13 +1692,13 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 						"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ChartGUID = "
 						+Singleton.ROOMDATABASE+".[dbo].[ChartInfo].GUID "+
 						"WHERE "+
-						"[RoomInfo].State != '已划拨' ";
+						"([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) ";
 						
 			    String sql01="AND "+
 						Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID not in( select top "+offset+" "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID from "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
 						"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
 						"WHERE "+ 
-						"[RoomInfo].State != '已划拨' ";
+						"([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) ";
 			
 				String sql1="ORDER BY  "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num ";
 			
@@ -1708,7 +1708,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 						"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
 						"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
 						"WHERE "+
-						"[RoomInfo].State != '已划拨' ";
+						"([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) ";
 				
 				System.out.println("search="+search);
 				
@@ -1832,13 +1832,13 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 				"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ChartGUID = "
 				+Singleton.ROOMDATABASE+".[dbo].[ChartInfo].GUID "+
 				"WHERE "+
-				"([RoomInfo].State != '已划拨' ";
+				"(([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) ";
 				
 	    String sql01="AND "+
 				Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID not in( select top "+offset+" "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID from "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
 				"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
 				"WHERE "+ 
-				"([RoomInfo].State != '已划拨'  ";
+				"(([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' )  ";
 	
 		String sql1="ORDER BY  "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num ";
 	
@@ -1848,7 +1848,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 				"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
 				"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
 				"WHERE "+
-				"([RoomInfo].State != '已划拨' ";
+				"(([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) ";
 		
 		System.out.println("search="+search);
 		
@@ -1878,13 +1878,13 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 			System.out.println("serach="+serach);
 			
 			if(searchTerm!=null&&!searchTerm.equals("")){
-				sql=sql0+" AND "+serach+") OR ( [RoomInfo].State != '已划拨' AND [RoomInfo]."+checkName+" is null AND "+searchTerm+")"+sql01+" AND "+serach+" )"
-						+ "OR ( [RoomInfo].State != '已划拨' AND [RoomInfo]."+checkName+" is null AND "+searchTerm+") "+sql1+")"+sql1;
-				sql2=sql2+" AND "+serach+") OR ( [RoomInfo].State != '已划拨' AND [RoomInfo]."+checkName+" is null AND "+searchTerm+")";
+				sql=sql0+" AND "+serach+") OR ( ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) AND [RoomInfo]."+checkName+" is null AND "+searchTerm+")"+sql01+" AND "+serach+" )"
+						+ "OR ( ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) AND [RoomInfo]."+checkName+" is null AND "+searchTerm+") "+sql1+")"+sql1;
+				sql2=sql2+" AND "+serach+") OR ( ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) AND [RoomInfo]."+checkName+" is null AND "+searchTerm+")";
 			}else{
-				sql=sql0+" AND "+serach+") OR ( [RoomInfo].State != '已划拨' AND [RoomInfo]."+checkName+" is null )"+sql01+" AND "+serach+" )"
-					+ "OR ( [RoomInfo].State != '已划拨' AND [RoomInfo]."+checkName+" is null ) "+sql1+")"+sql1;
-				sql2=sql2+" AND "+serach+") OR ( [RoomInfo].State != '已划拨' AND [RoomInfo]."+checkName+" is null )";
+				sql=sql0+" AND "+serach+") OR ( ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) AND [RoomInfo]."+checkName+" is null )"+sql01+" AND "+serach+" )"
+					+ "OR ( ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) AND [RoomInfo]."+checkName+" is null ) "+sql1+")"+sql1;
+				sql2=sql2+" AND "+serach+") OR ( ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) AND [RoomInfo]."+checkName+" is null )";
 			}
 		}
 	

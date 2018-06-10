@@ -146,6 +146,15 @@ function getQueryString(name) {
 
       $("#time").val(nowDate);
       
+      
+      $.post('/voucher/mobile/register/userinfoByopenId.do', {
+			campusId:1
+	       },function(data){
+	    	   var obj = $.parseJSON(data);
+	    	   if(obj.name!=null)
+	    	   $("#reportUser").val(obj.name);
+	       });
+      
       $("#report").click(function(){
     	  var title=$("#title").val();
     	  var reportUser=$("#reportUser").val();

@@ -738,7 +738,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 				String[] where4={Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = ",guid};
 				
 				roomInfo4.setWhere(where4);
-				roomInfo4.setLimit(2);
+				roomInfo4.setLimit(1);
 				roomInfo4.setOffset(0);			
 				roomInfo4.setNotIn("GUID");
 				

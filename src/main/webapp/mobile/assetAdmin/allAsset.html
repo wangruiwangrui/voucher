@@ -116,7 +116,8 @@
     });
     
     $("#tab1").on("click",function(){
-    	url="/voucher/baiduMap/getAssetsByDistanceImg.do";
+    	  $("#input").attr("placeholder","输入距离查询周围资产");
+    	  url="/voucher/baiduMap/getAssetsByDistanceImg.do";
     	  limit = 10;
           offset = 0;
           $("#ul").children('li').remove();
@@ -125,6 +126,7 @@
       });
     
     $("#tab2").on("click",function(){
+    	  $("#input").attr("placeholder","");
     	  url="/voucher/mobile/asset/getAll.do";
     	  limit = 10;
           offset = 0;

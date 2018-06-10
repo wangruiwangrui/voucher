@@ -21,10 +21,11 @@
 <body>
 <form action="" novalidate>
 	<div class="weui-cells weui-cells_form">
-            <div class="weui-cell">
+            <div class="weui-cell weui-cell_access">
                 <div class="weui-cell__hd"><label class="weui-label">资产名称</label></div>
                 <div id="address" class="weui-cell__bd">
                 </div>
+                <div class="weui-cell__ft"></div>
             </div>
     </div>
     
@@ -199,7 +200,11 @@
              	  var address=document.createElement("span");
                	  address.innerHTML=obj.address;
                   $("#address").append(address);
-                    
+                  
+                  $("#address").on("click",function(){
+                	  clickEvent(obj.guid);
+                  });
+                  
                   var manageRegion=document.createElement("span");
                   manageRegion.innerHTML=obj.manageRegion;
                   $("#manageRegion").append(manageRegion);
@@ -289,7 +294,32 @@
     });
     
     
-	
+	function clickEvent(guid){
+	  guid=encodeURI(guid);	
+  	  wx.getLocation({
+	         success : function(res) {
+	            // alert(JSON.stringify(res));
+	            var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+	            // $("#latitude").val(latitude);
+	            var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+	            
+	            $.get("/voucher/mobile/map/baiduSwitch.do",{ //微信地理位置坐标转换成百度地图坐标
+	              	 longitude:longitude,
+	              	 latitude:latitude               	 
+	               },function(text){
+	              	 var obj = $.parseJSON(text);
+	              	 var result=obj.result;
+	              	 var lat=result[0].y;
+	              	 var lng=result[0].x;
+	              	location.href="../../assetAdmin/assetDetail.html?guid="+guid+"&latitude="+lat+"&longitude="+lng;
+	            });
+	            
+	        },
+	        cancel : function(res) {
+	     	   console.log('用户拒绝授权获取地理位置');
+	        }
+	    });         	  
+    }
 	
 	function actionTime(value){
   	    var date = new Date(value); 
