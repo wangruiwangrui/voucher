@@ -2,6 +2,8 @@ package com.voucher.manage.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -210,13 +212,15 @@ public class BaiduMapController {
 	
 	@RequestMapping("/getAssetsByDistanceImg")
 	public @ResponseBody Map getAssetsByDistanceImg(Integer limit,Integer offset,Double lng,Double lat,
-			Double distance,String search,HttpServletRequest request){
+			Double distance,String search,String search2,HttpServletRequest request){
 		System.out.println("search="+search);
 
 		Map map;
 		
 		if(search==null)
 			search="";
+		
+		System.out.println("search2="+search2);
 		
 		if(search!=null&&!search.equals("")){
 			double d=TestDistance.get(search);
@@ -226,11 +230,19 @@ public class BaiduMapController {
 			if(d>0){
 				map=assetsDAO.findAssetByPoint(limit,offset,lng, lat, d, null);
 			}else{
-				map=assetsDAO.findAssetByDistance(limit, offset, lng, lat, search);
+				if(search2!=null&&!search2.equals("")){
+					map=assetsDAO.findAssetByDistanceDate(limit, offset, lng, lat, search,search2,1);
+				}else{
+					map=assetsDAO.findAssetByDistance(limit, offset, lng, lat, search);
+				}
 			}
 			
 		}else{
-			map=assetsDAO.findAssetByDistance(limit, offset, lng, lat, search);
+			if(search2!=null&&!search2.equals("")){
+				map=assetsDAO.findAssetByDistanceDate(limit, offset, lng, lat, search,search2,1);
+			}else{
+				map=assetsDAO.findAssetByDistance(limit, offset, lng, lat, search);
+			}
 		}
 		
 		MyTestUtil.print(map);
@@ -256,6 +268,19 @@ public class BaiduMapController {
 		
 	}
 	
+	@RequestMapping("getRoomProperty")
+	public @ResponseBody List getRoomProperty(){
+		
+		return assetsDAO.selectRoomProperty();
+		
+	}
+	
+	@RequestMapping("getDangerClassification")
+	public @ResponseBody List getDangerClassification(){
+		
+		return assetsDAO.selectDangerClassification();
+		
+	}
 	
 	@RequestMapping("getGUIDByPosition")
 	public @ResponseBody Map getGUIDByPosition(@RequestParam Double lng,
@@ -340,15 +365,28 @@ public class BaiduMapController {
 	}
 	
 	@RequestMapping("/getAllAsset")
-	public @ResponseBody List getAllAsset(String manageRegion,String roomProperty){
+	public @ResponseBody Map getAllAsset(String manageRegion,String roomProperty,
+			String state,Integer hire,String dangerClassification){
 	
 		Map where = new HashMap<>();
 		
 		String term="AND";
 		
-		System.out.println("manageRegion="+manageRegion);
-		System.out.println("roomProperty="+roomProperty);
+		try {
+			if(manageRegion!=null&&!manageRegion.equals(""))
+				manageRegion = URLDecoder.decode(manageRegion,"utf-8");
+			if(roomProperty!=null&&!roomProperty.equals(""))
+				roomProperty = URLDecoder.decode(roomProperty,"utf-8");
+			if(state!=null&&!state.equals(""))
+				state = URLDecoder.decode(state,"utf-8");
+			if(dangerClassification!=null&&!dangerClassification.equals(""))
+				dangerClassification = URLDecoder.decode(dangerClassification,"utf-8");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
+
 		if(manageRegion!=null&&!manageRegion.equals("")){
 			where.put("[Position].GUID !=","");
 			where.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManageRegion = ", manageRegion);
@@ -360,23 +398,58 @@ public class BaiduMapController {
 			where.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomProperty = ", roomProperty);
 		}
 		
+		if(state!=null&&!state.equals("")){
+			where.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].State = ", state);
+		}
+		
+		if(hire!=null){
+			where.put(Singleton.ROOMDATABASE+".[dbo].[ChartInfo].IsHistory = ", "0");
+			if(hire==0){
+				where.put(Singleton.ROOMDATABASE+".[dbo].[ChartInfo].Hire >= ", "0");
+				where.put(Singleton.ROOMDATABASE+".[dbo].[ChartInfo].Hire < ", "100");
+			}else if(hire==1){
+				where.put(Singleton.ROOMDATABASE+".[dbo].[ChartInfo].Hire >= ", "100");
+				where.put(Singleton.ROOMDATABASE+".[dbo].[ChartInfo].Hire < ", "500");
+			}else if(hire==2){
+				where.put(Singleton.ROOMDATABASE+".[dbo].[ChartInfo].Hire >= ", "500");
+				where.put(Singleton.ROOMDATABASE+".[dbo].[ChartInfo].Hire < ", "1000");
+			}else if(hire==3){
+				where.put(Singleton.ROOMDATABASE+".[dbo].[ChartInfo].Hire >= ", "1000");
+				where.put(Singleton.ROOMDATABASE+".[dbo].[ChartInfo].Hire < ", "3000");
+			}else if(hire==4){
+				where.put(Singleton.ROOMDATABASE+".[dbo].[ChartInfo].Hire >= ", "3000");
+				where.put(Singleton.ROOMDATABASE+".[dbo].[ChartInfo].Hire < ", "5000");
+			}else if(hire==5){
+				where.put(Singleton.ROOMDATABASE+".[dbo].[ChartInfo].Hire >= ", "5000");
+				where.put(Singleton.ROOMDATABASE+".[dbo].[ChartInfo].Hire < ", "10000");
+			}else if(hire==6){
+				where.put(Singleton.ROOMDATABASE+".[dbo].[ChartInfo].Hire > ", "10000");
+			}
+		}
+		
+		if(dangerClassification!=null&&!dangerClassification.equals("")){
+			where.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].DangerClassification = ", dangerClassification);
+		}
+		
 		Map map=assetsDAO.findAllRoomInfo_Position(100000, 0, null, null,term,where);
-	
-		List list=(List) map.get("rows");
-				
-		return list;
+		
+		Map map2=assetsDAO.findAllHire(term, where);
+		
+		String allHire=(String) map2.get("allHire");
+		
+		map.put("allHire", allHire);
+		
+		return map;
 		
 	}
 	
 	
 	@RequestMapping("/getAllAssetPosition")
-	public @ResponseBody List getAllAssetPosition(){
+	public @ResponseBody Map getAllAssetPosition(){
 		
 		Map map=roomInfoDao.getAllRoomInfoPosition();
 		
-		List list=(List) map.get("rows");
-		
-		return list;
+		return map;
 		
 	}
 	

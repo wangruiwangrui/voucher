@@ -45,6 +45,8 @@ public interface AssetsDAO {
 	
 	public Map findAssetByDistance(int limit,int offset,Double lng, Double lat,String search);
 	
+	public Map findAssetByDistanceDate(int limit,int offset,Double lng, Double lat,String search,String search2, Integer type);
+	
 	public Map findHiddenByPoint(Double lng, Double lat,Double distance,String search);
 	
 	public Map findAssetByPoint(int limit,int offset,Double lng, Double lat,Double distance,String search);
@@ -79,6 +81,8 @@ public interface AssetsDAO {
 	
 	public List selectRoomProperty();
 	
+	public List selectDangerClassification();
+	
 	public ChartInfo getChartInfoByIDNo(String IDNo);           //根据身份证查找承租户
 	
 	public ChartInfo getChartInfoByChartGUID(String chartGUID);           //根据GUID查找承租户
@@ -104,4 +108,6 @@ public interface AssetsDAO {
 	
 	public Map<String, Object> findAllRoomInfoCheckDateNULL(Integer limit, Integer offset, String sort,
 			String order,String term,String searchTerm,Map search,Integer type);
+	
+	public Map<String, Object> findAllHire(String term,Map search);
 }

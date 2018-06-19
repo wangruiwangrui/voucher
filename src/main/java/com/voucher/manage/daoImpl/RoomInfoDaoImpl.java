@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 import com.voucher.manage.dao.RoomInfoDao;
+import com.voucher.manage.daoImpl.AssetsDAOImpl.hidden_AssetsRowMapper;
 import com.voucher.manage.daoModel.Floor;
 import com.voucher.manage.daoModel.RoomChangeHireLog;
 import com.voucher.manage.daoModel.RoomChartLog;
@@ -684,11 +685,36 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		
 		int total=(int) SelectExe.getCount(this.getJdbcTemplate(), position).get("");
 		
+		String sql="SELECT sum([TotalHire]) as allHire "+
+				"FROM "+Singleton.ROOMDATABASE+".[dbo].[ChartInfo] where IsHistory=0";
+		
+		List list2=this.getJdbcTemplate().query(sql,new allHire());
+		
+		Double allHire=(Double) list2.get(0)/10000;
+		
 		map.put("rows", list);
 		
 		map.put("total", total);
 		
+		java.text.DecimalFormat   df=new   java.text.DecimalFormat("######0.00");   
+				
+		map.put("allHire", df.format(allHire)+"万元");
+		
 		return map;
+	}
+	
+	
+	class allHire implements RowMapper<Double> {
+
+		@Override
+		public Double mapRow(ResultSet rs, int rowNum) throws SQLException {
+			// TODO Auto-generated method stub
+			
+			Double allHire=rs.getDouble("allHire");
+			
+			return allHire;
+		}
+		
 	}
 	
 }

@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -16,6 +17,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 import com.voucher.manage.dao.AssetsDAO;
+import com.voucher.manage.daoImpl.RoomInfoDaoImpl.allHire;
 import com.voucher.manage.daoModel.HiddenAssetByMonthAmount;
 import com.voucher.manage.daoModel.HiddenByMonthAmount;
 import com.voucher.manage.daoModel.RoomInfo;
@@ -491,6 +493,162 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		return map;
 	}
 	
+	@Override
+	public Map findAssetByDistanceDate(int limit,int offset,Double lng, Double lat,String search,String search2,Integer type){
+		// TODO Auto-generated method stub
+		
+		String checkName = null;
+		
+		if(type==1){
+			checkName="hidden_check_date";
+		}else{
+			checkName="asset_check_date";
+		}
+		
+				String sql0="SELECT TOP "+limit+" "+
+							"[Position].GUID,"+
+							"[Position].province,"+
+							"[Position].city,"+
+							"[Position].district,"+
+							"[Position].street,"+
+							"[Position].street_number,"+
+							"[Position].lng,"+
+							"[Position].lat,"+
+							"[Position].date,"+
+							Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].OriginalNum,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].OriginalAddress,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Region,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Segment,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManageRegion,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomProperty,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Useful,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Floor,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].State,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Structure,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BuildArea,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomType,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].IsCity,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Manager,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManagerPhone,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].IsStreet,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].FitMent,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BeFrom,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].InDate,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightNo,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightArea,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].DesignUseful,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BuildYear,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightUnit,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RealPropertyRightUnit,"+
+						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyCardUnit "+				   
+							"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
+							"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
+							"WHERE [Position].lng is not null AND [Position].lat is not null "+
+							"AND ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) "+
+							"AND ";
+							
+
+				String sql01=Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID not in( select top "+offset+" "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID from "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
+						"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
+						"WHERE [Position].lng is not null AND [Position].lat is not null "+ 
+						"AND ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) "+
+						"AND ";
+				
+				String sql02 = null;
+				
+				if(search2!=null&&search2.equals("0")){
+					
+					Calendar cal = Calendar.getInstance();  
+			        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);  
+			        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+			        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
+					
+					String startTime = null;
+					
+					startTime=sdf.format(cal.getTime());
+					
+					sql02=" convert(varchar(11),"+Singleton.ROOMDATABASE+
+							".[dbo].[RoomInfo].hidden_check_date ,120 )< '"+startTime+"' "+
+							" OR ([Position].lng is not null AND ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' )"
+							+ " AND [RoomInfo]."+checkName+" is null )";
+					
+					sql01=sql01+sql02;
+					
+					sql0=sql0+sql02+" AND "+sql01;
+					
+				}else if(search2!=null&&search2.equals("1")){
+					
+					Calendar cal = Calendar.getInstance();  
+			        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);  
+			        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+			        cal.add(Calendar.MONTH, -1);
+			        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
+					
+					String startTime = null;
+					
+					startTime=sdf.format(cal.getTime());
+					
+					sql02=" convert(varchar(11),"+Singleton.ROOMDATABASE+
+							".[dbo].[RoomInfo].hidden_check_date ,120 )> '"+startTime+"' ";
+					
+					sql01=sql01+sql02;
+					
+					sql0=sql0+sql02+" AND "+sql01;
+					
+				}
+				
+				
+				
+				String sql1="ORDER BY   "+
+							"SQRT(("+lng+"-lng)*("+lng+"-lng)+("+lat+"-lat)*("+lat+"-lat))  ";
+				
+				String sql;
+				
+				String sql2="SELECT count(*) "+				   
+						"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
+						"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
+						"WHERE [Position].lng is not null AND [Position].lat is not null "+
+						"AND ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) "+
+						"AND "+sql02;
+				
+				if(search.equals("")){
+					sql=sql0+sql1+")"+sql1;
+				}else{
+					sql=sql0+" AND ("+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address like '%"+search+"%' "
+							+" OR "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num like '%"+search+"%' )"+
+							sql1+")"+
+							" AND ("+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address like '%"+search+"%' "
+							+" OR "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num like '%"+search+"%' )"+sql1;
+					sql2=sql2+" AND ("+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address like '%"+search+"%' "
+							+" OR "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num like '%"+search+"%' )";
+				}
+				
+				System.out.println("sql="+sql);
+				
+				RoomInfo_Position roomInfo_Position=new RoomInfo_Position();
+				
+				Position position=new Position();		
+				
+				RoomInfo roomInfo=new RoomInfo();
+				
+				Object[] objects={roomInfo,position};
+				
+				Map map=new HashMap<>();
+				
+				try{
+					List list=SelectSqlJoinExe.get(this.getJdbcTemplate(), sql, objects,roomInfo_Position);
+					int total=(int) SelectSqlJoinExe.getCount(this.getJdbcTemplate(), sql2, objects).get("");
+					map.put("rows", list);
+					map.put("total", total);
+				}catch (Exception e) {
+					// TODO: handle exception
+				}
+
+				return map;
+	}
 	
 	@Override
 	public Map findHiddenByPoint(Double lng, Double lat,Double distance,String search) {
@@ -1367,6 +1525,17 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		return list;
 	}
 	
+	@Override
+	public List selectDangerClassification() {
+		// TODO Auto-generated method stub
+		String sql="SELECT [DangerClassification] "+
+                "FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] group by [DangerClassification]";
+	
+		List list=this.getJdbcTemplate().query(sql, new roomInfoRowMapper());
+	
+		return list;
+	}
+	
 	class roomInfoRowMapper implements RowMapper<RoomInfo> {
         //rs涓鸿繑鍥炵粨鏋滈泦锛屼互姣忚涓哄崟浣嶅皝瑁呯潃
         public RoomInfo mapRow(ResultSet rs, int rowNum) {    
@@ -1378,6 +1547,11 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 			}
         	try{
         		roomInfo.setRoomProperty(rs.getString("RoomProperty"));
+        	}catch (Exception e) {
+				// TODO: handle exception
+			}
+        	try{
+        		roomInfo.setDangerClassification(rs.getString("DangerClassification"));
         	}catch (Exception e) {
 				// TODO: handle exception
 			}
@@ -1707,6 +1881,9 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 				String sql2="SELECT count(*) "+				   
 						"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
 						"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
+						"left join "+Singleton.ROOMDATABASE+".[dbo].[ChartInfo] "+
+						"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ChartGUID = "+
+						Singleton.ROOMDATABASE+".[dbo].[ChartInfo].GUID "+
 						"WHERE "+
 						"([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) ";
 				
@@ -1915,5 +2092,85 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	return map;
 	}
 
+	@Override
+	public Map<String, Object> findAllHire(String term,Map search) {
+		// TODO Auto-generated method stub
+	
+		String sql2="SELECT sum([TotalHire]) as allHire "+				   
+				"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
+				"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
+				"left join "+Singleton.ROOMDATABASE+".[dbo].[ChartInfo] "+
+				"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ChartGUID = "+
+				Singleton.ROOMDATABASE+".[dbo].[ChartInfo].GUID "+
+				"WHERE "+
+				"([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) "+
+				"AND "+Singleton.ROOMDATABASE+".[dbo].[ChartInfo].IsHistory=0 ";
+		
+		if(search.equals("")||search.isEmpty()){
+
+		}else{
+			
+			StringBuilder sb = new StringBuilder();
+			
+			String[] where=TransMapToString.get(search);
+			
+			int i=0;
+			for(String str : where){
+			    
+			    if(i%2==0){
+			    	sb.append(str);
+			    }else{
+			    	sb.append("'"+str+"'");
+			    	sb.append(" "+term+" ");
+			    }
+			    i++;
+			}
+			String s = sb.toString();
+			
+			String serach=s.substring(0,s.length()-4);
+			
+			System.out.println("serach="+serach);
+			
+			sql2=sql2+" AND ("+serach+")";
+		}
+	
+		RoomInfo_Position roomInfo_Position=new RoomInfo_Position();
+	
+		Position position=new Position();		
+	
+		RoomInfo roomInfo=new RoomInfo();
+	
+		ChartInfo chartInfo=new ChartInfo();
+		
+		Object[] objects={roomInfo,chartInfo,position};
+	
+		Map map=new HashMap<>();
+	
+		try{
+			List list2=this.getJdbcTemplate().query(sql2,new allHire());
+			Double allHire=(Double) list2.get(0)/10000;
+			java.text.DecimalFormat   df=new   java.text.DecimalFormat("######0.00");   			
+			map.put("allHire", df.format(allHire)+"万元");
+			//MyTestUtil.print(list);
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		return map;
+	}
+
+	
+	class allHire implements RowMapper<Double> {
+
+		@Override
+		public Double mapRow(ResultSet rs, int rowNum) throws SQLException {
+			// TODO Auto-generated method stub
+			
+			Double allHire=rs.getDouble("allHire");
+			
+			return allHire;
+		}
+		
+	}
 	
 }
