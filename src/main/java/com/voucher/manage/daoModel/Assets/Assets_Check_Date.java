@@ -6,16 +6,16 @@ import java.io.Serializable;
 
 import com.voucher.manage.daoSQL.annotations.*;
 
-@DBTable(name="[Hidden_Data]")
-public class Hidden_Data implements Serializable{
+@DBTable(name="[Assets_Check_Date]")
+public class Assets_Check_Date implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
     @SQLInteger(name="id")
 	private Integer id;
 
-    @SQLString(name="GUID")
-	private String GUID;
+    @SQLString(name="check_id")
+	private String check_id;
 
     @SQLString(name="NAME")
 	private String NAME;
@@ -26,20 +26,14 @@ public class Hidden_Data implements Serializable{
     @SQLString(name="URI")
 	private String URI;
 
-    @SQLDateTime(name="date")
-	private Date date;
-
-    @SQLString(name="campusAdmin")
-	private String campusAdmin;
-
-    @SQLString(name="terminal")
-	private String terminal;
-
     @SQLString(name="FileBelong")
 	private String FileBelong;
 
     @SQLInteger(name="FileIndex")
 	private Integer FileIndex;
+
+    @SQLDateTime(name="date")
+	private Date date;
 
 	public void setId(Integer id){
 		this.id = id;
@@ -49,12 +43,12 @@ public class Hidden_Data implements Serializable{
 		return id;
 	}
 
-	public void setGUID(String GUID){
-		this.GUID = GUID;
+	public void setCheck_id(String check_id){
+		this.check_id = check_id;
 	}
 
-	public String getGUID(){
-		return GUID;
+	public String getCheck_id(){
+		return check_id;
 	}
 
 	public void setNAME(String NAME){
@@ -81,30 +75,6 @@ public class Hidden_Data implements Serializable{
 		return URI;
 	}
 
-	public void setDate(Date date){
-		this.date = date;
-	}
-
-	public Date getDate(){
-		return date;
-	}
-
-	public void setCampusAdmin(String campusAdmin){
-		this.campusAdmin = campusAdmin;
-	}
-
-	public String getCampusAdmin(){
-		return campusAdmin;
-	}
-
-	public void setTerminal(String terminal){
-		this.terminal = terminal;
-	}
-
-	public String getTerminal(){
-		return terminal;
-	}
-
 	public void setFileBelong(String FileBelong){
 		this.FileBelong = FileBelong;
 	}
@@ -119,6 +89,14 @@ public class Hidden_Data implements Serializable{
 
 	public Integer getFileIndex(){
 		return FileIndex;
+	}
+
+	public void setDate(Date date){
+		this.date = date;
+	}
+
+	public Date getDate(){
+		return date;
 	}
 
 

@@ -26,6 +26,12 @@ public class Hidden_Neaten_Date implements Serializable{
     @SQLString(name="URI")
 	private String URI;
 
+    @SQLString(name="FileBelong")
+	private String FileBelong;
+
+    @SQLInteger(name="FileIndex")
+	private Integer FileIndex;
+
     @SQLDateTime(name="date")
 	private Date date;
 
@@ -67,6 +73,22 @@ public class Hidden_Neaten_Date implements Serializable{
 
 	public String getURI(){
 		return URI;
+	}
+
+	public void setFileBelong(String FileBelong){
+		this.FileBelong = FileBelong;
+	}
+
+	public String getFileBelong(){
+		return FileBelong;
+	}
+
+	public void setFileIndex(Integer FileIndex){
+		this.FileIndex = FileIndex;
+	}
+
+	public Integer getFileIndex(){
+		return FileIndex;
 	}
 
 	public void setDate(Date date){

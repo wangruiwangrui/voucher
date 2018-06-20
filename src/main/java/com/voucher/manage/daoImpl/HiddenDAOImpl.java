@@ -51,7 +51,17 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		hidden_Data.setTYPE(TYPE);
 		hidden_Data.setURI(uri);
         hidden_Data.setDate(date);
+        hidden_Data.setFileBelong("隐患图片");
+        
+        String[] where={"[GUID]=",GUID,
+				"[FileBelong]=","隐患图片"};
 		
+        hidden_Data.setWhere(where);
+        
+        int count=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden_Data).get("");
+		
+		hidden_Data.setFileIndex(count+1);
+        
 		return InsertExe.get(this.getJdbcTemplate(), hidden_Data);
 	}
 	
@@ -68,6 +78,17 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		hidden_Check_Date.setURI(uri);
 		hidden_Check_Date.setDate(date);
 		
+		hidden_Check_Date.setFileBelong("检查图片");
+        
+        String[] where={"[check_id]=",Check_id,
+				"[FileBelong]=","检查图片"};
+		
+        hidden_Check_Date.setWhere(where);
+        
+        int count=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden_Check_Date).get("");
+		
+		hidden_Check_Date.setFileIndex(count+1);
+		
 		return InsertExe.get(this.getJdbcTemplate(), hidden_Check_Date);
 	}
 
@@ -83,6 +104,17 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		hidden_Neaten_Date.setTYPE(TYPE);
 		hidden_Neaten_Date.setURI(uri);
 		hidden_Neaten_Date.setDate(date);
+		
+		hidden_Neaten_Date.setFileBelong("整改图片");
+        
+        String[] where={"[neaten_id]=",Neaten_id,
+				"[FileBelong]=","整改图片"};
+		
+        hidden_Neaten_Date.setWhere(where);
+        
+        int count=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden_Neaten_Date).get("");
+		
+        hidden_Neaten_Date.setFileIndex(count+1);
 		
 		return InsertExe.get(this.getJdbcTemplate(), hidden_Neaten_Date);
 	}

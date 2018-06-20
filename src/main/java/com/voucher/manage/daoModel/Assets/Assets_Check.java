@@ -6,40 +6,48 @@ import java.io.Serializable;
 
 import com.voucher.manage.daoSQL.annotations.*;
 
-@DBTable(name="[Hidden_Data]")
-public class Hidden_Data implements Serializable{
+@DBTable(name="[Assets_Check]")
+public class Assets_Check implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
-    @SQLInteger(name="id")
 	private Integer id;
 
     @SQLString(name="GUID")
 	private String GUID;
 
-    @SQLString(name="NAME")
-	private String NAME;
+    @SQLInteger(name="exist")
+	private Integer exist;
 
-    @SQLString(name="TYPE")
-	private String TYPE;
+    @SQLString(name="check_id")
+	private String check_id;
 
-    @SQLString(name="URI")
-	private String URI;
+    @SQLString(name="check_name")
+	private String check_name;
+
+    @SQLString(name="principal")
+	private String principal;
+
+    @SQLString(name="check_circs")
+	private String check_circs;
+
+    @SQLDateTime(name="happen_time")
+	private Date happen_time;
+
+    @SQLDateTime(name="update_time")
+	private Date update_time;
 
     @SQLDateTime(name="date")
 	private Date date;
+
+    @SQLString(name="remark")
+	private String remark;
 
     @SQLString(name="campusAdmin")
 	private String campusAdmin;
 
     @SQLString(name="terminal")
 	private String terminal;
-
-    @SQLString(name="FileBelong")
-	private String FileBelong;
-
-    @SQLInteger(name="FileIndex")
-	private Integer FileIndex;
 
 	public void setId(Integer id){
 		this.id = id;
@@ -57,28 +65,60 @@ public class Hidden_Data implements Serializable{
 		return GUID;
 	}
 
-	public void setNAME(String NAME){
-		this.NAME = NAME;
+	public void setExist(Integer exist){
+		this.exist = exist;
 	}
 
-	public String getNAME(){
-		return NAME;
+	public Integer getExist(){
+		return exist;
 	}
 
-	public void setTYPE(String TYPE){
-		this.TYPE = TYPE;
+	public void setCheck_id(String check_id){
+		this.check_id = check_id;
 	}
 
-	public String getTYPE(){
-		return TYPE;
+	public String getCheck_id(){
+		return check_id;
 	}
 
-	public void setURI(String URI){
-		this.URI = URI;
+	public void setCheck_name(String check_name){
+		this.check_name = check_name;
 	}
 
-	public String getURI(){
-		return URI;
+	public String getCheck_name(){
+		return check_name;
+	}
+
+	public void setPrincipal(String principal){
+		this.principal = principal;
+	}
+
+	public String getPrincipal(){
+		return principal;
+	}
+
+	public void setCheck_circs(String check_circs){
+		this.check_circs = check_circs;
+	}
+
+	public String getCheck_circs(){
+		return check_circs;
+	}
+
+	public void setHappen_time(Date happen_time){
+		this.happen_time = happen_time;
+	}
+
+	public Date getHappen_time(){
+		return happen_time;
+	}
+
+	public void setUpdate_time(Date update_time){
+		this.update_time = update_time;
+	}
+
+	public Date getUpdate_time(){
+		return update_time;
 	}
 
 	public void setDate(Date date){
@@ -87,6 +127,14 @@ public class Hidden_Data implements Serializable{
 
 	public Date getDate(){
 		return date;
+	}
+
+	public void setRemark(String remark){
+		this.remark = remark;
+	}
+
+	public String getRemark(){
+		return remark;
 	}
 
 	public void setCampusAdmin(String campusAdmin){
@@ -103,22 +151,6 @@ public class Hidden_Data implements Serializable{
 
 	public String getTerminal(){
 		return terminal;
-	}
-
-	public void setFileBelong(String FileBelong){
-		this.FileBelong = FileBelong;
-	}
-
-	public String getFileBelong(){
-		return FileBelong;
-	}
-
-	public void setFileIndex(Integer FileIndex){
-		this.FileIndex = FileIndex;
-	}
-
-	public Integer getFileIndex(){
-		return FileIndex;
 	}
 
 
