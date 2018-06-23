@@ -1526,6 +1526,34 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	}
 	
 	@Override
+	public List selectFareItem() {
+		// TODO Auto-generated method stub
+		String sql="SELECT FareItem "+
+                "FROM "+Singleton.ROOMDATABASE+".[dbo].[ChartInfo] left join "+
+                Singleton.ROOMDATABASE+".[dbo].[RoomInfo] on "+Singleton.ROOMDATABASE+".[dbo].[ChartInfo].GUID="+
+                Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ChartGUID left join "+
+                "[Position] on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID=[Position].GUID "+
+                "where IsHistory =0 and FareItem!='' and Position.is_roomInfo=1 "+
+                "group by FareItem ";
+	
+		List list=this.getJdbcTemplate().query(sql, new chartInfoRowMapper());
+	
+		return list;
+	}
+	
+	class chartInfoRowMapper implements RowMapper<ChartInfo> {
+
+		@Override
+		public ChartInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+			// TODO Auto-generated method stub
+			ChartInfo chartInfo=new ChartInfo();
+			chartInfo.setFareItem(rs.getString("FareItem"));
+			return chartInfo;
+		}
+		
+	}
+	
+	@Override
 	public List selectDangerClassification() {
 		// TODO Auto-generated method stub
 		String sql="SELECT [DangerClassification] "+

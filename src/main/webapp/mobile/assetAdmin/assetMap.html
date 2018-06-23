@@ -92,12 +92,12 @@ function getQueryString(name) {
     				var data=JSON.parse(xhm.responseText);
     				var obj=data.roomInfo;
     				var url="../../"+data.url;
-     				var content="<h4 style='margin:0 0 5px 0;padding:0.2em 0'> 资产名称 : "+obj.address+"</h4>"+
+     				var content="<h4 style='margin:0 0 5px 0;padding:0.2em 0'> 资产地址 : "+obj.address+"</h4>"+
      				"<img style='float:right;margin:4px' id='imgDemo' src="+url+" width='139' height='104'/>"+
      				"<p>"+
      	       	 	" 管理分区 : "+obj.manageRegion+" "+
-     	        	" 性质 : "+obj.roomProperty+" "+
      	        	" 编号 : "+obj.num+" </br>"+
+     	        	" 经营项目 : "+obj.fareItem+" "+
      	        	" 面积 : "+obj.buildArea+" m<sup>2</sup> "+
      	        	" 租金 :"+obj.hire+" </br>"+
      	        	" 距离 :"+getDistance(e.point.lng, e.point.lat)+" "+

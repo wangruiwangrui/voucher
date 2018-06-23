@@ -26,6 +26,8 @@
 			<select id="select4" onchange="gradeChange()"></select>
 			<span>&nbsp;&nbsp; 房屋等级 : </span>
 			<select id="select5" onchange="gradeChange()"></select>
+			<span>&nbsp;&nbsp; 经营项目 : </span>
+			<select id="select6" onchange="gradeChange()"></select>
 			
 			<span id="total"></span>
             <div id="allmap"></div>
@@ -166,13 +168,34 @@ select4.appendChild(option);
 	 option.setAttribute("value","");
 	 select5.appendChild(option);
 	 for(var i=0;i<roomInfos.length;i++){
-	 	  if(roomInfos[i].manageRegion!=""){
+	 	  if(roomInfos[i].dangerClassification!=""&&roomInfos[i].dangerClassification!=null){
 	 	  	var option = document.createElement("option");
 	 	  	option.innerHTML=roomInfos[i].dangerClassification;
 	 	  	option.setAttribute("value",roomInfos[i].dangerClassification);
 	 	  	select5.appendChild(option);
 	 	  }
 	 }	 
+	 
+	 var xhm=new ActiveXObject("Microsoft.XMLHttp");
+	 xhm.open("GET","../baiduMap/getFareItem.do",false);
+	 xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	 xhm.send();
+	 var chartInfos=JSON.parse(xhm.responseText);
+
+	 var select6 = document.getElementById("select6");
+
+	 var option = document.createElement("option");
+	 option.innerHTML="全部";
+	 option.setAttribute("value","");
+	 select6.appendChild(option);
+	 for(var i=0;i<chartInfos.length;i++){
+	 	  if(chartInfos[i].fareItem!=""){
+	 	  	var option = document.createElement("option");
+	 	  	option.innerHTML=chartInfos[i].fareItem;
+	 	  	option.setAttribute("value",chartInfos[i].fareItem);
+	 	  	select6.appendChild(option);
+	 	  }
+	 }
 	 
 function gradeChange(){ 
     var objS1 = document.getElementById("select1"); 
@@ -201,30 +224,58 @@ function gradeChange(){
     //console.log(objS.options[objS.selectedIndex]);
     grade5=encodeURI(encodeURI(grade5));
     
+    var objS6 = document.getElementById("select6"); 
+    var grade6 = objS6.options[objS6.selectedIndex].value; 
+    //console.log(objS.options[objS.selectedIndex]);
+    grade6=encodeURI(encodeURI(grade6));
+    
     map.clearOverlays();
-    if(grade1!=null||grade2!=null||grade3!=null||grade4!=null||grade5!=null){
+    if(grade1!=""||grade2!=""||grade3!=""||grade4!=""||grade5!=""||grade6!=""){
     	var xhm=new ActiveXObject("Microsoft.XMLHttp");
 	    	xhm.open("GET","../baiduMap/getAllAsset.do?manageRegion="+grade1+"&roomProperty="+grade2+
-	    			"&state="+grade3+"&hire="+grade4+"&dangerClassification="+grade5,false);
+	    			"&state="+grade3+"&hire="+grade4+"&dangerClassification="+grade5+
+	    			"&fareItem="+grade6,false);
 	    	xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
 	    	xhm.send();
 	    	var ticket=JSON.parse(xhm.responseText);
+	    	
+	    	var data=JSON.parse(xhm.responseText);
+	        var ticket=data.rows;
+	        
+	        var total=document.getElementById("total");
+	        total.innerHTML="&nbsp;&nbsp;总共 : "+data.total;
+  
+	        addDeck(ticket);
+	    	
     }else{
+    	
     	var xhm=new ActiveXObject("Microsoft.XMLHttp");
 	    	xhm.open("GET","../baiduMap/getAllAssetPosition.do",false);
 	    	xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
 	    	xhm.send();
 	    	var ticket=JSON.parse(xhm.responseText);
+	    	
+	    	var data=JSON.parse(xhm.responseText);
+	        var ticket=data.rows;
+	        
+	        var total=document.getElementById("total");
+	        total.innerHTML="&nbsp;&nbsp;总共 : "+data.total;
+	        
+	        addDeck(ticket);
+	        
+	        var xhm=new ActiveXObject("Microsoft.XMLHttp");
+	 	   xhm.open("GET","../baiduMap/getAllAsset.do?roomProperty="+encodeURI(encodeURI("住宅房")),false);
+	 	   xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	 	   xhm.send();
+	 	   var data2=JSON.parse(xhm.responseText);
+	 	   var ticket2=data2.rows;
+
+	 	  addDeck2(ticket2);
+	 	   
+	 	   
     }
-    
-    var data=JSON.parse(xhm.responseText);
-    var ticket=data.rows;
-    
-    var total=document.getElementById("total");
-    total.innerHTML="&nbsp;&nbsp;总共 : "+data.total+"&nbsp;&nbsp;总租金 :"+data.allHire;
-    
-    addDeck(ticket);
-   } 
+       
+  } 
 
 function addDeck(ticket){
 	
@@ -240,7 +291,7 @@ var pointArray = new Array();
 
 for(var i=0;i<json_data.length;i++){
 	var point=new BMap.Point(json_data[i][0], json_data[i][1]);
-	var myIcon = new BMap.Icon("../img/blackPoint.jpg", new BMap.Size(15,15));
+	var myIcon = new BMap.Icon("../img/blackPoint.jpg", new BMap.Size(10,30));
 	var marker = new BMap.Marker(point,{icon:myIcon}); // 创建点
 	map.addOverlay(marker);    //增加点	
 	pointArray[i] = new BMap.Point(json_data[i][0], json_data[i][1]);
@@ -265,7 +316,7 @@ var pointArray = new Array();
 
 for(var i=0;i<json_data.length;i++){
 	var point=new BMap.Point(json_data[i][0], json_data[i][1]);
-	var myIcon = new BMap.Icon("../img/blackPoint2.png", new BMap.Size(15,15));
+	var myIcon = new BMap.Icon("../img/blackPoint2.png", new BMap.Size(10,30));
 	var marker = new BMap.Marker(point,{icon:myIcon});// 创建点
 	map.addOverlay(marker);    //增加点	
 	pointArray[i] = new BMap.Point(json_data[i][0], json_data[i][1]);
@@ -331,7 +382,7 @@ map.setViewport(pointArray);
    var data=JSON.parse(xhm.responseText);
    var ticket=data.rows;
    var total=document.getElementById("total");
-   total.innerHTML="&nbsp;&nbsp;总共 : "+data.total+"&nbsp;&nbsp;总租金 :"+data.allHire;
+   total.innerHTML="&nbsp;&nbsp;总共 : "+data.total;
    
    var json_data = new Array();
    
@@ -344,7 +395,7 @@ map.setViewport(pointArray);
 
 	for(var i=0;i<json_data.length;i++){
 		var point=new BMap.Point(json_data[i][0], json_data[i][1]);
-		var myIcon = new BMap.Icon("../img/blackPoint.jpg", new BMap.Size(15,15));
+		var myIcon = new BMap.Icon("../img/blackPoint.jpg", new BMap.Size(10,30));
 		var marker = new BMap.Marker(point,{icon:myIcon}); // 创建点
 		map.addOverlay(marker);    //增加点	
 		pointArray[i] = new BMap.Point(json_data[i][0], json_data[i][1]);
@@ -365,12 +416,12 @@ map.setViewport(pointArray);
  				var obj=data.roomInfo;
  				var url="../"+data.url;
  			
-  				var content="<h4 style='margin:0 0 5px 0;padding:0.2em 0'> 资产名称 : "+obj.address+"</h4>"+
+  				var content="<h4 style='margin:0 0 5px 0;padding:0.2em 0'> 资产地址 : "+obj.address+"</h4>"+
   				"<img style='float:right;margin:4px' id='imgDemo' src="+url+" width='139' height='104'/>"+
   				"<p>"+
   	       	 	" 管理分区 : "+obj.manageRegion+" "+
-  	        	" 资产性质 : "+obj.roomProperty+" "+
-  	        	" 资产编号 : "+obj.num+" </br>"+
+  	       		" 资产编号 : "+obj.num+" </br>"+
+  	        	" 经营项目 : "+obj.fareItem+" "+  	        	
   	        	" 面积 : "+obj.buildArea+" m<sup>2</sup> "+
   	        	" 租金 :"+obj.hire+" "+
   	        	"</p>"+"</div>";

@@ -81,6 +81,8 @@ public interface AssetsDAO {
 	
 	public List selectRoomProperty();
 	
+	public List selectFareItem();
+	
 	public List selectDangerClassification();
 	
 	public ChartInfo getChartInfoByIDNo(String IDNo);           //根据身份证查找承租户

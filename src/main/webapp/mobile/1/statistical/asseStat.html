@@ -16,8 +16,9 @@
   
   <div id="myDiv6"><!-- Plotly chart will be drawn inside this DIV --></div>
   
-  <div id="myDiv2"><!-- Plotly chart will be drawn inside this DIV --></div>
+ <!--   <div id="myDiv2"><!-- Plotly chart will be drawn inside this DIV --></div> 
   
+  <!--  
   <div class="weui-cells weui-cells_form">
         <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">选择日期</label></div>
@@ -27,7 +28,8 @@
     </div>
   
   <div id="myDiv3"><!-- Plotly chart will be drawn inside this DIV --></div>
-  
+
+ <!--  
    <div class="weui-cells weui-cells_form">
         <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">选择日期</label></div>
@@ -35,7 +37,7 @@
                 </div>              
         </div>
     </div>
-  
+
   <div id="myDiv4"><!-- Plotly chart will be drawn inside this DIV --></div>
 
   
@@ -63,6 +65,7 @@
 	
 	});
 	
+    /*
 	$.post("/voucher/mobile/asset/getAllHire.do",{
     	
     },function(text){
@@ -84,7 +87,7 @@
 
 		Plotly.newPlot('myDiv2', data2 ,layout2);
     });
-    
+    */
 	
 	$.post("/voucher/mobile/asset/getAssetByState.do",{
     	
@@ -126,7 +129,7 @@
 	});
 	
 	
-	
+	/*
 	$.get("/voucher/mobile/asset/findChartInfoByYear.do", { 
 	  }, function(data) {
 		var chartInfoYears=JSON.parse(data);
@@ -259,5 +262,5 @@
 			Plotly.newPlot('myDiv4', data4, layout4);
     	});
 	}
-	
+	*/
   </script>

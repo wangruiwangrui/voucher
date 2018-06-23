@@ -275,6 +275,13 @@ public class BaiduMapController {
 		
 	}
 	
+	@RequestMapping("getFareItem")
+	public @ResponseBody List getFareItem(){
+		
+		return assetsDAO.selectFareItem();
+		
+	}
+	
 	@RequestMapping("getDangerClassification")
 	public @ResponseBody List getDangerClassification(){
 		
@@ -366,7 +373,8 @@ public class BaiduMapController {
 	
 	@RequestMapping("/getAllAsset")
 	public @ResponseBody Map getAllAsset(String manageRegion,String roomProperty,
-			String state,Integer hire,String dangerClassification){
+			String state,Integer hire,String dangerClassification,
+			String fareItem){
 	
 		Map where = new HashMap<>();
 		
@@ -381,6 +389,8 @@ public class BaiduMapController {
 				state = URLDecoder.decode(state,"utf-8");
 			if(dangerClassification!=null&&!dangerClassification.equals(""))
 				dangerClassification = URLDecoder.decode(dangerClassification,"utf-8");
+			if(fareItem!=null&&!fareItem.equals(""))
+				fareItem = URLDecoder.decode(fareItem,"utf-8");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -429,6 +439,10 @@ public class BaiduMapController {
 		
 		if(dangerClassification!=null&&!dangerClassification.equals("")){
 			where.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].DangerClassification = ", dangerClassification);
+		}
+		
+		if(fareItem!=null&&!fareItem.equals("")){
+			where.put(Singleton.ROOMDATABASE+".[dbo].[ChartInfo].fareItem = ", fareItem);
 		}
 		
 		Map map=assetsDAO.findAllRoomInfo_Position(100000, 0, null, null,term,where);
