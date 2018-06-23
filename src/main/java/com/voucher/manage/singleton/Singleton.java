@@ -13,6 +13,8 @@ public class Singleton {
 	//资产管理系统图片目录
 	public static final String ROOMINFOIMGPATH	="D:\\SYSPICTURE\\";
 	
+	//资产管理系统图片目录2
+	public static final String ROOMINFOIMGPATH2	="D:\\SYSPICTURE\\pasoft";
 	
     private Singleton (){    	
     }  

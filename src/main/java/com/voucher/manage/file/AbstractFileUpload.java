@@ -104,11 +104,18 @@ public abstract class AbstractFileUpload {
             System.out.println(uri);
             if(object==Hidden_Data.class){
               hiddenDAO.InsertIntoHiddenData(ID,name,mimeType, uri);
+              //cpoy到资产管理FTP目录
+              CopyFile.set(Singleton.ROOMINFOIMGPATH2, savePath+"\\"+fileName+"."+mimeType, fileName+"."+mimeType);
             }else if(object==Hidden_Check_Date.class){          	
+             //cpoy到资产管理FTP目录
               hiddenDAO.InsertIntoHiddenCheckData(ID, name, mimeType, uri);
+              CopyFile.set(Singleton.ROOMINFOIMGPATH2, savePath+"\\"+fileName+"."+mimeType, fileName+"."+mimeType);
             }else if(object==Hidden_Neaten_Date.class){
+              //cpoy到资产管理FTP目录 
               hiddenDAO.InsertIntoHiddenNeatenData(ID, name, mimeType, uri);
+              CopyFile.set(Singleton.ROOMINFOIMGPATH2, savePath+"\\"+fileName+"."+mimeType, fileName+"."+mimeType);
             }else if(object==FileSelfBelong.class){
+              //cpoy到资产管理资产FTP目录
               String imgPath=Singleton.ROOMINFOIMGPATH;
               CopyFile.set(imgPath, savePath+"\\"+fileName+"."+mimeType, fileName+"."+mimeType);
               roomInfoDao.insertIntoFileSelfBelong(ID, uri, mimeType, name);

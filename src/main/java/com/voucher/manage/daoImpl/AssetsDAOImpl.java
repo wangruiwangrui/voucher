@@ -1261,7 +1261,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		roomInfo.setWhere(where);
 		
 		String sql="select asset_GUID "+
-				"FROM [Assets].[dbo].[Hidden_Assets]  group by asset_GUID "	;
+				"FROM [Hidden_Assets]  group by asset_GUID "	;
 		
 		List list=this.getJdbcTemplate().query(sql,new hidden_AssetsRowMapper());
 		
@@ -1277,7 +1277,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		// TODO Auto-generated method stub
 		
 		String sql="select asset_GUID "+
-				"FROM [Assets].[dbo].[Hidden_Assets]  group by asset_GUID "	;
+				"FROM [Hidden_Assets]  group by asset_GUID "	;
 		
 		List list=this.getJdbcTemplate().query(sql,new hidden_AssetsRowMapper());
 		
@@ -1628,7 +1628,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	public List findHiddenByYear() {
 		// TODO Auto-generated method stub
 		String sql="SELECT convert(varchar(4),date,120) as year"+
-					" FROM [Assets].[dbo].[Hidden] where date is not null "+
+					" FROM [Hidden] where date is not null "+
 					" group by convert(varchar(4),date,120) order by year desc";
 		
 		List years=this.getJdbcTemplate().query(sql, new HiddenByYear());
@@ -1668,7 +1668,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	public List findHiddenByMonthOfYear(String year) {
 		// TODO Auto-generated method stub
 		String sql="SELECT convert(varchar(7),date,120) as year ,COUNT(*) as amount "+
-					"FROM [Assets].[dbo].[Hidden] where date is not null "+ 
+					"FROM [Hidden] where date is not null "+ 
 					"and convert(varchar(4),date,120)= "+year+" "+ 
 					"group by convert(varchar(7),date,120)";
 		
@@ -1703,9 +1703,9 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		List list=this.getJdbcTemplate().query(sql,new HiddenAssetByMonth());
 		
 		String sql2="SELECT convert(varchar(7),InDate,120) as year ,COUNT(*) as amount "+
-					"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join [Assets].[dbo].[Hidden_Assets] on "+
-					Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID=[Assets].[dbo].[Hidden_Assets].asset_GUID "+
-					"where InDate is not null and [Assets].[dbo].[Hidden_Assets].asset_GUID is not null "+
+					"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join [Hidden_Assets] on "+
+					Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID=[Hidden_Assets].asset_GUID "+
+					"where InDate is not null and [Hidden_Assets].asset_GUID is not null "+
 					"and convert(varchar(4),InDate,120) = "+year+" group by convert(varchar(7),InDate,120)";
 		
 		List list2=this.getJdbcTemplate().query(sql2,new HiddenAssetByMonth());

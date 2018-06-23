@@ -206,7 +206,7 @@ public class WechatSendMessageController {
 			
 			Map search3=new HashMap<>();
 			
-			search3.put("[Assets].[dbo].[Hidden].GUID=", hidden_GUID);
+			search3.put("[Hidden].GUID=", hidden_GUID);
 			
 			List<Hidden> list3=(List<Hidden>) hiddenDAO.selectAllHidden(2, 0, null, null, search3).get("rows");
 			

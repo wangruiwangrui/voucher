@@ -66,7 +66,8 @@ function getQueryString(name) {
     xhm.open("GET","../../baiduMap/getAllAssetPosition.do",false);
     xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
     xhm.send();
-    var ticket=JSON.parse(xhm.responseText);
+    var data=JSON.parse(xhm.responseText);
+    var ticket=data.rows;
    
     console.log(ticket);
     		var points = [];  // 添加海量点数据
@@ -120,7 +121,8 @@ function getQueryString(name) {
        xhm.open("GET","../../baiduMap/getAllAsset.do?roomProperty=住宅房",false);
        xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
        xhm.send();
-       var ticket=JSON.parse(xhm.responseText);
+       var data=JSON.parse(xhm.responseText);
+       var ticket=data.rows;
        
        for (var i = 0; i < ticket.length; i++) {
            points2.push(new BMap.Point(ticket[i].lng, ticket[i].lat));
