@@ -872,7 +872,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 					hidden_Check_Join2.setAddress(roomInfo5.getAddress());
 					hidden_Check_Join2.setManageRegion(roomInfo5.getManageRegion());
 					hidden_Check_Join2.setState(roomInfo5.getState());
-					
+					hidden_Check_Join2.setNum(roomInfo5.getNum());
 					
 				}catch (Exception e) {
 					// TODO: handle exception

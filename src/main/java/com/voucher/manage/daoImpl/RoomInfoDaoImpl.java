@@ -21,6 +21,7 @@ import com.voucher.manage.daoModel.RoomChangeHireLog;
 import com.voucher.manage.daoModel.RoomChartLog;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.RoomInfoRowMapper;
+import com.voucher.manage.daoModel.Assets.Hidden_Assets;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModel.TTT.FileSelfBelong;
@@ -713,6 +714,50 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 			Double allHire=rs.getDouble("allHire");
 			
 			return allHire;
+		}
+		
+	}
+
+
+	@Override
+	public Map getAllHiddenAsset() {
+		// TODO Auto-generated method stub
+		
+		String sql="SELECT [Position].lng,[Position].lat from [Position]"
+				+ "left join [Hidden_Assets] on [Position].GUID=[Hidden_Assets].asset_GUID "
+				+" where  [Position].is_roomInfo=1 and [Hidden_Assets].asset_GUID is not null";
+		
+		String sql2="SELECT count(*) from [Position]"
+				+ "left join [Hidden_Assets] on [Position].GUID=[Hidden_Assets].asset_GUID "
+				+" where  [Position].is_roomInfo=1 and [Hidden_Assets].asset_GUID is not null";
+		
+		Map map=new HashMap<>();
+
+		try{
+			List list=this.getJdbcTemplate().query(sql,new position());
+			int total=this.getJdbcTemplate().queryForInt(sql2);
+			map.put("rows", list);
+			map.put("total", total);
+			//MyTestUtil.print(list);
+		}catch (Exception e) {
+		// TODO: handle exception
+		}
+		
+		return map;
+	}
+	
+	class position implements RowMapper<Position> {
+
+		@Override
+		public Position mapRow(ResultSet rs, int rowNum) throws SQLException {
+			// TODO Auto-generated method stub
+			
+			Position position=new Position();
+			
+			position.setLng(rs.getDouble("lng"));
+			position.setLat(rs.getDouble("lat"));
+			
+			return position;
 		}
 		
 	}

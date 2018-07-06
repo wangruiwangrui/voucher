@@ -546,7 +546,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 						    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyCardUnit "+				   
 							"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
 							"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
-							"WHERE [Position].lng is not null AND [Position].lat is not null "+
+							"WHERE ([Position].lng is not null AND [Position].lat is not null "+
 							"AND ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) "+
 							"AND ";
 							
@@ -577,14 +577,13 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 					
 					sql01=sql01+sql02;
 					
-					sql0=sql0+sql02+" AND "+sql01;
+					sql0=sql0+sql02+") AND "+sql01;
 					
 				}else if(search2!=null&&search2.equals("1")){
 					
 					Calendar cal = Calendar.getInstance();  
 			        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);  
 			        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
-			        cal.add(Calendar.MONTH, -1);
 			        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
 					
 					String startTime = null;
@@ -596,7 +595,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 					
 					sql01=sql01+sql02;
 					
-					sql0=sql0+sql02+" AND "+sql01;
+					sql0=sql0+sql02+") AND "+sql01;
 					
 				}
 				
@@ -610,19 +609,20 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 				String sql2="SELECT count(*) "+				   
 						"FROM "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
 						"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
-						"WHERE [Position].lng is not null AND [Position].lat is not null "+
+						"WHERE ([Position].lng is not null AND [Position].lat is not null "+
 						"AND ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) "+
 						"AND "+sql02;
 				
 				if(search.equals("")){
 					sql=sql0+sql1+")"+sql1;
+					sql2=sql2+")";
 				}else{
 					sql=sql0+" AND ("+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address like '%"+search+"%' "
 							+" OR "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num like '%"+search+"%' )"+
 							sql1+")"+
 							" AND ("+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address like '%"+search+"%' "
 							+" OR "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num like '%"+search+"%' )"+sql1;
-					sql2=sql2+" AND ("+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address like '%"+search+"%' "
+					sql2=sql2+") AND ("+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address like '%"+search+"%' "
 							+" OR "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num like '%"+search+"%' )";
 				}
 				

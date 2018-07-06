@@ -458,6 +458,13 @@ public class BaiduMapController {
 	}
 	
 	
+	@RequestMapping("/getAllHiddenAsset")
+	public @ResponseBody Map getAllHiddenAsset(){
+		
+		return roomInfoDao.getAllHiddenAsset();
+		
+	}
+	
 	@RequestMapping("/getAllAssetPosition")
 	public @ResponseBody Map getAllAssetPosition(){
 		
@@ -488,8 +495,11 @@ public class BaiduMapController {
 				System.out.println("startTime="+startTime);
 			}
 			if(datepicker2!=null&&!datepicker2.equals("")){
-				eTime=sdf.parse(datepicker2);			
-				endTime=sdf.format(eTime);	
+				eTime=sdf.parse(datepicker2);	
+				calendar=Calendar.getInstance();
+				calendar.setTime(eTime);
+				calendar.add(Calendar.DATE, 1);
+				endTime=sdf.format(calendar.getTime());	
 				System.out.println("endTime="+endTime);
 			}
 		} catch (ParseException e) {
@@ -505,9 +515,7 @@ public class BaiduMapController {
 		    calendar.set(Calendar.SECOND, 0);  
 		    calendar.set(Calendar.MINUTE, 0);  
 		    calendar.set(Calendar.MILLISECOND, 0); 
-			
-			calendar.add(Calendar.DATE, -1);
-			
+						
 			Date start=calendar.getTime();
 			
 			startTime=sdf.format(start);			
@@ -523,6 +531,8 @@ public class BaiduMapController {
 		    calendar.set(Calendar.MINUTE, 0);  
 		    calendar.set(Calendar.MILLISECOND, 0); 
 			
+		    calendar.add(Calendar.DATE, 1);
+		    
 			Date end=calendar.getTime();
 			
 			endTime=sdf.format(end);	

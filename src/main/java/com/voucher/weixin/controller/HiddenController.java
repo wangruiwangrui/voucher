@@ -792,7 +792,25 @@ public class HiddenController {
 		
 		int successHidden=assetsDAO.findSuccessHidden();
 		
-		int allAsset=assetsDAO.findAllAssets();
+		Map search=new HashMap<>();
+		
+		search.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].State=","已出租");
+		
+		int alreadyHire=roomInfoDao.getRoomInfoCount(search);
+		
+		search=new HashMap<>();
+		
+		search.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].State=","空置");
+		
+		int notHire=roomInfoDao.getRoomInfoCount(search);
+		
+		search=new HashMap<>();
+		
+		search.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].State=","不可出租");
+		
+		int catnotHire=roomInfoDao.getRoomInfoCount(search);
+		
+		int allAsset=alreadyHire+notHire+catnotHire;
 		
 		int allAssetsHidden=assetsDAO.findAllAssetsHidden();
 		

@@ -58,4 +58,6 @@ public interface RoomInfoDao {
 	public List getChartInfosByGUID(String GUID);
 	
 	public Map getAllRoomInfoPosition();
+	
+	public Map getAllHiddenAsset();
 }
