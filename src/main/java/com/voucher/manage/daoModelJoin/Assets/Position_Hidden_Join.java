@@ -45,8 +45,8 @@ public class Position_Hidden_Join implements Serializable{
     @SQLString(name="name")
    	private String name;
 
-    @SQLInteger(name="hidden_level")
-   	private Integer hidden_level;
+    @SQLString(name="hidden_level")
+	private String hidden_level;
 
     @SQLString(name="detail")
    	private String detail;
@@ -57,8 +57,8 @@ public class Position_Hidden_Join implements Serializable{
     @SQLDateTime(name="happen_time")
    	private Date happen_time;
 
-    @SQLInteger(name="principal")
-   	private Integer principal;
+    @SQLString(name="principal")
+	private String principal;
 
     @SQLInteger(name="type")
    	private Integer type;
@@ -155,11 +155,11 @@ public class Position_Hidden_Join implements Serializable{
 		return name;
 	}
 
-	public void setHidden_level(Integer hidden_level){
+	public void setHidden_level(String hidden_level){
 		this.hidden_level = hidden_level;
 	}
 
-	public Integer getHidden_level(){
+	public String getHidden_level(){
 		return hidden_level;
 	}
 
@@ -187,11 +187,11 @@ public class Position_Hidden_Join implements Serializable{
 		return happen_time;
 	}
 
-	public void setPrincipal(Integer principal){
+	public void setPrincipal(String principal){
 		this.principal = principal;
 	}
 
-	public Integer getPrincipal(){
+	public String getPrincipal(){
 		return principal;
 	}
 

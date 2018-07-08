@@ -402,25 +402,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		hidden.setSort(sort);
 		hidden.setOrder(order);
 		hidden.setNotIn("id");
-		
-		Hidden_Level hidden_Level=new Hidden_Level();
-		
-		hidden_Level.setLimit(limit);
-		hidden_Level.setOffset(offset);
-		hidden_Level.setNotIn("id");
-		
-		Hidden_Type hidden_Type=new Hidden_Type();
-		
-		hidden_Type.setLimit(limit);
-		hidden_Type.setOffset(offset);
-		hidden_Type.setNotIn("id");
-		
-		Hidden_User hidden_User=new Hidden_User();
-		
-		hidden_User.setLimit(limit);
-		hidden_User.setOffset(offset);
-		hidden_User.setNotIn("id");
-		
+						
 		Position position=new Position();
 		
 		position.setLimit(limit);
@@ -436,20 +418,17 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		if(!search.isEmpty()){
 		    String[] where=TransMapToString.get(search);
 		    hidden.setWhere(where);
-		    hidden_Level.setWhere(where);
-		    hidden_Type.setWhere(where);
-		    hidden_User.setWhere(where);
 		    position.setWhere(where);
 		    weiXin_User.setWhere(where);
 		}
 		
-		Object[] objects={hidden,hidden_Level,hidden_Type,hidden_User,position,weiXin_User};
+		Object[] objects={hidden,position,weiXin_User};
 		
 		Map map=new HashMap<String, Object>();
 		
 		Hidden_Join hidden_Jion=new Hidden_Join();
 		
-		String[] join={"hidden_level","type","principal","GUID","campusAdmin"};
+		String[] join={"GUID","campusAdmin"};
 		
 		List list=SelectJoinExe.get(this.getJdbcTemplate(), objects,hidden_Jion,join);
 		MyTestUtil.print(list);

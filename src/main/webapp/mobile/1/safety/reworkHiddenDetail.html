@@ -210,7 +210,7 @@
              	   
              	  var name=obj.name;
                   $("#name").val(obj.name);
-                  
+                  console.log("obj="+obj);
                   $.get("/voucher/mobile/hidden/selectHiddenLevel.do", { 
                 	  }, function(data) {
                 		var hiddenLevels=JSON.parse(data);
@@ -222,8 +222,8 @@
         		  		for(var i=0;i<hiddenLevels.length;i++){
         			  			var option = document.createElement("option");
         			  			option.innerHTML=hiddenLevels[i].level_text;
-        			  			option.setAttribute("value",hiddenLevels[i].hidden_level);
-        			  			if(hiddenLevels[i].hidden_level==obj.hidden_level){
+        			  			option.setAttribute("value",hiddenLevels[i].level_text);
+        			  			if(hiddenLevels[i].level_text==obj.hidden_level){
         			  				option.setAttribute("selected","selected");
         			  			}
         			  			select.appendChild(option);
@@ -258,18 +258,19 @@
             		 
             	 });
                   
-                  var progre=obj.progress;
                   var type;
                   var progress_img=document.createElement("i");
                   
-                  if(progre==0){
+                  var state=obj.state;
+
+                  type=state;
+                  
+                  if(type=="未整改"||type==null){
                 	  type="未整改";
                 	  progress_img.setAttribute("class","weui-icon-warn");
-                  }else if(progre>0&&progre<1){
-                	  type="整改中";
-                	  progress_img.setAttribute("class","weui-icon-info-circle");  
-                  }else if(progre==1){
-                	  type="已整改";
+                  }else if(type=="整改中"){
+                	  progress_img.setAttribute("class","weui-icon-info-circle"); 
+                  }else if(type=="已整改"){
                 	  progress_img.setAttribute("class","weui-icon-success");
                   }
                   $("#progress_img").append(progress_img);

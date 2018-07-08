@@ -155,10 +155,12 @@
  		for(var i=hiddenLevels.length-1;i>=0;i--){
 	  			var option = document.createElement("option");
 	  			option.innerHTML=hiddenLevels[i].level_text;
-	  			option.setAttribute("value",hiddenLevels[i].hidden_level);
+	  			option.setAttribute("value",hiddenLevels[i].level_text);
 	  			select.appendChild(option);	 		   
+	  			hiddenlevel=hiddenLevels[i].level_text;
 			 }
  
+ 		
  		 select.setAttribute("class","weui-input");
  		 $("#level").append(select);
  		 

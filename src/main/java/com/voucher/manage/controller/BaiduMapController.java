@@ -227,7 +227,7 @@ public class BaiduMapController {
 			
 			System.out.println("d="+d);
 			
-			if(d>0){
+			if(d>0&&search2==null){
 				map=assetsDAO.findAssetByPoint(limit,offset,lng, lat, d, null);
 			}else{
 				if(search2!=null&&!search2.equals("")){

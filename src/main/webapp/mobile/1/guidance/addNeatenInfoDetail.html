@@ -40,6 +40,7 @@
     </div>
     
  
+    <!--  
     <div class="weui-cells weui-cells_form">
     	<div class="weui-cell">
     		<div class="weui-cell__hd"><label class="weui-label">整改进度</label></div>
@@ -52,13 +53,23 @@
                         			<div id="sliderHandler" style="left: 0%;" class="weui-slider__handler"></div>
                    				 </div>
                 			</div>
-                		<!--  <div id="sliderValue" class="weui-slider-box__value">75</div>
-                		<div>%</div> -->
             	 	   </div>            		   
         			</div>
   	  			</div>
   	  			<div id="progress_img" class="weui-cell "></div>  
     	</div>
+    </div>
+ -->
+   
+   
+   <div class="weui-cells weui-cells_form">
+      <div class="weui-cell">
+             <div class="weui-cell__hd"><label class="weui-label">整改进度</label></div>
+                <div id="progress" class="weui-cell__bd">
+                </div>
+            <div id="progress_img" class="weui-cell weui-cell_warn">                  
+            </div>
+         </div>
     </div>
 
    
@@ -163,7 +174,7 @@
         
     
     var progress=0;
-    
+    /*
 	$('#slider2').slider(function (progre) {
         console.log(progre);
         progress=progre/100;
@@ -178,6 +189,48 @@
       	  progress_img.setAttribute("class","weui-icon-success");
         }
     });
+	*/
+	
+	var select = document.createElement("select");
+	select.setAttribute("id","select");
+	select.setAttribute("onchange","gradeChange()");
+
+	var option = document.createElement("option");
+	option.innerHTML="未整改";
+	option.setAttribute("value",0);
+	select.appendChild(option);	 
+
+	var option = document.createElement("option");
+	option.innerHTML="整改中";
+	option.setAttribute("value",1);
+	select.appendChild(option);		
+
+	var option = document.createElement("option");
+	option.innerHTML="已整改";
+	option.setAttribute("value",2);
+	select.appendChild(option);	
+
+	select.setAttribute("class","weui-input");
+	$("#progress").append(select);	
+
+	var state="未整改";
+
+	function gradeChange(){ 
+    var objS = document.getElementById("select"); 
+    var grade = objS.options[objS.selectedIndex].value; 
+    console.log(objS.options[objS.selectedIndex]);
+    progre=grade;
+    if(progre==0){
+    	  state="未整改";
+    	  progress_img.setAttribute("class","weui-icon-cancel");
+      }else if(progre==1){
+    	  state="整改中";
+    	  progress_img.setAttribute("class","weui-icon-info-circle");  
+      }else if(progre==2){
+    	  state="已整改";
+    	  progress_img.setAttribute("class","weui-icon-success");
+      }
+   } 
 	
 	$.ajax({
         type: "POST",
@@ -209,26 +262,19 @@
              	  var name=document.createElement("span");
                   name.innerHTML=obj.name;
                   $("#name").append(name);
-                  
-                  var progre=obj.progress;
-                  progress=progre;
-                  var type;
-    
-                  $("#sliderTrack").attr("style","width:"+(progre*100)+"%");
-                  $("#sliderHandler").attr("style","left:"+(progre*100)+"%");
-                  
-                  if(progre==0){
-                	  type="未整改";
+                  console.log(obj.state);
+                  var state=obj.state;
+
+                  if(state=="未整改"){
                 	  progress_img.setAttribute("class","weui-icon-cancel");
-                  }else if(progre>0&&progre<1){
-                	  type="整改中";
-                	  progress_img.setAttribute("class","weui-icon-info-circle");  
-                  }else if(progre==1){
-                	  type="已整改";
+                	  document.getElementById("select")[0].selected=true;
+                  }else if(state=="整改中"){
+                	  progress_img.setAttribute("class","weui-icon-info-circle"); 
+                	  document.getElementById("select")[1].selected=true;
+                  }else if(state=="已整改"){
                 	  progress_img.setAttribute("class","weui-icon-success");
+                	  document.getElementById("select")[2].selected=true;
                   }
-                  
-                  
 
         	}
     });
@@ -298,6 +344,7 @@
         		 	neaten_name:neaten_name,
     		    	happenTime:happenTime,
     		    	principal:principal,
+    		    	state:state,
     		    	remark:remark,
     		    	neaten_instance:neaten_instance,
     		    	addComp:addComp1,

@@ -286,7 +286,7 @@ public class HiddenController {
 	
 	@RequestMapping("/updateHidden")
 	public @ResponseBody Integer updateHidden(@RequestParam String guid,
-			@RequestParam String name,@RequestParam Integer level,
+			@RequestParam String name,@RequestParam String level,
 			@RequestParam String manageRegion,
 			@RequestParam String happenTime,@RequestParam String remark,
 			@RequestParam String detail,@RequestParam Double lng,
@@ -321,7 +321,7 @@ public class HiddenController {
 		
 		Date date2=new Date();
 		hidden.setUpdate_time(date2);
-		
+				
 		int i=hiddenDAO.updateHidden(hidden);
 		
 		Position position=new Position();
@@ -342,7 +342,7 @@ public class HiddenController {
 	
 	@RequestMapping("/insertHidden")
 	public @ResponseBody Map insertHidden(
-			@RequestParam String name,@RequestParam Integer level,
+			@RequestParam String name,@RequestParam String level,
 			@RequestParam String manageRegion,
 			@RequestParam String happenTime,@RequestParam String remark,
 			@RequestParam String detail,@RequestParam String addComp,
@@ -606,6 +606,7 @@ public class HiddenController {
 	public @ResponseBody Map insertHiddenNeaten(
 			@RequestParam String guid,
 			@RequestParam String neaten_name,@RequestParam Double progress,
+			@RequestParam String state,
 			@RequestParam String happenTime,@RequestParam String principal,
 			@RequestParam String remark,
 			@RequestParam String neaten_instance,@RequestParam String addComp,
@@ -654,6 +655,8 @@ public class HiddenController {
 		Hidden hidden=new Hidden();
 		
 		hidden.setProgress(progress);
+		
+		hidden.setState(state);
 		
 		String[] where={"[Hidden].GUID=",guid};
 		

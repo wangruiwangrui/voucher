@@ -39,7 +39,7 @@
      </div>
     </div>
     
- 
+ <!--  
     <div class="weui-cells weui-cells_form">
     	<div class="weui-cell">
     		<div class="weui-cell__hd"><label class="weui-label">整改进度</label></div>
@@ -52,15 +52,14 @@
                         			<div id="sliderHandler" style="left: 0%;" class="weui-slider__handler"></div>
                    				 </div>
                 			</div>
-                		<!--  <div id="sliderValue" class="weui-slider-box__value">75</div>
-                		<div>%</div> -->
             	 	   </div>            		   
         			</div>
   	  			</div>
   	  			<div id="progress_img" class="weui-cell "></div>  
     	</div>
     </div>
-
+ -->
+   
    
   <div class="weui-cells weui-cells_form">
      <div class="weui-cell">
@@ -176,6 +175,7 @@
     
     var progress=0;
     
+    /*
 	$('#slider2').slider(function (progre) {
         console.log(progre);
         progress=progre/100;
@@ -190,6 +190,10 @@
       	  progress_img.setAttribute("class","weui-icon-success");
         }
     });
+	*/
+	
+
+	
 	
 	$.ajax({
         type: "POST",
@@ -228,7 +232,7 @@
              	  var neaten_name=obj.neaten_name;
                   $("#neaten_name").val(neaten_name);                  
                  
-                  
+                  /*
                   var progre=obj.progress;
                   progress=progre;
                   var type;
@@ -246,7 +250,8 @@
                 	  type="已整改";
                 	  progress_img.setAttribute("class","weui-icon-success");
                   }
-
+				*/
+				
 				 var time=actionTime(obj.happen_time);
 				 console.log(time);
 				 $("#happenTime").val(time);
