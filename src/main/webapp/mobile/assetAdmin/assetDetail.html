@@ -204,8 +204,8 @@
             	   	var point = new BMap.Point(obj.lng,obj.lat);
             	    var pointEnd=point;
             	    map.centerAndZoom(point, 12);
-            	    var myIcon = new BMap.Icon("../../img/blackPoint.jpg", new BMap.Size(30,38));
-            	    var marker = new BMap.Marker(point,{icon:myIcon}); // 创建点
+            	   // var myIcon = new BMap.Icon("../../img/blackPoint.jpg", new BMap.Size(30,38));
+            	    var marker = new BMap.Marker(point); // 创建点
             		map.addOverlay(marker);    //增加点
             	   }
             	  

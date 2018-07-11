@@ -47,6 +47,9 @@ public class Hidden_Neaten implements Serializable{
     @SQLString(name="campusAdmin")
 	private String campusAdmin;
 
+    @SQLString(name="UserName")
+	private String UserName;
+
     @SQLString(name="terminal")
 	private String terminal;
 
@@ -144,6 +147,14 @@ public class Hidden_Neaten implements Serializable{
 
 	public String getCampusAdmin(){
 		return campusAdmin;
+	}
+
+	public void setUserName(String UserName){
+		this.UserName = UserName;
+	}
+
+	public String getUserName(){
+		return UserName;
 	}
 
 	public void setTerminal(String terminal){

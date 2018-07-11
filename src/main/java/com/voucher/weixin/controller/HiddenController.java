@@ -355,6 +355,12 @@ public class HiddenController {
         
         String openId=( String ) request.getSession().getAttribute("openId");
         
+        Users users=userService.getUserByOnlyOpenId(openId);
+        
+        String userName=users.getName();
+        
+        hidden.setUserName(userName);
+        
         hidden.setCampusAdmin(openId);
         
         hidden.setGUID(uuid.toString());
@@ -632,6 +638,12 @@ public class HiddenController {
         hidden_Neaten.setNeaten_instance(neaten_instance);
 
         hidden_Neaten.setCampusAdmin(openId);
+        
+        Users users=userService.getUserByOnlyOpenId(openId);
+        
+        String userName=users.getName();
+        
+        hidden_Neaten.setUserName(userName);
         
 		if(happenTime!=null&&!happenTime.equals("")){
 			try {

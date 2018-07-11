@@ -35,6 +35,9 @@ public class Hidden_Neaten_Date implements Serializable{
     @SQLDateTime(name="date")
 	private Date date;
 
+    @SQLString(name="UserName")
+	private String UserName;
+
 	public void setId(Integer id){
 		this.id = id;
 	}
@@ -97,6 +100,14 @@ public class Hidden_Neaten_Date implements Serializable{
 
 	public Date getDate(){
 		return date;
+	}
+
+	public void setUserName(String UserName){
+		this.UserName = UserName;
+	}
+
+	public String getUserName(){
+		return UserName;
 	}
 
 

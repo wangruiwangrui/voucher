@@ -41,6 +41,9 @@ public class Hidden_Data implements Serializable{
     @SQLInteger(name="FileIndex")
 	private Integer FileIndex;
 
+    @SQLString(name="UserName")
+	private String UserName;
+
 	public void setId(Integer id){
 		this.id = id;
 	}
@@ -119,6 +122,14 @@ public class Hidden_Data implements Serializable{
 
 	public Integer getFileIndex(){
 		return FileIndex;
+	}
+
+	public void setUserName(String UserName){
+		this.UserName = UserName;
+	}
+
+	public String getUserName(){
+		return UserName;
 	}
 
 

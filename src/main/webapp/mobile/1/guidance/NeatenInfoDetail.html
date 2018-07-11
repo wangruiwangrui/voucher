@@ -65,7 +65,7 @@
      <div class="weui-cell">
         <div class="weui-cell__hd"><label class="weui-label">整改人员</label></div>
         <div  class="weui-cell__bd">
-          <input id="principal" class="weui-input" />
+          <input id="userName" class="weui-input" />
         </div>
      </div>
     </div>
@@ -264,8 +264,8 @@
                   var remark=obj.remark;
                   $("#remark").val(remark);
                   
-                  var principal=obj.principal;
-                  $("#principal").val(principal);
+                  var userName=obj.user_name;
+                  $("#userName").val(userName);
                   
                   var neaten_instance=obj.neaten_instance;
                   $("#neaten_instance").val(neaten_instance);
@@ -366,7 +366,7 @@
     	  	addComp = rs.addressComponents;
         	
         	var neaten_name=$("#neaten_name").val();        	
-        	var principal=$("#principal").val();
+        	var userName=$("#userName").val();
         	var happenTime=$("#happenTime").val();
         	var remark=$("#remark").val();
         	var neaten_instance=$("#neaten_instance").val();
@@ -379,7 +379,7 @@
         		 	progress:progress,
         		 	neaten_name:neaten_name,
     		    	happenTime:happenTime,
-    		    	principal:principal,
+    		    	principal:userName,
     		    	remark:remark,
     		    	neaten_instance:neaten_instance,
     		    	addComp:addComp1,

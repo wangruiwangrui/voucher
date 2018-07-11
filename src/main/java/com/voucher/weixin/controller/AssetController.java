@@ -33,10 +33,13 @@ import com.voucher.manage.daoModelJoin.Assets.Hidden_Assets_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.model.Access;
 import com.voucher.manage.model.Users;
+import com.voucher.manage.service.PhotoService;
 import com.voucher.manage.service.UserService;
+import com.voucher.manage.service.WeiXinService;
 import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.sqlserver.context.Connect;
+import com.voucher.weixin.insweptcontroller.FileUploadController;
 
 import common.HttpClient;
 
@@ -49,6 +52,20 @@ public class AssetController {
 	@Autowired
 	public void setUserService(UserService userService) {
 		this.userService = userService;
+	}
+	
+	private WeiXinService weixinService;
+	
+	private PhotoService photoService;
+	
+	@Autowired
+	public void setweixinService(WeiXinService weiXinService) {
+		this.weixinService=weiXinService;
+	}
+	
+	@Autowired
+	public void setPhotoService(PhotoService photoService) {
+		this.photoService = photoService;
 	}
 	
 	ApplicationContext applicationContext=new Connect().get();
@@ -700,6 +717,7 @@ public class AssetController {
 		
 		int upload=0;
 		
+		/*
 		String url="http://"+request.getServerName()+"/voucher/mobile/file/upload.do";
 		
 		System.out.println("url="+url);
@@ -715,6 +733,14 @@ public class AssetController {
 		HttpClient httpClient = new HttpClient();
 		
 		upload=Integer.parseInt(httpClient.doGet(url, reqParam));
+		*/
+		
+		try {
+			upload=FileUploadController.fildUpload2(request, response, imagename, serverId, campusId, GUID, classType, weixinService, photoService);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		if(upload==1){
 			

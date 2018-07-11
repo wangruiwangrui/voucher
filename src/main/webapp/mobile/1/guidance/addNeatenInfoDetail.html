@@ -274,6 +274,12 @@
                   }else if(state=="已整改"){
                 	  progress_img.setAttribute("class","weui-icon-success");
                 	  document.getElementById("select")[2].selected=true;
+                	  
+                	  $.alert("隐患已整改完成!", "提 示", function() {
+      	    			  //点击确认后的回调函数
+      	    				history.back();
+      	    			});
+                	  
                   }
 
         	}
