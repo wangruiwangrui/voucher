@@ -219,7 +219,7 @@
           }
           
           function clickEvent(that){
-        	  var guid=$(that).attr("guid");
+        	  var guid=encodeURI($(that).attr("guid"));
         	  location.href="hiddenDetail.html?guid="+guid+"&latitude="+latitude+"&longitude="+longitude;
           }
           

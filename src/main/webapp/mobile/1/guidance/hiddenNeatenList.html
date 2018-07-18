@@ -275,7 +275,7 @@
           }
           
           function clickEvent(that){
-        	  var neaten_id=$(that).attr("neaten_id");
+        	  var neaten_id=encodeURI($(that).attr("neaten_id"));
         	  wx.getLocation({
       	         success : function(res) {
       	            // alert(JSON.stringify(res));

@@ -255,16 +255,16 @@
                   var type;
                   var progress_img=document.createElement("i");
                   
-                  var state=obj.state;
+                  var progress=obj.progress;
 
-                  type=state;
+                  type=progress;
                   
                   if(type=="未整改"||type==null){
                 	  type="未整改";
                 	  progress_img.setAttribute("class","weui-icon-warn");
                   }else if(type=="整改中"){
                 	  progress_img.setAttribute("class","weui-icon-info-circle"); 
-                  }else if(type=="已整改"){
+                  }else if(type=="整改完成"){
                 	  progress_img.setAttribute("class","weui-icon-success");
                   }
                   $("#progress_img").append(progress_img);

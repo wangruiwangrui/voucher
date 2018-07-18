@@ -32,8 +32,8 @@ public class Hidden implements Serializable{
     @SQLDateTime(name="happen_time")
 	private Date happen_time;
 
-    @SQLDouble(name="progress")
-	private Double progress;
+    @SQLString(name="progress")
+	private String progress;
 
     @SQLString(name="principal")
 	private String principal;
@@ -121,11 +121,11 @@ public class Hidden implements Serializable{
 		return happen_time;
 	}
 
-	public void setProgress(Double progress){
+	public void setProgress(String progress){
 		this.progress = progress;
 	}
 
-	public Double getProgress(){
+	public String getProgress(){
 		return progress;
 	}
 

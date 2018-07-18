@@ -23,6 +23,9 @@ public class Hidden_Assets implements Serializable{
     @SQLString(name="campusAdmin")
 	private String campusAdmin;
 
+    @SQLString(name="UserName")
+	private String UserName;
+    
     @SQLDateTime(name="date")
 	private Date date;
 
@@ -58,6 +61,14 @@ public class Hidden_Assets implements Serializable{
 		return campusAdmin;
 	}
 
+	public void setUserName(String UserName){
+		this.UserName = UserName;
+	}
+
+	public String getUserName(){
+		return UserName;
+	}
+	
 	public void setDate(Date date){
 		this.date = date;
 	}

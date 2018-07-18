@@ -62,8 +62,8 @@ public class Hidden_Neaten_Join implements Serializable{
 	    @SQLString(name="detail")
 		private String detail;
 	    
-	    @SQLDouble(name="progress")
-	   	private Double progress;
+	    @SQLString(name="progress")
+		private String progress;
 	    
 	    @SQLInteger(name="type")
 		private Integer type;
@@ -218,11 +218,11 @@ public class Hidden_Neaten_Join implements Serializable{
 			this.detail = detail;
 		}
 
-		public Double getProgress() {
+		public String getProgress() {
 			return progress;
 		}
 
-		public void setProgress(Double progress) {
+		public void setProgress(String progress) {
 			this.progress = progress;
 		}
 

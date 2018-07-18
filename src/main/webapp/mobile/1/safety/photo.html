@@ -280,7 +280,7 @@
           }
           
           function clickEvent(that){
-        	  var guid=$(that).attr("guid");
+        	  var guid=encodeURI($(that).attr("guid"));
         	  wx.getLocation({
      	         success : function(res) {
      	            // alert(JSON.stringify(res));

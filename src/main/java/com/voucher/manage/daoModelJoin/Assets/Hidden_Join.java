@@ -30,8 +30,8 @@ public class Hidden_Join implements Serializable{
     @SQLString(name="detail")
 	private String detail;
 
-    @SQLDouble(name="progress")
-   	private Double progress;
+    @SQLString(name="progress")
+	private String progress;
     
     @SQLDateTime(name="happen_time")
 	private Date happen_time;
@@ -152,11 +152,11 @@ public class Hidden_Join implements Serializable{
 		return detail;
 	}
 
-	public void setProgress(Double progress){
+	public void setProgress(String progress){
 		this.progress = progress;
 	}
 
-	public Double getProgress(){
+	public String getProgress(){
 		return progress;
 	}
 	

@@ -298,7 +298,7 @@ public class HiddenController {
 		hidden.setWhere(where);
 		
 		hidden.setName(name);
-		if(level!=null)
+		if(level!=null&&!level.equals(""))
 		 hidden.setHidden_level(level);
 		
 		if(manageRegion!=null&&!manageRegion.equals("")){
@@ -611,7 +611,7 @@ public class HiddenController {
 	@RequestMapping("/insertHiddenNeaten")
 	public @ResponseBody Map insertHiddenNeaten(
 			@RequestParam String guid,
-			@RequestParam String neaten_name,@RequestParam Double progress,
+			@RequestParam String neaten_name,@RequestParam String progress,
 			@RequestParam String state,
 			@RequestParam String happenTime,@RequestParam String principal,
 			@RequestParam String remark,
@@ -645,6 +645,8 @@ public class HiddenController {
         
         hidden_Neaten.setUserName(userName);
         
+        hidden_Neaten.setProgress(progress);
+        
 		if(happenTime!=null&&!happenTime.equals("")){
 			try {
 				DateFormat fmt =new SimpleDateFormat("yyyy-MM-dd");
@@ -669,6 +671,8 @@ public class HiddenController {
 		hidden.setProgress(progress);
 		
 		hidden.setState(state);
+		
+		hidden.setUpdate_time(date);
 		
 		String[] where={"[Hidden].GUID=",guid};
 		
@@ -711,7 +715,7 @@ public class HiddenController {
 	@RequestMapping("/updateHiddenNeaten")
 	public @ResponseBody Map updateHiddenNeaten(
 			@RequestParam String guid,@RequestParam String neaten_id,
-			@RequestParam String neaten_name,@RequestParam Double progress,
+			@RequestParam String neaten_name,@RequestParam String progress,
 			@RequestParam String happenTime,@RequestParam String principal,
 			@RequestParam String remark,
 			@RequestParam String neaten_instance,@RequestParam String addComp,

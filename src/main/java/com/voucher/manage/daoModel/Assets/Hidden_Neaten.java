@@ -53,6 +53,9 @@ public class Hidden_Neaten implements Serializable{
     @SQLString(name="terminal")
 	private String terminal;
 
+    @SQLString(name="progress")
+	private String progress;
+    
 	public void setId(Integer id){
 		this.id = id;
 	}
@@ -165,6 +168,13 @@ public class Hidden_Neaten implements Serializable{
 		return terminal;
 	}
 
+	public void setProgress(String progress){
+		this.progress = progress;
+	}
+
+	public String getProgress(){
+		return progress;
+	}
 
 
 

@@ -173,8 +173,9 @@
 	 }     
         
     
-    var progress=0;
+    
     /*
+    var progress=0;
 	$('#slider2').slider(function (progre) {
         console.log(progre);
         progress=progre/100;
@@ -206,14 +207,14 @@
 	select.appendChild(option);		
 
 	var option = document.createElement("option");
-	option.innerHTML="已整改";
+	option.innerHTML="整改完成";
 	option.setAttribute("value",2);
 	select.appendChild(option);	
 
 	select.setAttribute("class","weui-input");
 	$("#progress").append(select);	
 
-	var state="未整改";
+	var progress="未整改";
 
 	function gradeChange(){ 
     var objS = document.getElementById("select"); 
@@ -221,16 +222,24 @@
     console.log(objS.options[objS.selectedIndex]);
     progre=grade;
     if(progre==0){
-    	  state="未整改";
+    	  progress="未整改";
     	  progress_img.setAttribute("class","weui-icon-cancel");
       }else if(progre==1){
-    	  state="整改中";
+    	  progress="整改中";
     	  progress_img.setAttribute("class","weui-icon-info-circle");  
       }else if(progre==2){
-    	  state="已整改";
+    	  progress="整改完成";
     	  progress_img.setAttribute("class","weui-icon-success");
       }
    } 
+	
+	$.post('/voucher/mobile/register/userinfoByopenId.do', {
+		campusId:1
+       },function(data){
+    	   var obj = $.parseJSON(data);
+    	   if(obj.name!=null)
+    	   $("#principal").val(obj.name);
+       });
 	
 	$.ajax({
         type: "POST",
@@ -262,16 +271,16 @@
              	  var name=document.createElement("span");
                   name.innerHTML=obj.name;
                   $("#name").append(name);
-                  console.log(obj.state);
-                  var state=obj.state;
+                  console.log(obj.progress);
+                  var progress=obj.progress;
 
-                  if(state=="未整改"){
+                  if(progress=="未整改"){
                 	  progress_img.setAttribute("class","weui-icon-cancel");
                 	  document.getElementById("select")[0].selected=true;
-                  }else if(state=="整改中"){
+                  }else if(progress=="整改中"){
                 	  progress_img.setAttribute("class","weui-icon-info-circle"); 
                 	  document.getElementById("select")[1].selected=true;
-                  }else if(state=="已整改"){
+                  }else if(progress=="整改完成"){
                 	  progress_img.setAttribute("class","weui-icon-success");
                 	  document.getElementById("select")[2].selected=true;
                 	  
@@ -346,11 +355,11 @@
         	 $.post("/voucher/mobile/hidden/insertHiddenNeaten.do",
         		  {
  					guid:guid,
-        		 	progress:progress,
         		 	neaten_name:neaten_name,
     		    	happenTime:happenTime,
     		    	principal:principal,
-    		    	state:state,
+    		    	progress:progress,
+    		    	state:progress,
     		    	remark:remark,
     		    	neaten_instance:neaten_instance,
     		    	addComp:addComp1,

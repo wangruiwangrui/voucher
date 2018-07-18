@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -623,8 +624,19 @@ public class AssetController {
 		
 		Hidden_Assets hidden_Assets=new Hidden_Assets();
 		
+		HttpSession session=request.getSession();
+		
+		String openId=session.getAttribute("openId").toString();
+		
+		Users users=userService.getUserByOnlyOpenId(openId);
+		
+		Date date=new Date();
+		
 		hidden_Assets.setAsset_GUID(guid);
 		hidden_Assets.setHidden_GUID(hiddenGuid);
+		hidden_Assets.setCampusAdmin(openId);
+		hidden_Assets.setUserName(users.getName());
+		hidden_Assets.setDate(date);
 		
 		WechatSendMessageController wechatSendMessageController=new WechatSendMessageController();
 		
