@@ -5,7 +5,7 @@ import com.voucher.manage.daoModel.Assets.Hidden_User;
 public class Singleton {
 	private static Singleton instance = new Singleton();
 		
-	public final static String ROOMDATABASE="[TTT]";
+	public final static String ROOMDATABASE="[RoomManage]";
 	
 	//本地文件目录
 	public final static String filePath="\\Desktop\\pasoft\\photo";

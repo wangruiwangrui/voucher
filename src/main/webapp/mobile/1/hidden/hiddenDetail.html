@@ -221,6 +221,8 @@
                 			asset2.setAttribute("class","weui-cell__ft");
                 			$("#asset").append(asset2);  
                 			
+                			guid=encodeURI(guid);
+                			
                 			$("#asset").click(function(){
                     			location.href="hiddenAsset.html?hiddenGuid="+guid+"&latitude="+latitude+"&longitude="+longitude;
                     		});

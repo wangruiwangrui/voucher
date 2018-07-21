@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.voucher.manage.daoSQL.annotations.*;
 
-@DBTable(name="[TTT].[dbo].[SendMessage]")
+@DBTable(name="[SendMessage]")
 public class SendMessage implements Serializable{
 
     private static final long serialVersionUID = 1L;

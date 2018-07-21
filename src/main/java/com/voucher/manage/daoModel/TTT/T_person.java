@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.voucher.manage.daoSQL.annotations.*;
 
-@DBTable(name="[TTT].[dbo].[t_person]")
+@DBTable(name="[t_person]")
 public class T_person implements Serializable{
 
     private static final long serialVersionUID = 1L;

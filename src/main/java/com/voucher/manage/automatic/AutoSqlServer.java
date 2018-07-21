@@ -124,7 +124,8 @@ public class AutoSqlServer {
         sb.append("import java.io.Serializable;\n\n");
         sb.append("import com.voucher.manage.daoSQL.annotations.*;\n\n");
         
-        String prefix="["+dataBase+"].[dbo].[";
+        //String prefix="["+dataBase+"].[dbo].[";
+        String prefix="[";
         sb.append("@DBTable(name=\""+prefix+tabName+"]\")\n");
         sb.append("public class "+initCap(tabName)+" implements Serializable{\r\n"); 
         sb.append("\n");
@@ -325,8 +326,8 @@ public class AutoSqlServer {
     
     public static void main(String[] args){
         String url="jdbc:jtds:sqlserver://127.0.0.1:1433/";
-    	String dataBase="Assets";
-    	String filePath="C:\\Users\\WangJing\\Desktop\\pasoft\\Assets\\";
+    	String dataBase="TTT";
+    	String filePath="C:\\Users\\WangJing\\Desktop\\pasoft\\TTT\\";
     	List<String> tabNames = getTabNames(url,dataBase);  
         Iterator<String> iterator=tabNames.iterator();
         int i=0;

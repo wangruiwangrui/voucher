@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.voucher.manage.daoSQL.annotations.*;
 
-@DBTable(name="[TTT].[dbo].[FileRalate]")
+@DBTable(name="[FileRalate]")
 public class FileRalate implements Serializable{
 
     private static final long serialVersionUID = 1L;
