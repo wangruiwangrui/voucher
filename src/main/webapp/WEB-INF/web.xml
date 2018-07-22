@@ -151,7 +151,30 @@
 		<url-pattern>/mobile/1/*</url-pattern>
 		<url-pattern>/mobile/assetAdmin/*</url-pattern>
 	</filter-mapping>
-
+	
+	<!-- 资产巡查的栏截 -->
+    <filter>
+		<filter-name>MobileAssetCheckIsLoginFilter</filter-name>
+		<filter-class>com.voucher.manage.filter.MobileAssetCheckIsLoginFilter</filter-class>
+		<init-param>
+			<param-name>loginStrings</param-name>
+			<param-value>/login.html;.js;.css;restrict.html;index.html;/test</param-value>
+		</init-param>
+		<init-param>
+			<param-name>includeStrings</param-name>
+			<param-value>.html;.jsp;.do</param-value>
+		</init-param>
+		<init-param>
+			<param-name>redirectPath</param-name>
+			<param-value>/mobile/1/restrict.html</param-value>
+		</init-param>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>MobileAssetCheckIsLoginFilter</filter-name>
+		<url-pattern>/mobile/assetAdmin/assetCheck/*</url-pattern>
+	</filter-mapping>
+	
      <!-- 资产交租页面的栏截 -->
     <filter>
 		<filter-name>MobileAssetIsLoginFilter</filter-name>

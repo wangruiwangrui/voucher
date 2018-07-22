@@ -832,9 +832,18 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		if(count==0){
 			result=InsertExe.get(this.getJdbcTemplate(), hidden_Assets);
 			
-			WechatSendMessageController wechatSendMessageController=new WechatSendMessageController();
-			
-			wechatSendMessageController.send(asset_GUID, hidden_GUID);
+			Runnable r=new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					WechatSendMessageController wechatSendMessageController=new WechatSendMessageController();
+					
+					wechatSendMessageController.send(asset_GUID, hidden_GUID);
+				}
+			};
+
+			r.run();
 			
 		}else{
 			result=2;

@@ -101,6 +101,8 @@
 	else if (value == "2") {
 		return "安全人员";
 	}else if (value == "3") {
+		return "资产管理人员";
+	}else if (value == "4") {
 		return "领导";
 	}
   }
@@ -109,6 +111,9 @@
 
 			return [
 					'<a class="superAdmin ml8 fa fa-user-plus" href="javascript:void(0)" title="设为领导">',
+					'&nbsp;&nbsp;',
+					'</a>',
+					'<a class="assetAdmin ml8 fa fa-user-plus" href="javascript:void(0)" title="设为资产管理人员">',
 					'&nbsp;&nbsp;',
 					'</a>',
 					'<a class="admin ml8 fa fa-user" href="javascript:void(0)" title="设为安全人员">',
@@ -128,7 +133,7 @@
 				//alert("admin");
 				$.post("../../voucher/user/upAtionFormatter.do", {
 					openId : row.openId,
-					place:3,
+					place:4,
                    campusId:campusId,
 				}, function(text) {
 					
@@ -136,6 +141,29 @@
 						setSuccess("设置为领导失败。");
 					} else {
 						setSuccess("设置为领导成功。");
+						$('#table').bootstrapTable('updateRow', {
+							index : index,
+							row : {
+								type : 2
+							}
+						});
+						$('#table').bootstrapTable('refresh', {silent: true});
+					}
+
+				});
+			},
+			'click .assetAdmin' : function(e, value, row, index) {
+				//alert("admin");
+				$.post("../../voucher/user/upAtionFormatter.do", {
+					openId : row.openId,
+					place:3,
+                   campusId:campusId,
+				}, function(text) {
+					
+					if (text == -1 || text == 0) {
+						setSuccess("设置为资产管理人员失败。");
+					} else {
+						setSuccess("设置为资产管理人员成功。");
 						$('#table').bootstrapTable('updateRow', {
 							index : index,
 							row : {

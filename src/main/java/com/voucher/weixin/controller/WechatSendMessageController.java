@@ -1,5 +1,6 @@
 package com.voucher.weixin.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -8,6 +9,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.defaults.DefaultSqlSessionFactory;
@@ -99,27 +101,30 @@ public class WechatSendMessageController {
     	templateData.setUrl(url);
     	templateData.setTouser(openid);
     	templateData.setTopcolor("#000000");
-    	templateData.setTemplate_id("1vQfPSl4pSvi5UnmmDhVtueutq2R1w7XYRMts294URg");
+    	templateData.setTemplate_id("XjGvV8BcSYzVtcxOJmXD2VefRqor4QQXYfLabWckkiw");
     	Map<String,TemplateData> m = new HashMap<String,TemplateData>();
     	TemplateData first = new TemplateData();
     	first.setColor("#000000");
-    	first.setValue("火灾事件");
+    	first.setValue(title);
     	m.put("first", first);
     	TemplateData keyword1 = new TemplateData();
     	keyword1.setColor("#328392");
-    	keyword1.setValue(title);
+    	keyword1.setValue(reportUser);
     	m.put("keyword1", keyword1);
     	TemplateData keyword2 = new TemplateData();
     	keyword2.setColor("#328392");
-    	keyword2.setValue(reportUser);
+    	keyword2.setValue(reportContext);
     	m.put("keyword2", keyword2);
     	TemplateData keyword3 = new TemplateData();
     	keyword3.setColor("#328392");
-    	keyword3.setValue(reportContext);
+    	keyword3.setValue(place);
     	m.put("keyword3", keyword3);
+    	SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+    	Date date=new Date();
+		String time=sdf.format(date);
     	TemplateData keyword4 = new TemplateData();
     	keyword4.setColor("#328392");
-    	keyword4.setValue(place);
+    	keyword4.setValue(time);
     	m.put("keyword4", keyword4);
     	TemplateData remark = new TemplateData();
     	remark.setColor("#929232");
@@ -130,8 +135,6 @@ public class WechatSendMessageController {
     	String s=wechatTemplate.sendTemplateMessage(accessToken, templateData);
     	
     	message=message+"  "+users.getNickname()+"  "+s;
-    	
-    	Date date=new Date();
     	
     	MessageList messageList=new MessageList();
     	
@@ -220,28 +223,38 @@ public class WechatSendMessageController {
 			WxTemplate templateData=new WxTemplate();
 	    	templateData.setTouser(openId);
 	    	templateData.setTopcolor("#000000");
-	    	templateData.setTemplate_id("c5vZy_C4H68pwxKUa5sBVfkLwHjQscikJ3S_qrDDsv4");
+	    	templateData.setTemplate_id("JqvvyZUkOSWC3FlaFQQNg22zxBqNfFAxwM1-xfg6vxo");
 	    	Map<String,TemplateData> m = new HashMap<String,TemplateData>();
 	    	TemplateData first = new TemplateData();
 	    	first.setColor("#000000");
-	    	first.setValue("");
+	    	first.setValue("尊敬的承租人"+charter+" , 您好 : ");
 	    	m.put("first", first);
+	        
+	    	String user=hidden.getUserName();
+	    	
 	    	TemplateData keyword1 = new TemplateData();
 	    	keyword1.setColor("#328392");
-	    	keyword1.setValue("尊敬的承租人"+charter+" , 您好 : ");
+	    	keyword1.setValue(user);
 	    	m.put("keyword1", keyword1);
-	    	TemplateData keyword2 = new TemplateData();
-	    	keyword2.setColor("#328392");
-	    	keyword2.setValue("您承租的资产存在"+hidden.getName()+","+
+	    	SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+	    	Date date=new Date();
+			String time=sdf.format(date);
+			TemplateData keyword2 = new TemplateData();
+			keyword2.setValue(time);
+			m.put("keyword2", keyword2);
+			TemplateData keyword3 = new TemplateData();
+			keyword3.setValue("限期检查");
+			m.put("keyword3", keyword3);
+	    	TemplateData keyword4 = new TemplateData();
+	    	keyword4.setColor("#328392");
+	    	keyword4.setValue("您承租的资产存在"+hidden.getName()+","+
 	    			hidden.getDetail()+"的隐患,请注意安全防范!");
-	    	m.put("keyword2", keyword2);
+	    	m.put("keyword4", keyword4);
 	    	templateData.setData(m);
 	    	
 	    	ChatTemplateProcessor wechatTemplate=new ChatTemplateProcessor();
 	    	
 	    	String s=wechatTemplate.sendTemplateMessage(accessToken, templateData);
-	    	
-	    	Date date=new Date();
 	    	
 	    	MessageList messageList=new MessageList();
 	    	

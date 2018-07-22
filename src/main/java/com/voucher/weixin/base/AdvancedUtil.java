@@ -1,7 +1,10 @@
 package com.voucher.weixin.base;
 
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import org.slf4j.Logger;
 
@@ -121,7 +124,12 @@ public class AdvancedUtil {
 	                // 用户头像
 	                snsUserInfo.setHeadImgUrl(jsonObject.getString("headimgurl"));
 	                //用户关注时间
-	                Date date= new Date(Integer.parseInt(jsonObject.getString("subscribe_time")));
+	                String formats = "yyyy-MM-dd HH:mm:ss";
+	                Long timestamp = Long.parseLong(jsonObject.getString("subscribe_time")) * 1000;
+	                String dateTime = new SimpleDateFormat(formats, Locale.CHINA).format(new Date(timestamp));
+	                System.out.println("dateTime="+dateTime);
+	                DateFormat fmt =new SimpleDateFormat(formats);
+	                Date date= fmt.parse(dateTime);
 	                snsUserInfo.setSubScribeTime(date);
 	                System.out.println("substiem="+date);
 	                //公众号运营者对粉丝的备注

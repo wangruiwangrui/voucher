@@ -637,11 +637,7 @@ public class AssetController {
 		hidden_Assets.setCampusAdmin(openId);
 		hidden_Assets.setUserName(users.getName());
 		hidden_Assets.setDate(date);
-		
-		WechatSendMessageController wechatSendMessageController=new WechatSendMessageController();
-		
-		wechatSendMessageController.send(guid, hiddenGuid);
-		
+				
 		return assetsDAO.insertIntoHidden_Assets(hidden_Assets);
 		
 	}
