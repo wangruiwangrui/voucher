@@ -245,9 +245,11 @@ public class AssetController {
 			where.put("Address like ", search);
 		}		
 
-		Map roomInfo_Positions=assetsDAO.findAllRoomInfo_Position(limit, offset, sort, order,term, where);
+		//Map roomInfo_Positions=assetsDAO.findAllRoomInfo_Position(limit, offset, sort, order,term, where);
 		
-		List roominfos=(List) roomInfo_Positions.get("rows");
+		//List roominfos=(List) roomInfo_Positions.get("rows");
+		
+		List roominfos=roomInfoDao.findAllRoomInfo_Position(limit, offset, sort, order, where);
 		
 		map.put("rows", roominfos);
 			

@@ -59,7 +59,7 @@
      <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">状态</label></div>
-                <div id="securityClassification" class="weui-cell__bd">
+                <div id="state" class="weui-cell__bd">
                 </div>
             </div>
     </div>
@@ -198,9 +198,9 @@
                   $("#buildArea").append(buildArea);
                   
 
-                  var securityClassification=document.createElement("span");
-                  securityClassification.innerHTML=obj.securityClassification;
-                  $("#securityClassification").append(securityClassification);
+                  var state=document.createElement("span");
+                  state.innerHTML=obj.state;
+                  $("#state").append(state);
                   
                   
                   console.log(imgs);

@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 import com.voucher.manage.daoModel.RoomInfo;
+import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 
 public interface RoomInfoDao {
 
@@ -13,6 +14,9 @@ public interface RoomInfoDao {
 			String order,Map search);
 	
 	Integer getRoomInfoCount(Map search);
+	
+	public List<RoomInfo_Position> findAllRoomInfo_Position(Integer limit, Integer offset, String sort,
+			String order,Map search);
 	
 	public Integer updateRoomInfo(RoomInfo roomInfo);
 	

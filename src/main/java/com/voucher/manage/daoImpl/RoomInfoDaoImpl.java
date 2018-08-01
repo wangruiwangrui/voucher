@@ -163,6 +163,38 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 	}
 
 	@Override
+	public List<RoomInfo_Position> findAllRoomInfo_Position(Integer limit, Integer offset, String sort, String order,
+			Map search) {
+		// TODO Auto-generated method stub
+
+		RoomInfo roomInfo=new RoomInfo();
+		roomInfo.setLimit(limit);
+		roomInfo.setOffset(offset);
+		roomInfo.setNotIn("[GUID]");
+		
+		Position position=new Position();
+		position.setLimit(limit);
+		position.setOffset(offset);
+		position.setNotIn("[GUID]");
+		
+		if(!search.isEmpty()){
+		    String[] where=TransMapToString.get(search);
+		    roomInfo.setWhere(where);
+		    position.setWhere(where);
+		}
+		
+		RoomInfo_Position roomInfo_Position=new RoomInfo_Position();
+		
+		Object[] objects={roomInfo,position};
+		
+		String[] join={"[GUID]"};
+		
+		List list=SelectJoinExe.get(this.getJdbcTemplate(), objects,roomInfo_Position,join);
+		
+		return list;
+	}
+	
+	@Override
 	public Map<String, Object> findAllChangehire_CharLog(Integer limit, Integer offset, String sort, String order,
 			String search) {
 		// TODO Auto-generated method stub
