@@ -52,7 +52,7 @@
 	
 	var showLable=0;
 	
-	/*
+
 	
 	function menuControl(){
 		  // 默认停靠位置和偏移量
@@ -364,9 +364,9 @@
 	// 添加到地图当中
 	map.addControl(buttonCtrl);
 	
-	*/
 	
-	/*
+	
+
 	function checkMap(){
 		var datepicker=document.getElementById('datepicker').value;
   	   var datepicker2=document.getElementById('datepicker2').value;
@@ -379,7 +379,7 @@
 	    	console.log(ticket);
 	        addDeck(ticket);
 	}
-	*/
+	
 	
 	  /*  
 	    var xhm=new XMLHttpRequest();
@@ -397,6 +397,7 @@
 			
 		}
 	 
+	 /*
 	 function checkMap(openId,datepicker,datepicker2){
 			var xhm=new XMLHttpRequest();
 			    xhm.open("GET","../baiduMap/getAllCheckByOpenId.do?openId="+openId+"&datepicker="+datepicker+"&datepicker2="+datepicker2,false);
@@ -407,6 +408,7 @@
 		    	console.log(ticket);
 		        addDeck(ticket);
 		} 
+	*/
 	
   function addDeck(text){	
 
@@ -468,7 +470,7 @@
     	try{
     	 map.addOverlay(polyline);          //增加折线
     	}catch(err){
-    		console.log(err);
+    		//console.log(err);
     	}
     	
 		var pointArray = new Array();

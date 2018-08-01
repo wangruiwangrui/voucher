@@ -270,7 +270,7 @@ var state=getQueryString("state");
 		 }
 		
 		document.querySelector('#safeLike').onclick =function(){
-			 location.href="safety/safeLike.html";
+			 location.href="hidden/safeLike.html";
 		 }
 		
 		document.querySelector('#report').onclick =function(){

@@ -35,8 +35,6 @@ import com.voucher.sqlserver.context.Connect;
 @Controller
 @RequestMapping("/mobile/register")
 public class UserRegisterController {
-
-	private String verifyCode;
 	
 	private UserService userService;
 	
@@ -58,6 +56,7 @@ public class UserRegisterController {
 	 */
 	@RequestMapping(value="getYzm",method=RequestMethod.GET)
 	public void getYzm(HttpServletResponse response,HttpServletRequest request){
+		HttpSession session = request.getSession();
 		try {
 			response.setHeader("Pragma", "No-cache");  
 	        response.setHeader("Cache-Control", "no-cache");  
@@ -69,7 +68,8 @@ public class UserRegisterController {
 
 	        //生成图片  
 	        captcha.out(response.getOutputStream());
-            verifyCode=captcha.text().toLowerCase();
+            String verifyCode=captcha.text().toLowerCase();
+            session.setAttribute("verifyCode", verifyCode);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -212,6 +212,8 @@ public class UserRegisterController {
 	   }
 	   
 	   regtlx=regtlx.toLowerCase();
+	   
+	   String verifyCode=(String) session.getAttribute("verifyCode");
 	   
 	   if(!regtlx.equals(verifyCode)){
 		   verifyCode=null;
