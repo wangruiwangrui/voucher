@@ -159,6 +159,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public List<Users> getUserByPlace(Integer place) {
+		// TODO Auto-generated method stub
+		return usersMapper.getUserByPlace(place);
+	}
+	
+	@Override
 	public List<Users> getWetchatAllUsers(Integer campusId,Integer place,Integer limit,Integer offset, String sort,String order) {
 		// TODO Auto-generated method stub
 		return usersMapper.getWetchatAllUsers(campusId, place,limit,offset,sort,order);

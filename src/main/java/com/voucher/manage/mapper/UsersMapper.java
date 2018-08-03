@@ -46,6 +46,8 @@ public interface UsersMapper {
 	
 	List<Users> getUserByGuidance();
 	
+	List<Users> getUserByPlace(@Param(value="place")Integer place);
+	
 	Integer getOpenId(@Param(value="campusId")Integer campusId,@Param(value="openId")String openId);
 	
 	Integer insertUserInfo(SNSUserInfo snsUserInfo);

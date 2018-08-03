@@ -21,6 +21,8 @@ public interface UserService {
 	
 	List<Users> getUserByGuidance();
 	
+	List<Users> getUserByPlace(Integer place);
+	
 	Users getUserInfoById(Integer campusId,String openId);
 	
 	Integer getUserCount(String campusAdmin,Integer campusId,String search);

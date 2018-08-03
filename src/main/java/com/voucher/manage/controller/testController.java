@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.activemq.transport.stomp.Stomp.Headers.Send;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -20,12 +21,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.rmi.server.AssetsImpl;
 import com.voucher.manage.dao.AssetsDAO;
+import com.voucher.manage.dao.FinanceDAO;
 import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.daoImpl.HiddenDAOImpl;
+import com.voucher.manage.daoModelJoin.Finance.HireList_ChartInfo_Join;
 import com.voucher.manage.redis.Orders;
 import com.voucher.manage.redis.RedisDao;
 import com.voucher.manage.service.AffairService;
 import com.voucher.sqlserver.context.Connect;
+import com.voucher.weixin.controller.WechatSendMessageController;
 
 
 @Controller
@@ -37,6 +41,8 @@ public class testController {
 	HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
 	
 	AssetsDAO assetsDAO=(AssetsDAO) applicationContext.getBean("assetsdao");
+	
+	FinanceDAO financeDAO=(FinanceDAO) applicationContext.getBean("financeDao");
 	
      private AffairService testService;
 	
@@ -56,6 +62,64 @@ public class testController {
 		this.testService=testService;
 	}
 	
+	
+	@RequestMapping("/finan")
+	public @ResponseBody Map finan(@RequestParam Integer days,@RequestParam Integer limit,@RequestParam
+			Integer offset){
+		return financeDAO.findMatureHire(days, limit, offset, "", "", null);
+	}
+	
+	@RequestMapping("/chartInfo")
+	public @ResponseBody Map charInfo(@RequestParam Integer limit,@RequestParam
+			Integer offset){
+		return financeDAO.findOverdueChartInfo( limit, offset, "Charter", "", null);
+	}
+	
+	@RequestMapping("/send")
+	public @ResponseBody Integer Send(){
+		Map map=financeDAO.findMatureHire(15, 2, 0, "", "", null);
+		List list=(List) map.get("rows");
+		
+		Iterator<HireList_ChartInfo_Join> iterator=list.iterator();
+		
+		String key2="";
+		
+		while (iterator.hasNext()) {
+			HireList_ChartInfo_Join hireList_ChartInfo_Join=iterator.next();
+			key2=key2+","+hireList_ChartInfo_Join.getRoomAddress();
+		}
+		
+		Integer place=4;
+		String Template_Id="yArnh7Tjzx07fXuuzz_AMd-gDa2Vo6eC3IH9dvqGjLA";
+		String Send_Type="test";
+		String first_data=" ";
+		
+		String allHire=(String) map.get("allHire");
+		Integer count= (Integer) map.get("count");
+		
+		String keyword1_data="共"+allHire+","+count+"户";		
+		
+		key2=key2+"......";
+		
+		String keyword2_data=key2;
+		
+		String matureTime=(String) map.get("matureTime");
+		
+		String keyword3_data=matureTime;
+		String keyword4_data=null;
+		String url="baidu.com";
+		String remark_data="baidu";
+		
+		try{
+		 new WechatSendMessageController().sendMessage(place, Template_Id, Send_Type,url, first_data, keyword1_data, keyword2_data, keyword3_data, keyword4_data, remark_data);
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return 0;
+		}
+		
+		return 1;
+	}
 	
 	@RequestMapping("/aaa")
 	public @ResponseBody
