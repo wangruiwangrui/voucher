@@ -64,4 +64,6 @@ public interface RoomInfoDao {
 	public Map getAllRoomInfoPosition();
 	
 	public Map getAllHiddenAsset();
+	
+	public RoomInfo findRoomInfoByChartGUID(String chartGUID);
 }

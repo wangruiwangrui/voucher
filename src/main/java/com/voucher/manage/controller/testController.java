@@ -72,7 +72,7 @@ public class testController {
 	@RequestMapping("/chartInfo")
 	public @ResponseBody Map charInfo(@RequestParam Integer limit,@RequestParam
 			Integer offset){
-		return financeDAO.findOverdueChartInfo( limit, offset, "Charter", "", null);
+		return financeDAO.findOverdueChartInfo(limit, offset, "", "", 0, null);
 	}
 	
 	@RequestMapping("/send")

@@ -58,30 +58,52 @@
     <div class="row" >
     <div class="container">
      <div class="row" >
+        
+       <div class="col-xs-4 col-sm-3" 
+        style="text-align:center;">
+          <button id="generalChartInfo" class="button button-raised  button-circle button-jumbo"><i class="fa fa-envelope-open-o"></i></button>
+          <div><span>正常合同</span></div>
+        </div>
+        
         <div class="col-xs-4 col-sm-3" 
         style="text-align:center;">
           <button id="overdueChartInfo" class="button button-raised button-caution button-circle button-jumbo"><i class="fa fa-institution"></i></button>
-          <div><span>全部资产</span></div>
+          <div><span>已逾期合同</span></div>
         </div>
+  
        
-        <div class="col-xs-4 col-sm-3" 
-        style="text-align:center;">
-          <button id="hiddenNeaten" class="button button-raised  button-circle button-jumbo"><i class="fa fa-envelope-open-o"></i></button>
-          <div><span>整改记录</span></div>
-        </div>
-        
-        <div class="col-xs-4 col-sm-3" 
-        style="text-align:center;">
-          <button class="button button-raised button-highlight button-circle button-jumbo"><i class="fa fa-list-alt"></i></button>
-          <div><span>文件查看</span></div>
-        </div>
-       
-        
+
        </div>
       </div>
     
  
     <div class="container">
+     <div class="row" >
+     
+      <div class="col-xs-4 col-sm-3" 
+        style="text-align:center;">
+          <button id="allChartInfo" class="button button-raised button-highlight button-circle button-jumbo"><i class="fa fa-list-alt"></i></button>
+          <div><span>全部合同</span></div>
+        </div>
+     
+     <div class="col-xs-4 col-sm-3" 
+        style="text-align:center;">
+          <button id="successChartInfo" class="button button-raised  button-circle button-jumbo"><i class="fa fa-envelope-open-o"></i></button>
+          <div><span>已完成合同</span></div>
+        </div>
+     
+     <div class="col-xs-4 col-sm-3" 
+        style="text-align:center;">
+          <button id="historyOverdueChartInfo" class="button button-raised  button-circle button-jumbo"><i class="fa fa-envelope-open-o"></i></button>
+          <div><span>历史逾期合同</span></div>
+       </div>
+     
+       
+     </div>
+    </div>
+     
+      
+      <div class="container">
      <div class="row" >
      
        <div class="col-xs-4 col-sm-3" 
@@ -92,7 +114,6 @@
        
      </div>
     </div>
-     
       
      <div class="container">
      <div class="row" >
@@ -140,8 +161,24 @@
 	financeButton.setAttribute("class","button button-raised  button-circle button-jumbo corner");
 	*/
 	
+	$("#generalChartInfo").click(function(){
+		location.href="generalChartInfo.html";
+	});
+	
 	$("#overdueChartInfo").click(function(){
 		location.href="overdueChartInfo.html";
+	});
+	
+	$("#successChartInfo").click(function(){
+		location.href="successChartInfo.html";
+	});
+	
+	$("#historyOverdueChartInfo").click(function(){
+		location.href="historyOverdueChartInfo.html";
+	});
+	
+	$("#allChartInfo").click(function(){
+		location.href="allChartInfo.html";
 	});
 	
 </script>

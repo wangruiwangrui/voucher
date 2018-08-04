@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta content="" name="description"/>
     <meta content="webthemez" name="author"/>
-    <title>已逾期房屋出租合同</title>
+    <title>已完成房屋合同</title>
    <link rel='stylesheet' type='text/css' href='../../../css/bootstrap2.min.css'>
 	<link rel="stylesheet"
 	href="../../../assets/bootstrap-table/bootstrap.min.css"><!-- 必须注意引入顺序  -->
@@ -33,7 +33,7 @@
 
 <body>
         <div class="header">
-            <h1 class="page-header">已逾期合同列表</h1>
+            <h1 class="page-header">已完成房屋合同</h1>
         </div>
 
 
@@ -44,7 +44,7 @@
                         <div class="panel-body">
                             <div class="table-responsive">
                                 <table id="table" class="table " data-toggle="table" data-toolbar="#toolbar"
-                                       data-url="/voucher/mobile/finance/getOverdueChartInfo.do?isHistory=0" data-search="true"
+                                       data-url="/voucher/mobile/finance/getGeneralChartInfo.do?isHistory=1" data-search="true"
                                        data-show-refresh="true" data-show-toggle="true"
                                        data-side-pagination="server" data-pagination="true"
                                        data-show-columns="true" data-sort-order="desc">
@@ -122,6 +122,7 @@
         window.location.href = "hire.html?chartGUID="+chartGUID+"&name="+name+"&roomAddress="+roomAddress;
         
     }
+    
     
     function actionUser(value, row, index) {
         return [
