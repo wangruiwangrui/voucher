@@ -228,14 +228,29 @@
 
 <script type="text/javascript">
 
-var financeButton = document.getElementById("finance");
-/*
-var count=4;
+	var financeButton = document.getElementById("finance");
 
-financeButton.setAttribute("data-num",count);
+	$.get("/voucher/mobile/finance/findFirstClew.do",{
+		days:15
+	},function(text){
+		
+		if(text>0){
 
-financeButton.setAttribute("class","button button-raised  button-circle button-jumbo corner");
-*/
+			financeButton.setAttribute("data-num",text);
+
+			financeButton.setAttribute("class","button button-raised  button-circle button-jumbo corner");
+		}
+		
+		$.get("/voucher/mobile/asset/upUserAccessTime.do",{
+			parameter:"first"
+		},function(text){
+			
+		});
+		
+	});
+	
+	
+
 </script>
 
 </body>

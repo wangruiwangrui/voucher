@@ -25,6 +25,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.voucher.manage.dao.AssetCheckDAO;
 import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.dao.MobileDAO;
@@ -42,6 +44,8 @@ import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
+import com.voucher.manage.model.Users;
+import com.voucher.manage.service.UserService;
 import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.manage.tools.TestDistance;
@@ -62,6 +66,15 @@ public class BaiduMapController {
 	MobileDAO mobileDao=(MobileDAO) applicationContext.getBean("mobileDao");
 	
 	RoomInfoDao roomInfoDao=(RoomInfoDao) applicationContext.getBean("roomInfodao");
+	
+	AssetCheckDAO assetCheckDAO=(AssetCheckDAO) applicationContext.getBean("assetCheckdao");
+	
+	private UserService userService;
+	
+	@Autowired
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
 	
 	@RequestMapping("/get")
 	public @ResponseBody List test(String manageRegion) {		
@@ -345,14 +358,22 @@ public class BaiduMapController {
 	
 	@RequestMapping("getCheckByPosition")
 	public @ResponseBody Hidden_Check_Join getCheckByPosition(@RequestParam Double lng,
-			@RequestParam Double lat ,HttpServletRequest request){
+			@RequestParam Double lat ,@RequestParam String openId,HttpServletRequest request){
 		
 		Map searchMap=new HashMap<>();
         
         searchMap.put("[Position].lng=", String.valueOf(lng));
         searchMap.put("[Position].lat=", String.valueOf(lat));
         
-        Map map=hiddenDAO.selectAllHiddenCheck(1, 0, null, null,null, searchMap);
+        Users users=userService.getUserByOnlyOpenId(openId);
+        
+        Map map;
+        
+        if(users.getPlace()==3){
+        	map=assetCheckDAO.selectAllAssetCheck(1, 0, null, null,null, searchMap);
+        }else{
+        	map=hiddenDAO.selectAllHiddenCheck(1, 0, null, null,null, searchMap);
+        }
         
         Hidden_Check_Join hidden_Check_Join = null;
         
@@ -546,7 +567,24 @@ public class BaiduMapController {
 		searchMap.put("[Hidden_Check].date>",startTime);
 		searchMap.put("[Hidden_Check].date<",endTime);
 		
-		Map map=hiddenDAO.selectAllHiddenCheckPosition(1000, 0, "date", "asc", searchMap);
+		System.out.println("openId="+openId);
+		
+		Users users=userService.getUserByOnlyOpenId(openId);
+		
+		Map map;
+		
+		if(users.getPlace()==3){
+			Map searchMap2=new HashMap<>();
+			
+			searchMap2.put("[Assets_Check].campusAdmin=", openId);	
+			searchMap2.put("[Position].check_id !=", "");
+			searchMap2.put("[Assets_Check].date>",startTime);
+			searchMap2.put("[Assets_Check].date<",endTime);
+			
+			map=assetCheckDAO.selectAllAssetCheckPosition(1000, 0, "date", "asc", searchMap2);
+		}else{		
+			map=hiddenDAO.selectAllHiddenCheckPosition(1000, 0, "date", "asc", searchMap);
+		}
 		
 		/*
 		System.out.println("datepicker="+datepicker+" "+datepicker2);

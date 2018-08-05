@@ -1,20 +1,31 @@
 package com.voucher.manage.mytask;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.http.message.BasicNameValuePair;
+import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
+import com.voucher.manage.dao.FinanceDAO;
+import com.voucher.manage.daoModelJoin.Finance.HireList_ChartInfo_Join;
+import com.voucher.sqlserver.context.Connect;
 import com.voucher.weixin.base.CommonUtil;
+import com.voucher.weixin.controller.WechatSendMessageController;
 
 import common.HttpClient;
 
 
 @Component("taskJob")  
 public class TaskJob {  
+	
+	ApplicationContext applicationContext=new Connect().get();
+	
+	FinanceDAO financeDAO=(FinanceDAO) applicationContext.getBean("financeDao");
 	
 	private static final String requestUrl = "https://www.sojson.com/open/api/weather/json.shtml";
 	
@@ -33,4 +44,91 @@ public class TaskJob {
         System.out.println("json="+json);  
         
     }  
+    
+    public void sendMatureHire(){
+    	Map map=financeDAO.findMatureHire(15, 2, 0, "GUID", "", null);
+		List list=(List) map.get("rows");
+		
+		Iterator<HireList_ChartInfo_Join> iterator=list.iterator();
+		
+		String key2="";
+		
+		while (iterator.hasNext()) {
+			HireList_ChartInfo_Join hireList_ChartInfo_Join=iterator.next();
+			key2=key2+","+hireList_ChartInfo_Join.getRoomAddress();
+		}
+		
+		Integer place=4;
+		String Template_Id="yArnh7Tjzx07fXuuzz_AMd-gDa2Vo6eC3IH9dvqGjLA";
+		String Send_Type="租金到期提醒";
+		String first_data=" ";
+		
+		String allHire=(String) map.get("allHire");
+		Integer count= (Integer) map.get("count");
+		
+		String keyword1_data="共"+allHire+","+count+"户";		
+		
+		key2=key2+"......";
+		
+		String keyword2_data=key2;
+		
+		String matureTime=(String) map.get("matureTime");
+		
+		String keyword3_data=matureTime;
+		String keyword4_data=null;
+		String url="http://lzxlzc.com/voucher/mobile/assetAdmin/assetFinance/15matureChartInfo.html";
+		String remark_data="查看详情";
+		
+		try{
+			new WechatSendMessageController().sendMessage(place, Template_Id, Send_Type,url, first_data, keyword1_data, keyword2_data, keyword3_data, keyword4_data, remark_data);
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+
+    }
+    
+    public void sendMatureHire2(){
+    	Map map=financeDAO.findMatureHire(15, 2, 0, "GUID", "", null);
+		List list=(List) map.get("rows");
+		
+		Iterator<HireList_ChartInfo_Join> iterator=list.iterator();
+		
+		String key2="";
+		
+		while (iterator.hasNext()) {
+			HireList_ChartInfo_Join hireList_ChartInfo_Join=iterator.next();
+			key2=key2+","+hireList_ChartInfo_Join.getRoomAddress();
+		}
+		
+		Integer place=3;
+		String Template_Id="yArnh7Tjzx07fXuuzz_AMd-gDa2Vo6eC3IH9dvqGjLA";
+		String Send_Type="租金到期提醒";
+		String first_data=" ";
+		
+		String allHire=(String) map.get("allHire");
+		Integer count= (Integer) map.get("count");
+		
+		String keyword1_data="共"+allHire+","+count+"户";		
+		
+		key2=key2+"......";
+		
+		String keyword2_data=key2;
+		
+		String matureTime=(String) map.get("matureTime");
+		
+		String keyword3_data=matureTime;
+		String keyword4_data=null;
+		String url="http://lzxlzc.com/voucher/mobile/assetAdmin/assetFinance/15matureChartInfo.html";
+		String remark_data="查看详情";
+		
+		try{
+			new WechatSendMessageController().sendMessage(place, Template_Id, Send_Type,url, first_data, keyword1_data, keyword2_data, keyword3_data, keyword4_data, remark_data);
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+
+    }
+    
 }  

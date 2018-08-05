@@ -338,9 +338,11 @@ public class WechatSendMessageController {
 	    	keyword1.setValue(keyword1_data);
 	    	m.put("keyword1", keyword1);
 			TemplateData keyword2 = new TemplateData();
+			keyword2.setColor("#328392");
 			keyword2.setValue(keyword2_data);
 			m.put("keyword2", keyword2);
 			TemplateData keyword3 = new TemplateData();
+			keyword3.setColor("#328392");
 			keyword3.setValue(keyword3_data);
 			m.put("keyword3", keyword3);
 			

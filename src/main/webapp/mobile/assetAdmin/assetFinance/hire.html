@@ -27,7 +27,6 @@
     <script src="../../../js/bootstrap-table-zh-CN.min.js"></script>
     <script type="text/javascript" src="../../../bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 
-	<script type="text/javascript" src="../js/accessStat.js"></script>
 	<link rel="stylesheet" href="css/jquery-weui.css">
 	<link rel="stylesheet" href="css/weui.css"/>
 	<script src="../../../js/jquery-weui.js"></script>
@@ -115,7 +114,21 @@
     var head=document.getElementById("head");
     head.appendChild(span);
     
+    var place=0;
     
+    var xhm = new XMLHttpRequest();
+	xhm.open("GET", "/voucher/mobile/finance/selectPlace.do", false);
+	xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	xhm.send();
+
+	place = xhm.responseText;
+    
+	console.log("place="+place);
+	
+	if(place!=4){
+		$('#plus').addClass('disabled');
+	}
+	
     function checkFormatter(value,row,index){
 		
     	var state=(row.state);
@@ -196,7 +209,7 @@
     							url : url
     						});
     				    	
-    					$('#alertchar').text("收"+hireTime+"租金成功");
+    					$('#alertchar').text("收"+count+"租金成功");
     					setTimeout(function(){
     					 $('#alertdialog').modal("hide");
     					},1000);
@@ -227,9 +240,15 @@
     	var state=(row.state);
     	
     	if(state=="未交"){
-    		return [             
-                	'<button type="button" title="收租金" onclick="repayment(this);" class="btn btn-danger">收租金</button>'
+    		if(place!=4){
+    			return [             
+                	'<button type="button" title="收租金" onclick="repayment(this);" class="btn btn-danger disabled">收租金</button>'
             		].join('');
+    		}else{
+    			return [             
+                    	'<button type="button" title="收租金" onclick="repayment(this);" class="btn btn-danger">收租金</button>'
+                		].join('');
+    		}
     	}
     }
 

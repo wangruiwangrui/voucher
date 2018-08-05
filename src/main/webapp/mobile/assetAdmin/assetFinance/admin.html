@@ -21,10 +21,9 @@
 </script>
 
 <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
-<script type="text/javascript" src="js/index2.js"></script>
 
 <title>兴泸资产管理有限公司</title>
-<link rel="icon" href="../../img/xl.ico" type="image/x-icon">
+<link rel="icon" href="../../../img/xl.ico" type="image/x-icon">
 <!-- Buttons 库的核心文件 -->
   <link rel="stylesheet" href="css/buttons.css">
  
@@ -43,8 +42,8 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#"><img src="../../img/xl.ico" width="25px" height="25px"></a>
-        <a class="navbar-brand" href="#">资产管理助手</a>
+        <a class="navbar-brand" href="#"><img src="../../../img/xl.ico" width="25px" height="25px"></a>
+        <a class="navbar-brand" href="#">财务管理助手</a>
     </div>
     <div class="collapse navbar-collapse" id="example-navbar-collapse">
         <ul class="nav navbar-nav">
@@ -67,7 +66,7 @@
         
         <div class="col-xs-4 col-sm-3" 
         style="text-align:center;">
-          <button id="overdueChartInfo" class="button button-raised button-caution button-circle button-jumbo"><i class="fa fa-institution"></i></button>
+          <button id="overdueChartInfo" class="button button-raised button-caution button-circle button-jumbo"><i class="fa fa-envelope-open-o"></i></button>
           <div><span>已逾期合同</span></div>
         </div>
   
@@ -92,13 +91,13 @@
      
      <div class="col-xs-4 col-sm-3" 
         style="text-align:center;">
-          <button id="successChartInfo" class="button button-raised  button-circle button-jumbo"><i class="fa fa-envelope-open-o"></i></button>
+          <button id="successChartInfo" class="button button-raised button-action button-circle button-jumbo"><i class="fa fa-envelope-open-o"></i></button>
           <div><span>已完成合同</span></div>
         </div>
      
      <div class="col-xs-4 col-sm-3" 
         style="text-align:center;">
-          <button id="historyOverdueChartInfo" class="button button-raised  button-circle button-jumbo"><i class="fa fa-envelope-open-o"></i></button>
+          <button id="historyOverdueChartInfo" class="button button-raised button-caution button-circle button-jumbo"><i class="fa fa-envelope-open-o"></i></button>
           <div><span>历史逾期合同</span></div>
        </div>
      
@@ -152,14 +151,45 @@
 
 <script type="text/javascript">
 
-	var financeButton = document.getElementById("finance");
-	/*
-	var count=4;
+	$.get("/voucher/mobile/asset/upUserAccessTime.do",{
+		parameter:"finance"
+	},function(text){
+	
+	});
 
-	financeButton.setAttribute("data-num",count);
+	
 
-	financeButton.setAttribute("class","button button-raised  button-circle button-jumbo corner");
-	*/
+	$.get("/voucher/mobile/finance/findOverdueChartInfoClew.do",{
+		days:15
+	},function(text){
+		
+		var overdueChartInfoButton = document.getElementById("overdueChartInfo");
+		
+		if(text>0){
+
+			overdueChartInfoButton.setAttribute("data-num",text);
+
+			overdueChartInfoButton.setAttribute("class","button button-raised button-caution button-circle button-jumbo corner");
+		}
+				
+		
+	});
+	
+	$.get("/voucher/mobile/finance/findMatureHireClew.do",{
+		days:15
+	},function(text){
+		
+		var matureChartInfoButton = document.getElementById("15matureChartInfo");
+		
+		if(text>0){
+
+			matureChartInfoButton.setAttribute("data-num",text);
+
+			matureChartInfoButton.setAttribute("class","button button-raised  button-circle button-jumbo corner");
+		}
+				
+		
+	});
 	
 	$("#generalChartInfo").click(function(){
 		location.href="generalChartInfo.html";

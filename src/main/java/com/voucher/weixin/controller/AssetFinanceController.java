@@ -27,6 +27,7 @@ import com.voucher.manage.dao.MobileDAO;
 import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
+import com.voucher.manage.model.Users;
 import com.voucher.manage.service.UserService;
 import com.voucher.sqlserver.context.Connect;
 
@@ -53,6 +54,34 @@ public class AssetFinanceController {
 	@Autowired
 	public void setUserService(UserService userService) {
 		this.userService = userService;
+	}
+	
+	@RequestMapping("/findMatureHire")
+	public @ResponseBody Map findMatureHire(@RequestParam Integer days,@RequestParam Integer limit,@RequestParam
+			Integer offset,String sort,String order,String search){
+		
+		if(sort!=null&&!sort.equals("")){
+
+		}else{
+			sort="guid";
+		}
+		
+		if(order!=null&&!order.equals("")){
+		}else{
+			order="asc";
+		}
+		
+		Map searchMap=new HashMap<>();
+		
+		if(search!=null&&!search.equals("")){
+			
+			search="%"+search+"%";
+		
+			searchMap.put("Charter like ", search);
+		
+		}
+		
+		return financeDAO.findMatureHire(days, limit, offset, sort, order, searchMap);
 	}
 	
 	@RequestMapping("/getAllChartInfo")
@@ -208,6 +237,25 @@ public class AssetFinanceController {
 		
 		String[] filesString = file.split(",");
 
+		String openId=( String ) request.getSession().getAttribute("openId");
+		
+		System.out.println("openId="+openId);
+		
+		Users users;
+		
+		Integer place=0;
+		
+		if(openId!=null&&!openId.equals("")){
+			users=userService.getUserByOnlyOpenId(openId);
+			place=users.getPlace();
+		}else{
+			return 3;
+		}
+		
+		if(place!=4){
+			return 3;
+		}
+		
 		// 娑擄拷濞嗏�冲灩闂勩倕顦挎稉顏堟祩妞嬶拷
 		ArrayList<String> list=new ArrayList<>();
 		for (String fileString : filesString) {
@@ -216,8 +264,87 @@ public class AssetFinanceController {
 			
 		}
 		
-		return financeDAO.updateHireSetHireList(list);
+		return financeDAO.updateHireSetHireList(users,list);
  		
+	}
+	
+	@RequestMapping(value="selectPlace")
+	public @ResponseBody Integer selectPlace(HttpServletRequest request,
+			HttpServletResponse response){
+		
+		String openId=( String ) request.getSession().getAttribute("openId");
+		
+		Users users=userService.getUserByOnlyOpenId(openId);
+		
+		int place=users.getPlace();
+	    
+		return place;
+	}
+	
+	@RequestMapping("/findFirstClew")
+	public @ResponseBody int findFirstClew(@RequestParam Integer days,HttpServletRequest request,
+			HttpServletResponse response){
+		
+		String openId=( String ) request.getSession().getAttribute("openId");
+		
+		Users users=userService.getUserByOnlyOpenId(openId);
+		
+		int place=users.getPlace();
+		
+		if(place<3){
+			System.out.println("plcace1="+place);
+			return 0;
+		}else{
+			System.out.println("plcace2="+place);
+		}
+		
+		int c3=0;
+		
+		int c1=financeDAO.findMatureHireClew(openId,days);
+		
+		if(c1>0)
+			c3++;
+		
+		int c2=financeDAO.findOverdueChartInfoClew(openId);
+		
+		if(c2>0)
+			c3++;
+		
+		return c3;
+	}
+	
+	@RequestMapping("/findMatureHireClew")
+	public @ResponseBody int findMatureHireClew(@RequestParam Integer days,HttpServletRequest request,
+			HttpServletResponse response){
+		
+		String openId=( String ) request.getSession().getAttribute("openId");
+		
+		Users users=userService.getUserByOnlyOpenId(openId);
+		
+		int place=users.getPlace();
+		
+		if(place<3){
+			return 0;
+		}
+		
+		return financeDAO.findMatureHireClew(openId,days);
+	}
+	
+	@RequestMapping("/findOverdueChartInfoClew")
+	public @ResponseBody int findOverdueChartInfoClew(HttpServletRequest request,
+			HttpServletResponse response){
+		
+		String openId=( String ) request.getSession().getAttribute("openId");
+		
+		Users users=userService.getUserByOnlyOpenId(openId);
+		
+		int place=users.getPlace();
+		
+		if(place<3){
+			return 0;
+		}
+		
+		return financeDAO.findOverdueChartInfoClew(openId);
 	}
 	
 }

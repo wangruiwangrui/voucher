@@ -286,7 +286,7 @@
 		 var p = e.target;
 		//alert("marker的位置是" + p.getPosition().lng + "," + p.getPosition().lat);   
      		var xhm=new ActiveXObject("Microsoft.XMLHttp");
-	  				 xhm.open("GET","../baiduMap/getCheckByPosition.do?lng="+p.getPosition().lng+"&lat="+p.getPosition().lat,false);
+	  				 xhm.open("GET","../baiduMap/getCheckByPosition.do?lng="+p.getPosition().lng+"&lat="+p.getPosition().lat+"&openId="+openId,false);
 	  				 xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
 	  				 xhm.send();
 	   				var obj=JSON.parse(xhm.responseText);

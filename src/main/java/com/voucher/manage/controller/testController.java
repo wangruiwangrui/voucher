@@ -65,8 +65,19 @@ public class testController {
 	
 	@RequestMapping("/finan")
 	public @ResponseBody Map finan(@RequestParam Integer days,@RequestParam Integer limit,@RequestParam
-			Integer offset){
-		return financeDAO.findMatureHire(days, limit, offset, "", "", null);
+			Integer offset,String search){
+		
+		Map searchMap=new HashMap<>();
+		
+		if(search!=null&&!search.equals("")){
+			
+			search="%"+search+"%";
+		
+			searchMap.put("Charter like ", search);
+		
+		}
+		
+		return financeDAO.findMatureHire(days, limit, offset, "HireDate", "asc", searchMap);
 	}
 	
 	@RequestMapping("/chartInfo")
@@ -75,9 +86,19 @@ public class testController {
 		return financeDAO.findOverdueChartInfo(limit, offset, "", "", 0, null);
 	}
 	
+	@RequestMapping("/findMatureHireClew")
+	public @ResponseBody int findMatureHireClew(@RequestParam Integer days){
+		return financeDAO.findMatureHireClew("oKAqL1ndJNnmviHZlFuNOcKfJPXk",days);
+	}
+	
+	@RequestMapping("/findOverdueChartInfoClew")
+	public @ResponseBody int findOverdueChartInfoClew(){
+		return financeDAO.findOverdueChartInfoClew("oKAqL1ndJNnmviHZlFuNOcKfJPXk");
+	}
+	
 	@RequestMapping("/send")
 	public @ResponseBody Integer Send(){
-		Map map=financeDAO.findMatureHire(15, 2, 0, "", "", null);
+		Map map=financeDAO.findMatureHire(15, 2, 0, "guid", "", null);
 		List list=(List) map.get("rows");
 		
 		Iterator<HireList_ChartInfo_Join> iterator=list.iterator();
@@ -91,7 +112,7 @@ public class testController {
 		
 		Integer place=4;
 		String Template_Id="yArnh7Tjzx07fXuuzz_AMd-gDa2Vo6eC3IH9dvqGjLA";
-		String Send_Type="test";
+		String Send_Type="租金到期提醒";
 		String first_data=" ";
 		
 		String allHire=(String) map.get("allHire");
@@ -107,8 +128,8 @@ public class testController {
 		
 		String keyword3_data=matureTime;
 		String keyword4_data=null;
-		String url="baidu.com";
-		String remark_data="baidu";
+		String url="http://lzxlzc.com/voucher/mobile/assetAdmin/assetFinance/15matureChartInfo.html";
+		String remark_data="查看详情";
 		
 		try{
 		 new WechatSendMessageController().sendMessage(place, Template_Id, Send_Type,url, first_data, keyword1_data, keyword2_data, keyword3_data, keyword4_data, remark_data);

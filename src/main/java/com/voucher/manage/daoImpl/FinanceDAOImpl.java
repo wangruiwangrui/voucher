@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
@@ -21,12 +22,16 @@ import com.voucher.manage.dao.FinanceDAO;
 import com.voucher.manage.daoImpl.AssetsDAOImpl.allHire;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
 import com.voucher.manage.daoModel.TTT.HireList;
+import com.voucher.manage.daoModel.TTT.HirePay;
+import com.voucher.manage.daoModel.TTT.User_AccessTime;
 import com.voucher.manage.daoModelJoin.Finance.HireList_ChartInfo_Join;
 import com.voucher.manage.daoRowMapper.RowMappers;
+import com.voucher.manage.daoSQL.InsertExe;
 import com.voucher.manage.daoSQL.SelectExe;
 import com.voucher.manage.daoSQL.SelectJoinExe2;
 import com.voucher.manage.daoSQL.SelectSQL;
 import com.voucher.manage.daoSQL.UpdateExe;
+import com.voucher.manage.model.Users;
 import com.voucher.manage.singleton.Singleton;
 import com.voucher.manage.tools.TransMapToString;
 
@@ -36,21 +41,39 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO{
 	public Map findMatureHire(Integer days,Integer limit, Integer offset, String sort, String order, Map<String, String> search) {
 		// TODO Auto-generated method stub
 		
+		String startTime = null;
+		
+		String endTime = null;
+		
+		SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
+		
 		Calendar cal = Calendar.getInstance();  
-        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);  
-        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+		
+		startTime=sdf.format(cal.getTime());
+		
         cal.add(Calendar.DAY_OF_MONTH, days);
-        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM");
+        
+		endTime=sdf.format(cal.getTime());
+        
+        
+        System.out.println("startTime="+startTime+"   endTime="+endTime);
+        
+        String[] where={"convert(varchar(11),[HireList].HireDate ,120 )+'-'+ convert(varchar(2),[ChartInfo].[ChartEndDate] ,103 )>",startTime,
+				"convert(varchar(11),[HireList].HireDate ,120 )+'-'+ convert(varchar(2),[ChartInfo].[ChartEndDate] ,103 )<",endTime,
+				"State=","未交"};
+        
+		if(search!=null&&!search.isEmpty()){
+        	
+			search.put("convert(varchar(11),[HireList].HireDate ,120 )+'-'+ convert(varchar(2),[ChartInfo].[ChartEndDate] ,103 )>", startTime);
+			search.put("convert(varchar(11),[HireList].HireDate ,120 )+'-'+ convert(varchar(2),[ChartInfo].[ChartEndDate] ,103 )<", endTime);
+			search.put("State=","未交");
+			
+        	StringBuilder sb = new StringBuilder();
+        	
+        	where=TransMapToString.get(search);
+        	
+		}
 		
-        String matureTime = null;
-		
-        matureTime=sdf.format(cal.getTime());
-        
-        System.out.println("matureTime="+matureTime);
-        
-        String[] where={"convert(varchar(11),[HireList].HireDate ,120 )=",matureTime,
-        		"State=","未交"};
-        
 		HireList hireList=new HireList();
 		hireList.setLimit(limit);
 		hireList.setOffset(offset);
@@ -63,18 +86,30 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO{
 		chartInfo.setNotIn("GUID");
 		chartInfo.setWhere(where);
 		
+		if(sort!=null&&!sort.equals("")){
+			hireList.setSort(sort);
+			hireList.setOrder(order);
+		}
+		
+		if(order!=null&&order.equals("")){
+			chartInfo.setSort(sort);
+			chartInfo.setOrder(order);
+		}
+				
 		HireList_ChartInfo_Join hireList_ChartInfo_Join=new HireList_ChartInfo_Join();
 		
-		Object[] objects={hireList,chartInfo};
+		Object[] objects={chartInfo,hireList};
 		
-		String[][] join={{"ChartGUID","GUID"}};
+		String[][] join={{"GUID","ChartGUID"}};
 		
 		List list=SelectJoinExe2.get(this.getJdbcTemplate(), objects, hireList_ChartInfo_Join, join);
 		
 		int total=(int) SelectJoinExe2.getCount(this.getJdbcTemplate(), objects, join).get("");
 		
-		String sql2="SELECT sum([Hire]) as allHire,count(*) as count from HireList where "
-				+ "convert(varchar(11),[HireList].HireDate ,120 )='"+matureTime+"' and "
+		String sql2="SELECT sum([HireList].[Hire]) as allHire,count(*) as count from HireList left join ChartInfo "
+				+ "on [HireList].ChartGUID=[ChartInfo].GUID where "
+				+ "convert(varchar(11),[HireList].HireDate ,120 )+'-'+ convert(varchar(2),[ChartInfo].[ChartEndDate] ,103 )>'"+startTime+"' and "
+				+ "convert(varchar(11),[HireList].HireDate ,120 )+'-'+ convert(varchar(2),[ChartInfo].[ChartEndDate] ,103 )<'"+endTime+"' and "
 				+ "State='未交'";
 		
 		List list2=this.getJdbcTemplate().query(sql2,new allHire());
@@ -95,7 +130,7 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO{
 		
 		map.put("allHire", df.format(allHire)+"万元");
 		
-		map.put("matureTime", matureTime);
+		map.put("matureTime", startTime+" 至  "+endTime);
 		
 		return map;
 	}
@@ -122,6 +157,63 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO{
 		
 	}
 
+	
+	@Override
+	public Integer findMatureHireClew(String openId, Integer days) {
+		// TODO Auto-generated method stub
+		String startTime = null;
+		
+		String endTime = null;
+		
+		SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
+		
+		Calendar cal = Calendar.getInstance();  
+		
+		startTime=sdf.format(cal.getTime());
+		
+        cal.add(Calendar.DAY_OF_MONTH, days);
+        
+		endTime=sdf.format(cal.getTime());
+		
+		String sql="SELECT sum([HireList].[Hire]) as allHire,count(*) as count from HireList left join ChartInfo "
+				+ "on [HireList].ChartGUID=[ChartInfo].GUID where "
+				+ "convert(varchar(11),[HireList].HireDate ,120 )+'-'+ convert(varchar(2),[ChartInfo].[ChartEndDate] ,103 )>'"+startTime+"' and "
+				+ "convert(varchar(11),[HireList].HireDate ,120 )+'-'+ convert(varchar(2),[ChartInfo].[ChartEndDate] ,103 )<'"+endTime+"' and "
+				+ "State='未交'";
+		
+		List list=this.getJdbcTemplate().query(sql,new allHire());
+		
+		Map HireMap=(Map) list.get(0);
+		
+		int  count=(int) HireMap.get("count");
+		
+		User_AccessTime user_AccessTime=new User_AccessTime();
+
+		String[] where={"open_id=",openId};
+		
+		user_AccessTime.setLimit(1);
+		user_AccessTime.setOffset(0);
+		user_AccessTime.setNotIn("open_id");
+		user_AccessTime.setWhere(where);
+		
+		try{
+			List list2=SelectExe.get(this.getJdbcTemplate(), user_AccessTime);
+			user_AccessTime=(User_AccessTime) list2.get(0);
+			Date matureChartInfo=user_AccessTime.getMatureChartInfo();
+			String matureDate=sdf.format(matureChartInfo);
+			
+			if(matureDate.equals(startTime)){
+				return 0;
+			}
+			
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		return count;
+	}
+	
 	
 	@Override
 	public Map findGeneralChartInfo(Integer limit, Integer offset, String sort, String order, Integer isHistory,
@@ -356,6 +448,67 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO{
 		return map;
 	}
 
+	
+
+	@Override
+	public Integer findOverdueChartInfoClew(String openId) {
+		// TODO Auto-generated method stub
+		Calendar cal = Calendar.getInstance();  
+        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);  
+        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM");
+		
+        String matureTime = null;
+		
+        matureTime=sdf.format(cal.getTime());
+        
+        User_AccessTime user_AccessTime=new User_AccessTime();
+
+		String[] where={"open_id=",openId};
+		
+		user_AccessTime.setLimit(1);
+		user_AccessTime.setOffset(0);
+		user_AccessTime.setNotIn("open_id");
+		user_AccessTime.setWhere(where);
+		
+		String matureDate=null;
+		
+		try{
+			List list2=SelectExe.get(this.getJdbcTemplate(), user_AccessTime);
+			user_AccessTime=(User_AccessTime) list2.get(0);
+			Date matureChartInfo=user_AccessTime.getOverdueChartInfo();
+			matureDate=sdf.format(matureChartInfo);
+						
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+        
+		String sql = null;
+		
+		if(matureDate==null||matureDate.equals("")){
+			sql="select COUNT(*) from "+
+    			"ChartInfo left join ( "+
+    			"select ChartGUID,COUNT(*)as c from [HireList] "+
+    			"where [HireList].State='未交' and convert(varchar(11),[HireList].HireDate ,120 )<'"+matureTime+"' group by "+
+    			"[HireList].ChartGUID ) t2 on ChartInfo.GUID=t2.ChartGUID where "+
+    			"IsHistory=0 and "+
+    			"ChartGUID is not null ";
+		}else{
+			sql="select COUNT(*) from "+
+	    			"ChartInfo left join ( "+
+	    			"select ChartGUID,COUNT(*)as c from [HireList] "+
+	    			"where [HireList].State='未交' and convert(varchar(11),[HireList].HireDate ,120 )<'"+matureTime+"' "+
+	    			"and convert(varchar(11),[HireList].HireDate ,120 )>'"+matureDate+"' group by "+
+	    			"[HireList].ChartGUID ) t2 on ChartInfo.GUID=t2.ChartGUID where "+
+	    			"IsHistory=0 and "+
+	    			"ChartGUID is not null ";
+		}
+		
+        int count=(int) this.getJdbcTemplate().queryForMap(sql).get("");
+        
+		return count;
+	}
 
 	@Override
 	public Map findAllChartInfo(Integer limit, Integer offset, String sort, String order, Map<String, String> search) {
@@ -418,8 +571,22 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO{
 
 
 	@Override
-	public Integer updateHireSetHireList(List files) {
+	public Integer updateHireSetHireList(Users users,List files) {
 		// TODO Auto-generated method stub
+		
+		String openId=users.getOpenId();
+		String name=users.getName();
+		
+		float amount = 0;
+		
+		String printMemo = "";
+		
+		String chartGUID = null;
+		
+		String hireGUID = null;
+		
+		String payGUID=UUID.randomUUID().toString();
+		
 		if(!files.isEmpty()){
             try {
             	int u=0;
@@ -435,7 +602,10 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO{
                     	HireList hireList=new HireList();
                     	hireList.setState("已交");
                     	hireList.setOptDate(date);
+                    	hireList.setOperator(name);
+                    	hireList.setOpen_id(openId);
                     	hireList.setWhere(where);                    	
+                    	hireList.setPayGUID(payGUID);
                     	
                     	u=UpdateExe.get(this.getJdbcTemplate(), hireList);
                     	
@@ -443,9 +613,37 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO{
                     		TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                     		return 0;
                     	}
-
+                    	
+                    	hireList.setLimit(1);
+                    	hireList.setOffset(0);
+                    	hireList.setNotIn("GUID");
+                    	
+                    	HireList hireList2=(HireList) SelectExe.get(this.getJdbcTemplate(), hireList).get(0);
+                    	
+                    	amount=amount+hireList2.getHire();                    	
+                    	printMemo=printMemo+"  "+hireList2.getHireDate();                   	
+                    	chartGUID=hireList2.getChartGUID();                    	
+                    	hireGUID=hireList2.getHireGUID();
                 }
 
+
+                HirePay hirePay=new HirePay();
+                
+                hirePay.setGUID(payGUID);
+                hirePay.setAmount(amount);
+                hirePay.setOperator(name);
+                hirePay.setOpen_id(openId);
+                hirePay.setPrintMemo(printMemo);
+                hirePay.setChartGUID(chartGUID);
+                hirePay.setHireGUID(hireGUID);
+                
+                u=InsertExe.get(this.getJdbcTemplate(), hirePay);
+                
+                if(u==0){
+            		TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            		return 0;
+            	}
+                
                 return u;
                
             } catch (Exception e) {
@@ -460,6 +658,7 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO{
         }
 		
 	}
+
 			
 	
 }

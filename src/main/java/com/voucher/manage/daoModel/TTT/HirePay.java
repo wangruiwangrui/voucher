@@ -26,6 +26,9 @@ public class HirePay implements Serializable{
     @SQLString(name="Operator")
 	private String Operator;
 
+    @SQLString(name="open_id")
+	private String open_id;
+
     @SQLDateTime(name="OptDate")
 	private Date OptDate;
 
@@ -76,6 +79,14 @@ public class HirePay implements Serializable{
 
 	public String getOperator(){
 		return Operator;
+	}
+
+	public void setOpen_id(String open_id){
+		this.open_id = open_id;
+	}
+
+	public String getOpen_id(){
+		return open_id;
 	}
 
 	public void setOptDate(Date OptDate){

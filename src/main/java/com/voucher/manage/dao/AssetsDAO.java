@@ -8,6 +8,7 @@ import com.voucher.manage.daoModel.Assets.Hidden_Assets;
 import com.voucher.manage.daoModel.Assets.Hidden_Data;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
+import com.voucher.manage.daoModel.TTT.User_AccessTime;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Data_Join;
 
 public interface AssetsDAO {
@@ -112,4 +113,10 @@ public interface AssetsDAO {
 			String order,String term,String searchTerm,Map search,Integer type);
 	
 	public Map<String, Object> findAllHire(String term,Map search);
+	
+	public List<User_AccessTime> selectUserAccessTime(String openId);
+	
+	public Integer insertUserAccessTime(User_AccessTime user_AccessTime);
+	
+	public Integer upUserAccessTime(User_AccessTime user_AccessTime);
 }

@@ -19,10 +19,10 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import com.voucher.manage.mapper.UsersMapper;
 import com.voucher.manage.model.Users;   
   
-public class MobileAssetCheckIsLoginFilter implements Filter {   
+public class MobileAssetFinanceIsLoginFilter implements Filter {   
 	private UsersMapper usersMapper;
 	
-    public FilterConfig config4=null;
+    public FilterConfig config5=null;
     @Override  
     public void destroy() {   
   
@@ -34,10 +34,10 @@ public class MobileAssetCheckIsLoginFilter implements Filter {
     	  HttpServletRequest hrequest = (HttpServletRequest)request;
 	        HttpServletResponseWrapper wrapper = new HttpServletResponseWrapper((HttpServletResponse) response);
 	        
-	        String loginStrings = config4.getInitParameter("loginStrings");        
-	        String includeStrings = config4.getInitParameter("includeStrings");    
-	        String redirectPath = hrequest.getContextPath() + config4.getInitParameter("redirectPath");
-	        String disabletestfilter = config4.getInitParameter("disabletestfilter");
+	        String loginStrings = config5.getInitParameter("loginStrings");        
+	        String includeStrings = config5.getInitParameter("includeStrings");    
+	        String redirectPath = hrequest.getContextPath() + config5.getInitParameter("redirectPath");
+	        String disabletestfilter = config5.getInitParameter("disabletestfilter");
 	        
 
 	        String[] loginList = loginStrings.split(";");
@@ -72,7 +72,7 @@ public class MobileAssetCheckIsLoginFilter implements Filter {
 	        	Users users=usersMapper.getUserByOnlyOpenId(openId);
 	        	System.out.println("MobileAssetCheckIsLoginFilter openId ="+openId);
 	        	System.out.println("place ="+users.getPlace());
-	           if(users.getPlace()==3||users.getPlace()==5){  //通过place判断用户的访问权限，数字越大权限越高
+	           if(users.getPlace()>=3){  //通过place判断用户的访问权限，数字越大权限越高
 	             chain.doFilter(request, response);
 	            }else{
 	        	 wrapper.sendRedirect(redirectPath);
@@ -83,6 +83,6 @@ public class MobileAssetCheckIsLoginFilter implements Filter {
   
     @Override  
     public void init(FilterConfig filterConfig) throws ServletException {   
-    	config4 = filterConfig;
+    	config5 = filterConfig;
     }
 }   
