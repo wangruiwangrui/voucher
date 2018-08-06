@@ -57,7 +57,7 @@
                                         <th data-align="left" data-field="chartEndDate" data-formatter="actionTime" data-sortable="true">结束日期</th>                            
                                         <th data-align="left" data-field="roomAddress" data-formatter="actionAddress">地址</th>
                                         <th data-align="left" data-field="contractNo" >合同编号</th>
-                                        <th data-align="left" data-field="chartGUID" >合同ID</th>
+                                        <th data-align="left" data-field="chartGUID" data-visible="false">合同ID</th>
                                     </tr>
                                     </thead>
                                 </table>
@@ -112,74 +112,67 @@
                 	// '<a  href="javascript:void(0)" onclick="report(this);" title="点击查看征信报告">',
                 	// '&nbsp;<img src="img/detail.jpg" width="25px" height="25px">&nbsp;',
                 	// '</a>&nbsp;',
-                	'<button type="button" title="查看详情" onclick="repayment(this);" class="btn btn-success">查看详情</button>'
+                	'<button type="button" title="查看详情"  class="btn btn-success">查看详情</button>'
             		].join('');
     }
 
-    function repayment(temp){
-        var hang = $(temp.parentNode).parent().prevAll().length + 1;
-        var chartGUID =encodeURI(document.getElementById("table").rows[hang].cells[8].innerHTML);
+    $('#table').on("click-cell.bs.table",function(e, row, $element,field) {
+
+        console.log(row+"  "+field.contractNo+"  "+field.guid);
         
-        var name=encodeURI(document.getElementById("table").rows[hang].cells[0].innerHTML);
-        
-        var roomAddress=encodeURI(document.getElementById("table").rows[hang].cells[6].innerHTML);
-        
-        window.location.href = "hire.html?chartGUID="+chartGUID+"&name="+name+"&roomAddress="+roomAddress;
-        
-    }
+        if(row=="status"){
+        	var chartGUID =encodeURI(field.guid);
+        	var name=encodeURI(field.charter);
+        	var roomAddress=encodeURI(field.roomAddress);
+        	window.location.href = "hire.html?chartGUID="+chartGUID+"&name="+name+"&roomAddress="+roomAddress;
+        }else if(row=="charter"){
+        	var idNo = field.idno;
+        	
+        	$.get("/voucher/mobile/finance/getChartInfoByIdNo.do", {
+            	idNo:idNo
+            },function(text){
+            	
+            	var json = $.parseJSON(text);
+            	
+            	console.log(json.guid);
+            	
+            	var chartGUID=encodeURI(json.guid);
+            	
+            	window.location.href = "assetChartState.html?chartGUID="+chartGUID;
+            });
+        	
+        }else if(row=="roomAddress"){
+        	var idNo = field.idno;
+        	$.get("/voucher/mobile/finance/getRoomInfoByIdNo.do", {
+            	idNo:idNo
+            },function(text){
+            	
+            	var json = $.parseJSON(text);
+            	
+            	console.log(json.guid);
+            	
+            	var guid=encodeURI(json.guid);
+            	
+            	window.location.href = "assetChartDetail.html?guid="+guid;
+            });
+        }
+    });
     
+ 
     
     function actionUser(value, row, index) {
         return [
-            '<a  href="javascript:void(0)" onclick="getUser(this);" title="点击查看用户详情">',
+            '<a  href="javascript:void(0)" title="点击查看用户详情">',
             value,
             '</a>'].join('');
     }
     
-    function getUser(temp){
-        
-    	var hang = $(temp.parentNode).parent().prevAll().length + 1;
-        var idNo =encodeURI(document.getElementById("table").rows[hang].cells[1].innerHTML);
-        
-        $.get("/voucher/mobile/finance/getChartInfoByIdNo.do", {
-        	idNo:idNo
-        },function(text){
-        	
-        	var json = $.parseJSON(text);
-        	
-        	console.log(json.guid);
-        	
-        	var chartGUID=encodeURI(json.guid);
-        	
-        	window.location.href = "assetChartState.html?chartGUID="+chartGUID;
-        });
-    }
-    
+       
     function actionAddress(value, row, index) {
         return [
-            '<a  href="javascript:void(0)" onclick="getAddress(this);" title="点击查看用户详情">',
+            '<a  href="javascript:void(0)"  title="点击查看用户详情">',
             value,
             '</a>'].join('');
-    }
-    
-    function getAddress(temp){
-    	
-    	var hang = $(temp.parentNode).parent().prevAll().length + 1;
-        var idNo =encodeURI(document.getElementById("table").rows[hang].cells[1].innerHTML);
-        
-    	$.get("/voucher/mobile/finance/getRoomInfoByIdNo.do", {
-        	idNo:idNo
-        },function(text){
-        	
-        	var json = $.parseJSON(text);
-        	
-        	console.log(json.guid);
-        	
-        	var guid=encodeURI(json.guid);
-        	
-        	window.location.href = "assetChartDetail.html?guid="+guid;
-        });
-        
     }
     
     function actionTime(value, row, index){

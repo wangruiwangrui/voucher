@@ -60,10 +60,9 @@
                                         <th data-align="left" data-field="hire">金额</th>
                                         <th data-align="left" data-field="state" data-sortable="true" data-formatter="statusFormatter">状态</th>
                                         <th data-align="left" data-field="guid" data-formatter="actionHire">收租金</th>
-                                        <th data-align="left" data-field="hireDate" data-sortable="true">日期</th>                               
+                                        <th data-align="left" data-field="hireDate" data-sortable="true">租金月份</th>                               
 										<th data-align="left" data-field="operator" >操作人</th>
 										<th data-align="left" data-field="optDate" data-formatter="actionTime">操作日期</th>
-										<th data-align="left" data-field="guid">租金ID</th>
                                     </tr>
                                     </thead>
                                 </table>
@@ -242,16 +241,73 @@
     	if(state=="未交"){
     		if(place!=4){
     			return [             
-                	'<button type="button" title="收租金" onclick="repayment(this);" class="btn btn-danger disabled">收租金</button>'
+                	'<button type="button" title="收租金"  class="btn btn-danger disabled">收租金</button>'
             		].join('');
     		}else{
     			return [             
-                    	'<button type="button" title="收租金" onclick="repayment(this);" class="btn btn-danger">收租金</button>'
+                    	'<button type="button" title="收租金"  class="btn btn-danger">收租金</button>'
                 		].join('');
     		}
     	}
     }
 
+    
+    $('#table').on("click-cell.bs.table",function(e, row, $element,field) {
+
+        console.log(row);
+        
+        var hireGUID=field.guid;
+        var hireTime=field.hireDate;
+        
+        if(row=="guid"){
+
+        	var roomAddress=encodeURI(field.roomAddress);
+        	var form = "";
+     		
+     		form=form+hireGUID;
+     			
+       		$.confirm("确认收取"+hireTime+"的租金", function() {
+    	        //点击确认后的回调函数
+    	            	
+       			$.post("/voucher/mobile/finance/uploadFilesHireList.do", {
+    				file : form
+    			}, function(text) {
+    				if (text == 1) {				
+
+    						/*
+    						 * 刷新页面
+    						 */
+    					    url="/voucher/mobile/finance/getHireListByGUID.do?chartGUID="+chartGUID;
+
+    				    	$(" #table").bootstrapTable('refresh',{
+    							url : url
+    						});
+    				    	
+    					$('#alertchar').text("收"+hireTime+"租金成功");
+    					setTimeout(function(){
+    					 $('#alertdialog').modal("hide");
+    					},1000);
+    				} else {
+    					if(text==0){
+    						$('#alertchar').text("收租金失败");
+    					}else if(text==2){
+    						$('#alertchar').text("租金月份无效");
+    					}else if(text==3){
+    						$('#alertchar').text("没有收租金权限");
+    					}
+    					$('#alertdialog').modal("show");
+    					setTimeout(function(){
+    						 $('#alertdialog').modal("hide");
+    						},1000);
+    					}
+    				});
+    	    			
+    	           }, function() {
+    	    				//点击取消后的回调函数	  
+    	    			
+    	    });
+        }
+    });
     
     function repayment(temp){
         var hang = $(temp.parentNode).parent().prevAll().length + 1;

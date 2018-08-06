@@ -61,19 +61,19 @@
        <div class="col-xs-4 col-sm-3" 
         style="text-align:center;">
           <button id="generalChartInfo" class="button button-raised  button-circle button-jumbo"><i class="fa fa-envelope-open-o"></i></button>
-          <div><span>正常合同</span></div>
+          <div><span>租金正常客户</span></div>
         </div>
         
         <div class="col-xs-4 col-sm-3" 
         style="text-align:center;">
           <button id="overdueChartInfo" class="button button-raised button-caution button-circle button-jumbo"><i class="fa fa-envelope-open-o"></i></button>
-          <div><span>已逾期合同</span></div>
+          <div><span>租金已逾期客户</span></div>
         </div>
   
        <div class="col-xs-4 col-sm-3" 
         style="text-align:center;">
           <button id="15matureChartInfo" class="button button-raised  button-circle button-jumbo"><i class="fa fa-envelope-open-o"></i></button>
-          <div><span>15天内到期合同</span></div>
+          <div><span>15天内租金到期客户</span></div>
         </div>
 
        </div>
@@ -86,19 +86,19 @@
       <div class="col-xs-4 col-sm-3" 
         style="text-align:center;">
           <button id="allChartInfo" class="button button-raised button-highlight button-circle button-jumbo"><i class="fa fa-list-alt"></i></button>
-          <div><span>全部合同</span></div>
+          <div><span>全部客户</span></div>
         </div>
      
      <div class="col-xs-4 col-sm-3" 
         style="text-align:center;">
           <button id="successChartInfo" class="button button-raised button-action button-circle button-jumbo"><i class="fa fa-envelope-open-o"></i></button>
-          <div><span>已完成合同</span></div>
+          <div><span>租金已完成客户</span></div>
         </div>
      
      <div class="col-xs-4 col-sm-3" 
         style="text-align:center;">
           <button id="historyOverdueChartInfo" class="button button-raised button-caution button-circle button-jumbo"><i class="fa fa-envelope-open-o"></i></button>
-          <div><span>历史逾期合同</span></div>
+          <div><span>历史租金逾期客户</span></div>
        </div>
      
        
@@ -139,6 +139,7 @@
          text-align: center;
          width: 25px;
          height: 25px;
+         font-size:14px;
          border-radius: 50%;
          background-color: red;
          position: absolute;
@@ -166,7 +167,11 @@
 		var overdueChartInfoButton = document.getElementById("overdueChartInfo");
 		
 		if(text>0){
-
+			
+			if(text>100){
+				text="•••";
+			}
+			
 			overdueChartInfoButton.setAttribute("data-num",text);
 
 			overdueChartInfoButton.setAttribute("class","button button-raised button-caution button-circle button-jumbo corner");
@@ -178,6 +183,10 @@
 	$.get("/voucher/mobile/finance/findMatureHireClew.do",{
 		days:15
 	},function(text){
+		
+		if(text>100){
+			text="•••";
+		}
 		
 		var matureChartInfoButton = document.getElementById("15matureChartInfo");
 		
