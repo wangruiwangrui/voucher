@@ -221,7 +221,7 @@ public class AssetCheckController {
 		
 		Hidden_Check_Join assets_Check_Join= (Hidden_Check_Join) list.get(0);
 		
-		List fileBytes=mobileDao.allCheckImageByGUID(request, assets_Check_Join);
+		List fileBytes=mobileDao.allAssetCheckImageByGUID(request, assets_Check_Join);
 		
 		result.put("assets_Check", assets_Check_Join);
 		result.put("fileBytes", fileBytes);
@@ -344,7 +344,7 @@ public class AssetCheckController {
 		
 		int total=(int) map.get("total");
 		
-		Map fileBytes=mobileDao.checkImageQuery(request,list);
+		Map fileBytes=mobileDao.assetCheckImageQuery(request,list);
 		
 		Map result=new HashMap<>();
 		

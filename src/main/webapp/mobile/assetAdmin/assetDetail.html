@@ -17,6 +17,8 @@
 <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=cR98TwX2FnKTpANIOYhMYMot9a4ioxjc"></script>
 <script type="text/javascript" src="https://api.map.baidu.com/library/CurveLine/1.5/src/CurveLine.min.js"></script>
 <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<link rel="stylesheet" href="css/jquery-weui.css">
+<script src="../../js/jquery-weui.js"></script>
 </head>
 
 <body>
@@ -350,16 +352,38 @@
                       	  	div.appendChild(img);
                       	   		
                       	  	div2=document.createElement("div");
-                      	  		div2.setAttribute("class","weui-media-box__bd");
-                      	 		h4=document.createElement("h4");
-                      	 		h4.setAttribute("class","weui-media-box__title");                      	 		
-                      	  	 	p=document.createElement("p");
-                      	  	 	p.setAttribute("class","weui-media-box__desc");
-                      	  		p.innerHTML=name;
-                      	     div2.appendChild(h4);
-                      	     div2.appendChild(p);
+                      	  	div2.setAttribute("class","weui-media-box__bd");
+                      	 	h4=document.createElement("h4");
+                      	 	h4.setAttribute("class","weui-media-box__title");                      	 		
+                      	  	p=document.createElement("p");
+                      	  	p.setAttribute("class","weui-media-box__desc");
+                      	  	p.innerHTML=name;                      	  		
+                      	    div2.appendChild(h4);
+                      	    div2.appendChild(p);
                       	   a.appendChild(div);
                       	   a.appendChild(div2);
+                      	   var label=document.createElement("label");
+                      	   label.setAttribute("class","weui-cell weui-check__label");
+                      	   var div3=document.createElement("div");
+                      	   div3.setAttribute("class","weui-cell__ft");
+                      	   var input=document.createElement("input");
+                      	   input.setAttribute("type","radio");
+                      	   input.setAttribute("name","name");
+                      	   input.setAttribute("id",data.guid);
+                      	   if(data.sequence==1){
+                      		 input.setAttribute("checked","checked");
+                      	   }
+                      	 	var span3=document.createElement("span");
+                      	 	span3.setAttribute("class","weui-icon-checked");
+                      	 	input.appendChild(span3);
+                      	 	div3.appendChild(input);
+                      	 	label.appendChild(div3);
+                      	   var button=document.createElement("button");
+                      	   button.setAttribute("id",data.guid);
+                      	   button.setAttribute("class","weui-btn weui-btn_mini weui-btn_plain-default");
+               	  		   button.innerHTML="删除图片";
+               	  		   a.appendChild(label);
+                      	   a.appendChild(button);
                       	   panel.appendChild(a);
                	      	  $("#img").append(panel);
                       }
@@ -596,6 +620,45 @@
          current : current
      };
      previewImage.start(obj);
+ });
+ 
+ 
+ im.delegate(document.querySelector('#img'), 'click','button',function(){
+	 
+     var guid=this.id;
+
+     $.confirm("是否确定要删除图片"+guid+" ? ", function() {
+	        //点击确认后的回调函数
+
+			$.post("/voucher/mobile/asset/deleteFileSelfBelongByGUID.do", {
+				guid : guid
+			}, function(text) {
+				if (text == 1) {				
+						
+					location.reload();
+					
+				} else {
+					 alert("删除失败");
+					}
+				});
+	    			
+	           }, function() {
+	    				//点击取消后的回调函数	  
+	    			
+	    });
+ });
+ 
+ im.delegate(document.querySelector('#img'), 'click','input',function(){
+	 
+     var guid=this.id;
+     
+     $.post("/voucher/mobile/asset/upSequenceByGUID.do", {
+			guid:guid
+		}, function(text) {
+			
+		});
+
+     
  });
  
 </script>

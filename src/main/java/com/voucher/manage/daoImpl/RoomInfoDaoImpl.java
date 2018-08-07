@@ -339,6 +339,8 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		// TODO Auto-generated method stub
 		FileSelfBelong fileSelfBelong=new FileSelfBelong();
 		
+		Date date=new Date();
+		
 		String GUID=UUID.randomUUID().toString();
 		
 		fileSelfBelong.setGUID(GUID);
@@ -346,6 +348,8 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		fileSelfBelong.setUpFileFullName(UpFileFullName);
 		fileSelfBelong.setFileType(FileType);
 		fileSelfBelong.setFileBelong("房屋图片");
+		fileSelfBelong.setSequence(0);
+		fileSelfBelong.setDate_time(date);
 		
 		String[] where={"[FileSelfBelong].RoomGUID=",RoomGUID,
 				"[FileSelfBelong].FileBelong=","房屋图片"};

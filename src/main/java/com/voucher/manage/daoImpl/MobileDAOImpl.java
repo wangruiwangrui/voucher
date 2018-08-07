@@ -295,6 +295,66 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 
 	
 	@Override
+	public Map<String, Object> assetCheckImageQuery(HttpServletRequest request,List guidLits) {
+		// TODO Auto-generated method stub
+	
+		String pathRoot = System.getProperty("user.home");
+	
+		String filePath=pathRoot+Singleton.filePath;
+        
+		String imgPath=request.getSession().getServletContext().getRealPath(Singleton.filePath);
+		
+		//List<byte[]> fileBytes=new ArrayList<byte[]>();
+		
+		Map fileBytes=new HashMap<>();
+		
+		Iterator<Hidden_Check_Join> iterator=guidLits.iterator();
+	
+		while(iterator.hasNext()){			
+		
+			Hidden_Check_Join hidden_Check_Join = iterator.next();
+		
+			String Check_id=hidden_Check_Join.getCheck_id();
+		
+			String sql="SELECT top 1 "+    
+				"[Assets_Check_Date].Check_id, "+
+			    "[Assets_Check_Date].URI, "+
+				"[Assets_Check_Date].date, "+
+			    "[Assets_Check_Date].NAME "+
+				"FROM "+
+				"[Assets_Check_Date] left join [Assets_Check] on [Assets_Check_Date].Check_id=[Assets_Check].Check_id "+  
+				"where [Assets_Check_Date].Check_id='"+Check_id+"'  "+
+				"AND ([Assets_Check_Date].TYPE ='png ' OR [Assets_Check_Date].TYPE ='jpg ' OR [Assets_Check_Date].TYPE ='jpeg ' OR [Assets_Check_Date].TYPE ='gif ' ) "+
+				"order by [Assets_Check_Date].date desc ";
+		
+			List hidden_Data_Joins=this.getJdbcTemplate().query(sql,new checkImageQueryRowMapper());
+		
+			try{
+				Hidden_Check_Date hidden_Check_Date=(Hidden_Check_Date) hidden_Data_Joins.get(0);
+							
+				//String fileByte=Base64Test.getImageStr(filePath+"\\"+hidden_Data_Join.getURI());
+				
+				String oldFile=filePath+"\\"+hidden_Check_Date.getURI();
+				
+				CopyFile.set(imgPath, oldFile, hidden_Check_Date.getURI());
+				
+				fileBytes.put(Check_id, Singleton.filePath+"\\compressFile\\"+hidden_Check_Date.getURI());
+		
+			}catch (Exception e) {
+			// TODO: handle exception
+				//e.printStackTrace();
+			}
+		
+		}
+	
+
+		MyTestUtil.print(fileBytes);
+		
+		return fileBytes;
+	}
+	
+	
+	@Override
 	public List allCheckImageByGUID(HttpServletRequest request,Hidden_Check_Join hidden_Check_Join) {
 		// TODO Auto-generated method stub
 	
@@ -350,6 +410,61 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 	
 	}
 	
+	@Override
+	public List allAssetCheckImageByGUID(HttpServletRequest request,Hidden_Check_Join hidden_Check_Join) {
+		// TODO Auto-generated method stub
+	
+		String pathRoot = System.getProperty("user.home");
+	
+		String filePath=pathRoot+Singleton.filePath;
+        
+		String imgPath=request.getSession().getServletContext().getRealPath(Singleton.filePath);
+		
+		String check_id=hidden_Check_Join.getCheck_id();
+		
+		String sql="SELECT "+    
+				"[Assets_Check_Date].check_id, "+
+			    "[Assets_Check_Date].URI, "+
+				"[Assets_Check_Date].date, "+
+			    "[Assets_Check_Date].NAME "+
+				"FROM "+
+				"[Assets_Check_Date] left join [Assets_Check] on [Assets_Check_Date].check_id=[Assets_Check].check_id "+  
+				"where [Assets_Check_Date].check_id='"+check_id+"'  "+
+				"AND ([Assets_Check_Date].TYPE ='png ' OR [Assets_Check_Date].TYPE ='jpg ' OR [Assets_Check_Date].TYPE ='jpeg ' OR [Assets_Check_Date].TYPE ='gif ' ) "+
+				"order by [Assets_Check_Date].date desc ";
+		
+		List hidden_Data_Joins=this.getJdbcTemplate().query(sql,new checkImageQueryRowMapper());
+		
+		List fileBytes=new ArrayList<>();
+		
+		Iterator<Hidden_Check_Date> iterator=hidden_Data_Joins.iterator();
+		
+		while (iterator.hasNext()) {
+			
+			Hidden_Check_Date hidden_Check_Date=iterator.next();
+			
+			try{			
+				String oldFile=filePath+"\\"+hidden_Check_Date.getURI();
+			
+				CopyFile.set(imgPath, oldFile, hidden_Check_Date.getURI());
+			
+				Map<String,String> map=new HashMap<>();
+				
+				map.put("name", hidden_Check_Date.getNAME());
+				map.put("uri", Singleton.filePath+"\\"+hidden_Check_Date.getURI());
+				map.put("compressUri", Singleton.filePath+"\\compressFile\\"+hidden_Check_Date.getURI());
+				map.put("date", hidden_Check_Date.getDate().toString());
+				
+				fileBytes.add(map);
+			}catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+		}
+		
+		return fileBytes;
+	
+	}
 	
 	class checkImageQueryRowMapper implements RowMapper<Hidden_Check_Date> {
         //rs为返回结果集，以每行为单位封装着
@@ -578,10 +693,12 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 					",[FileBelong] "+
 					",[FileIndex] "+
 					",[ViewFileName] "+
+					",[sequence] "+
+					",[date_time] "+
 				"FROM "+
 				Singleton.ROOMDATABASE+".[dbo].[FileSelfBelong] "+  
 				"where RoomGUID='"+roomGUID+"'"+
-				"AND FileBelong='房屋图片'";
+				"AND FileBelong='房屋图片' order by sequence desc";
 		
 			List fileSelfBelongs=this.getJdbcTemplate().query(sql,new fileSelfBelongRowMapper());
 		
@@ -630,6 +747,8 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 				",[FileBelong] "+
 				",[FileIndex] "+
 				",[ViewFileName] "+
+				",[sequence] "+
+				",[date_time] "+
 			"FROM "+
 			Singleton.ROOMDATABASE+".[dbo].[FileSelfBelong] "+  
 			"where RoomGUID='"+roomGUID+"'"+
@@ -656,6 +775,8 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 				map.put("uri", Singleton.filePath+"\\"+fileSelfBelong.getUpFileFullName());
 				map.put("compressUri", Singleton.filePath+"\\compressFile\\"+fileSelfBelong.getUpFileFullName());
 				map.put("fileBelong", fileSelfBelong.getFileBelong());
+				map.put("guid", fileSelfBelong.getGUID());
+				map.put("sequence", String.valueOf(fileSelfBelong.getSequence()));
 
 				fileBytes.add(map);
 		
@@ -685,6 +806,8 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 			fileSelfBelong.setFileBelong(rs.getString("FileBelong"));
 			fileSelfBelong.setFileIndex(rs.getInt("FileIndex"));
 			fileSelfBelong.setViewFileName(rs.getString("ViewFileName"));
+			fileSelfBelong.setSequence(rs.getInt("sequence"));
+			fileSelfBelong.setDate_time(rs.getDate("date_time"));
 			return fileSelfBelong;
 		}
 		

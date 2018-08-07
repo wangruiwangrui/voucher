@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.druid.sql.ast.statement.SQLIfStatement.Else;
+import com.voucher.manage.daoModel.Assets.Assets_Check_Date;
 import com.voucher.manage.daoModel.Assets.Hidden;
 import com.voucher.manage.daoModel.Assets.Hidden_Check_Date;
 import com.voucher.manage.daoModel.Assets.Hidden_Data;
@@ -145,6 +146,8 @@ public class FileUploadController {
         	objectClass=Hidden_Neaten_Date.class;
         }else if(classType.equals("roomInfo")){
         	objectClass=FileSelfBelong.class;
+        }else if(classType.equals("assetCheck")){
+        	objectClass=Assets_Check_Date.class;
         }
         
         new ImageFileFactory().upload(objectClass,id, names, files);

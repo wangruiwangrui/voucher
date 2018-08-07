@@ -873,9 +873,17 @@ public class AssetController {
 			assetsDAO.upUserAccessTime(user_AccessTime);
 		}
 		
-		
-		
-		
+	}
+	
+	
+	@RequestMapping("/upSequenceByGUID")
+	public @ResponseBody Integer upSequenceByGUID(@RequestParam String guid){
+		return assetsDAO.upSequenceByGUID(guid);
+	}
+	
+	@RequestMapping("/deleteFileSelfBelongByGUID")
+	public @ResponseBody Integer deleteFileSelfBelongByGUID(@RequestParam String guid){
+		return assetsDAO.deleteFileSelfBelongByGUID(guid);
 	}
 	
 }

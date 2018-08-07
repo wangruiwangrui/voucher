@@ -574,6 +574,8 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO{
 	public Integer updateHireSetHireList(Users users,List files) {
 		// TODO Auto-generated method stub
 		
+		Date date = new Date();
+		
 		String openId=users.getOpenId();
 		String name=users.getName();
 		
@@ -587,6 +589,8 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO{
 		
 		String payGUID=UUID.randomUUID().toString();
 		
+		int i=0;
+		
 		if(!files.isEmpty()){
             try {
             	int u=0;
@@ -597,7 +601,7 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO{
 
                     	String[] where={"GUID=",guid};
                     	
-                    	Date date=new Date();
+                    	date=new Date();
                     	
                     	HireList hireList=new HireList();
                     	hireList.setState("已交");
@@ -620,10 +624,16 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO{
                     	
                     	HireList hireList2=(HireList) SelectExe.get(this.getJdbcTemplate(), hireList).get(0);
                     	
-                    	amount=amount+hireList2.getHire();                    	
-                    	printMemo=printMemo+"  "+hireList2.getHireDate();                   	
+                    	amount=amount+hireList2.getHire();  
+                    	if(i==(files.size()-1)){
+                    		printMemo=printMemo+hireList2.getHireDate(); 
+                    	}else{
+                    		printMemo=printMemo+hireList2.getHireDate()+","; 
+                    	}
                     	chartGUID=hireList2.getChartGUID();                    	
                     	hireGUID=hireList2.getHireGUID();
+                    	
+                    	i++;
                 }
 
 
@@ -636,6 +646,8 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO{
                 hirePay.setPrintMemo(printMemo);
                 hirePay.setChartGUID(chartGUID);
                 hirePay.setHireGUID(hireGUID);
+                hirePay.setOptDate(date);
+                hirePay.setPrintCount((float) 0);
                 
                 u=InsertExe.get(this.getJdbcTemplate(), hirePay);
                 

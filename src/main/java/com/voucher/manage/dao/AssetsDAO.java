@@ -119,4 +119,8 @@ public interface AssetsDAO {
 	public Integer insertUserAccessTime(User_AccessTime user_AccessTime);
 	
 	public Integer upUserAccessTime(User_AccessTime user_AccessTime);
+	
+	public Integer upSequenceByGUID(String guid);
+	
+	public Integer deleteFileSelfBelongByGUID(String guid);
 }

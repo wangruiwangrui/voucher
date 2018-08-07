@@ -11,9 +11,11 @@ import java.util.UUID;
 
 import org.springframework.context.ApplicationContext;
 
+import com.voucher.manage.dao.AssetCheckDAO;
 import com.voucher.manage.dao.HiddenDAO;
 import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoImpl.MobileDAOImpl;
+import com.voucher.manage.daoModel.Assets.Assets_Check_Date;
 import com.voucher.manage.daoModel.Assets.Hidden;
 import com.voucher.manage.daoModel.Assets.Hidden_Check_Date;
 import com.voucher.manage.daoModel.Assets.Hidden_Data;
@@ -33,6 +35,8 @@ public abstract class AbstractFileUpload {
 	HiddenDAO hiddenDAO=(HiddenDAO) applicationContext.getBean("hiddenDao");
 	
 	RoomInfoDao roomInfoDao=(RoomInfoDao) applicationContext.getBean("roomInfodao");
+	
+	AssetCheckDAO assetCheckDAO=(AssetCheckDAO) applicationContext.getBean("assetCheckdao");
 	
 	public AbstractFileUpload() {
 		// TODO Auto-generated constructor stub
@@ -119,6 +123,9 @@ public abstract class AbstractFileUpload {
               String imgPath=Singleton.ROOMINFOIMGPATH;
               CopyFile.set(imgPath, savePath+"\\"+fileName+"."+mimeType, fileName+"."+mimeType);
               roomInfoDao.insertIntoFileSelfBelong(ID, uri, mimeType, name);
+            }else if(object==Assets_Check_Date.class){
+              assetCheckDAO.InsertIntoAssetsCheckDate(ID, name, mimeType, uri);
+              CopyFile.set(Singleton.ROOMINFOIMGPATH2, savePath+"\\"+fileName+"."+mimeType, fileName+"."+mimeType);
             }
             
             i++;

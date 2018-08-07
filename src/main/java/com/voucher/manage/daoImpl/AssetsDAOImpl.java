@@ -33,6 +33,7 @@ import com.voucher.manage.daoModel.Assets.Hidden_Type;
 import com.voucher.manage.daoModel.Assets.Hidden_User;
 import com.voucher.manage.daoModel.Assets.Position;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
+import com.voucher.manage.daoModel.TTT.FileSelfBelong;
 import com.voucher.manage.daoModel.TTT.User_AccessTime;
 import com.voucher.manage.daoModelJoin.RoomInfo_Position;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Assets_Join;
@@ -2239,6 +2240,60 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	public Integer upUserAccessTime(User_AccessTime user_AccessTime) {
 		// TODO Auto-generated method stub
 		return UpdateExe.get(this.getJdbcTemplate(), user_AccessTime);
+	}
+
+	@Override
+	public Integer upSequenceByGUID(String guid) {
+		// TODO Auto-generated method stub
+		FileSelfBelong fileSelfBelong=new FileSelfBelong();
+		
+		String[] where={"GUID=",guid};
+		
+		fileSelfBelong.setLimit(1);
+		fileSelfBelong.setOffset(0);
+		fileSelfBelong.setNotIn("GUID");
+		fileSelfBelong.setWhere(where);
+		
+		List<FileSelfBelong> list=SelectExe.get(this.getJdbcTemplate(), fileSelfBelong);
+		
+		int i;
+		
+		try{
+			fileSelfBelong=list.get(0);
+			String roomGUID=fileSelfBelong.getRoomGUID();
+			
+			FileSelfBelong fileSelfBelong2=new FileSelfBelong();
+			String[] where2={"RoomGUID=",roomGUID};
+			fileSelfBelong2.setSequence(0);
+			fileSelfBelong2.setWhere(where2);
+			UpdateExe.get(this.getJdbcTemplate(),fileSelfBelong2);
+			
+			FileSelfBelong fileSelfBelong3=new FileSelfBelong();
+			fileSelfBelong3.setSequence(1);
+			fileSelfBelong3.setWhere(where);
+			UpdateExe.get(this.getJdbcTemplate(), fileSelfBelong3);
+			i=1;
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			i=0;
+		}
+		
+		return i;
+	}
+
+	@Override
+	public Integer deleteFileSelfBelongByGUID(String guid) {
+		// TODO Auto-generated method stub
+		FileSelfBelong fileSelfBelong=new FileSelfBelong();
+		
+		String[] where={"GUID=",guid};
+		
+		fileSelfBelong.setWhere(where);
+		
+		int i=DeleteExe.get(this.getJdbcTemplate(), fileSelfBelong);
+		
+		return i;
 	}
 	
 	

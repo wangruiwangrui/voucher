@@ -508,6 +508,7 @@ public class AssetCheckDAOImpl extends JdbcDaoSupport implements AssetCheckDAO{
 		assets_Check_Date.setNAME(NAME);
 		assets_Check_Date.setTYPE(TYPE);
 		assets_Check_Date.setURI(uri);
+		assets_Check_Date.setDate(date);
 		
 		assets_Check_Date.setFileBelong("检查图片");
         
