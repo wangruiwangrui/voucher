@@ -266,8 +266,7 @@ public class RoomInfo_Position implements Serializable{
 	private Double lat;
 
 	@SQLDateTime(name="date")
-	private Date date;
-	
+	private Date date;	
 	
 	public void setGUID(String GUID){
 		this.GUID = GUID;
@@ -925,4 +924,5 @@ public class RoomInfo_Position implements Serializable{
 	public String getPhone(){
 		return Phone;
 	}
+
 }

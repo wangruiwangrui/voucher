@@ -814,5 +814,99 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		
 		return (RoomInfo) SelectExe.get(this.getJdbcTemplate(), roomInfo).get(0);
 	}
+
+	@Override
+	public Map<String, Object> findRoomInfoPositionByLatLng(Double lat, Double lng) {
+		// TODO Auto-generated method stub
+		String sql0="SELECT "+
+				"[Position].province,"+
+				"[Position].city,"+
+				"[Position].district,"+
+				"[Position].street,"+
+				"[Position].street_number,"+
+				"[Position].lng,"+
+				"[Position].lat,"+
+				"[Position].date,"+
+				Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Num,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].OriginalNum,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Address,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].OriginalAddress,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Region,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Segment,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManageRegion,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomProperty,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Useful,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Floor,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].State,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Structure,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BuildArea,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RoomType,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].IsCity,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].Manager,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManagerPhone,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].IsStreet,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].FitMent,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BeFrom,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].InDate,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightNo,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightArea,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].DesignUseful,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].BuildYear,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyRightUnit,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].RealPropertyRightUnit,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].PropertyCardUnit ,"+	
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].DangerClassification ,"+
+			    Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ChartGUID ,"+
+			    Singleton.ROOMDATABASE+".[dbo].[ChartInfo].Hire ,"+
+			    Singleton.ROOMDATABASE+".[dbo].[ChartInfo].FareItem ,"+
+			    Singleton.ROOMDATABASE+".[dbo].[ChartInfo].Charter ,"+
+			    Singleton.ROOMDATABASE+".[dbo].[ChartInfo].Phone ";
+			
+		String sql1="from Position left join  (SELECT round(lat,4) as lat,"+
+					"round(lng,4) as lng ,COUNT(*) as c "+      
+					"FROM [Position] group by round(lat,4),round([lng],4)) t2 "+
+					"on round(Position.lat,4)=t2.lat and round(Position.lng,4)=t2.lng "+
+					"left join RoomInfo on Position.GUID=RoomInfo.GUID "+
+					"left join ChartInfo on RoomInfo.ChartGUID=ChartInfo.GUID "+
+					"where Position.GUID is not null and round(Position.lat,4)=round("+lat+",4) and "+
+					"round(Position.lng,4)=round("+lng+",4)";
+		
+		String sql2="select count(*) from Position left join  (SELECT round(lat,4) as lat,"+
+					"round(lng,4) as lng ,COUNT(*) as c "+      
+					"FROM [Position] group by round(lat,4),round([lng],4)) t2 "+
+					"on round(Position.lat,4)=t2.lat and round(Position.lng,4)=t2.lng "+
+					"left join RoomInfo on Position.GUID=RoomInfo.GUID "+
+					"left join ChartInfo on RoomInfo.ChartGUID=ChartInfo.GUID "+
+					"where Position.GUID is not null and round(Position.lat,4)=round("+lat+",4) and "+
+					"round(Position.lng,4)=round("+lng+",4)";
+		
+		String sql=sql0+sql1;
+		
+		RoomInfo_Position roomInfo_Position=new RoomInfo_Position();
+		
+		Position position=new Position();		
+	
+		RoomInfo roomInfo=new RoomInfo();
+	
+		ChartInfo chartInfo=new ChartInfo();
+		
+		Object[] objects={roomInfo,chartInfo,position};
+	
+		Map map=new HashMap<>();
+	
+		try{
+			List list=SelectSqlJoinExe.get(this.getJdbcTemplate(), sql, objects,roomInfo_Position);
+			int total=(int) SelectSqlJoinExe.getCount(this.getJdbcTemplate(), sql2, objects).get("");
+			map.put("rows", list);
+			map.put("total", total);
+			//MyTestUtil.print(list);
+		}catch (Exception e) {
+		// TODO: handle exception
+		}
+
+		
+		return map;
+	}
 	
 }

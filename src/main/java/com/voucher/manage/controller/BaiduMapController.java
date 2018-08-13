@@ -336,9 +336,11 @@ public class BaiduMapController {
         searchMap.put("[Position].lng=", String.valueOf(lng));
         searchMap.put("[Position].lat=", String.valueOf(lat));
 
-        Map map=assetsDAO.findAllRoomInfo_Position(1, 0, null, null,term, searchMap); 
+        Map map=roomInfoDao.findRoomInfoPositionByLatLng(lat, lng);
         
         List list=(List) map.get("rows"); 
+        
+        int total=(int) map.get("total");
         
         RoomInfo_Position roomInfo_Position=(RoomInfo_Position) list.get(0);
         
@@ -349,6 +351,10 @@ public class BaiduMapController {
         Map map2=new HashMap<>();
         
         map2.put("roomInfo", roomInfo_Position);
+        
+        map2.put("total", total);
+        
+        map2.put("list", list);
         
         map2.put("url", url);
         

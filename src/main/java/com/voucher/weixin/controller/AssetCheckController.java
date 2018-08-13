@@ -307,7 +307,7 @@ public class AssetCheckController {
 	@RequestMapping("/selectAllCheck")
 	public @ResponseBody Map selectAllCheck(@RequestParam Integer limit, @RequestParam Integer offset, 
 			String sort, String order,
-			@RequestParam String search,String search2,HttpServletRequest request) {
+			@RequestParam String search,String search2,String search3,HttpServletRequest request) {
 		Map searchMap=new HashMap<>();
 		
 		/*
@@ -336,6 +336,10 @@ public class AssetCheckController {
 			searchMap.put("convert(varchar(11),[Assets_Check].date,120 ) >", startTime);
 			
 			System.out.println("startTime="+startTime);
+		}
+		
+		if(search3!=null&&!search3.equals("")){
+			searchMap.put("[Assets_Check].guid = ", search3);
 		}
 		
 		Map map=assetCheckDAO.selectAllAssetCheck(limit, offset, sort, order,search, searchMap);

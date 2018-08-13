@@ -110,6 +110,16 @@
     </div>  
     
     <div class="weui-cells weui-cells_form">
+            <div id="hiddenCheck" class="weui-cell weui-cell_access">
+            </div>
+    </div>
+  
+  	<div class="weui-cells weui-cells_form">
+            <div id="assetCheck" class="weui-cell weui-cell_access">
+            </div>
+    </div>
+    
+    <div class="weui-cells weui-cells_form">
             <div id="hidden" class="weui-cell weui-cell_access">
             </div>
     </div>
@@ -324,6 +334,87 @@
   			  			}
   			  			 			  		
   			  		
+  			  		$.get("/voucher/mobile/asset/getCountCheckByGUID.do",{
+				 		guid:guid
+			  		},function(text){
+			  			var data=JSON.parse(text);
+			  			if(data.hiddenCheck>0){
+			  				//hidden.innerHTML=text+"处";
+			  				var hidden1=document.createElement("div");
+			  				hidden1.setAttribute("class","weui-cell__bd");
+			  				var span1=document.createElement("span");
+			  				span1.setAttribute("style","vertical-align: middle");
+			  				span1.innerHTML="安全巡查记录";
+			  				var span2=document.createElement("span");
+			  				span2.setAttribute("class","weui-badge");
+			  				span2.setAttribute("style","margin-left: 25px;");
+			  				span2.innerHTML=data.hiddenCheck;
+			  				hidden1.appendChild(span1);
+			  				hidden1.appendChild(span2);
+                  		$("#hiddenCheck").append(hidden1); 
+                  		var hidden2=document.createElement("div");
+                  		hidden2.setAttribute("class","weui-cell__ft");
+                  		$("#hiddenCheck").append(hidden2); 
+                  		
+                  		$("#hiddenCheck").click(function(){
+        			  			var assetGuid=encodeURI(guid);
+        			  			location.href="../1/guidance/hiddenCheckListByGuid.html?search="+assetGuid+"&latitude="+latitude+"&longitude="+longitude;
+                  		});
+                  		
+			  			}else{
+			  				var hidden=document.createElement("div");
+			  				hidden.setAttribute("class","weui-cell__bd");
+			  				var span1=document.createElement("span");
+			  				span1.setAttribute("style","vertical-align: middle");
+			  				span1.innerHTML="安全巡查记录";
+			  				var span2=document.createElement("span");
+			  				span2.setAttribute("style","margin-left: 15px;");
+			  				span2.innerHTML="无";
+			  				hidden.appendChild(span1);
+			  				hidden.appendChild(span2);
+              			$("#hiddenCheck").append(hidden);
+			  			}
+			  			 			  		
+			  			if(data.assetCheck>0){
+			  				//hidden.innerHTML=text+"处";
+			  				var hidden1=document.createElement("div");
+			  				hidden1.setAttribute("class","weui-cell__bd");
+			  				var span1=document.createElement("span");
+			  				span1.setAttribute("style","vertical-align: middle");
+			  				span1.innerHTML="资产巡查记录";
+			  				var span2=document.createElement("span");
+			  				span2.setAttribute("class","weui-badge");
+			  				span2.setAttribute("style","margin-left: 25px;");
+			  				span2.innerHTML=data.assetCheck;
+			  				hidden1.appendChild(span1);
+			  				hidden1.appendChild(span2);
+                  		$("#assetCheck").append(hidden1); 
+                  		var hidden2=document.createElement("div");
+                  		hidden2.setAttribute("class","weui-cell__ft");
+                  		$("#assetCheck").append(hidden2); 
+                  		
+                  		$("#assetCheck").click(function(){
+        			  			var assetGuid=encodeURI(guid);
+                  			location.href="assetCheck/assetCheckListByGuid.html?search="+assetGuid+"&latitude="+latitude+"&longitude="+longitude;
+                  		});
+                  		
+			  			}else{
+			  				var hidden=document.createElement("div");
+			  				hidden.setAttribute("class","weui-cell__bd");
+			  				var span1=document.createElement("span");
+			  				span1.setAttribute("style","vertical-align: middle");
+			  				span1.innerHTML="资产巡查记录";
+			  				var span2=document.createElement("span");
+			  				span2.setAttribute("style","margin-left: 15px;");
+			  				span2.innerHTML="无";
+			  				hidden.appendChild(span1);
+			  				hidden.appendChild(span2);
+              			$("#assetCheck").append(hidden);
+			  		   }
+			  			
+			  		});
+  			  			
+  			  			
   			  		});
                   
                   console.log(imgs);

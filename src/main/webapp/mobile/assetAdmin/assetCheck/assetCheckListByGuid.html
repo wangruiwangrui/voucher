@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>安全巡查记录列表</title>
+<title>资产巡查记录列表</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="../css/example.css"/>
     <link rel="stylesheet" href="../css/jquery-weui.css">
     <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=pQFgFpS0VnMXwCRN6cTc1jDOcBVi3XoD"></script>
-    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 </head>
 <body>
 
@@ -24,27 +23,6 @@
         <div class="refresh">正在刷新</div>
        </div>
 
-	<div class="page__bd" style="height:50px;">
-        <div class="weui-tab">
-            <div class="weui-navbar">
-                <div id="tab1" class="weui-navbar__item weui-bar__item_on">
-                    	全部巡查记录
-                </div>
-                <div id="tab2" class="weui-navbar__item">
-                   	 	本月巡查记录
-                </div>
-            </div>
-        </div>
-    </div>
-
-        <div class="weui-cells weui-cells_form">
-              <div class="weui-cell">
-                <div class="weui-cell__bd weui_cell_primary name">
-                    <input id="input" class="weui-input" type="text" placeholder=""/>
-                </div class="weui-cell__bd weui_cell_primary name">
-                  <a href="javascript:;" id="search" class="weui-btn weui-btn_mini weui-btn_primary">查询</a>
-               </div>
-        </div>
         
 		<div class="weui-cells">
 		  <div class="weui-panel weui-panel_access">
@@ -89,10 +67,10 @@
   var longitude=getQueryString("longitude");
   var latitude=getQueryString("latitude");
   var map = new BMap.Map("allmap");
+  var search3=getQueryString("search");
   
     var limit = 5;
     var offset = 0;
-    var search = "";
     var sort = "date";
     var order = "desc";
     
@@ -101,41 +79,9 @@
     
     var loading = false;  //状态标记
     
-    $("#search").on("click",function(){
-  	  search = $("#input").val();
-  	  limit = 5;
-        offset = 0;
-        $("#ul").children('li').remove();
-        loading = false;
-  	  loadlist();
-    });
     
-    url="/voucher/mobile/hidden/selectAllCheck.do";
-    
-    $("#tab1").on("click",function(){
-      $("#input").attr("placeholder","");
-      $("#input").val("");
-      search = "";
-  	  url="/voucher/mobile/hidden/selectAllCheck.do";
-  	  limit = 10;
-        offset = 0;
-        $("#ul").children('li').remove();
-        loading = false;
-  	  loadlist();
-    });
-  
-  $("#tab2").on("click",function(){
-	  $("#input").attr("placeholder","输入数字查其它月份记录");
-	  $("#input").val("");
-	  search = "";
-	  url="/voucher/mobile/hidden/selectAllCheck.do?search2=1";
-	  limit = 10;
-      offset = 0;
-      $("#ul").children('li').remove();
-      loading = false;
-	  loadlist();
-  });
-    
+	url="/voucher/mobile/assetCheck/selectAllCheck.do";
+      	
     loadlist();
     
     $(document.body).pullToRefresh().on("pull-to-refresh", function() {
@@ -167,11 +113,12 @@
       function loadlist() {
            var html = "";
            $.ajax({
-               type: "get",
+               type: "POST",
                url: url,
                data: { "limit" : limit, 
                        "offset" : offset,
-                       "search" : search,
+                       "search" : "",
+                       "search3" : search3,
                        "sort" : sort,
                        "order" : order
                        },
@@ -182,8 +129,9 @@
                    html += "网络连接故障";
                    $("#ul").append(html);
                },
-               success: function (text) {              	   
-            	   var data=text.hidden_Check;
+               success: function (text) {  
+            	   console.log(text);
+            	   var data=text.assets_Check;
             	   var count=text.total;
             	   var imgs=text.fileBytes;
             	   
@@ -210,13 +158,8 @@
                     	   if(obj.lng!=""&&obj.lat!=""){
                     	   	  distance=getDistance(obj.lng,obj.lat);
                     	   }
-                    	   if(obj.check_name=="异常"){
-                    	   		var check_name="<font color='red'>"+obj.check_name+"</font>";
-                    	   }else{
-                    		   var check_name="<font color='green'>"+obj.check_name+"</font>";
-                    	   }
                     	   var li_1=addDiv(img,obj.address,"距离:"+distance,"时间:"+actionTime(obj.date)
-                    			   ,obj.region,"检查结果:"+check_name);
+                    			   ,obj.region,"检查结果:"+obj.check_name);
                            li_1.setAttribute("check_id",check_id);
                     	   li_1.setAttribute("onclick","clickEvent(this);");
                     	   $("#ul").append(li_1);

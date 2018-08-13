@@ -23,29 +23,7 @@
         <div class="up">释放刷新</div>
         <div class="refresh">正在刷新</div>
        </div>
-
-	<div class="page__bd" style="height:50px;">
-        <div class="weui-tab">
-            <div class="weui-navbar">
-                <div id="tab1" class="weui-navbar__item weui-bar__item_on">
-                    	全部巡查记录
-                </div>
-                <div id="tab2" class="weui-navbar__item">
-                   	 	本月巡查记录
-                </div>
-            </div>
-        </div>
-    </div>
-
-        <div class="weui-cells weui-cells_form">
-              <div class="weui-cell">
-                <div class="weui-cell__bd weui_cell_primary name">
-                    <input id="input" class="weui-input" type="text" placeholder=""/>
-                </div class="weui-cell__bd weui_cell_primary name">
-                  <a href="javascript:;" id="search" class="weui-btn weui-btn_mini weui-btn_primary">查询</a>
-               </div>
-        </div>
-        
+       
 		<div class="weui-cells">
 		  <div class="weui-panel weui-panel_access">
   			<div id="count" class="weui-panel__hd"></div>
@@ -88,11 +66,12 @@
 
   var longitude=getQueryString("longitude");
   var latitude=getQueryString("latitude");
+  var search3 = getQueryString("search");
+  
   var map = new BMap.Map("allmap");
   
     var limit = 5;
-    var offset = 0;
-    var search = "";
+    var offset = 0;  
     var sort = "date";
     var order = "desc";
     
@@ -101,41 +80,10 @@
     
     var loading = false;  //状态标记
     
-    $("#search").on("click",function(){
-  	  search = $("#input").val();
-  	  limit = 5;
-        offset = 0;
-        $("#ul").children('li').remove();
-        loading = false;
-  	  loadlist();
-    });
     
     url="/voucher/mobile/hidden/selectAllCheck.do";
     
-    $("#tab1").on("click",function(){
-      $("#input").attr("placeholder","");
-      $("#input").val("");
-      search = "";
-  	  url="/voucher/mobile/hidden/selectAllCheck.do";
-  	  limit = 10;
-        offset = 0;
-        $("#ul").children('li').remove();
-        loading = false;
-  	  loadlist();
-    });
-  
-  $("#tab2").on("click",function(){
-	  $("#input").attr("placeholder","输入数字查其它月份记录");
-	  $("#input").val("");
-	  search = "";
-	  url="/voucher/mobile/hidden/selectAllCheck.do?search2=1";
-	  limit = 10;
-      offset = 0;
-      $("#ul").children('li').remove();
-      loading = false;
-	  loadlist();
-  });
-    
+   
     loadlist();
     
     $(document.body).pullToRefresh().on("pull-to-refresh", function() {
@@ -171,7 +119,8 @@
                url: url,
                data: { "limit" : limit, 
                        "offset" : offset,
-                       "search" : search,
+                       "search" : "",
+                       "search3" : search3,
                        "sort" : sort,
                        "order" : order
                        },

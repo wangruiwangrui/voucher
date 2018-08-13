@@ -22,6 +22,7 @@ import com.voucher.manage.daoModel.HiddenAssetByMonthAmount;
 import com.voucher.manage.daoModel.HiddenByMonthAmount;
 import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.daoModel.Users;
+import com.voucher.manage.daoModel.Assets.Assets_Check;
 import com.voucher.manage.daoModel.Assets.Hidden;
 import com.voucher.manage.daoModel.Assets.Hidden_Assets;
 import com.voucher.manage.daoModel.Assets.Hidden_Check;
@@ -2296,5 +2297,30 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 		return i;
 	}
 	
+	
+	@Override
+	public Map<String, Object> getCountCheckByGUID(String guid) {
+		// TODO Auto-generated method stub
+		Map map=new HashMap<>();
+		
+		String[] where={"guid=",guid};
+		
+		Hidden_Check hidden_Check=new Hidden_Check();
+		
+		hidden_Check.setWhere(where);
+		
+		int hiddenCheck=(int) SelectExe.getCount(this.getJdbcTemplate(), hidden_Check).get("");
+		
+		Assets_Check assets_Check=new Assets_Check();
+		
+		assets_Check.setWhere(where);
+		
+		int assetCheck=(int) SelectExe.getCount(this.getJdbcTemplate(), assets_Check).get("");
+		
+		map.put("hiddenCheck", hiddenCheck);
+		map.put("assetCheck", assetCheck);
+		
+		return map;
+	}
 	
 }

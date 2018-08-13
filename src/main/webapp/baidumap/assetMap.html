@@ -309,7 +309,7 @@
    xhm.open("GET","../baiduMap/getAllAssetPosition.do",false);
    xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
    xhm.send();
-   alert(xhm.responseText);
+   //alert(xhm.responseText);
    var data=JSON.parse(xhm.responseText);
    var ticket=data.rows;
    
@@ -336,6 +336,9 @@
    				var data=JSON.parse(xhm.responseText);
    				var obj=data.roomInfo;
    				var url="../"+data.url;
+   				total=data.total;
+   				console.log(total);
+   				if(total==1){
     				var content="<h4 style='margin:0 0 5px 0;padding:0.2em 0'> 资产名称 : "+obj.address+"</h4>"+
     				"<img style='float:right;margin:4px' id='imgDemo' src="+url+" width='139' height='104'/>"+
     				"<p>"+
@@ -347,7 +350,33 @@
     	        	"</p>"+"</div>";
     				var infoWindow = new BMap.InfoWindow(content);  // 创建信息窗口对象
     	            map.openInfoWindow(infoWindow,new BMap.Point(e.point.lng, e.point.lat)); //开启信息窗口
-    	       	
+   				}else{
+   					console.log(data.list);
+   					rows=data.list;
+   			        div1=document.getElementById('div1')
+   					var tab="<table border=1 width=700>";
+   				        for(var i=0;i<rows.length;i++){
+   				        	var obj=rows[i];
+   				        	tab+="<tr>";
+   				        	tab+="<td> 资产名称 : "+obj.address+" </td>";
+   				        	tab+="<td> 管理分区 : "+obj.manageRegion+" </td>";
+   				        	tab+="<td> 资产性质 : "+obj.roomProperty+" </td>";
+   				        	tab+="<td> 资产编号 : "+obj.num+" </td>";
+   				        	tab+="<td> 面积 : "+obj.buildArea+" m<sup>2</sup> </td>";
+   				        	tab+="<td> 租金 :"+obj.hire+" </td>";	               
+   				            tab+="<td>"+"<img style='float:right;margin:4px' id='imgDemo' src="+url+" width='50' height='30'/>"+"</td>";
+   				            tab+="</tr>";
+   				        }    
+   				        tab+="</table>";
+   					
+   					var content="<h4 style='margin:0 0 5px 0;padding:0.2em 0'> 位置 :"+obj.city+obj.district+
+   					" 资产数量 : "+data.total+"</h4>"+
+    				"<p>"+
+    	       	 	"  "+tab+" "+
+    	        	"</p>"+"</div>";
+    				var infoWindow = new BMap.InfoWindow(content);  // 创建信息窗口对象
+    	            map.openInfoWindow(infoWindow,new BMap.Point(e.point.lng, e.point.lat));
+   				}
          });
          map.addOverlay(pointCollection);  // 添加Overlay
   
@@ -371,25 +400,54 @@
          
          pointCollection.addEventListener('click', function (e) {
           // alert('单击点的坐标为：' + e.point.lng + ',' + e.point.lat);  // 监听点击事件
-          		var xhm=new XMLHttpRequest();
-  				 xhm.open("GET","../baiduMap/getAssetGUIDByPosition.do?lng="+e.point.lng+"&lat="+e.point.lat,false);
-  				 xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-  				 xhm.send();
-   				var data=JSON.parse(xhm.responseText);
-   				var obj=data.roomInfo;
-   				var url="../"+data.url;
-    				var content="<h4 style='margin:0 0 5px 0;padding:0.2em 0'> 资产名称 : "+obj.address+"</h4>"+
-    				"<img style='float:right;margin:4px' id='imgDemo' src="+url+" width='139' height='104'/>"+
-    				"<p>"+
-    	       	 	" 管理分区 : "+obj.manageRegion+" "+
-    	        	" 资产性质 : "+obj.roomProperty+" "+
-    	        	" 资产编号 : "+obj.num+" </br>"+
-    	        	" 面积 : "+obj.buildArea+" m<sup>2</sup> "+
-    	        	" 租金 :"+obj.hire+" "+
-    	        	"</p>"+"</div>";
-    				var infoWindow = new BMap.InfoWindow(content);  // 创建信息窗口对象
-    	            map.openInfoWindow(infoWindow,new BMap.Point(e.point.lng, e.point.lat)); //开启信息窗口
-    	       	
+        	 var xhm=new XMLHttpRequest();
+				 xhm.open("GET","../baiduMap/getAssetGUIDByPosition.do?lng="+e.point.lng+"&lat="+e.point.lat,false);
+				 xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+				 xhm.send();
+				var data=JSON.parse(xhm.responseText);
+				var obj=data.roomInfo;
+				var url="../"+data.url;
+				total=data.total;
+				console.log(total);
+				if(total==1){
+				var content="<h4 style='margin:0 0 5px 0;padding:0.2em 0'> 资产名称 : "+obj.address+"</h4>"+
+				"<img style='float:right;margin:4px' id='imgDemo' src="+url+" width='139' height='104'/>"+
+				"<p>"+
+	       	 	" 管理分区 : "+obj.manageRegion+" "+
+	        	" 资产性质 : "+obj.roomProperty+" "+
+	        	" 资产编号 : "+obj.num+" </br>"+
+	        	" 面积 : "+obj.buildArea+" m<sup>2</sup> "+
+	        	" 租金 :"+obj.hire+" "+
+	        	"</p>"+"</div>";
+				var infoWindow = new BMap.InfoWindow(content);  // 创建信息窗口对象
+	            map.openInfoWindow(infoWindow,new BMap.Point(e.point.lng, e.point.lat)); //开启信息窗口
+				}else{
+					console.log(data.list);
+					rows=data.list;
+			        div1=document.getElementById('div1')
+					var tab="<table border=1 width=700>";
+				        for(var i=0;i<rows.length;i++){
+				        	var obj=rows[i];
+				        	tab+="<tr>";
+				        	tab+="<td> 资产名称 : "+obj.address+" </td>";
+				        	tab+="<td> 管理分区 : "+obj.manageRegion+" </td>";
+				        	tab+="<td> 资产性质 : "+obj.roomProperty+" </td>";
+				        	tab+="<td> 资产编号 : "+obj.num+" </td>";
+				        	tab+="<td> 面积 : "+obj.buildArea+" m<sup>2</sup> </td>";
+				        	tab+="<td> 租金 :"+obj.hire+" </td>";	               
+				            tab+="<td>"+"<img style='float:right;margin:4px' id='imgDemo' src="+url+" width='50' height='30'/>"+"</td>";
+				            tab+="</tr>";
+				        }    
+				        tab+="</table>";
+					
+					var content="<h4 style='margin:0 0 5px 0;padding:0.2em 0'> 位置 :"+obj.city+obj.district+
+					" 资产数量 : "+data.total+"</h4>"+
+				"<p>"+
+	       	 	"  "+tab+" "+
+	        	"</p>"+"</div>";
+				var infoWindow = new BMap.InfoWindow(content);  // 创建信息窗口对象
+	            map.openInfoWindow(infoWindow,new BMap.Point(e.point.lng, e.point.lat));
+				}
          });
          map.addOverlay(pointCollection);  // 添加Overlay
           
@@ -492,25 +550,54 @@
   
 	 pointCollection2.addEventListener('click', function (e) {
        // alert('单击点的坐标为：' + e.point.lng + ',' + e.point.lat);  // 监听点击事件
-       		var xhm=new XMLHttpRequest();
-				 xhm.open("GET","../baiduMap/getAssetGUIDByPosition.do?lng="+e.point.lng+"&lat="+e.point.lat,false);
-				 xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-				 xhm.send();
-				var data=JSON.parse(xhm.responseText);
-				var obj=data.roomInfo;
-				var url="../"+data.url;
- 				var content="<h4 style='margin:0 0 5px 0;padding:0.2em 0'> 资产名称 : "+obj.address+"</h4>"+
- 				"<img style='float:right;margin:4px' id='imgDemo' src="+url+" width='139' height='104'/>"+
- 				"<p>"+
- 	       	 	" 管理分区 : "+obj.manageRegion+" "+
- 	        	" 资产性质 : "+obj.roomProperty+" "+
- 	        	" 资产编号 : "+obj.num+" </br>"+
- 	        	" 面积 : "+obj.buildArea+" m<sup>2</sup> "+
- 	        	" 租金 :"+obj.hire+" "+
- 	        	"</p>"+"</div>";
- 				var infoWindow = new BMap.InfoWindow(content);  // 创建信息窗口对象
- 	            map.openInfoWindow(infoWindow,new BMap.Point(e.point.lng, e.point.lat)); //开启信息窗口
- 	       	
+		 var xhm=new XMLHttpRequest();
+			 xhm.open("GET","../baiduMap/getAssetGUIDByPosition.do?lng="+e.point.lng+"&lat="+e.point.lat,false);
+			 xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+			 xhm.send();
+			var data=JSON.parse(xhm.responseText);
+			var obj=data.roomInfo;
+			var url="../"+data.url;
+			total=data.total;
+			console.log(total);
+			if(total==1){
+			var content="<h4 style='margin:0 0 5px 0;padding:0.2em 0'> 资产名称 : "+obj.address+"</h4>"+
+			"<img style='float:right;margin:4px' id='imgDemo' src="+url+" width='139' height='104'/>"+
+			"<p>"+
+       	 	" 管理分区 : "+obj.manageRegion+" "+
+        	" 资产性质 : "+obj.roomProperty+" "+
+        	" 资产编号 : "+obj.num+" </br>"+
+        	" 面积 : "+obj.buildArea+" m<sup>2</sup> "+
+        	" 租金 :"+obj.hire+" "+
+        	"</p>"+"</div>";
+			var infoWindow = new BMap.InfoWindow(content);  // 创建信息窗口对象
+            map.openInfoWindow(infoWindow,new BMap.Point(e.point.lng, e.point.lat)); //开启信息窗口
+			}else{
+				console.log(data.list);
+				rows=data.list;
+		        div1=document.getElementById('div1')
+				var tab="<table border=1 width=700>";
+			        for(var i=0;i<rows.length;i++){
+			        	var obj=rows[i];
+			        	tab+="<tr>";
+			        	tab+="<td> 资产名称 : "+obj.address+" </td>";
+			        	tab+="<td> 管理分区 : "+obj.manageRegion+" </td>";
+			        	tab+="<td> 资产性质 : "+obj.roomProperty+" </td>";
+			        	tab+="<td> 资产编号 : "+obj.num+" </td>";
+			        	tab+="<td> 面积 : "+obj.buildArea+" m<sup>2</sup> </td>";
+			        	tab+="<td> 租金 :"+obj.hire+" </td>";	               
+			            tab+="<td>"+"<img style='float:right;margin:4px' id='imgDemo' src="+url+" width='50' height='30'/>"+"</td>";
+			            tab+="</tr>";
+			        }    
+			        tab+="</table>";
+				
+				var content="<h4 style='margin:0 0 5px 0;padding:0.2em 0'> 位置 :"+obj.city+obj.district+
+				" 资产数量 : "+data.total+"</h4>"+
+			"<p>"+
+       	 	"  "+tab+" "+
+        	"</p>"+"</div>";
+			var infoWindow = new BMap.InfoWindow(content);  // 创建信息窗口对象
+            map.openInfoWindow(infoWindow,new BMap.Point(e.point.lng, e.point.lat));
+			}
       });
 	
 	map.addOverlay(pointCollection2);
@@ -523,8 +610,6 @@
 	}
     
     var opts = {
-			width : 250,     // 信息窗口宽度
-			height: 120,     // 信息窗口高度
 			title : "资产详情" , // 信息窗口标题
 			enableMessage:true//设置允许信息窗发送短息
 		   };

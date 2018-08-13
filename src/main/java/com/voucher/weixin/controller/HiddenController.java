@@ -110,7 +110,7 @@ public class HiddenController {
 	@RequestMapping("/selectAllCheck")
 	public @ResponseBody Map selectAllCheck(@RequestParam Integer limit, @RequestParam Integer offset, 
 			String sort, String order,
-			@RequestParam String search,String search2,HttpServletRequest request) {
+			@RequestParam String search,String search2,String search3,HttpServletRequest request) {
 		Map searchMap=new HashMap<>();
 		
 		Map map;
@@ -169,7 +169,7 @@ public class HiddenController {
 				return result;
 				
 			}else{
-				searchMap.put("check_name like", "%"+search+"%");
+				searchMap.put(Singleton.ROOMDATABASE+".[dbo].[RoomInfo].[Address] like", "%"+search+"%");
 			}
 	
 		}
@@ -188,6 +188,10 @@ public class HiddenController {
 			searchMap.put("convert(varchar(11),[Hidden_Check].date,120 ) >", startTime);
 			
 			System.out.println("startTime="+startTime);
+		}
+		
+		if(search3!=null&&!search3.equals("")){
+			searchMap.put("[Hidden_Check].guid = ", search3);
 		}
 		
 		map=hiddenDAO.selectAllHiddenCheck(limit, offset, sort, order,search, searchMap);

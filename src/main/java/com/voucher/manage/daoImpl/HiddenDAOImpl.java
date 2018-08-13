@@ -684,6 +684,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		weiXin_User.setOrder(order);
 		weiXin_User.setNotIn("id");
 		
+		/*
 		if(address!=null&&!address.equals("")){
 			
 			RoomInfo roomInfo2=new RoomInfo();
@@ -715,6 +716,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 			}
 			
 		}
+		*/
 		
 		if(!search.isEmpty()){
 		    String[] where=TransMapToString.get(search);
@@ -724,6 +726,17 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 		    weiXin_User.setWhere(where);
 		}
 
+		
+		Object[] objects={hidden_Check,roomInfo,position,weiXin_User};
+		
+		String[] join={"guid","check_id","campusAdmin"};
+		
+		Hidden_Check_Join hidden_Check_Join=new Hidden_Check_Join();
+		
+		list=SelectJoinExe.get(this.getJdbcTemplate(), objects, hidden_Check_Join, join);
+		countMap=SelectJoinExe.getCount(this.getJdbcTemplate(), objects, join);
+		
+		/*
 		if(offset>0){
 			
 			Object[] objects={hidden_Check,weiXin_User};
@@ -866,7 +879,7 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 			
 			countMap=SelectJoinExe.getCount(this.getJdbcTemplate(), objects, join);
 		}
-		
+		*/
 		
 		
 		map.put("rows", list);

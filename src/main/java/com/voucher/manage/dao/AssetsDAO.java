@@ -3,6 +3,8 @@ package com.voucher.manage.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.voucher.manage.daoModel.Assets.Hidden;
 import com.voucher.manage.daoModel.Assets.Hidden_Assets;
 import com.voucher.manage.daoModel.Assets.Hidden_Data;
@@ -123,4 +125,6 @@ public interface AssetsDAO {
 	public Integer upSequenceByGUID(String guid);
 	
 	public Integer deleteFileSelfBelongByGUID(String guid);
+	
+	public Map<String, Object> getCountCheckByGUID(@RequestParam String guid);
 }

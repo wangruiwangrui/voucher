@@ -23,6 +23,7 @@ import com.rmi.server.AssetsImpl;
 import com.voucher.manage.dao.AssetsDAO;
 import com.voucher.manage.dao.FinanceDAO;
 import com.voucher.manage.dao.HiddenDAO;
+import com.voucher.manage.dao.RoomInfoDao;
 import com.voucher.manage.daoImpl.HiddenDAOImpl;
 import com.voucher.manage.daoModelJoin.Finance.HireList_ChartInfo_Join;
 import com.voucher.manage.redis.Orders;
@@ -44,6 +45,8 @@ public class testController {
 	
 	FinanceDAO financeDAO=(FinanceDAO) applicationContext.getBean("financeDao");
 	
+	RoomInfoDao roomInfoDao=(RoomInfoDao) applicationContext.getBean("roomInfodao");
+	
      private AffairService testService;
 	
      
@@ -55,6 +58,12 @@ public class testController {
  		this.orderDao = orderDao;
  	}
  	*/
+   
+    @RequestMapping("/roomPosition")
+    public @ResponseBody Map<String, Object> roomPosition(@RequestParam Double lat,
+    		@RequestParam Double lng){
+    	return roomInfoDao.findRoomInfoPositionByLatLng(lat, lng);
+    }
      
 	@Transactional(rollbackFor = { Exception.class })
 	@Autowired

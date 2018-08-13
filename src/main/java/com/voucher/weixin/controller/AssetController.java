@@ -886,4 +886,9 @@ public class AssetController {
 		return assetsDAO.deleteFileSelfBelongByGUID(guid);
 	}
 	
+	@RequestMapping("/getCountCheckByGUID")
+	public @ResponseBody Map getCountCheckByGUID(@RequestParam String guid){
+		return assetsDAO.getCountCheckByGUID(guid);
+	}
+	
 }
