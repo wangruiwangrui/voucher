@@ -157,7 +157,7 @@
 	  			option.innerHTML=hiddenLevels[i].level_text;
 	  			option.setAttribute("value",hiddenLevels[i].level_text);
 	  			select.appendChild(option);	 		   
-	  			hiddenlevel=hiddenLevels[i].level_text;
+	  			hiddenlevel=hiddenLevels[hiddenLevels.length-1].level_text;
 			 }
  
  		
@@ -185,7 +185,8 @@
 	  			var option = document.createElement("option");
 	  			option.innerHTML=manageRegions[i].manageRegion;
 	  			option.setAttribute("value",manageRegions[i].manageRegion);
-	  			select.appendChild(option);	 		   
+	  			select.appendChild(option);	 
+	  			manageRegion=manageRegions[0].manageRegion;
 			 }
 
 		 select.setAttribute("class","weui-input");
@@ -239,6 +240,8 @@
 	
     $("#save").on("click",function(){
 
+    	console.log("manageRegion="+manageRegion);
+    	
     	geoc.getLocation(point, function(rs){
     	    	var addComp;
     	  	  	addComp = rs.addressComponents;
