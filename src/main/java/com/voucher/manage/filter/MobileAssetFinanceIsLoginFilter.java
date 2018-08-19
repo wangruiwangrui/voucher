@@ -37,6 +37,7 @@ public class MobileAssetFinanceIsLoginFilter implements Filter {
 	        String loginStrings = config5.getInitParameter("loginStrings");        
 	        String includeStrings = config5.getInitParameter("includeStrings");    
 	        String redirectPath = hrequest.getContextPath() + config5.getInitParameter("redirectPath");
+	        String mobileLoginPath = hrequest.getContextPath() + config5.getInitParameter("mobileLoginPath");
 	        String disabletestfilter = config5.getInitParameter("disabletestfilter");
 	        
 
@@ -65,7 +66,7 @@ public class MobileAssetFinanceIsLoginFilter implements Filter {
 	        if (openId==null) {
 	        //	HttpSession session = hrequest.getSession();	        	  
 	        //	session.invalidate();         //如果微信登录后就清除session再登陆管理员页面
-	        	wrapper.sendRedirect(redirectPath);
+	        	wrapper.sendRedirect(mobileLoginPath);
 	            return;
 	        }else {
 	        	System.out.println("MobileAssetCheckIsLoginFilter openid="+openId);

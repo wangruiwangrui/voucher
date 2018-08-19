@@ -27,6 +27,7 @@ import com.voucher.manage.daoModel.Assets.WeiXin_User;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Check_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Join;
 import com.voucher.manage.daoModelJoin.Assets.Hidden_Neaten_Join;
+import com.voucher.manage.daoModelJoin.Assets.Position_Hidden_Join;
 import com.voucher.manage.daoSQL.DeleteExe;
 import com.voucher.manage.daoSQL.InsertExe;
 import com.voucher.manage.daoSQL.SelectExe;
@@ -1091,37 +1092,44 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	@Override
 	public List<Hidden_Join> selectHiddenOfMap(Map<String, String> search) {
 		// TODO Auto-generated method stub
-		 Hidden hidden=new Hidden();
-		 search.put("[Hidden].exist =", "1");
-		 
-			hidden.setLimit(10);
-			hidden.setOffset(0);
-			hidden.setSort(null);
-			hidden.setOrder(null);
-			hidden.setNotIn("GUID");
-			
-			Position position=new Position();
-			position.setLimit(10);
-			position.setOffset(0);
-			position.setSort(null);
-			position.setOrder(null);
-			position.setNotIn("GUID");
-			
-		 String[] where=TransMapToString.get(search);
-		 hidden.setWhere(where);
-		 position.setWhere(where);
+		Hidden hidden = new Hidden();
+		search.put("[Hidden].exist =", "1");
 
-			 
-		Map map=new HashMap<String, Object>();
-				
-		Object[] objects={hidden,position};
-				
-		String[] join={"GUID","GUID"};
-			
-		Hidden_Join hidden_Join=new Hidden_Join();
-		
-		List hidden_joins=SelectJoinExe.get(this.getJdbcTemplate(), objects, hidden_Join, join);		
-			 
+		hidden.setLimit(10);
+		hidden.setOffset(0);
+		hidden.setSort(null);
+		hidden.setOrder(null);
+		hidden.setNotIn("GUID");
+
+		Position position = new Position();
+		position.setLimit(10);
+		position.setOffset(0);
+		position.setSort(null);
+		position.setOrder(null);
+		position.setNotIn("GUID");
+
+		WeiXin_User weiXin_User = new WeiXin_User();
+		weiXin_User.setLimit(10);
+		weiXin_User.setOffset(0);
+		weiXin_User.setSort(null);
+		weiXin_User.setOrder(null);
+		weiXin_User.setNotIn("GUID");
+
+		String[] where = TransMapToString.get(search);
+		hidden.setWhere(where);
+		position.setWhere(where);
+		weiXin_User.setWhere(where);
+
+		Map map = new HashMap<String, Object>();
+
+		Object[] objects = { hidden, position, weiXin_User };
+
+		String[] join = { "GUID", "campusAdmin" };
+
+		Hidden_Join hidden_Join = new Hidden_Join();
+
+		List hidden_joins = SelectJoinExe.get(this.getJdbcTemplate(), objects, hidden_Join, join);
+
 		return hidden_joins;
 	}
 
@@ -1142,5 +1150,47 @@ public class HiddenDAOImpl extends JdbcDaoSupport implements HiddenDAO{
 	}
 
 
+	@Override
+	public Map selectAllHidden_Point(Integer limit, Integer offset, String sort, String order,
+			Map<String, String> search) {
+		// TODO Auto-generated method stub
+		Hidden hidden=new Hidden();
+		hidden.setLimit(limit);
+		hidden.setOffset(offset);
+		hidden.setSort(sort);
+		hidden.setOrder(order);
+		hidden.setNotIn("id");
+		
+		Position position=new Position();
+		position.setLimit(limit);
+		position.setOffset(offset);
+		position.setSort(sort);
+		position.setOrder(order);
+		position.setNotIn("id");
+		
+		if(search!=null&&!search.isEmpty()){
+		    String[] where=TransMapToString.get(search);
+		    hidden.setWhere(where);
+		    position.setWhere(where);
+		}
+		
+		Position_Hidden_Join position_Hidden_Join=new Position_Hidden_Join();
+		
+		Object[] objects={hidden,position};
+		
+		String[] join={"guid"};
+		
+		List list=SelectJoinExe.get(this.getJdbcTemplate(), objects, position_Hidden_Join, join);
+		
+		int total=(int) SelectJoinExe.getCount(this.getJdbcTemplate(), objects, join).get("");
+		
+		Map map=new HashMap<>();
+		
+		map.put("row", list);
+		
+		map.put("total", total);
+		
+		return map;
+	}
 
 }

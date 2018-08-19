@@ -161,7 +161,7 @@ public class BaiduMapController {
 	public @ResponseBody List getByPoint(Integer limit,Integer offset,Double lng,Double lat,
 			Double distance,HttpServletRequest request){
 		
-		Map map=assetsDAO.findHiddenByPoint(lng, lat, distance, "");
+		Map map=hiddenDAO.selectAllHidden_Point(limit, offset, null, null, null);
 		
 		MyTestUtil.print(map);
 		
@@ -320,6 +320,8 @@ public class BaiduMapController {
         Map map=new HashMap<>();
         
         map.put("guid", GUID);
+        
+        map.put("hidden", hidden_Join);
         
         return map;
         

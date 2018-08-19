@@ -265,8 +265,10 @@
         	var form = "";
      		
      		form=form+hireGUID;
-     			
-       		$.confirm("确认收取"+hireTime+"的租金", function() {
+     		
+     		if(place==4){	
+       		   
+     			$.confirm("确认收取"+hireTime+"的租金", function() {
     	        //点击确认后的回调函数
     	            	
        			$.post("/voucher/mobile/finance/uploadFilesHireList.do", {
@@ -305,7 +307,8 @@
     	           }, function() {
     	    				//点击取消后的回调函数	  
     	    			
-    	    });
+    	    	 });
+     		}
         }
     });
     

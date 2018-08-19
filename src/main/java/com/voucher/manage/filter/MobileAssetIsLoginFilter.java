@@ -51,6 +51,7 @@ public class MobileAssetIsLoginFilter implements Filter{
 		        String loginStrings = configAsset.getInitParameter("loginStrings");        
 		        String includeStrings = configAsset.getInitParameter("includeStrings");    
 		        String redirectPath = hrequest.getContextPath() + configAsset.getInitParameter("redirectPath");
+		        String mobileLoginPath = hrequest.getContextPath() + configAsset.getInitParameter("mobileLoginPath");
 		        String settingPath = hrequest.getContextPath() + configAsset.getInitParameter("settingPath");
 		        String disabletestfilter = configAsset.getInitParameter("disabletestfilter");
 		        
@@ -80,7 +81,7 @@ public class MobileAssetIsLoginFilter implements Filter{
 		        if (openId==null) {       
 		        	MyTestUtil.print(hrequest.getSession());
 		        	System.out.println("MobileAssetIsLoginFilter openid= null");
-		        	wrapper.sendRedirect(redirectPath);
+		        	wrapper.sendRedirect(mobileLoginPath);
 		            return;
 		        }else {
 		        	Users users=usersMapper.getUserByOnlyOpenId(openId);

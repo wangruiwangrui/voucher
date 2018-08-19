@@ -636,6 +636,8 @@ public class MobileDAOImpl extends JdbcDaoSupport implements MobileDAO{
 					",[FileBelong] "+
 					",[FileIndex] "+
 					",[ViewFileName] "+
+					",[sequence] "+
+					",[date_time] "+
 				"FROM "+
 				Singleton.ROOMDATABASE+".[dbo].[FileSelfBelong] "+  
 				"where RoomGUID='"+roomGUID+"'";

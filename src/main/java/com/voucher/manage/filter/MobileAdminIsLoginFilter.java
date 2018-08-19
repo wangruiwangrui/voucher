@@ -37,6 +37,7 @@ public class MobileAdminIsLoginFilter implements Filter {
 	        String loginStrings = config2.getInitParameter("loginStrings");        
 	        String includeStrings = config2.getInitParameter("includeStrings");    
 	        String redirectPath = hrequest.getContextPath() + config2.getInitParameter("redirectPath");
+	        String mobileLoginPath = hrequest.getContextPath() + config2.getInitParameter("mobileLoginPath");
 	        String disabletestfilter = config2.getInitParameter("disabletestfilter");
 	        
 
@@ -65,7 +66,7 @@ public class MobileAdminIsLoginFilter implements Filter {
 	        if (openId==null) {
 	        //	HttpSession session = hrequest.getSession();	        	  
 	        //	session.invalidate();         //如果微信登录后就清除session再登陆管理员页面
-	        	wrapper.sendRedirect(redirectPath);
+	        	wrapper.sendRedirect(mobileLoginPath);
 	            return;
 	        }else {
 	        	System.out.println("mobileAdminIsLoginFilter openid="+openId);

@@ -10,7 +10,7 @@
 		#r-result{height:100%;width:20%;float:left;}
 	</style>
 	<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=pQFgFpS0VnMXwCRN6cTc1jDOcBVi3XoD"></script>
-	<title>查看周围的隐患</title>
+	<title>隐患地图</title>
 </head>
 <body>
 	<div id="allmap"></div>
@@ -41,7 +41,7 @@ function getQueryString(name) {
  var point = new BMap.Point(lng, lat);
     map.centerAndZoom(point, 12);
     var marker = new BMap.Marker(point); // 创建点
-	map.addOverlay(marker);    //增加点
+	//map.addOverlay(marker);    //增加点
 	var str = "我的位置";
 	var opts = {
 			   position : point,    // 指定文本标注所在的地理位置
@@ -67,7 +67,7 @@ function getQueryString(name) {
  
     
     var xhm=new XMLHttpRequest();
-    xhm.open("GET","../../baiduMap/getByPoint.do?limit=100&offset=0&lng="+lng+"&lat="+lat+"&distance=10000",false);
+    xhm.open("GET","../../baiduMap/getByPoint.do?limit=1000&offset=0&lng="+lng+"&lat="+lat+"&distance=5000",false);
     xhm.setRequestHeader("Content-type","application/x-www-form-urlencoded");
     xhm.send();
     var ticket=JSON.parse(xhm.responseText);
@@ -81,13 +81,24 @@ var json_data = new Array();
 
 for(var i=0;i<ticket.length;i++){
 	json_data[i]=[ticket[i].lng,ticket[i].lat,
-	              ticket[i].name];
+	              ticket[i].name,ticket[i].hidden_level];
 }
 
 var pointArray = new Array();
 for(var i=0;i<json_data.length;i++){
 	var point=new BMap.Point(json_data[i][0], json_data[i][1]);
-	var marker = new BMap.Marker(point); // 创建点
+	var myIcon = new BMap.Icon("../../img/hiddenPoint2.png", new BMap.Size(10,30));
+	var marker= new BMap.Marker(point, {icon : myIcon}); // 创建点
+	if(json_data[i][3]=="重大隐患"){
+		var myIcon = new BMap.Icon("../../img/hiddenPoint0.png", new BMap.Size(10,30));
+		marker = new BMap.Marker(point, {icon : myIcon}); // 创建点
+	}else if(json_data[i][3]=="一级隐患"){
+		var myIcon = new BMap.Icon("../../img/hiddenPoint1.png", new BMap.Size(10,30));
+		marker = new BMap.Marker(point, {icon : myIcon}); // 创建点
+	}else if(json_data[i][3]=="二级隐患"){
+		var myIcon = new BMap.Icon("../../img/hiddenPoint2.png", new BMap.Size(10,30));
+		marker = new BMap.Marker(point, {icon : myIcon}); // 创建点
+	}
 	map.addOverlay(marker);    //增加点
 	/*
 	var str = json_data[i][2];
@@ -104,7 +115,7 @@ for(var i=0;i<json_data.length;i++){
 					 lineHeight : "20px",
 					 fontFamily:"微软雅黑"
 				  });
-    map.addOverlay(label);   
+    map.addOverlay(label);
     */
 	marker.addEventListener("click",attribute);
 }

@@ -90,4 +90,7 @@ public interface HiddenDAO {
 	public List<Hidden_Join> selectHiddenOfMap(Map<String, String> search);
 	
 	public Integer getAllAssetByHidden_GUID(String guid);
+	
+	public Map selectAllHidden_Point(Integer limit, Integer offset, String sort,
+			String order,Map<String, String> search);
 }

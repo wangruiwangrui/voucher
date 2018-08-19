@@ -40,6 +40,7 @@ public class MobileIsLoginFilter implements Filter{
 		        String loginStrings = config3.getInitParameter("loginStrings");        
 		        String includeStrings = config3.getInitParameter("includeStrings");    
 		        String redirectPath = hrequest.getContextPath() + config3.getInitParameter("redirectPath");
+		        String mobileLoginPath = hrequest.getContextPath() + config3.getInitParameter("mobileLoginPath");
 		        String disabletestfilter = config3.getInitParameter("disabletestfilter");
 		        
 
@@ -69,7 +70,7 @@ public class MobileIsLoginFilter implements Filter{
 		        //	HttpSession session = hrequest.getSession();
 		        //	  session.invalidate();       
 		        	System.out.println("mobileIsLoginFilter openid= null");
-		        	wrapper.sendRedirect(redirectPath);
+		        	wrapper.sendRedirect(mobileLoginPath);
 		            return;
 		        }else {
 		        	System.out.println("mobileIsLoginFilter openid="+openId);
