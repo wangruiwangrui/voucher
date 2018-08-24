@@ -105,6 +105,8 @@
 	}else if (value == "4") {
 		return "财务管理人员";
 	}else if (value == "5") {
+		return "综合部人员";
+	}else if (value == "6") {
 		return "领导";
 	}
   }
@@ -113,6 +115,9 @@
 
 			return [
 					'<a class="superAdmin ml8 fa fa-user-plus" href="javascript:void(0)" title="设为领导">',
+					'&nbsp;&nbsp;',
+					'</a>',
+					'<a class="colligateAdmin ml8 fa fa-user-plus" href="javascript:void(0)" title="设为综合部人员">',
 					'&nbsp;&nbsp;',
 					'</a>',
 					'<a class="financeAdmin ml8 fa fa-user-circle" href="javascript:void(0)" title="设为财务管理人员">',
@@ -135,6 +140,29 @@
    
    window.actionEvents = {
 			'click .superAdmin' : function(e, value, row, index) {
+				//alert("admin");
+				$.post("../../voucher/user/upAtionFormatter.do", {
+					openId : row.openId,
+					place:6,
+                   campusId:campusId,
+				}, function(text) {
+					
+					if (text == -1 || text == 0) {
+						setSuccess("设置为领导失败。");
+					} else {
+						setSuccess("设置为领导成功。");
+						$('#table').bootstrapTable('updateRow', {
+							index : index,
+							row : {
+								type : 2
+							}
+						});
+						$('#table').bootstrapTable('refresh', {silent: true});
+					}
+
+				});
+			},
+			'click .colligateAdmin' : function(e, value, row, index) {
 				//alert("admin");
 				$.post("../../voucher/user/upAtionFormatter.do", {
 					openId : row.openId,

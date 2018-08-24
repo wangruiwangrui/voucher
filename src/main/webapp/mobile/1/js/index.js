@@ -144,6 +144,7 @@ var state=getQueryString("state");
  
  wx.ready(function () {
 
+	 try{
 		document.querySelector('#hiddentrouble').onclick =function(){
 			 // 2. 分享接口
          wx.getLocation({
@@ -175,7 +176,11 @@ var state=getQueryString("state");
              }
          });
 		 }
-		
+	 }catch(ex){
+
+	 }
+	 
+	 try{
 		document.querySelector('#addhiddenCheck').onclick =function(){
 			wx.getLocation({
 	               success : function(res) {
@@ -206,7 +211,11 @@ var state=getQueryString("state");
 	                }
 	            });
 		 }
-		
+	 }catch(ex){
+		 
+	 }	
+	 
+	 try{
 		document.querySelector('#hiddenCheck').onclick =function(){
 			wx.getLocation({
 	               success : function(res) {
@@ -237,7 +246,11 @@ var state=getQueryString("state");
 	                }
 	            });
 		 }
-		
+	 }catch(ex){
+		 
+	 }
+	 
+	 try{
 		document.querySelector('#hiddenNeaten').onclick =function(){
 			wx.getLocation({
 	               success : function(res) {
@@ -268,11 +281,19 @@ var state=getQueryString("state");
 	                }
 	            });
 		 }
-		
+	 }catch(ex){
+		 
+	 }
+	 
+	 try{
 		document.querySelector('#safeLike').onclick =function(){
 			 location.href="hidden/safeLike.html";
 		 }
-		
+	 }catch(ex){
+		 
+	 }
+	
+	 try{
 		document.querySelector('#report').onclick =function(){
 			wx.getLocation({
 	               success : function(res) {
@@ -303,13 +324,19 @@ var state=getQueryString("state");
 	                }
 	            });
 		 }
+	 }catch(ex){
 		 
-		 
+	 }
+	
+	 try{
 		document.querySelector('#userSetting').onclick =function(){
 			 location.href="userSetting.html";
 		 }
+	 }catch(ex){
+		 
+	 }
 		
-		
+	try{
 		document.querySelector('#allAsset').onclick =function(){
 			wx.getLocation({
 	               success : function(res) {
@@ -340,7 +367,11 @@ var state=getQueryString("state");
 	                }
 	            });
 		 }
+	}catch(ex){
 		
+	}
+	
+	try{
 		 document.querySelector('#photo').onclick = function () {
  		  wx.getLocation({
 	               success : function(res) {
@@ -371,13 +402,15 @@ var state=getQueryString("state");
 	                }
 	            });
  	  }
+	}catch(ex){
 		
+	}	
 	
-		
-  document.querySelector('#map').onclick = function () {
-    // 2. 分享接口
-    wx.getLocation({
-         success : function(res) {
+	try{	
+		document.querySelector('#map').onclick = function () {
+		// 2. 分享接口
+		wx.getLocation({
+			success : function(res) {
             // alert(JSON.stringify(res));
             var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
             // $("#latitude").val(latitude);
@@ -403,10 +436,14 @@ var state=getQueryString("state");
         cancel : function(res) {
      	   console.log('用户拒绝授权获取地理位置');
         }
-    });
-  }
+		});
+	  }
+	}catch(ex){
+		
+	}
   
-  document.querySelector('#assetMap').onclick = function () {
+	try{
+		document.querySelector('#assetMap').onclick = function () {
 	    // 2. 分享接口
 	    wx.getLocation({
 	         success : function(res) {
@@ -437,21 +474,37 @@ var state=getQueryString("state");
 	        }
 	    });
 	  } 
+	}catch(ex){
+		
+	}
 	
-  	document.querySelector('#hiddenStat').onclick = function () {
+	try{
+		document.querySelector('#hiddenStat').onclick = function () {
   			location.href="statistical/hiddenStat.html";
-  	}
-  	
-  	document.querySelector('#asseStat').onclick = function () {
+  		}
+	}catch(ex){
+		
+	}
+	
+	try{
+		document.querySelector('#asseStat').onclick = function () {
 			location.href="statistical/asseStat.html";
 	}
-  
-  	document.querySelector('#hiddenCheckMap').onclick = function () {
+	}catch(ex){
+		
+	}
+	
+	try{
+		document.querySelector('#hiddenCheckMap').onclick = function () {
 		location.href="guidance/hiddenCheckMap.html";
   	}
-  	
-  	document.querySelector('#assetCheck').onclick =function(){
-		wx.getLocation({
+	}catch(ex){
+		
+	}
+	
+	try{	
+		document.querySelector('#assetCheck').onclick =function(){
+			wx.getLocation({
                success : function(res) {
                     // alert(JSON.stringify(res));
                     var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
@@ -480,9 +533,13 @@ var state=getQueryString("state");
                 }
             });
 	 }
-  	
-  	document.querySelector('#assetCheckList').onclick =function(){
-		wx.getLocation({
+	}catch(ex){
+		
+	}
+	
+	try{
+		document.querySelector('#assetCheckList').onclick =function(){
+			wx.getLocation({
                success : function(res) {
                     // alert(JSON.stringify(res));
                     var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
@@ -511,15 +568,25 @@ var state=getQueryString("state");
                 }
             });
 	 }
-  	
-  	document.querySelector('#notPlace').onclick = function () {
+	}catch(ex){
+		
+	}
+	
+	try{
+		document.querySelector('#notPlace').onclick = function () {
 		location.href="../assetAdmin/notPlaceAsset.html";
   	}
-  	
-  	document.querySelector('#finance').onclick = function () {
-		location.href="../assetAdmin/assetFinance/admin.html";
-  	}
-  	
+	}catch(ex){
+		
+	}
+	
+	try{
+		document.querySelector('#finance').onclick = function () {
+			location.href="../assetAdmin/assetFinance/admin.html";
+		}
+	}catch(ex){
+		
+	}
 	 // 2. 分享接口
 	  // 2.1 监听“分享给朋友”，按钮点击、自定义分享内容及分享结果接口
 	    wx.onMenuShareAppMessage({

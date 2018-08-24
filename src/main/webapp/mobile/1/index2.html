@@ -21,7 +21,6 @@
 </script>
 
 <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
-<script type="text/javascript" src="js/index.js"></script>
 
 <title>兴泸资产管理有限公司</title>
 <link rel="icon" href="../../img/xl.ico" type="image/x-icon">
@@ -56,6 +55,7 @@
 </nav>
 <div class="container">
     <div class="row" >
+    <!--  
     <div class="container">
      <div class="row" >
 
@@ -222,36 +222,145 @@
         
         
      
-     </div>        
+     </div> 
+     -->       
     </div>
 </div>
 
 <script type="text/javascript">
 
-	var financeButton = document.getElementById("finance");
 
-	$.get("/voucher/mobile/finance/findFirstClew.do",{
-		days:15
-	},function(text){
-		
-		if(text>0){
 
-			financeButton.setAttribute("data-num",text);
+	var a1 = ""
+			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"hiddenNeaten\" class=\"button button-raised button-royal button-circle button-jumbo\"><i class=\"fa fa-file-text-o\"></i></button><div><span>隐患整改</span></div></div>"
+			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"addhiddenCheck\" class=\"button button-raised button-action button-circle button-jumbo\"><i class=\"fa fa-check-square-o\"></i></button><div><span>安全巡查</span></div></div>"
+			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"hiddenCheck\" class=\"button button-raised button-highlight button-circle button-jumbo\"><i class=\"fa fa-calendar-check-o\"></i></button><div><span>安全巡查记录</span></div></div>"
+			+ "";
+	var a2 = ""
+			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"hiddentrouble\" class=\"button button-raised button-action3 button-circle button-jumbo\"><i class=\"fa fa-search-plus\"></i></button><div><span>隐患检索</span></div></div>"
+			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"photo\" class=\"button button-raised button-caution button-circle button-jumbo\"><i class=\"fa fa-camera\"></i></button><div><span>隐患上传</span></div></div>"
+			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"map\" class=\"button button-raised button-primary button-circle button-jumbo\"><i class=\"fa fa-map-marker\"></i></button><div><span>隐患地图</span></div></div>"
+			+ "";
 
-			financeButton.setAttribute("class","button button-raised  button-circle button-jumbo corner");
-		}
-		
-		$.get("/voucher/mobile/asset/upUserAccessTime.do",{
-			parameter:"first"
-		},function(text){
+	var a21=""
+			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"hiddentrouble\" class=\"button button-raised button-action3 button-circle button-jumbo\"><i class=\"fa fa-search-plus\"></i></button><div><span>隐患检索</span></div></div>"
+			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"hiddenStat\" class=\"button button-raised button-highlight button-circle button-jumbo\"><i class=\"fa fa-area-chart\"></i></button><div><span>隐患统计</span></div></div>"
+			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"map\" class=\"button button-raised button-primary button-circle button-jumbo\"><i class=\"fa fa-map-marker\"></i></button><div><span>隐患地图</span></div></div>"
+			+ "";
 			
-		});
-		
-	});
 	
-	
+	var a3 = ""
+			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"allAsset\" class=\"button button-raised button-caution button-circle button-jumbo\"><i class=\"fa fa-institution\"></i></button><div><span>全部资产</span></div></div>"
+			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"assetMap\" class=\"button button-raised button-primary button-circle button-jumbo\"><i class=\"fa fa-map-marker\"></i></button><div><span>资产地图</span></div></div>"
+			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"asseStat\" class=\"button button-raised button-highlight button-circle button-jumbo\"><i class=\"fa fa-bar-chart\"></i></button><div><span>资产统计</span></div></div>"
+			+ "";
 
+	var a4 = ""
+			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"userSetting\" class=\"button button-raised button-action button-circle button-jumbo\"><i class=\"fa fa-user-o\"></i></button><div><span>用户设置</span></div></div>"
+			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"safeLike\" class=\"button button-raised button-royal button-circle button-jumbo\"><i class=\"fa fa-address-book-o\"></i></button><div><span>安全通讯录</span></div></div>"
+			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"report\" class=\"button button-raised button-caution button-circle button-jumbo\"><i class=\"fa fa-warning\"></i></button><div><span>紧急报告</span></div></div>"			
+			+ "";
+			
+
+	var a41 = ""
+			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"userSetting\" class=\"button button-raised button-action button-circle button-jumbo\"><i class=\"fa fa-user-o\"></i></button><div><span>用户设置</span></div></div>"
+			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"safeLike\" class=\"button button-raised button-royal button-circle button-jumbo\"><i class=\"fa fa-address-book-o\"></i></button><div><span>安全通讯录</span></div></div>"
+			+ "";
+
+	var a5 = ""
+			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"hiddenStat\" class=\"button button-raised button-highlight button-circle button-jumbo\"><i class=\"fa fa-area-chart\"></i></button><div><span>隐患统计</span></div></div>"
+			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"assetCheck\" class=\"button button-raised button-action button-circle button-jumbo\"><i class=\"fa fa-check-square-o\"></i></button><div><span>资产巡查</span></div></div>"
+			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"assetCheckList\" class=\"button button-raised button-highlight button-circle button-jumbo\"><i class=\"fa fa-calendar-check-o\"></i></button><div><span>资产巡查记录</span></div></div>"
+			+ "";
+
+			
+
+	var a51 = ""
+			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"assetCheck\" class=\"button button-raised button-action button-circle button-jumbo\"><i class=\"fa fa-check-square-o\"></i></button><div><span>资产巡查</span></div></div>"
+			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"assetCheckList\" class=\"button button-raised button-highlight button-circle button-jumbo\"><i class=\"fa fa-calendar-check-o\"></i></button><div><span>资产巡查记录</span></div></div>"
+			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"finance\" class=\"button button-raised  button-circle button-jumbo\"><i class=\"fa fa-yen\"></i></button><div><span>财务管理</span></div></div>"
+			+ "";
+	
+	var a52 = ""
+			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"finance\" class=\"button button-raised  button-circle button-jumbo\"><i class=\"fa fa-yen\"></i></button><div><span>财务管理</span></div></div>"
+			+ "";		
+			
+	var a6 = ""
+			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"hiddenCheckMap\" class=\"button button-raised button-highlight button-circle button-jumbo\"><i class=\"fa fa-map\"></i></button><div><span>巡查路线图</span></div></div>"
+			+ "<div class='col-xs-4 col-sm-4' style=\"text-align:center;\"><button id=\"finance\" class=\"button button-raised  button-circle button-jumbo\"><i class=\"fa fa-yen\"></i></button><div><span>财务管理</span></div></div>"
+			+ "";
+
+	var xhm = new XMLHttpRequest();
+	xhm.open("GET", "/voucher/mobile/finance/selectPlace.do", false);
+	xhm.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	xhm.send();
+
+	place = xhm.responseText;
+
+	console.log("place=" + place);
+
+	if (place == 2) {
+		$(".row").append(a1);
+		$(".row").append(a2);
+		$(".row").append(a3);
+		$(".row").append(a4);
+	}else if (place == 3) {
+		$(".row").append(a21);
+		$(".row").append(a3);
+		$(".row").append(a41);
+		$(".row").append(a51);
+	}else if (place == 4) {
+		$(".row").append(a21);
+		$(".row").append(a3);
+		$(".row").append(a41);
+		$(".row").append(a52);
+	}else if (place > 5) {
+		$(".row").append(a1);
+		$(".row").append(a2);
+		$(".row").append(a3);
+		$(".row").append(a4);
+		$(".row").append(a5);
+		$(".row").append(a6);
+	}else{
+		$(".row").append(a21);
+		$(".row").append(a3);
+		$(".row").append(a41);
+	}
+
+
+	if (place >= 3 && place != 5) {
+		
+		var financeButton = document.getElementById("finance");
+
+		$.get("/voucher/mobile/finance/findFirstClew.do",
+						{
+							days : 15
+						},
+						function(text) {
+
+							if (text > 0) {
+
+								financeButton.setAttribute("data-num", text);
+
+								financeButton
+										.setAttribute("class",
+												"button button-raised  button-circle button-jumbo corner");
+							}
+
+							$.get("/voucher/mobile/asset/upUserAccessTime.do",
+									{
+										parameter : "first"
+									}, function(text) {
+
+									});
+
+						});
+		
+	}
+	
 </script>
+
+<script type="text/javascript" src="js/index.js"></script>
 
 </body>
 <style type="text/css">
