@@ -33,7 +33,10 @@ import com.voucher.manage.daoSQL.SelectSQL;
 import com.voucher.manage.daoSQL.UpdateExe;
 import com.voucher.manage.model.Users;
 import com.voucher.manage.singleton.Singleton;
+import com.voucher.manage.tools.MyTestUtil;
 import com.voucher.manage.tools.TransMapToString;
+
+import voucher.Mybatis;
 
 public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO{
 
@@ -196,19 +199,30 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO{
 		user_AccessTime.setNotIn("open_id");
 		user_AccessTime.setWhere(where);
 		
+		String matureDate=null;
+		
 		try{
 			List list2=SelectExe.get(this.getJdbcTemplate(), user_AccessTime);
+			
+			MyTestUtil.print(list2);
+			
 			user_AccessTime=(User_AccessTime) list2.get(0);
+			
+			MyTestUtil.print(user_AccessTime);
+			
 			Date matureChartInfo=user_AccessTime.getMatureChartInfo();
-			String matureDate=sdf.format(matureChartInfo);
+			matureDate=sdf.format(matureChartInfo);
 			
-			if(matureDate.equals(startTime)){
-				return 0;
-			}
-			
+		
 		}catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
+		}
+		
+		System.out.println("matureDate="+matureDate+"  startTime="+startTime);
+		System.out.println(count);
+		if(matureDate!=null&&matureDate.equals(startTime)){
+			return 0;
 		}
 		
 		return count;

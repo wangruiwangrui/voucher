@@ -184,46 +184,46 @@
 		days:15
 	},function(text){
 		
-		if(text>100){
-			text="•••";
-		}
 		
-		var matureChartInfoButton = document.getElementById("15matureChartInfo");
-		
-		if(text>0){
+	if (text > 0) {
 
-			matureChartInfoButton.setAttribute("data-num",text);
+			if (text > 100) {
+				text = "•••";
+			}
+
+			var matureChartInfoButton = document
+					.getElementById("15matureChartInfo");
+
+			matureChartInfoButton.setAttribute("data-num", text);
 
 			matureChartInfoButton.setAttribute("class","button button-raised  button-circle button-jumbo corner");
 		}
-				
-		
+
 	});
-	
-	$("#generalChartInfo").click(function(){
-		location.href="generalChartInfo.html";
+
+	$("#generalChartInfo").click(function() {
+		location.href = "generalChartInfo.html";
 	});
-	
-	$("#overdueChartInfo").click(function(){
-		location.href="overdueChartInfo.html";
+
+	$("#overdueChartInfo").click(function() {
+		location.href = "overdueChartInfo.html";
 	});
-	
-	$("#15matureChartInfo").click(function(){
-		location.href="15matureChartInfo.html";
+
+	$("#15matureChartInfo").click(function() {
+		location.href = "15matureChartInfo.html";
 	});
-	
-	$("#successChartInfo").click(function(){
-		location.href="successChartInfo.html";
+
+	$("#successChartInfo").click(function() {
+		location.href = "successChartInfo.html";
 	});
-	
-	$("#historyOverdueChartInfo").click(function(){
-		location.href="historyOverdueChartInfo.html";
+
+	$("#historyOverdueChartInfo").click(function() {
+		location.href = "historyOverdueChartInfo.html";
 	});
-	
-	$("#allChartInfo").click(function(){
-		location.href="allChartInfo.html";
+
+	$("#allChartInfo").click(function() {
+		location.href = "allChartInfo.html";
 	});
-	
 </script>
 
 </html>
