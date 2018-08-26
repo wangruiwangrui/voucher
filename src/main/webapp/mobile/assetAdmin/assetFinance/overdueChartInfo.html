@@ -51,11 +51,13 @@
                                     <thead>
                                     <tr>
                                         <th data-align="left" data-field="charter" data-sortable="true" data-formatter="actionUser">姓名</th>
-                                        <th data-align="left" data-field="idno">身份证</th>
+                                        <th data-align="left" data-field="idno" >证件号</th>
+                                        <th data-align="left" data-field="c" data-formatter="actionC">已逾期</th>
                                         <th data-align="left" data-field="status" data-formatter="actionReport">查看详情</th>
                                         <th data-align="left" data-field="totalHire" data-sortable="true">金额</th>
                                         <th data-align="left" data-field="chartBeginDate" data-formatter="actionTime" data-sortable="true">开始日期</th>     
-                                        <th data-align="left" data-field="chartEndDate" data-formatter="actionTime" data-sortable="true">结束日期</th>                            
+                                        <th data-align="left" data-field="chartEndDate" data-formatter="actionTime" data-sortable="true">结束日期</th>  
+                                        <th data-align="left" data-field="chartType">付款方式</th>                          
                                         <th data-align="left" data-field="roomAddress" data-formatter="actionAddress">地址</th>
                                         <th data-align="left" data-field="contractNo" >合同编号</th>
                                         <th data-align="left" data-field="guid" data-visible="false">合同ID</th>
@@ -106,6 +108,15 @@
 	},function(text){
 	
 	});
+    
+    function actionC(value, row, index) {
+		return [
+            	// '<a  href="javascript:void(0)" onclick="report(this);" title="点击查看征信报告">',
+            	// '&nbsp;<img src="img/detail.jpg" width="25px" height="25px">&nbsp;',
+            	// '</a>&nbsp;',
+            	'<font color="red">',value,'</font>个月'
+        		].join('');
+	}
     
     function actionReport(value, row, index) {
     		return [

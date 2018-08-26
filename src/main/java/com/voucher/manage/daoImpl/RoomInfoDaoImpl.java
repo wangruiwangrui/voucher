@@ -810,6 +810,9 @@ public class RoomInfoDaoImpl extends JdbcDaoSupport implements RoomInfoDao{
 		
 		String[] where={"[RoomInfo].ChartGUID=",chartGUID};
 		
+		System.out.println("where="+where);
+		MyTestUtil.print(where);
+		
 		roomInfo.setWhere(where);		
 		
 		return (RoomInfo) SelectExe.get(this.getJdbcTemplate(), roomInfo).get(0);

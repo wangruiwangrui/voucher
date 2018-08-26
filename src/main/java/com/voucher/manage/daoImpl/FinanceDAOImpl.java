@@ -21,6 +21,7 @@ import com.google.common.collect.MapMaker;
 import com.voucher.manage.dao.FinanceDAO;
 import com.voucher.manage.daoImpl.AssetsDAOImpl.allHire;
 import com.voucher.manage.daoModel.TTT.ChartInfo;
+import com.voucher.manage.daoModel.TTT.ChartInfo2;
 import com.voucher.manage.daoModel.TTT.HireList;
 import com.voucher.manage.daoModel.TTT.HirePay;
 import com.voucher.manage.daoModel.TTT.User_AccessTime;
@@ -447,7 +448,7 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO{
         			"ChartGUID is not null ";
         }
         
-		ChartInfo chartInfo=new ChartInfo();
+		ChartInfo2 chartInfo=new ChartInfo2();
 		
 		List list=this.getJdbcTemplate().query(sql, new RowMappers(chartInfo.getClass()));
 		
