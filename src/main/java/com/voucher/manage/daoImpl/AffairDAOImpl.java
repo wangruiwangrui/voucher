@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.voucher.manage.dao.AffairDAO;
+import com.voucher.manage.daoModel.RoomInfo;
 import com.voucher.manage.model.Affair;
 
 public class AffairDAOImpl extends JdbcDaoSupport implements AffairDAO{
@@ -17,7 +18,7 @@ public class AffairDAOImpl extends JdbcDaoSupport implements AffairDAO{
 	@Override
 	public int insertTest(Map<String, Object> paramMap) {
 		// TODO Auto-generated method stub
-		String sql=" insert into  ROOMDATABASE"+".[dbo].[test]  values(?,?)";
+		String sql=" insert into  [TTT]"+".[dbo].[test]  values(?,?)";
 		
 		return this.getJdbcTemplate().update(sql, paramMap.get("id"),paramMap.get("val"));
 	}
@@ -25,14 +26,14 @@ public class AffairDAOImpl extends JdbcDaoSupport implements AffairDAO{
 	@Override
 	public int insertTest2(Map<String, Object> paramMap) {
 		// TODO Auto-generated method stub
-		String sql="insert into  ROOMDATABASE"+".[dbo].[test2]  values(?,?)";
+		String sql="insert into  [TTT]"+".[dbo].[test2]  values(?,?)";
 		return this.getJdbcTemplate().update(sql, paramMap.get("id"),paramMap.get("val"));
 	}
 
 	@Override
 	public int  insertTest3(Map<String, Object> paramMap) {
 		// TODO Auto-generated method stub
-		String sql=" update  ROOMDATABASE"+".[dbo].[test3] set amount=amount-1 WHERE id=1 and amount>0";
+		String sql=" update  [TTT]"+".[dbo].[test3] set amount=amount-1 WHERE id=1 and amount>0";
 		return this.getJdbcTemplate().update(sql);
 	}
 
@@ -129,4 +130,47 @@ public class AffairDAOImpl extends JdbcDaoSupport implements AffairDAO{
 	}
 	 return i;
 	}
+	
+
+
+	@Override
+	public int inserttest(Map<String, Object> paramMap) {
+		// TODO Auto-generated method stub
+		
+		String sql="insert into  [TTT]"+".[dbo].[test2]  values(?,?)";
+
+		int i=this.getJdbcTemplate().update(sql, 2,"5rrrrrrrr");
+		
+		if (i>0)
+        TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+		
+		return i;
+	}
+
+	@Override
+	public int insertaaa() {
+		// TODO Auto-generated method stub
+		String sql="insert into  [TTT]"+".[dbo].[test2]  values(?,?)";
+
+		int i=this.getJdbcTemplate().update(sql, 2,"5rrrrrrrr");
+		
+		if (i>0)
+        	TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+		
+		return i;
+	}
+
+	@Override
+	public int test() {
+		// TODO Auto-generated method stub
+				String sql="insert into  [TTT]"+".[dbo].[test2]  values(?,?)";
+
+				int i=this.getJdbcTemplate().update(sql, 2,"5rrrrrrrr");
+				
+				if (i>0)
+		        	TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+				
+				return i;
+	}
+	
 }

@@ -67,4 +67,16 @@ public class test2Controller {
 		
 		return i;
 	}
+	
+	@RequestMapping(value = "/start")
+	public @ResponseBody int startProcessInstance(){
+		
+		String openId="";
+		
+		int i=affairDAO.insertaaa();
+		
+		return i;
+	
+	}
+	
 }

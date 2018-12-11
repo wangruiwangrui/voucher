@@ -19,5 +19,10 @@ int insertTest(Map<String, Object> paramMap);
 	int insert2(Map<String, Object> paramMap);
 	
 	Affair selectTest3();
+		
+	int inserttest(Map<String, Object> paramMap);
 	
+	int test();
+	
+	int insertaaa();
 }
