@@ -195,9 +195,9 @@ public class BaiduMapController {
 	
 	@RequestMapping("/getAssetsByDistance")
 	public @ResponseBody Map getAssetsByDistance(Integer limit,Integer offset,Double lng,Double lat,
-			Double distance,HttpServletRequest request){
+			Double distance,String manageRegion,HttpServletRequest request){
 
-		Map map=assetsDAO.findAssetByDistance(limit, offset, lng, lat,"");
+		Map map=assetsDAO.findAssetByDistance(limit, offset, lng, lat,"",manageRegion);
 	
 		List list=(List) map.get("row");
 
@@ -225,8 +225,8 @@ public class BaiduMapController {
 	
 	@RequestMapping("/getAssetsByDistanceImg")
 	public @ResponseBody Map getAssetsByDistanceImg(Integer limit,Integer offset,Double lng,Double lat,
-			Double distance,String search,String search2,HttpServletRequest request){
-		System.out.println("search="+search);
+			Double distance,String search,String search2,String manageRegion,HttpServletRequest request){
+		System.out.println("manageRegion="+manageRegion);
 
 		Map map;
 		
@@ -244,17 +244,17 @@ public class BaiduMapController {
 				map=assetsDAO.findAssetByPoint(limit,offset,lng, lat, d, null);
 			}else{
 				if(search2!=null&&!search2.equals("")){
-					map=assetsDAO.findAssetByDistanceDate(limit, offset, lng, lat, search,search2,1);
+					map=assetsDAO.findAssetByDistanceDate(limit, offset, lng, lat, search,search2,manageRegion,1);
 				}else{
-					map=assetsDAO.findAssetByDistance(limit, offset, lng, lat, search);
+					map=assetsDAO.findAssetByDistance(limit, offset, lng, lat, search,manageRegion);
 				}
 			}
 			
 		}else{
 			if(search2!=null&&!search2.equals("")){
-				map=assetsDAO.findAssetByDistanceDate(limit, offset, lng, lat, search,search2,1);
+				map=assetsDAO.findAssetByDistanceDate(limit, offset, lng, lat, search,search2,manageRegion,1);
 			}else{
-				map=assetsDAO.findAssetByDistance(limit, offset, lng, lat, search);
+				map=assetsDAO.findAssetByDistance(limit, offset, lng, lat, search,manageRegion);
 			}
 		}
 		

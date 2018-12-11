@@ -63,7 +63,7 @@ public class AssetCheckController {
 	
 	@RequestMapping("/getAssetsByDistanceImg")
 	public @ResponseBody Map getAssetsByDistanceImg(Integer limit,Integer offset,Double lng,Double lat,
-			Double distance,String search,String search3,HttpServletRequest request){
+			Double distance,String search,String search3,String manageRegion,HttpServletRequest request){
 		System.out.println("search="+search);
 
 		Map map;
@@ -84,7 +84,7 @@ public class AssetCheckController {
 				if(search3!=null&&!search3.equals("")){
 					map=assetCheckDAO.findAssetByDistanceDate(limit, offset, lng, lat, search,search3,0);
 				}else{
-					map=assetsDAO.findAssetByDistance(limit, offset, lng, lat, search);
+					map=assetsDAO.findAssetByDistance(limit, offset, lng, lat, search,manageRegion);
 				}
 			}
 			
@@ -92,7 +92,7 @@ public class AssetCheckController {
 			if(search3!=null&&!search3.equals("")){
 				map=assetCheckDAO.findAssetByDistanceDate(limit, offset, lng, lat, search,search3,0);
 			}else{
-				map=assetsDAO.findAssetByDistance(limit, offset, lng, lat, search);
+				map=assetsDAO.findAssetByDistance(limit, offset, lng, lat, search,manageRegion);
 			}
 		}
 		

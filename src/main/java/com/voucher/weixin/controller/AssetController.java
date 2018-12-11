@@ -82,7 +82,7 @@ public class AssetController {
 	
 	@RequestMapping("/getAll")
 	public @ResponseBody Map<String, Object> RoomInfo(@RequestParam Integer limit,@RequestParam Integer offset,String sort,String order,
-			String search,Integer search2,Integer search3,HttpServletRequest request) {
+			String search,Integer search2,Integer search3,String manageRegion,HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		String term="OR";
@@ -111,6 +111,10 @@ public class AssetController {
 			where.put("Num like ", search);
 		}		
 
+		if(manageRegion!=null&&!manageRegion.equals("")){
+			where.put(" [RoomInfo].ManageRegion = ", manageRegion);
+		}
+		
 		//设置有搜索条件并且时间为空时的查询条件
 		String searchTerm="";
 		

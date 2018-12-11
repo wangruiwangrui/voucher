@@ -396,7 +396,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	
 	
 	@Override
-	public Map findAssetByDistance(int limit,int offset,Double lng, Double lat,String search) {
+	public Map findAssetByDistance(int limit,int offset,Double lng, Double lat,String search,String manageRegion) {
 		// TODO Auto-generated method stub
 		
 		String sql0="SELECT TOP "+limit+" "+
@@ -442,12 +442,19 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 					"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
 					"WHERE [Position].lng is not null AND [Position].lat is not null "+
 					"AND ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) "+
-					"AND "+
-					Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID not in( select top "+offset+" "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID from "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
+					"AND ";
+		
+		if(manageRegion!=null&&!manageRegion.equals("")){
+			sql0=sql0+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManageRegion='"+manageRegion+"' AND ";
+		}
+		
+		String sql01=Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID not in( select top "+offset+" "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID from "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
 					"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
 					"WHERE [Position].lng is not null AND [Position].lat is not null "+ 
 					"AND ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) ";
 		
+		
+		sql0=sql0+sql01;
 		
 		String sql1="ORDER BY   "+
 					"SQRT(("+lng+"-lng)*("+lng+"-lng)+("+lat+"-lat)*("+lat+"-lat))  ";
@@ -459,6 +466,11 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 				"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
 				"WHERE [Position].lng is not null AND [Position].lat is not null "+
 				"AND ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) ";
+		
+		
+		if(manageRegion!=null&&!manageRegion.equals("")){
+			sql2=sql2+" AND "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManageRegion='"+manageRegion+"'";
+		}
 		
 		if(search.equals("")){
 			sql=sql0+sql1+")"+sql1;
@@ -497,7 +509,7 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 	}
 	
 	@Override
-	public Map findAssetByDistanceDate(int limit,int offset,Double lng, Double lat,String search,String search2,Integer type){
+	public Map findAssetByDistanceDate(int limit,int offset,Double lng, Double lat,String search,String search2,String manageRegion,Integer type){
 		// TODO Auto-generated method stub
 		
 		String checkName = null;
@@ -552,13 +564,20 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 							"WHERE ([Position].lng is not null AND [Position].lat is not null "+
 							"AND ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) "+
 							"AND ";
-							
+				
+				if(manageRegion!=null&&!manageRegion.equals("")){
+					sql0=sql0+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManageRegion='"+manageRegion+"' AND ";
+				}
 
 				String sql01=Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID not in( select top "+offset+" "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID from "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo] left join  [Position]"+
 						"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
 						"WHERE [Position].lng is not null AND [Position].lat is not null "+ 
 						"AND ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) "+
 						"AND ";
+				
+				if(manageRegion!=null&&!manageRegion.equals("")){
+					sql01=sql01+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManageRegion='"+manageRegion+"' AND ";
+				}
 				
 				String sql02 = null;
 				
@@ -614,7 +633,13 @@ public class AssetsDAOImpl extends JdbcDaoSupport implements AssetsDAO{
 						"on "+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].GUID = [Position].GUID "+
 						"WHERE ([Position].lng is not null AND [Position].lat is not null "+
 						"AND ([RoomInfo].State = '已出租' or [RoomInfo].State = '不可出租' or [RoomInfo].State = '空置' ) "+
-						"AND "+sql02;
+						"AND ";
+				
+				if(manageRegion!=null&&!manageRegion.equals("")){
+					sql2=sql2+Singleton.ROOMDATABASE+".[dbo].[RoomInfo].ManageRegion='"+manageRegion+"' AND ";
+				}
+				
+				sql2=sql2+sql02;
 				
 				if(search.equals("")){
 					sql=sql0+sql1+")"+sql1;

@@ -83,12 +83,13 @@
 </script>
 
 <script>
-  function getQueryString(name) {
-    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-    var r = window.location.search.substr(1).match(reg);
-    if (r != null) return unescape(r[2]); return null;
-   }
+function getQueryString(key){
+    var reg = new RegExp("(^|&)"+key+"=([^&]*)(&|$)");
+    var result = window.location.search.substr(1).match(reg);
+    return result?decodeURIComponent(result[2]):null;
+  }
 
+  var manageRegion=getQueryString("manageRegion");
   var longitude=getQueryString("longitude");
   var latitude=getQueryString("latitude");
   var map = new BMap.Map("allmap");
@@ -159,7 +160,7 @@
     	  
       });
          
-      
+      console.log("manageRegion="+manageRegion);
       sign_URL=document.location.toString();
       
       $.ajax({
@@ -216,7 +217,8 @@
                        "offset" : offset,
                        "search" : search,
                        "lng" : longitude,
-                       "lat" : latitude
+                       "lat" : latitude,
+                       "manageRegion" :manageRegion
                        },
                dataType: "json",
                error: function (request){

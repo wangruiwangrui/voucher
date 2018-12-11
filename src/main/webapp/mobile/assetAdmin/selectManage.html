@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>选择管理分区</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta charset="utf-8" />
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<link rel="stylesheet" href="css/weui.css"/>
+<link rel="stylesheet" href="css/example.css"/>
+<link rel="stylesheet" href="../../weixinUI/style/weui.css"/>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+<body>
+<div class="button">
+<div class="hd">
+    <h1 class="page_title">管理分区:</h1>
+</div>
+	<div id="manage" class="button_sp_area">
+			<a href="javascript:;" onclick="clickEvent('')" class="weui_btn weui_btn_plain_primary">全部</a>
+    </div>
+</div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+	var xhm=new XMLHttpRequest();
+	xhm.open("GET", "../../baiduMap/getManageRegion.do", false);
+	xhm.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	xhm.send();
+	var roomInfos = JSON.parse(xhm.responseText);
+
+	// 创建一个DOM元素
+	var manage = document.getElementById("manage");
+
+	for (var i = 0; i < roomInfos.length; i++) {
+		if (roomInfos[i].manageRegion != "") {
+			var a = document.createElement("a");
+			a.setAttribute("class","weui_btn weui_btn_primary");
+			a.innerHTML = roomInfos[i].manageRegion;
+			a.setAttribute("onclick","clickEvent('"+roomInfos[i].manageRegion+"');");
+			manage.appendChild(a);
+		}
+	}
+	
+	 sign_URL=document.location.toString();
+     
+     $.ajax({
+	     url : "../../wechat/sign.do",
+	     data : {
+	    	 campusId:1,
+	    	 url:sign_URL
+	     },
+	     async: false,
+	     type : "GET",
+	     success : function(data) {
+	    	 var ticket=JSON.parse(data);
+       	     /*
+     	      * 此处需要两次执行相同的函数，否则返回ture时不能执行以下函数
+     	      */  
+       	          
+	    	 
+	    	 wx.config({
+	    		debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+	      		appId: ticket.appId,
+	      		timestamp: ticket.timestamp,
+	      		nonceStr: ticket.nonceStr,
+	      		signature: ticket.signature,
+	      		jsApiList : [ 'checkJsApi', 'onMenuShareTimeline',
+	                            'onMenuShareAppMessage', 'onMenuShareQQ',
+	                            'onMenuShareWeibo', 'hideMenuItems',
+	                            'showMenuItems', 'hideAllNonBaseMenuItem',
+	                            'showAllNonBaseMenuItem', 'translateVoice',
+	                            'startRecord', 'stopRecord', 'onRecordEnd',
+	                            'playVoice', 'pauseVoice', 'stopVoice',
+	                            'uploadVoice', 'downloadVoice', 'chooseImage',
+	                            'previewImage', 'uploadImage', 'downloadImage',
+	                            'getNetworkType', 'openLocation', 'getLocation',
+	                            'hideOptionMenu', 'showOptionMenu', 'closeWindow',
+	                            'scanQRCode', 'chooseWXPay',
+	                            'openProductSpecificView', 'addCard', 'chooseCard',
+	                            'openCard' ]
+	      	});
+       	    
+	    	 
+	    	
+       	     
+	      }
+	 });
+	
+	function clickEvent(manageRegion){
+  	  //var guid=encodeURI($(that).attr("guid"));
+  	  //var manageRegion=encodeURI(manageRegion);
+  	  wx.getLocation({
+	         success : function(res) {
+	            // alert(JSON.stringify(res));
+	            var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+	            // $("#latitude").val(latitude);
+	            var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+	            
+	            $.get("/voucher/mobile/map/baiduSwitch.do",{ //微信地理位置坐标转换成百度地图坐标
+	              	 longitude:longitude,
+	              	 latitude:latitude               	 
+	               },function(text){
+	              	 var obj = $.parseJSON(text);
+	              	 var result=obj.result;
+	              	 var lat=result[0].y;
+	              	 var lng=result[0].x;
+	              	 location.href="allAsset.html?manageRegion="+manageRegion+"&latitude="+lat+"&longitude="+lng;
+	              	 //alert(manageRegion);
+	            });
+	            
+	        },
+	        cancel : function(res) {
+	     	   console.log('用户拒绝授权获取地理位置');
+	        }
+	    });       	 
+    }
+	
+</script>

@@ -358,7 +358,7 @@ var state=getQueryString("state");
 		                   	 var result=obj.result;
 		                   	 var lat=result[0].y;
 		                   	 var lng=result[0].x;
-		                   	 location.href="../assetAdmin/allAsset.html?latitude="+lat+"&longitude="+lng;
+		                   	 location.href="../assetAdmin/selectManage.html?latitude="+lat+"&longitude="+lng;
 		                 });
 	                    
 	                 },
