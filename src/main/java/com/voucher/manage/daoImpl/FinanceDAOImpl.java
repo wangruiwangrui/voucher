@@ -285,7 +285,7 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO{
         			"where [HireList].State='未交'  and convert(varchar(11),[HireList].HireDate ,120 )<'"+matureTime+"' group by "+
         			"[HireList].ChartGUID )group by  chartGuid "+
         			") as t2 on ChartInfo.GUID=t2.ChartGUID	"+
-        			"where ChartGUID is not null "+
+        			"where ChartGUID is not null and  ("+serach+")"+
         			")as w1 "+
         			"where rows>"+offset+" and "+
         			"IsHistory="+isHistory+" "+
@@ -299,7 +299,7 @@ public class FinanceDAOImpl extends JdbcDaoSupport implements FinanceDAO{
 					 "where [HireList].State='未交'  and convert(varchar(11),[HireList].HireDate ,120 )<'"+matureTime+"' group by "+
 					 "[HireList].ChartGUID )group by  chartGuid "+
 					 ") as t2 on ChartInfo.GUID=t2.ChartGUID	"+
-					 "where ChartGUID is not null  and "+
+					 "where ChartGUID is not null  and (" +serach+") and "+
 					 "IsHistory="+isHistory;
 			
         }else{
