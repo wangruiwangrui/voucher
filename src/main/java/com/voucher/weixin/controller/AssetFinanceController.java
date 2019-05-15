@@ -113,6 +113,8 @@ public class AssetFinanceController {
 		
 		}
 		
+		System.out.println(searchMap);
+		
 		return financeDAO.findAllChartInfo(limit, offset, sort, order, searchMap);
 		
 	}
@@ -178,7 +180,7 @@ public class AssetFinanceController {
 			searchMap.put("IDNo like ", search);
 		
 		}
-		
+		System.out.print(financeDAO.findOverdueChartInfo( limit, offset, sort, order,isHistory,searchMap));
 		return financeDAO.findOverdueChartInfo( limit, offset, sort, order,isHistory,searchMap);
 		
 	}
