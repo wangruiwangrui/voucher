@@ -69,9 +69,14 @@ public class FileUploadController {
     	String accessToken;
     	
         //获得物理路径webapp所在路径  
-        String pathRoot = request.getSession().getServletContext().getRealPath("");  
-        String path="/mobile/photo/";  
-        String filePath=pathRoot+path;  
+        String pathRoot = request.getSession().getServletContext().getRealPath(""); 
+        
+        String path="mobile"+File.separator+"photo"+File.separator;
+        
+        String filePath=pathRoot+path; 
+        
+        filePath = filePath.replaceAll("\\\\", "//");
+        
         
         Object objectClass = null;
         

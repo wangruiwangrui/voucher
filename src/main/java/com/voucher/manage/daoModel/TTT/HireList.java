@@ -58,6 +58,17 @@ public class HireList implements Serializable{
 
     @SQLString(name="OptAddUser")
 	private String OptAddUser;
+    
+    @SQLString(name="IsCreateList")
+    private Integer IsCreateList;
+
+	public Integer getIsCreateList() {
+		return IsCreateList;
+	}
+
+	public void setIsCreateList(Integer isCreateList) {
+		IsCreateList = isCreateList;
+	}
 
 	public void setGUID(String GUID){
 		this.GUID = GUID;
